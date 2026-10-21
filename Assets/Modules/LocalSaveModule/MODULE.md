@@ -1,0 +1,73 @@
+# LocalSaveModule
+
+## Purpose
+Writes the ScriptableObjects filed on its Root to a file of the module's own and reads them back
+before any other module wakes up.
+
+## Concepts
+save, load, local storage, persistence, save file, .flowsave, encryption, password,
+ILocalSaveService, LocalSaveRootAdapter
+
+## Decisions
+- **Own store, no vendor.** The first version sat on Easy Save 3 and used six of its calls - a
+  key-to-string map in cache mode, flushed on demand. That was the whole dependency, and it cost a
+  paid asset that kept the module out of the public package, a setup step that failed as a missing
+  type when skipped (`Tools/Easy Save 3/Enable Assembly Definition Files`), and an `ES3Defaults`
+  asset that rewrote itself every time an assembly came or went. `LocalSaveFile` is the map on
+  disk now: one JSON object, one member per asset, written to a `.tmp` and moved over the old file
+  the way ES3 did, so a kill mid-write leaves the previous save whole.
+- **Newtonsoft, narrowed to Unity's rules.** JsonUtility could not carry a Dictionary member, so
+  a game that keeps progress in one had to flatten it. Newtonsoft does the serializing and
+  `UnityFieldContractResolver` keeps it to what Unity would have saved: public fields and
+  `[SerializeField]` ones, no properties, no references to other Objects. `LocalSaveTypeBinder`
+  refuses to build a type from outside the project's own assemblies, because a save file sits in
+  the player's folder and can be edited. `com.unity.nuget.newtonsoft-json` is a dependency of the
+  core package for this.
+- **`.flowsave`, not `.json`.** The owner did not want a file that invites the player to open it
+  in whatever their system pairs with `.json` and change a number. `SaveFile.flowsave` under
+  `Application.persistentDataPath`; the contents are JSON all the same, so a developer reads it.
+- **Encryption is one field.** `Password` on `LocalSaveRootAdapter`, empty by default. Set, the
+  file is AES-256-CBC with a PBKDF2 key over a fresh salt and IV, behind a `FLOWSAVE` header. It
+  keeps a player from editing the file in a text editor, not from a determined one: the password is
+  a string in the build, and the Help page says so. Reading goes by the file, not the setting - a
+  plain file is read whatever the password says and the next `Flush` writes it encrypted, so a game
+  that turns encryption on later keeps every save it has. An encrypted file with no password, or
+  the wrong one, is an error and an empty session.
+- **The session is opened once.** `BeginSession(password)` reads the file into memory in the
+  model's `PostConstruct`; `Has`, `LoadInto` and `Save` work on that copy, and nothing reaches disk
+  until `Flush`. The two steps a game binds, `ILocalSaveService.Commands.Save` and `.SaveAll`,
+  flush at the end; the Context saves everything on pause and the Root on quit, because a
+  backgrounded mobile app is often killed without quitting.
+- **A panel, under `Tools/FlowIoC-Modules/Local Save/Panel`.** The developer's view of the file on this
+  machine: path and state, its contents read with the password off the `LocalSaveServiceRoot` in the open
+  scene or one typed, *Reset* (the file and a stray `.tmp`), *Clear PlayerPrefs*, and *Rewrite* under
+  another password for the day the Root's changes. It reads and never edits - the file is the
+  Model's - and its buttons are off in play mode, where the game holds the save in memory. The
+  window is FlowIoC's (`ModulePanel` drawn by `ModulePanelWindow`); the module ships only
+  `LocalSavePanel` and its `[MenuItem]`, under `Scripts/Editor` in `#if UNITY_EDITOR`, which is why
+  the asmdef references `FlowIoC.Editor` - a reference Unity drops for a player build. The owner
+  put the root beside `Tools/FlowIoC` rather than inside it (2026-09-15): a module adds nothing to
+  FlowIoC's own menu, and `FlowIoC-Modules` sits second under Tools, ahead of `FlowIoC-dev`.
+- **An Editor run starts from the asset's file.** The model snapshots every filed asset in
+  `PostConstruct`, puts the snapshot back at once, reads the save over it, and puts it back again
+  on quit - so play leaves no diff on the asset. The snapshot comes from the file rather than from
+  memory: a run whose restore never happened (stopped mid-boot, or Play pressed while the last
+  run was still exiting) left the save's values in memory, not dirty, and every later run used to
+  capture them as its baseline - a reset save then still opened on the old level. An asset with an
+  unsaved inspector edit is snapshotted from memory, because that edit is the developer's.
+- **Errors through `Debug.LogError`.** A save that silently does nothing looks exactly like success
+  until the player restarts, so the failure has to reach a release build's log.
+
+## Known gaps
+- No save slots and no versioning of the file: one file per game, and a field that changes type
+  between builds is read as far as Newtonsoft can take it.
+- The `.tmp` write is only as atomic as the platform's move; there is no checksum.
+
+Version: 1.0.4
+
+<!-- FLOWIOC:BEGIN version=1 hash=08b830ab | generated by Tools/FlowIoC/Module Scanner - do not edit inside this block -->
+**Kind** Main · **Assemblies** Modules.LocalSave
+**Root** LocalSaveServiceRoot → LocalSaveServiceContext
+**Services** ILocalSaveService
+**Sub modules** LocalSaveTestModule (Test)
+<!-- FLOWIOC:END -->

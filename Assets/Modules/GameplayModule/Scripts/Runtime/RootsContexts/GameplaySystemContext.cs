@@ -1,0 +1,186 @@
+using Modules.HapticModule.Enums;
+using Modules.HapticModule.Services;
+using Modules.GameplayModule.Signals;
+using FlowIoC.BaseModule.Contexts;
+using Modules.GameplayModule.Controllers;
+using Modules.GameplayModule.Models;
+using Modules.LocalSaveModule.Services;
+
+namespace Modules.GameplayModule.RootsContexts
+{
+
+    public class GameplaySystemContext : Context
+    {
+		private GameplaySignals _signals;
+        private GameplayInternalSignals _internalSignals;
+        private IJellyPuzzleModel _model;
+        /// <summary>The progress asset as it is filed on LocalSaveServiceRoot.</summary>
+        private const string PROGRESS = "SD_JellyProgress";
+
+        public override void SignalBindings()
+        {
+            base.SignalBindings();
+			_signals = InjectionBinderCrossContext.Bind<GameplaySignals>();
+            _internalSignals = InjectionBinder.Bind<GameplayInternalSignals>();
+        }
+
+        public override void InjectionBindings()
+        {
+            base.InjectionBindings();
+            _model = InjectionBinder.Bind<IJellyPuzzleModel, JellyPuzzleModel>();
+            InjectionBinder.Bind<PuzzleFeedbackModel>();
+            InjectionBinder.Bind<ILivesModel, LivesModel>();
+            InjectionBinder.Bind<IJellyTutorialModel, JellyTutorialModel>();
+        }
+
+        public override void MediationBindings()
+        {
+            base.MediationBindings();
+        }
+
+        public override void CommandBindings()
+        {
+            base.CommandBindings();
+            CommandBinder.Bind(_signals.Incoming.Start)
+                .ToSequence<RefreshLivesCommand>()
+                .ToSequence<RequireLifeCommand>()
+                .ToSequence<StartPuzzleCommand>()
+                .ToSequence<StartTutorialCommand>()
+                .ToSequence<StartPuzzleClockCommand>()
+                .ToSequence<StorePuzzleProgressCommand>()
+                .ToSequence<GrantBoostersCommand>()
+                .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
+                .ToSequence<AnnounceBoostersCommand>()
+                .ToSequence<AnnounceLivesCommand>()
+                .ToSequence<ScheduleNotificationsCommand>();
+            CommandBinder.Bind(_signals.Incoming.Drag)
+                .ToSequence<CapturePuzzleFeedbackCommand>()
+                .ToSequence<DragJellyCommand>()
+                .ToSequence<StartClockOnMoveCommand>()
+                .ToSequence<StartPuzzleClockCommand>()
+                .ToSequence<AdvanceTutorialCommand>()
+                .ToSequence<CheckWinPaymentCommand>()
+                .ToSequence<PlayPuzzleFeedbackCommand>();
+            CommandBinder.Bind(_signals.Incoming.Undo)
+                .ToSequence<UndoPuzzleCommand>()
+                .ToSequence<StartPuzzleClockCommand>();
+            CommandBinder.Bind(_signals.Incoming.Stop).ToSequence<StopPuzzleClockCommand>();
+            // The gameplay screen closed: back to the menu. A level still being played costs a life.
+            CommandBinder.Bind(_signals.Incoming.Quit)
+                .ToSequence<LoseLifeOnQuitCommand>()
+                .ToSequence<StopPuzzleClockCommand>()
+                .ToSequence<LeaveLevelCommand>()
+                .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
+                .ToSequence<AnnounceLivesCommand>()
+                .ToSequence<ScheduleNotificationsCommand>();
+            CommandBinder.Bind(_signals.Incoming.Resume)
+                .ToSequence<ResumePuzzleClockCommand>()
+                .ToSequence<StartPuzzleClockCommand>();
+            CommandBinder.Bind(_signals.Incoming.NextLevel)
+                .ToSequence<RefreshLivesCommand>()
+                .ToSequence<RequireLifeCommand>()
+                .ToSequence<NextPuzzleLevelCommand>()
+                .ToSequence<StartPuzzleCommand>()
+                .ToSequence<StartTutorialCommand>()
+                .ToSequence<StartPuzzleClockCommand>()
+                .ToSequence<StorePuzzleProgressCommand>()
+                .ToSequence<GrantBoostersCommand>()
+                .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
+                .ToSequence<AnnounceBoostersCommand>()
+                .ToSequence<AnnounceLivesCommand>()
+                .ToSequence<ScheduleNotificationsCommand>();
+            CommandBinder.Bind(_signals.Incoming.SkipLevel)
+                .ToSequence<SkipPuzzleLevelCommand>()
+                .ToSequence<StorePuzzleProgressCommand>()
+                .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
+                .ToSequence<AnnounceCurrentLevelCommand>()
+                .ToSequence<RequireLevelInPlayCommand>()
+                .ToSequence<StartPuzzleCommand>()
+                .ToSequence<StartTutorialCommand>()
+                .ToSequence<StartPuzzleClockCommand>()
+                .ToSequence<GrantBoostersCommand>()
+                .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
+                .ToSequence<AnnounceBoostersCommand>()
+                .ToSequence<AnnounceLivesCommand>()
+                .ToSequence<ScheduleNotificationsCommand>();
+#if UNITY_EDITOR
+            CommandBinder.Bind(_signals.Incoming.ForceResult)
+                .ToSequence<CapturePuzzleFeedbackCommand>()
+                .ToSequence<ForcePuzzleResultCommand>()
+                .ToSequence<CheckWinPaymentCommand>()
+                .ToSequence<PlayPuzzleFeedbackCommand>()
+                .ToSequence<LoseLifeCommand>()
+                .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
+                .ToSequence<AnnounceLivesCommand>()
+                .ToSequence<ScheduleNotificationsCommand>();
+#endif
+            CommandBinder.Bind(_signals.Incoming.ResetBoosters)
+                .ToSequence<ResetBoostersCommand>()
+                .ToSequence<GrantBoostersCommand>()
+                .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
+                .ToSequence<AnnounceBoostersCommand>();
+            CommandBinder.Bind(_signals.Incoming.UseBooster)
+                .ToSequence<CheckBoosterCommand>()
+                .ToSequence<ApplyBoosterCommand>()
+                .ToSequence<PayBoosterCommand>()
+                .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
+                .ToSequence<AnnounceBoostersCommand>()
+                .ToSequence<CheckWinPaymentCommand>();
+            CommandBinder.Bind(_internalSignals.TimeExpired)
+                .ToSequence<IHapticService.Commands.Play>(HapticPreset.Failure)
+                .ToSequence<LoseLifeCommand>()
+                .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
+                .ToSequence<AnnounceLivesCommand>()
+                .ToSequence<ScheduleNotificationsCommand>();
+            CommandBinder.Bind(_signals.Incoming.RefreshLives)
+                .ToSequence<RefreshLivesCommand>()
+                .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
+                .ToSequence<AnnounceLivesCommand>()
+                .ToSequence<ScheduleNotificationsCommand>();
+            CommandBinder.Bind(_signals.Incoming.OpenLivesOffer)
+                .ToSequence<RefreshLivesCommand>()
+                .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
+                .ToSequence<AnnounceLivesCommand>()
+                .ToSequence<ScheduleNotificationsCommand>()
+                .ToSequence<OpenLivesOfferCommand>();
+            CommandBinder.Bind(_signals.Incoming.RefreshLivesOffer)
+                .ToSequence<RefreshLivesCommand>()
+                .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
+                .ToSequence<AnnounceLivesCommand>()
+                .ToSequence<ScheduleNotificationsCommand>()
+                .ToSequence<AnnounceLivesOfferCommand>();
+            CommandBinder.Bind(_signals.Incoming.BuyLives)
+                .ToSequence<RefreshLivesCommand>()
+                .ToSequence<BuyLivesCommand>()
+                .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
+                .ToSequence<AnnounceLivesCommand>()
+                .ToSequence<ScheduleNotificationsCommand>()
+                .ToSequence<AnnounceLivesOfferCommand>();
+            CommandBinder.Bind(_signals.Incoming.ResetLives)
+                .ToSequence<ResetLivesCommand>()
+                .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
+                .ToSequence<AnnounceLivesCommand>()
+                .ToSequence<ScheduleNotificationsCommand>();
+            CommandBinder.Bind(_internalSignals.Tick).ToSequence<TickPuzzleCommand>();
+            CommandBinder.Bind(_internalSignals.PayWin)
+                .ToSequence<AddCoinsCommand>()
+                .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
+                .ToSequence<AnnounceBoostersCommand>();
+        }
+
+        public override void Setup()
+        {
+            base.Setup();
+        }
+
+        public override void Launch()
+        {
+            base.Launch();
+        }
+        public override void DestroyContext()
+        {
+            if (_model != null) _model.IsTicking = false;
+            base.DestroyContext();
+        }
+    }
+}

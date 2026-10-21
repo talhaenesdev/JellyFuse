@@ -1,0 +1,350 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88b584c2ffad4e1aacc7ea01b7bbf203, type: 3}
+  m_Name: CD_JellyWallSkin
+  m_EditorClassIdentifier: Modules.Gameplay.Screen::Modules.GameplayModule.GameplayScreenModule.Data.UnityObjects.CD_JellyWallSkin
+  Top: {fileID: 21300000, guid: bbd2e72dcedd4044d97ac12cbe44304b, type: 3}
+  Bottom: {fileID: 21300000, guid: bbd2e72dcedd4044d97ac12cbe44304b, type: 3}
+  Left: {fileID: 21300000, guid: a149f9c53007fc04ab924704ffeee93c, type: 3}
+  Right: {fileID: 21300000, guid: a149f9c53007fc04ab924704ffeee93c, type: 3}
+  CornerTopLeft: {fileID: 21300000, guid: 64cccca94c8696245a44840fe01fa122, type: 3}
+  CornerTopRight: {fileID: 21300000, guid: d22046f83bd80a04d8d7a6ce5d2e0b90, type: 3}
+  CornerBottomLeft: {fileID: 21300000, guid: e5f350df688a1634c9168acca63d7669, type: 3}
+  CornerBottomRight: {fileID: 21300000, guid: 25577ec030fdad24490826bee4086ec2, type: 3}
+  ConcaveTopLeft: {fileID: 21300000, guid: 1808d2d5dd1c0bb48bcb9d4e27ac13fe, type: 3}
+  ConcaveTopRight: {fileID: 21300000, guid: 21c309f1b14f3d84b87c00d44cd62b45, type: 3}
+  ConcaveBottomLeft: {fileID: 21300000, guid: 132fac78c3ead6e4389272a623152035, type: 3}
+  ConcaveBottomRight: {fileID: 21300000, guid: a7ed07231ecc126438e263aeb755d340, type: 3}
+  Inner: {fileID: 0}
+  Single: {fileID: 0}
+  EndUp: {fileID: 0}
+  EndDown: {fileID: 0}
+  EndLeft: {fileID: 0}
+  EndRight: {fileID: 0}
+  Horizontal: {fileID: 0}
+  Vertical: {fileID: 0}
+  CornerUpRight: {fileID: 0}
+  CornerUpLeft: {fileID: 0}
+  CornerDownRight: {fileID: 0}
+  CornerDownLeft: {fileID: 0}
+  TeeUp: {fileID: 0}
+  TeeDown: {fileID: 0}
+  TeeLeft: {fileID: 0}
+  TeeRight: {fileID: 0}
+  Cross: {fileID: 0}
+  DoorInset: 0.42
+  DoorThickness: 0.62
+  DoorOverhang: 0.1
+  DoorTop:
+  - {fileID: 21300000, guid: 43d361aae4dd76341a88e8803ff039e0, type: 3}
+  - {fileID: 21300000, guid: 85a874b00f2c4fe409169eb9416b7e51, type: 3}
+  - {fileID: 21300000, guid: f73aeb6d8c22c494b92c7075fe97a10e, type: 3}
+  - {fileID: 21300000, guid: 9add0044caea0a345ade9eb65473c1bb, type: 3}
+  DoorBottom:
+  - {fileID: 21300000, guid: 5b3e674e900801f468940c5da0dbd354, type: 3}
+  - {fileID: 21300000, guid: ce7d317ef9e7f3b4eaba2ae3dca36be3, type: 3}
+  - {fileID: 21300000, guid: 0cd989facb330724b8bbd9896d5fbd60, type: 3}
+  - {fileID: 21300000, guid: 103f0b5f2e1160c4d958b630b119a67e, type: 3}
+  DoorLeft:
+  - {fileID: 21300000, guid: 3ce0153948adb6543889a92a9cb6775f, type: 3}
+  - {fileID: 21300000, guid: 0191be5c62d223c409c70652a78f22d4, type: 3}
+  - {fileID: 21300000, guid: f9670d5731fa59f4fa16e6cee23fe610, type: 3}
+  - {fileID: 21300000, guid: e00b04d74ee20934390bebc94e60b8e7, type: 3}
+  DoorRight:
+  - {fileID: 21300000, guid: a8f7c61ac6710064d8a108e5c968298d, type: 3}
+  - {fileID: 21300000, guid: 72b7eb505532da043bc2aeaab8700dc7, type: 3}
+  - {fileID: 21300000, guid: 6c5ba6c6783d8b143913878f4de1a37c, type: 3}
+  - {fileID: 21300000, guid: 334696c24261f364b965c18e86a8e46b, type: 3}
+  DoorTopIce:
+  - {fileID: 21300000, guid: 24e5dad7e89b74b448306db8cb785f3d, type: 3}
+  - {fileID: 21300000, guid: 2d6397fa9fc4d7d4b98065071a5a6b81, type: 3}
+  - {fileID: 21300000, guid: d1c799a1c2511414d805936d682da73c, type: 3}
+  - {fileID: 21300000, guid: 76f4d60fe01069e43b9bf8f71472905b, type: 3}
+  DoorTopScreen:
+  - Screen:
+      serializedVersion: 2
+      x: 13
+      y: 70
+      width: 101
+      height: 80
+    GridOrigin: {x: 25, y: 71.5}
+    Pitch: 19.5
+  - Screen:
+      serializedVersion: 2
+      x: 60
+      y: 62
+      width: 134
+      height: 98
+    GridOrigin: {x: 78, y: 62.5}
+    Pitch: 19.5
+  - Screen:
+      serializedVersion: 2
+      x: 61
+      y: 62
+      width: 251
+      height: 98
+    GridOrigin: {x: 68.5, y: 62.5}
+    Pitch: 19.5
+  - Screen:
+      serializedVersion: 2
+      x: 71
+      y: 63
+      width: 361
+      height: 98
+    GridOrigin: {x: 128.5, y: 63.5}
+    Pitch: 19.5
+  DoorBottomScreen:
+  - Screen:
+      serializedVersion: 2
+      x: 13
+      y: 60
+      width: 101
+      height: 80
+    GridOrigin: {x: 25, y: 61.5}
+    Pitch: 19.5
+  - Screen:
+      serializedVersion: 2
+      x: 60
+      y: 55
+      width: 134
+      height: 98
+    GridOrigin: {x: 78, y: 55.5}
+    Pitch: 19.5
+  - Screen:
+      serializedVersion: 2
+      x: 65
+      y: 54
+      width: 251
+      height: 98
+    GridOrigin: {x: 72.5, y: 54.5}
+    Pitch: 19.5
+  - Screen:
+      serializedVersion: 2
+      x: 71
+      y: 57
+      width: 361
+      height: 98
+    GridOrigin: {x: 128.5, y: 57.499996}
+    Pitch: 19.5
+  DoorLeftScreen:
+  - Screen:
+      serializedVersion: 2
+      x: 30
+      y: 42
+      width: 96
+      height: 79
+    GridOrigin: {x: 40, y: 43}
+    Pitch: 19.5
+  - Screen:
+      serializedVersion: 2
+      x: 31
+      y: 88
+      width: 97
+      height: 134
+    GridOrigin: {x: 31.5, y: 106}
+    Pitch: 19.5
+  - Screen:
+      serializedVersion: 2
+      x: 32
+      y: 89
+      width: 98
+      height: 251
+    GridOrigin: {x: 32.5, y: 96.5}
+    Pitch: 19.5
+  - Screen:
+      serializedVersion: 2
+      x: 31
+      y: 102
+      width: 98
+      height: 361
+    GridOrigin: {x: 31.5, y: 150}
+    Pitch: 19.5
+  DoorRightScreen:
+  - Screen:
+      serializedVersion: 2
+      x: 34
+      y: 42
+      width: 96
+      height: 79
+    GridOrigin: {x: 41, y: 43}
+    Pitch: 19.5
+  - Screen:
+      serializedVersion: 2
+      x: 32
+      y: 88
+      width: 97
+      height: 134
+    GridOrigin: {x: 32.5, y: 106}
+    Pitch: 19.5
+  - Screen:
+      serializedVersion: 2
+      x: 30
+      y: 89
+      width: 98
+      height: 251
+    GridOrigin: {x: 30.5, y: 96.5}
+    Pitch: 19.5
+  - Screen:
+      serializedVersion: 2
+      x: 31
+      y: 102
+      width: 98
+      height: 361
+    GridOrigin: {x: 31.5, y: 150}
+    Pitch: 19.5
+  ScreenCellFill: 0.9
+  DoorBottomIce:
+  - {fileID: 21300000, guid: 55a19fc70330e6146b7ab87edf18f6ab, type: 3}
+  - {fileID: 21300000, guid: 14ccd7045e3159f48ad4709b4a19ed79, type: 3}
+  - {fileID: 21300000, guid: bee5793528da8d94ebd41c8fcee1ff8d, type: 3}
+  - {fileID: 21300000, guid: a140ad1720301204e81133ab8a9db008, type: 3}
+  DoorLeftIce:
+  - {fileID: 21300000, guid: 51286be5cad6ea449bfe02f8997a0dbf, type: 3}
+  - {fileID: 21300000, guid: 8b4b195a0bc36f342a604ef0a03d3c2f, type: 3}
+  - {fileID: 21300000, guid: 91f0d2f6c4a3ec54a94567c776dbca07, type: 3}
+  - {fileID: 21300000, guid: 41d8931f49f6d954382b17b975da81dc, type: 3}
+  DoorRightIce:
+  - {fileID: 21300000, guid: 5d49cc31e53afe145b3e7837823362bf, type: 3}
+  - {fileID: 21300000, guid: 221345b6d451a7445bc27b48d3827490, type: 3}
+  - {fileID: 21300000, guid: 707738af2024c0844a9d26487d892df3, type: 3}
+  - {fileID: 21300000, guid: dd1df64bb47b23a4a8543e03cfff1cd2, type: 3}
+  GateLeftLeaves:
+  - {fileID: 21300000, guid: 91c65dbc6873e5141aa80ad82124e1dd, type: 3}
+  - {fileID: 21300000, guid: 5d3646214e3e5e043aa74bda1511b300, type: 3}
+  - {fileID: 21300000, guid: 08a01a04927132f44aeea532040269c9, type: 3}
+  - {fileID: 21300000, guid: db6de1b43f1aeff49802567fae5c7d3c, type: 3}
+  GateRightLeaves:
+  - {fileID: 21300000, guid: 743c9fb23819b4740b2ae830f3f91a80, type: 3}
+  - {fileID: 21300000, guid: 284544f3eabd82842b187c49d3b1adc6, type: 3}
+  - {fileID: 21300000, guid: 4f6bcc2373e2514458a0ed56c85d1ad0, type: 3}
+  - {fileID: 21300000, guid: 87b417609ffca644b8210b59fae2013c, type: 3}
+  GateOffsetPixels: {x: 0, y: 0}
+  GateMaskOffset:
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  GateMaskSize:
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  GateMaskSoftness:
+  - {x: 70, y: 0}
+  - {x: 70, y: 0}
+  - {x: 70, y: 0}
+  - {x: 70, y: 0}
+  GateOpenDistance: 1
+  GateOpenSpeed: 5
+  GateDustCount: 10
+  GateDustColour: {r: 1, g: 1, b: 1, a: 0.7}
+  GateDustSize: 0.45
+  GateDustSpread: 0.8
+  GateDustRise: 0.25
+  GateDustTime: 0.55
+  PixelsPerCell: 128
+  DoorPixelsPerCell: 128
+  PieceSize: {x: 1, y: 1}
+  PieceOffset: {x: 0, y: 0}
+  WallOffsetTop: {x: 0, y: 0}
+  WallOffsetBottom: {x: 0, y: -0.15625}
+  WallOffsetLeft: {x: 0, y: 0}
+  WallOffsetRight: {x: 0.15625, y: 0}
+  CornerOffsetTopLeft: {x: 0, y: 0}
+  CornerOffsetTopRight: {x: 0, y: 0}
+  CornerOffsetBottomLeft: {x: 0, y: 0}
+  CornerOffsetBottomRight: {x: 0, y: 0}
+  ConcaveOffsetTopLeft: {x: 0, y: 0}
+  ConcaveOffsetTopRight: {x: 0, y: 0}
+  ConcaveOffsetBottomLeft: {x: 0, y: 0}
+  ConcaveOffsetBottomRight: {x: 0, y: 0}
+  DoorOffsetTop: {x: 0, y: 0}
+  DoorOffsetBottom: {x: 0, y: -0.15}
+  DoorOffsetLeft: {x: 0, y: 0}
+  DoorOffsetRight: {x: 0, y: 0}
+  FrameInset: 0.8
+  ShapeIcons:
+  - Sprite: {fileID: 21300000, guid: 306b34c003160f64790d869e3464f561, type: 3}
+    Cells:
+    - {x: 0, y: 0}
+    - {x: 1, y: 0}
+  - Sprite: {fileID: 21300000, guid: 54f41e87ee84a41428d971510f453c72, type: 3}
+    Cells:
+    - {x: 0, y: 0}
+    - {x: 1, y: 0}
+    - {x: 2, y: 0}
+  - Sprite: {fileID: 21300000, guid: ff6eb961471a39947bf6bac6ee789ba8, type: 3}
+    Cells:
+    - {x: 0, y: 0}
+    - {x: 1, y: 0}
+    - {x: 2, y: 0}
+    - {x: 3, y: 0}
+  - Sprite: {fileID: 21300000, guid: c18e040fc511f8643bb54971f7d4bc68, type: 3}
+    Cells:
+    - {x: 0, y: 0}
+    - {x: 1, y: 0}
+    - {x: 1, y: 1}
+    - {x: 1, y: 2}
+  - Sprite: {fileID: 21300000, guid: d55218d7d4691ca48b271eceba2cb6e2, type: 3}
+    Cells:
+    - {x: 0, y: 0}
+    - {x: 1, y: 0}
+    - {x: 0, y: 1}
+  - Sprite: {fileID: 21300000, guid: af8be21261000764fb95924d21cab2d6, type: 3}
+    Cells:
+    - {x: 0, y: 0}
+    - {x: 1, y: 0}
+    - {x: 0, y: 1}
+    - {x: 0, y: 2}
+  - Sprite: {fileID: 21300000, guid: 3aa35ec667dd93847a6ad04ef821af16, type: 3}
+    Cells:
+    - {x: 0, y: 0}
+  - Sprite: {fileID: 21300000, guid: 5e95fcd2d03bed6429405b3dd3dc178d, type: 3}
+    Cells:
+    - {x: 0, y: 0}
+    - {x: 1, y: 0}
+    - {x: 0, y: 1}
+    - {x: 1, y: 1}
+  - Sprite: {fileID: 21300000, guid: da991e39bd7aa2340b017b8bb09fdf13, type: 3}
+    Cells:
+    - {x: 0, y: 0}
+    - {x: 1, y: 0}
+    - {x: 1, y: 1}
+    - {x: 2, y: 1}
+  - Sprite: {fileID: 21300000, guid: 75231acaf8132f049bcc423ecd13875d, type: 3}
+    Cells:
+    - {x: 0, y: 0}
+    - {x: 1, y: 0}
+    - {x: 2, y: 0}
+    - {x: 1, y: 1}
+  - Sprite: {fileID: 21300000, guid: 33ed266c5e70f694aa4bc070b0f08ee1, type: 3}
+    Cells:
+    - {x: 1, y: 0}
+    - {x: 2, y: 0}
+    - {x: 0, y: 1}
+    - {x: 1, y: 1}
+  IconTint: {fileID: 2100000, guid: 39458c00667ebdd4ba4a80bd80d21e65, type: 2}
+  IconCellPixels: 19
+  IconCellSize: 0.22
+  IconOffset: {x: 0, y: 0}
+  CounterColour: {r: 1, g: 1, b: 1, a: 1}
+  CounterBadge: {r: 0, g: 0, b: 0, a: 0.55}
+  CounterBorder: {r: 0.78, g: 0.78, b: 0.8, a: 1}
+  CounterBorderWidth: 0.1
+  CounterSprite: {fileID: 21300000, guid: db46df267f1d158468878170255d0b92, type: 3}
+  CounterPlus: 0
+  CounterSize: 0.42
+  CounterAnchorTop: {x: 0, y: 0.5}
+  CounterAnchorBottom: {x: 1, y: 0.5}
+  CounterAnchorLeft: {x: 0.5, y: 0.1}
+  CounterAnchorRight: {x: 0.5, y: 0.1}
+  CounterOffset: {x: 0, y: 0}

@@ -1,0 +1,431 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fd28af06e0507248bbd442c49b581f1, type: 3}
+  m_Name: CD_GameplayTexts
+  m_EditorClassIdentifier: Modules.Localization.Shared::Modules.LocalizationModule.Shared.Data.UnityObjects.CD_LocalizationTable
+  Usage: 0
+  Texts:
+  - Key: gameplay.booster_hint.rocket
+    Translations:
+    - Code: en
+      Text: 'Tap a door: the jellies it is waiting for disappear.'
+    - Code: tr
+      Text: "Bir kap\u0131ya dokun: bekledi\u011Fi jellyler yok olsun."
+  - Key: gameplay.booster_hint.freeze
+    Translations:
+    - Code: en
+      Text: Time is frozen!
+    - Code: tr
+      Text: Zaman donduruldu!
+  - Key: gameplay.booster_hint.ufo
+    Translations:
+    - Code: en
+      Text: 'Tap a jelly: every jelly of its colour and its doors disappear.'
+    - Code: tr
+      Text: "Bir jellyye dokun: o renkteki t\xFCm jellyler ve kap\u0131lar\u0131
+        yok olsun."
+  - Key: gameplay.booster_locked
+    Translations:
+    - Code: en
+      Text: Lv {0}
+    - Code: tr
+      Text: Sv {0}
+  - Key: gameplay.lives_full
+    Translations:
+    - Code: en
+      Text: Full
+    - Code: tr
+      Text: Dolu
+  - Key: gameplay.out_of_lives
+    Translations:
+    - Code: en
+      Text: 'No lives left!
+
+        Next life in {0}'
+    - Code: tr
+      Text: "Can\u0131n kalmad\u0131!\nSonraki can: {0}"
+  - Key: lives.more_lives
+    Translations:
+    - Code: en
+      Text: More Lives
+    - Code: tr
+      Text: Daha Fazla Can
+  - Key: lives.next_life
+    Translations:
+    - Code: en
+      Text: Next life in {0}
+    - Code: tr
+      Text: 'Sonraki can: {0}'
+  - Key: lives.full
+    Translations:
+    - Code: en
+      Text: Your lives are full
+    - Code: tr
+      Text: "Canlar\u0131n dolu"
+  - Key: lives.buy
+    Translations:
+    - Code: en
+      Text: Buy  {0}
+    - Code: tr
+      Text: "Sat\u0131n Al  {0}"
+  - Key: gameplay.undo
+    Translations:
+    - Code: en
+      Text: Undo
+    - Code: tr
+      Text: Geri Al
+  - Key: gameplay.restart
+    Translations:
+    - Code: en
+      Text: Restart
+    - Code: tr
+      Text: "Yeniden Ba\u015Flat"
+  - Key: gameplay.level
+    Translations:
+    - Code: en
+      Text: Level {0}
+    - Code: tr
+      Text: Seviye {0}
+  - Key: gameplay.next_level
+    Translations:
+    - Code: en
+      Text: "Next level \u25B6"
+    - Code: tr
+      Text: "Sonraki b\xF6l\xFCm \u25B6"
+  - Key: gameplay.play_again
+    Translations:
+    - Code: en
+      Text: Play again
+    - Code: tr
+      Text: Tekrar oyna
+  - Key: gameplay.try_again
+    Translations:
+    - Code: en
+      Text: Try again
+    - Code: tr
+      Text: Tekrar dene
+  - Key: gameplay.times_up
+    Translations:
+    - Code: en
+      Text: Time's up
+    - Code: tr
+      Text: "S\xFCre doldu"
+  - Key: gameplay.well_done
+    Translations:
+    - Code: en
+      Text: Well done!
+    - Code: tr
+      Text: Harika!
+  - Key: gameplay.all_complete
+    Translations:
+    - Code: en
+      Text: All levels complete!
+    - Code: tr
+      Text: "T\xFCm b\xF6l\xFCmler tamamland\u0131!"
+  - Key: gameplay.win_body
+    Translations:
+    - Code: en
+      Text: "Level {0} complete\n{1} moves \xB7 {2:00}:{3:00}"
+    - Code: tr
+      Text: "B\xF6l\xFCm {0} tamamland\u0131\n{1} hamle \xB7 {2:00}:{3:00}"
+  - Key: gameplay.lose_body
+    Translations:
+    - Code: en
+      Text: 'Level {0}
+
+        {1} / {2} jellies delivered'
+    - Code: tr
+      Text: "B\xF6l\xFCm {0}\n{1} / {2} j\xF6le teslim edildi"
+  - Key: settings.title
+    Translations:
+    - Code: en
+      Text: Settings
+    - Code: tr
+      Text: Ayarlar
+  - Key: settings.language
+    Translations:
+    - Code: en
+      Text: Language
+    - Code: tr
+      Text: Dil
+  - Key: settings.close
+    Translations:
+    - Code: en
+      Text: Close
+    - Code: tr
+      Text: Kapat
+  - Key: main.play
+    Translations:
+    - Code: en
+      Text: Play
+    - Code: tr
+      Text: Oyna
+  - Key: main.home
+    Translations:
+    - Code: en
+      Text: Home
+    - Code: tr
+      Text: Ana Sayfa
+  - Key: main.nav.0
+    Translations:
+    - Code: en
+      Text: Shop
+    - Code: tr
+      Text: "Ma\u011Faza"
+  - Key: main.nav.1
+    Translations:
+    - Code: en
+      Text: Levels
+    - Code: tr
+      Text: "B\xF6l\xFCmler"
+  - Key: main.nav.3
+    Translations:
+    - Code: en
+      Text: Events
+    - Code: tr
+      Text: Etkinlikler
+  - Key: main.nav.4
+    Translations:
+    - Code: en
+      Text: Profile
+    - Code: tr
+      Text: Profil
+  - Key: settings.haptics
+    Translations:
+    - Code: en
+      Text: Haptics
+    - Code: tr
+      Text: "Titre\u015Fim"
+  - Key: settings.on
+    Translations:
+    - Code: en
+      Text: On
+    - Code: tr
+      Text: "A\xE7\u0131k"
+  - Key: settings.off
+    Translations:
+    - Code: en
+      Text: Off
+    - Code: tr
+      Text: "Kapal\u0131"
+  - Key: main.play.level
+    Translations:
+    - Code: en
+      Text: Level {0}
+    - Code: tr
+      Text: "B\xF6l\xFCm {0}"
+  - Key: pause.title
+    Translations:
+    - Code: en
+      Text: Pause
+    - Code: tr
+      Text: "Duraklat\u0131ld\u0131"
+  - Key: pause.resume
+    Translations:
+    - Code: en
+      Text: Resume
+    - Code: tr
+      Text: Devam Et
+  - Key: pause.quit
+    Translations:
+    - Code: en
+      Text: Quit
+    - Code: tr
+      Text: "\xC7\u0131k"
+  - Key: settings.sounds
+    Translations:
+    - Code: en
+      Text: Sounds
+    - Code: tr
+      Text: Sesler
+  - Key: settings.music
+    Translations:
+    - Code: en
+      Text: Music
+    - Code: tr
+      Text: "M\xFCzik"
+  - Key: settings.notifications
+    Translations:
+    - Code: en
+      Text: Notifications
+    - Code: tr
+      Text: Bildirimler
+  - Key: gameplay.perfect
+    Translations:
+    - Code: en
+      Text: PERFECT!
+    - Code: tr
+      Text: "M\xDCKEMMEL!"
+  - Key: gameplay.continue
+    Translations:
+    - Code: en
+      Text: Continue
+    - Code: tr
+      Text: Devam
+  - Key: gameplay.level_title
+    Translations:
+    - Code: en
+      Text: Level {0}
+    - Code: tr
+      Text: "B\xF6l\xFCm {0}"
+  - Key: gameplay.lose_life
+    Translations:
+    - Code: en
+      Text: You will lose 1 life!
+    - Code: tr
+      Text: 1 can kaybedeceksin!
+  - Key: gameplay.level_failed
+    Translations:
+    - Code: en
+      Text: Level Failed!
+    - Code: tr
+      Text: "B\xF6l\xFCm Ba\u015Far\u0131s\u0131z!"
+  - Key: gameplay.select_boosters
+    Translations:
+    - Code: en
+      Text: 'Select Boosters:'
+    - Code: tr
+      Text: "G\xFC\xE7lendirici Se\xE7:"
+  - Key: gameplay.retry
+    Translations:
+    - Code: en
+      Text: Retry
+    - Code: tr
+      Text: Tekrar Dene
+  - Key: loading.loading
+    Translations:
+    - Code: en
+      Text: Loading...
+    - Code: tr
+      Text: "Y\xFCkleniyor..."
+  - Key: tutorial.level1.step1
+    Translations:
+    - Code: en
+      Text: Drag to Move Jellies
+    - Code: tr
+      Text: "J\xF6leyi onu bekleyen kap\u0131ya s\xFCr\xFCkle!"
+  - Key: tutorial.level2.step1
+    Translations:
+    - Code: en
+      Text: Move Jellies Next to Each Other to Merge Them
+    - Code: tr
+      Text: "Ayn\u0131 renk j\xF6leleri birle\u015Ftirip kap\u0131n\u0131n istedi\u011Fi
+        \u015Fekli yap!"
+  - Key: tutorial.level2.step2
+    Translations:
+    - Code: en
+      Text: Move the New Jelly to the Gate
+    - Code: tr
+      Text: "\u015Eimdi yeni \u015Fekli kap\u0131s\u0131na g\xF6t\xFCr!"
+  - Key: info.ok
+    Translations:
+    - Code: en
+      Text: OK
+    - Code: tr
+      Text: Tamam
+  - Key: info.booster.subtitle
+    Translations:
+    - Code: en
+      Text: New booster unlocked!
+    - Code: tr
+      Text: "Yeni g\xFC\xE7lendirici a\xE7\u0131ld\u0131!"
+  - Key: info.booster.rocket.title
+    Translations:
+    - Code: en
+      Text: Rocket
+    - Code: tr
+      Text: Roket
+  - Key: info.booster.rocket.description
+    Translations:
+    - Code: en
+      Text: 'Tap a door: the jellies it waits for are taken away.'
+    - Code: tr
+      Text: "Bir kap\u0131ya dokun: bekledi\u011Fi j\xF6leler yok olsun."
+  - Key: info.booster.freezetime.title
+    Translations:
+    - Code: en
+      Text: Freeze Time
+    - Code: tr
+      Text: "Zaman\u0131 Dondur"
+  - Key: info.booster.freezetime.description
+    Translations:
+    - Code: en
+      Text: Stops the clock for a while, so you can think.
+    - Code: tr
+      Text: "S\xFCreyi bir s\xFCreli\u011Fine durdurur, d\xFC\u015F\xFCnmeye vaktin
+        olur."
+  - Key: info.booster.ufo.title
+    Translations:
+    - Code: en
+      Text: UFO
+    - Code: tr
+      Text: UFO
+  - Key: info.booster.ufo.description
+    Translations:
+    - Code: en
+      Text: 'Tap a jelly: every jelly of its colour is taken away.'
+    - Code: tr
+      Text: "Bir j\xF6leye dokun: o renkteki t\xFCm j\xF6leler yok olsun."
+  - Key: gameplay.booster_hint.ufo_frozen
+    Translations:
+    - Code: en
+      Text: "A frozen jelly or door still needs this colour. Pick another one."
+    - Code: tr
+      Text: "Donmu\u015F bir j\u00F6le ya da kap\u0131 bu renge h\u00E2l\u00E2 ihtiya\u00E7 duyuyor. Ba\u015Fka bir renk se\u00E7."
+  - Key: gameplay.difficulty.hard
+    Translations:
+    - Code: en
+      Text: "Hard"
+    - Code: tr
+      Text: "Zor"
+  - Key: gameplay.difficulty.super_hard
+    Translations:
+    - Code: en
+      Text: "Super Hard"
+    - Code: tr
+      Text: "\u00C7ok Zor"
+  - Key: notification.lives_full.title
+    Translations:
+    - Code: en
+      Text: "Lives refilled!"
+    - Code: tr
+      Text: "Canlar\u0131n doldu!"
+  - Key: notification.lives_full.text
+    Translations:
+    - Code: en
+      Text: "Your lives are full. Time to fuse some jellies!"
+    - Code: tr
+      Text: "Canlar\u0131n tamamen doldu. J\u00F6leleri birle\u015Ftirme zaman\u0131!"
+  - Key: notification.come_back_soon.title
+    Translations:
+    - Code: en
+      Text: "The jellies miss you"
+    - Code: tr
+      Text: "J\u00F6leler seni \u00F6zledi"
+  - Key: notification.come_back_soon.text
+    Translations:
+    - Code: en
+      Text: "A new level is waiting. Come back and play!"
+    - Code: tr
+      Text: "Yeni bir b\u00F6l\u00FCm seni bekliyor. Gel ve oyna!"
+  - Key: notification.come_back_later.title
+    Translations:
+    - Code: en
+      Text: "Still there?"
+    - Code: tr
+      Text: "H\u00E2l\u00E2 orada m\u0131s\u0131n?"
+  - Key: notification.come_back_later.text
+    Translations:
+    - Code: en
+      Text: "Your jellies are getting bored. Jump back in!"
+    - Code: tr
+      Text: "J\u00F6lelerin s\u0131k\u0131lmaya ba\u015Flad\u0131. Hemen geri d\u00F6n!"

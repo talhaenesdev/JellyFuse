@@ -1,0 +1,1729 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fd28af06e0507248bbd442c49b581f1, type: 3}
+  m_Name: CD_EditorTexts
+  m_EditorClassIdentifier: Modules.Localization.Shared::Modules.LocalizationModule.Shared.Data.UnityObjects.CD_LocalizationTable
+  Usage: 1
+  Texts:
+  - Key: Dragging
+    Translations:
+    - Code: tr
+      Text: "S\xFCr\xFCkleme"
+  - Key: Animate Jellies
+    Translations:
+    - Code: tr
+      Text: "J\xF6le Animasyonu"
+  - Key: 'Off: no wobble, stretch, pop or breathing, and their settings are hidden.
+      Jellies still slide and lift smoothly.'
+    Translations:
+    - Code: tr
+      Text: "Kapal\u0131: titreme, esneme, z\u0131plama ve nefes alma olmaz, ayarlar\u0131
+        da gizlenir. J\xF6leler yine yumu\u015Fak\xE7a kayar ve kalkar."
+  - Key: Grid Drag
+    Translations:
+    - Code: tr
+      Text: "H\xFCcre H\xFCcre S\xFCr\xFCkle"
+  - Key: 'On: a held jelly moves cell by cell. Off: it glides with the finger between
+      cells.'
+    Translations:
+    - Code: tr
+      Text: "A\xE7\u0131k: tutulan j\xF6le h\xFCcre h\xFCcre ilerler. Kapal\u0131:
+        h\xFCcreler aras\u0131nda parmakla birlikte kayar."
+  - Key: Drag Follow
+    Translations:
+    - Code: tr
+      Text: "Parma\u011F\u0131 Takip"
+  - Key: How far a gliding jelly may lead its cell toward the finger, in cells. It
+      never leads into a blocked cell.
+    Translations:
+    - Code: tr
+      Text: "Kayan j\xF6lenin h\xFCcresinden parma\u011Fa do\u011Fru ne kadar \xF6nde
+        gidebilece\u011Fi, h\xFCcre cinsinden. Kapal\u0131 bir h\xFCcreye asla girmez."
+  - Key: Slide Speed
+    Translations:
+    - Code: tr
+      Text: "Kayma H\u0131z\u0131"
+  - Key: How fast a jelly slides along its route, in cells per second. It never overshoots
+      or cuts a corner.
+    Translations:
+    - Code: tr
+      Text: "J\xF6lenin yolunda ne kadar h\u0131zl\u0131 kayd\u0131\u011F\u0131,
+        saniyede h\xFCcre. Asla hedefi ge\xE7mez, k\xF6\u015Fe kesmez."
+  - Key: Lifting
+    Translations:
+    - Code: tr
+      Text: "Kald\u0131rma"
+  - Key: Grab Lift
+    Translations:
+    - Code: tr
+      Text: "Tutma Y\xFCksekli\u011Fi"
+  - Key: How high a held jelly rises, in cells.
+    Translations:
+    - Code: tr
+      Text: "Tutulan j\xF6lenin ne kadar y\xFCkseldi\u011Fi, h\xFCcre cinsinden."
+  - Key: Lift Time
+    Translations:
+    - Code: tr
+      Text: "Kalkma S\xFCresi"
+  - Key: Seconds a jelly takes to rise or settle when it is lifted or put down.
+    Translations:
+    - Code: tr
+      Text: "J\xF6lenin kald\u0131r\u0131l\u0131nca y\xFCkselmesi ya da b\u0131rak\u0131l\u0131nca
+        oturmas\u0131 i\xE7in ge\xE7en saniye."
+  - Key: Springs
+    Translations:
+    - Code: tr
+      Text: Yaylar
+  - Key: Jelly Stiffness
+    Translations:
+    - Code: tr
+      Text: "J\xF6le Sertli\u011Fi"
+  - Key: How fast the shape springs back. Higher wobbles quicker.
+    Translations:
+    - Code: tr
+      Text: "\u015Eeklin ne kadar h\u0131zl\u0131 eski haline d\xF6nd\xFC\u011F\xFC.
+        Y\xFCksek de\u011Fer daha h\u0131zl\u0131 titrer."
+  - Key: Jelly Damping
+    Translations:
+    - Code: tr
+      Text: "J\xF6le S\xF6n\xFCm\xFC"
+  - Key: Lower keeps wobbling longer.
+    Translations:
+    - Code: tr
+      Text: "D\xFC\u015F\xFCk de\u011Fer daha uzun titretir."
+  - Key: Move Stretch
+    Translations:
+    - Code: tr
+      Text: Hareket Esnemesi
+  - Key: Stretch per cell per second of speed.
+    Translations:
+    - Code: tr
+      Text: "Saniyede bir h\xFCcrelik h\u0131z ba\u015F\u0131na esneme."
+  - Key: Max Stretch
+    Translations:
+    - Code: tr
+      Text: En Fazla Esneme
+  - Key: Pull Stretch
+    Translations:
+    - Code: tr
+      Text: "\xC7ekme Esnemesi"
+  - Key: How much a held jelly stretches toward the finger when pulled further than
+      it can follow.
+    Translations:
+    - Code: tr
+      Text: "Tutulan j\xF6le, takip edebilece\u011Finden uza\u011Fa \xE7ekilince
+        parma\u011Fa do\u011Fru ne kadar esner."
+  - Key: Grab Pop
+    Translations:
+    - Code: tr
+      Text: "Tutma Z\u0131plamas\u0131"
+  - Key: Spread when picked up, as a share of its size.
+    Translations:
+    - Code: tr
+      Text: "Tutulunca ne kadar yay\u0131ld\u0131\u011F\u0131, boyutuna oranla."
+  - Key: Land Squash
+    Translations:
+    - Code: tr
+      Text: "B\u0131rakma Ezilmesi"
+  - Key: Spread when put down.
+    Translations:
+    - Code: tr
+      Text: "B\u0131rak\u0131l\u0131nca ne kadar yay\u0131ld\u0131\u011F\u0131."
+  - Key: Fuse Pop
+    Translations:
+    - Code: tr
+      Text: "Birle\u015Fme Z\u0131plamas\u0131"
+  - Key: Spread when two jellies fuse.
+    Translations:
+    - Code: tr
+      Text: "\u0130ki j\xF6le birle\u015Fince ne kadar yay\u0131ld\u0131\u011F\u0131."
+  - Key: Neighbour Wobble
+    Translations:
+    - Code: tr
+      Text: "Kom\u015Fu Titremesi"
+  - Key: How strongly jellies touching the moving one react. 0 = only the moving
+      jelly wobbles.
+    Translations:
+    - Code: tr
+      Text: "Hareket eden j\xF6leye de\u011Fen j\xF6lelerin ne kadar tepki verdi\u011Fi.
+        0 = yaln\u0131zca hareket eden titrer."
+  - Key: Breath Amount
+    Translations:
+    - Code: tr
+      Text: "Nefes Miktar\u0131"
+  - Key: Idle breathing while nothing touches it.
+    Translations:
+    - Code: tr
+      Text: "Hi\xE7bir \u015Fey dokunmazken bo\u015Fta nefes alma."
+  - Key: Breath Speed
+    Translations:
+    - Code: tr
+      Text: "Nefes H\u0131z\u0131"
+  - Key: Fuse hint
+    Translations:
+    - Code: tr
+      Text: "Birle\u015Fme ipucu"
+  - Key: Fuse Hint Glow
+    Translations:
+    - Code: tr
+      Text: "\u0130pucu Parlamas\u0131"
+  - Key: How much brighter a jelly glows while the held one would fuse with it on
+      release.
+    Translations:
+    - Code: tr
+      Text: "Tutulan j\xF6le b\u0131rak\u0131l\u0131nca birle\u015Fecekse, o j\xF6lenin
+        ne kadar parlad\u0131\u011F\u0131."
+  - Key: Fuse Ready Lift
+    Translations:
+    - Code: tr
+      Text: "\u0130pucu Y\xFCksekli\u011Fi"
+  - Key: How high a jelly the held one would fuse with is lifted, in cells. Equal
+      to GrabLift lifts both to the same height.
+    Translations:
+    - Code: tr
+      Text: "Tutulan j\xF6lenin birle\u015Fece\u011Fi j\xF6lenin ne kadar kald\u0131r\u0131ld\u0131\u011F\u0131,
+        h\xFCcre cinsinden. Tutma Y\xFCksekli\u011Fi'ne e\u015Fitse ikisi ayn\u0131
+        y\xFCksekli\u011Fe \xE7\u0131kar."
+  - Key: Fuse Hint Pulse
+    Translations:
+    - Code: tr
+      Text: "\u0130pucu Nabz\u0131"
+  - Key: How much it swells with each pulse, as a share of its size.
+    Translations:
+    - Code: tr
+      Text: "Her nab\u0131zda ne kadar \u015Fi\u015Fti\u011Fi, boyutuna oranla."
+  - Key: Fuse Hint Speed
+    Translations:
+    - Code: tr
+      Text: "\u0130pucu H\u0131z\u0131"
+  - Key: "Pulses per second times 2\u03C0."
+    Translations:
+    - Code: tr
+      Text: "Saniyedeki nab\u0131z say\u0131s\u0131 \xD7 2\u03C0."
+  - Key: Delivery
+    Translations:
+    - Code: tr
+      Text: Teslim
+  - Key: Door Enter Time
+    Translations:
+    - Code: tr
+      Text: "Kap\u0131ya Giri\u015F S\xFCresi"
+  - Key: Seconds a delivered jelly takes to slide into its door and vanish. It plays
+      even with AnimateJellies off.
+    Translations:
+    - Code: tr
+      Text: "Teslim edilen j\xF6lenin kap\u0131s\u0131na kay\u0131p kaybolmas\u0131
+        i\xE7in ge\xE7en saniye. J\xF6le Animasyonu kapal\u0131yken de oynar."
+  - Key: Door Enter Squeeze
+    Translations:
+    - Code: tr
+      Text: "Kap\u0131da Daralma"
+  - Key: How much narrower it gets as it squeezes into the door, as a share of its
+      width.
+    Translations:
+    - Code: tr
+      Text: "Kap\u0131dan s\u0131k\u0131\u015Farak ge\xE7erken ne kadar darald\u0131\u011F\u0131,
+        geni\u015Fli\u011Fine oranla."
+  - Key: View
+    Translations:
+    - Code: tr
+      Text: "G\xF6r\xFCn\xFCm"
+  - Key: Sprite Tilt
+    Translations:
+    - Code: tr
+      Text: "E\u011Fim"
+  - Key: 'Vertical squash of the flat board: 1 looks straight down, lower looks more
+      from the side.'
+    Translations:
+    - Code: tr
+      Text: "Tahtan\u0131n dikeyde bas\u0131kl\u0131\u011F\u0131: 1 tam yukar\u0131dan
+        bakar, d\xFC\u015F\xFCk de\u011Fer daha yandan bakar."
+  - Key: Sprite Jelly Depth
+    Translations:
+    - Code: tr
+      Text: "J\xF6le Y\xFCksekli\u011Fi"
+  - Key: Visible side height of blocks, in cells.
+    Translations:
+    - Code: tr
+      Text: "Bloklar\u0131n g\xF6r\xFCnen yan y\xFCz y\xFCksekli\u011Fi, h\xFCcre
+        cinsinden."
+  - Key: Sprite Wall Depth
+    Translations:
+    - Code: tr
+      Text: "Duvar Y\xFCksekli\u011Fi"
+  - Key: Sprite Board Depth
+    Translations:
+    - Code: tr
+      Text: "Tahta Kal\u0131nl\u0131\u011F\u0131"
+  - Key: Jelly art
+    Translations:
+    - Code: tr
+      Text: "J\xF6le g\xF6rseli"
+  - Key: Jelly Sprite
+    Translations:
+    - Code: tr
+      Text: "J\xF6le Sprite'\u0131"
+  - Key: A sprite with a 9-slice border keeps round corners at any size; one without
+      is stretched.
+    Translations:
+    - Code: tr
+      Text: "9-slice kenar\u0131 olan sprite her boyutta yuvarlak k\xF6\u015Felerini
+        korur; olmayan esnetilir."
+  - Key: Jelly Sprite Is Block
+    Translations:
+    - Code: tr
+      Text: "J\xF6le Sprite'\u0131 Haz\u0131r Blok"
+  - Key: 'On: the jelly sprite is a finished block - top, side and shine painted
+      in. No side, shine or bridge is added, and the cells of one piece join edge
+      to edge.'
+    Translations:
+    - Code: tr
+      Text: "A\xE7\u0131k: j\xF6le sprite'\u0131 bitmi\u015F bir bloktur; \xFCst,
+        yan ve parlakl\u0131k \xE7izilidir. Yan, parlakl\u0131k ya da k\xF6pr\xFC
+        eklenmez, bir par\xE7an\u0131n h\xFCcreleri kenar kenara birle\u015Fir."
+  - Key: Jelly Sprite Offset
+    Translations:
+    - Code: tr
+      Text: "J\xF6le Sprite Kaymas\u0131"
+  - Key: Moves a jelly's picture off the centre of its cell, in cells (x right, y
+      up). Use it to seat the art on the grid; the jelly's cell does not change.
+    Translations:
+    - Code: tr
+      Text: "J\xF6le resmini h\xFCcresinin ortas\u0131ndan kayd\u0131r\u0131r, h\xFCcre
+        cinsinden (x sa\u011Fa, y yukar\u0131). G\xF6rseli \u0131zgaraya oturtmak
+        i\xE7in; j\xF6lenin h\xFCcresi de\u011Fi\u015Fmez."
+  - Key: Jelly Side Sprite
+    Translations:
+    - Code: tr
+      Text: "J\xF6le Yan Sprite'\u0131"
+  - Key: Optional. Drawn darker under the top face; empty uses the jelly sprite.
+    Translations:
+    - Code: tr
+      Text: "\u0130ste\u011Fe ba\u011Fl\u0131. \xDCst y\xFCz\xFCn alt\u0131nda daha
+        koyu \xE7izilir; bo\u015Fsa j\xF6le sprite'\u0131 kullan\u0131l\u0131r."
+  - Key: Jelly Highlight Sprite
+    Translations:
+    - Code: tr
+      Text: "J\xF6le Parlakl\u0131k Sprite'\u0131"
+  - Key: Jelly Shadow Sprite
+    Translations:
+    - Code: tr
+      Text: "J\xF6le G\xF6lge Sprite'\u0131"
+  - Key: Jelly Width
+    Translations:
+    - Code: tr
+      Text: "J\xF6le Geni\u015Fli\u011Fi"
+  - Key: Jelly width as a share of a cell.
+    Translations:
+    - Code: tr
+      Text: "J\xF6le geni\u015Fli\u011Fi, bir h\xFCcreye oranla."
+  - Key: Sprite Bridge Length
+    Translations:
+    - Code: tr
+      Text: "K\xF6pr\xFC Uzunlu\u011Fu"
+  - Key: Sprite Bridge Width
+    Translations:
+    - Code: tr
+      Text: "K\xF6pr\xFC Geni\u015Fli\u011Fi"
+  - Key: Board art
+    Translations:
+    - Code: tr
+      Text: "Tahta g\xF6rseli"
+  - Key: Tile Sprite
+    Translations:
+    - Code: tr
+      Text: "Zemin Sprite'\u0131"
+  - Key: Floor tile. A painted tile is drawn as it is; with TileSpriteAlt the two
+      alternate as a checkerboard.
+    Translations:
+    - Code: tr
+      Text: "Zemin karosu. \xC7izilmi\u015F karo oldu\u011Fu gibi \xE7izilir; Alternatif
+        Zemin ile ikisi dama tahtas\u0131 gibi s\u0131rayla gelir."
+  - Key: Tile Sprite Alt
+    Translations:
+    - Code: tr
+      Text: "Alternatif Zemin Sprite'\u0131"
+  - Key: Wall Skin
+    Translations:
+    - Code: tr
+      Text: "Duvar G\xF6r\xFCn\xFCm\xFC"
+  - Key: 'The wall round the board, the walls on it and the doors: a sprite for every
+      straight side, corner, wall join and door width.'
+    Translations:
+    - Code: tr
+      Text: "Tahtan\u0131n \xE7evresindeki duvar, tahtadaki duvarlar ve kap\u0131lar:
+        her d\xFCz kenar, k\xF6\u015Fe, duvar birle\u015Fimi ve kap\u0131 geni\u015Fli\u011Fi
+        i\xE7in bir sprite."
+  - Key: Wall Sprite
+    Translations:
+    - Code: tr
+      Text: "Duvar Sprite'\u0131"
+  - Key: The generated wall and door block, used wherever WallSkin leaves a slot
+      empty.
+    Translations:
+    - Code: tr
+      Text: "Duvar G\xF6r\xFCn\xFCm\xFC'nde bo\u015F kalan her yerde kullan\u0131lan
+        \xFCretilmi\u015F duvar ve kap\u0131 blo\u011Fu."
+  - Key: Board Sprite
+    Translations:
+    - Code: tr
+      Text: "Tahta Sprite'\u0131"
+  - Key: Background Sprite
+    Translations:
+    - Code: tr
+      Text: "Arka Plan Sprite'\u0131"
+  - Key: Sprite Tile Size
+    Translations:
+    - Code: tr
+      Text: Zemin Karosu Boyutu
+  - Key: Sizes as a fraction of one cell.
+    Translations:
+    - Code: tr
+      Text: "Boyutlar, bir h\xFCcreye oranla."
+  - Key: Sprite Wall Size
+    Translations:
+    - Code: tr
+      Text: Duvar Boyutu
+  - Key: Shading
+    Translations:
+    - Code: tr
+      Text: "G\xF6lgelendirme"
+  - Key: Sprite Corner Radius
+    Translations:
+    - Code: tr
+      Text: "K\xF6\u015Fe Yuvarlakl\u0131\u011F\u0131"
+  - Key: Corner radius of 9-sliced sprites, as a share of the block.
+    Translations:
+    - Code: tr
+      Text: "9-slice sprite'lar\u0131n k\xF6\u015Fe yar\u0131\xE7ap\u0131, blo\u011Fa
+        oranla."
+  - Key: Sprite Side Darken
+    Translations:
+    - Code: tr
+      Text: "Yan Y\xFCz Koyulu\u011Fu"
+  - Key: How much darker a block's side is than its top.
+    Translations:
+    - Code: tr
+      Text: "Blo\u011Fun yan y\xFCz\xFCn\xFCn \xFCst\xFCnden ne kadar koyu oldu\u011Fu."
+  - Key: Sprite Highlight
+    Translations:
+    - Code: tr
+      Text: "Parlakl\u0131k"
+  - Key: Sprite Shadow
+    Translations:
+    - Code: tr
+      Text: "G\xF6lge"
+  - Key: Sprite Shadow Offset
+    Translations:
+    - Code: tr
+      Text: "G\xF6lge Kaymas\u0131"
+  - Key: Shadow offset from a block's footprint, in cells.
+    Translations:
+    - Code: tr
+      Text: "G\xF6lgenin blo\u011Fun oturdu\u011Fu yerden kaymas\u0131, h\xFCcre
+        cinsinden."
+  - Key: Colours
+    Translations:
+    - Code: tr
+      Text: Renkler
+  - Key: Palette
+    Translations:
+    - Code: tr
+      Text: Palet
+  - Key: The jelly colours. Their tints are edited right here, and the level editor
+      and the game read the same palette.
+    Translations:
+    - Code: tr
+      Text: "J\xF6le renkleri. Tonlar\u0131 tam burada d\xFCzenlenir; level edit\xF6r\xFC
+        ve oyun ayn\u0131 paleti okur."
+  - Key: Board Colour
+    Translations:
+    - Code: tr
+      Text: Tahta Rengi
+  - Key: Tile Colour
+    Translations:
+    - Code: tr
+      Text: Zemin Rengi
+  - Key: Wall Colour
+    Translations:
+    - Code: tr
+      Text: Duvar Rengi
+  - Key: Background
+    Translations:
+    - Code: tr
+      Text: Arka Plan
+  - Key: Assign CD_JellyPalette to edit the jelly colours here.
+    Translations:
+    - Code: tr
+      Text: "J\xF6le renklerini burada d\xFCzenlemek i\xE7in CD_JellyPalette ata."
+  - Key: Backdrop
+    Translations:
+    - Code: tr
+      Text: "Ekran Arka Plan\u0131"
+  - Key: Ink
+    Translations:
+    - Code: tr
+      Text: "Yaz\u0131 Rengi"
+  - Key: Muted
+    Translations:
+    - Code: tr
+      Text: "Soluk Yaz\u0131 Rengi"
+  - Key: Card Colour
+    Translations:
+    - Code: tr
+      Text: Kart Rengi
+  - Key: Button Colour
+    Translations:
+    - Code: tr
+      Text: Buton Rengi
+  - Key: Hud Accent
+    Translations:
+    - Code: tr
+      Text: Vurgu Rengi
+  - Key: The coin icon and other gold touches in the HUD.
+    Translations:
+    - Code: tr
+      Text: "Aray\xFCzdeki para ikonu ve di\u011Fer alt\u0131n rengi dokunu\u015Flar."
+  - Key: Map placement
+    Translations:
+    - Code: tr
+      Text: "Haritan\u0131n yeri"
+  - Key: Map Side Margin
+    Translations:
+    - Code: tr
+      Text: "Harita Yan Bo\u015Flu\u011Fu"
+  - Key: Space between the map and each side of the screen, as a share of the screen's
+      width. The map is centred, so both sides always get the same space.
+    Translations:
+    - Code: tr
+      Text: "Harita ile ekran\u0131n her iki yan\u0131 aras\u0131ndaki bo\u015Fluk,
+        ekran geni\u015Fli\u011Fine oranla. Harita ortalan\u0131r, iki yan her zaman
+        e\u015Fit bo\u015Fluk al\u0131r."
+  - Key: Map Top Space
+    Translations:
+    - Code: tr
+      Text: "Harita \xDCst Bo\u015Flu\u011Fu"
+  - Key: Room kept for the HUD above the map, in layout units (the screen is 760
+      units wide).
+    Translations:
+    - Code: tr
+      Text: "Haritan\u0131n \xFCst\xFCnde aray\xFCz i\xE7in ayr\u0131lan yer, yerle\u015Fim
+        birimi cinsinden (ekran 760 birim geni\u015Fli\u011Finde)."
+  - Key: Map Bottom Space
+    Translations:
+    - Code: tr
+      Text: "Harita Alt Bo\u015Flu\u011Fu"
+  - Key: Room kept for the restart button and the warning line below the map, in
+      layout units. Lower moves the map down and lets it grow.
+    Translations:
+    - Code: tr
+      Text: "Haritan\u0131n alt\u0131nda yeniden ba\u015Flat butonu ve uyar\u0131
+        sat\u0131r\u0131 i\xE7in ayr\u0131lan yer, yerle\u015Fim birimi cinsinden.
+        D\xFC\u015F\xFCk de\u011Fer haritay\u0131 a\u015Fa\u011F\u0131 al\u0131r
+        ve b\xFCy\xFCmesine izin verir."
+  - Key: Timer
+    Translations:
+    - Code: tr
+      Text: "S\xFCre"
+  - Key: Time Warning Colour
+    Translations:
+    - Code: tr
+      Text: "S\xFCre Uyar\u0131 Rengi"
+  - Key: Time Warning Seconds
+    Translations:
+    - Code: tr
+      Text: "S\xFCre Uyar\u0131 Saniyesi"
+  - Key: The timer turns to the warning colour at this many seconds left.
+    Translations:
+    - Code: tr
+      Text: "Bu kadar saniye kal\u0131nca s\xFCre uyar\u0131 rengine d\xF6ner."
+  - Key: Win and lose panels
+    Translations:
+    - Code: tr
+      Text: Kazanma ve kaybetme panelleri
+  - Key: Panel Dim
+    Translations:
+    - Code: tr
+      Text: "Panel Karartmas\u0131"
+  - Key: Win Colour
+    Translations:
+    - Code: tr
+      Text: Kazanma Rengi
+  - Key: Win Panel Delay
+    Translations:
+    - Code: tr
+      Text: Kazanma Paneli Gecikmesi
+  - Key: Seconds after the win before the panel shows, so the last jelly is seen
+      leaving.
+    Translations:
+    - Code: tr
+      Text: "Kazand\u0131ktan sonra panel gelmeden \xF6nce ge\xE7en saniye; son j\xF6lenin
+        \xE7\u0131kt\u0131\u011F\u0131 g\xF6r\xFCls\xFCn diye."
+  - Key: Lose Panel Delay
+    Translations:
+    - Code: tr
+      Text: Kaybetme Paneli Gecikmesi
+  - Key: Frame - the wall round the board
+    Translations:
+    - Code: tr
+      Text: "\xC7er\xE7eve - tahtan\u0131n \xE7evresindeki duvar"
+  - Key: Top
+    Translations:
+    - Code: tr
+      Text: "\xDCst"
+  - Key: The straight wall along the top of the board.
+    Translations:
+    - Code: tr
+      Text: "Tahtan\u0131n \xFCst\xFC boyunca d\xFCz duvar."
+  - Key: Bottom
+    Translations:
+    - Code: tr
+      Text: Alt
+  - Key: The straight wall along the bottom of the board.
+    Translations:
+    - Code: tr
+      Text: "Tahtan\u0131n alt\u0131 boyunca d\xFCz duvar."
+  - Key: Left
+    Translations:
+    - Code: tr
+      Text: Sol
+  - Key: The straight wall down the left of the board.
+    Translations:
+    - Code: tr
+      Text: "Tahtan\u0131n solu boyunca d\xFCz duvar."
+  - Key: Right
+    Translations:
+    - Code: tr
+      Text: "Sa\u011F"
+  - Key: The straight wall down the right of the board.
+    Translations:
+    - Code: tr
+      Text: "Tahtan\u0131n sa\u011F\u0131 boyunca d\xFCz duvar."
+  - Key: Corner Top Left
+    Translations:
+    - Code: tr
+      Text: "Sol \xDCst K\xF6\u015Fe"
+  - Key: Corner Top Right
+    Translations:
+    - Code: tr
+      Text: "Sa\u011F \xDCst K\xF6\u015Fe"
+  - Key: Corner Bottom Left
+    Translations:
+    - Code: tr
+      Text: "Sol Alt K\xF6\u015Fe"
+  - Key: Corner Bottom Right
+    Translations:
+    - Code: tr
+      Text: "Sa\u011F Alt K\xF6\u015Fe"
+  - Key: Walls on the board - picked by which neighbours are walls too
+    Translations:
+    - Code: tr
+      Text: "Tahtadaki duvarlar - hangi kom\u015Fular\u0131n da duvar oldu\u011Funa
+        g\xF6re se\xE7ilir"
+  - Key: Inner
+    Translations:
+    - Code: tr
+      Text: "\u0130\xE7 Duvar"
+  - Key: Used for every piece below that is left empty.
+    Translations:
+    - Code: tr
+      Text: "A\u015Fa\u011F\u0131da bo\u015F b\u0131rak\u0131lan her par\xE7a i\xE7in
+        kullan\u0131l\u0131r."
+  - Key: Single
+    Translations:
+    - Code: tr
+      Text: Tek
+  - Key: A wall with no wall beside it.
+    Translations:
+    - Code: tr
+      Text: "Yan\u0131nda ba\u015Fka duvar olmayan duvar."
+  - Key: End Up
+    Translations:
+    - Code: tr
+      Text: "U\xE7 (Yukar\u0131)"
+  - Key: The end of a line of walls that carries on upward.
+    Translations:
+    - Code: tr
+      Text: "Yukar\u0131 do\u011Fru devam eden duvar s\u0131ras\u0131n\u0131n ucu."
+  - Key: End Down
+    Translations:
+    - Code: tr
+      Text: "U\xE7 (A\u015Fa\u011F\u0131)"
+  - Key: The end of a line of walls that carries on downward.
+    Translations:
+    - Code: tr
+      Text: "A\u015Fa\u011F\u0131 do\u011Fru devam eden duvar s\u0131ras\u0131n\u0131n
+        ucu."
+  - Key: End Left
+    Translations:
+    - Code: tr
+      Text: "U\xE7 (Sol)"
+  - Key: The end of a line of walls that carries on to the left.
+    Translations:
+    - Code: tr
+      Text: "Sola do\u011Fru devam eden duvar s\u0131ras\u0131n\u0131n ucu."
+  - Key: End Right
+    Translations:
+    - Code: tr
+      Text: "U\xE7 (Sa\u011F)"
+  - Key: The end of a line of walls that carries on to the right.
+    Translations:
+    - Code: tr
+      Text: "Sa\u011Fa do\u011Fru devam eden duvar s\u0131ras\u0131n\u0131n ucu."
+  - Key: Horizontal
+    Translations:
+    - Code: tr
+      Text: Yatay
+    - Code: en
+      Text: Horizontal
+  - Key: The middle of a line of walls from left to right.
+    Translations:
+    - Code: tr
+      Text: "Soldan sa\u011Fa duvar s\u0131ras\u0131n\u0131n ortas\u0131."
+  - Key: Vertical
+    Translations:
+    - Code: tr
+      Text: Dikey
+    - Code: en
+      Text: Vertical
+  - Key: The middle of a line of walls from top to bottom.
+    Translations:
+    - Code: tr
+      Text: "Yukar\u0131dan a\u015Fa\u011F\u0131ya duvar s\u0131ras\u0131n\u0131n
+        ortas\u0131."
+  - Key: Corner Up Right
+    Translations:
+    - Code: tr
+      Text: "K\xF6\u015Fe (Yukar\u0131-Sa\u011F)"
+  - Key: A corner joining the wall above and the wall to the right.
+    Translations:
+    - Code: tr
+      Text: "Yukar\u0131daki duvarla sa\u011Fdaki duvar\u0131 birle\u015Ftiren k\xF6\u015Fe."
+  - Key: Corner Up Left
+    Translations:
+    - Code: tr
+      Text: "K\xF6\u015Fe (Yukar\u0131-Sol)"
+  - Key: A corner joining the wall above and the wall to the left.
+    Translations:
+    - Code: tr
+      Text: "Yukar\u0131daki duvarla soldaki duvar\u0131 birle\u015Ftiren k\xF6\u015Fe."
+  - Key: Corner Down Right
+    Translations:
+    - Code: tr
+      Text: "K\xF6\u015Fe (A\u015Fa\u011F\u0131-Sa\u011F)"
+  - Key: A corner joining the wall below and the wall to the right.
+    Translations:
+    - Code: tr
+      Text: "A\u015Fa\u011F\u0131daki duvarla sa\u011Fdaki duvar\u0131 birle\u015Ftiren
+        k\xF6\u015Fe."
+  - Key: Corner Down Left
+    Translations:
+    - Code: tr
+      Text: "K\xF6\u015Fe (A\u015Fa\u011F\u0131-Sol)"
+  - Key: A corner joining the wall below and the wall to the left.
+    Translations:
+    - Code: tr
+      Text: "A\u015Fa\u011F\u0131daki duvarla soldaki duvar\u0131 birle\u015Ftiren
+        k\xF6\u015Fe."
+  - Key: Tee Up
+    Translations:
+    - Code: tr
+      Text: "T (Yukar\u0131)"
+  - Key: Walls to the left, right and above.
+    Translations:
+    - Code: tr
+      Text: "Solda, sa\u011Fda ve yukar\u0131da duvar."
+  - Key: Tee Down
+    Translations:
+    - Code: tr
+      Text: "T (A\u015Fa\u011F\u0131)"
+  - Key: Walls to the left, right and below.
+    Translations:
+    - Code: tr
+      Text: "Solda, sa\u011Fda ve a\u015Fa\u011F\u0131da duvar."
+  - Key: Tee Left
+    Translations:
+    - Code: tr
+      Text: T (Sol)
+  - Key: Walls above, below and to the left.
+    Translations:
+    - Code: tr
+      Text: "Yukar\u0131da, a\u015Fa\u011F\u0131da ve solda duvar."
+  - Key: Tee Right
+    Translations:
+    - Code: tr
+      Text: "T (Sa\u011F)"
+  - Key: Walls above, below and to the right.
+    Translations:
+    - Code: tr
+      Text: "Yukar\u0131da, a\u015Fa\u011F\u0131da ve sa\u011Fda duvar."
+  - Key: Cross
+    Translations:
+    - Code: tr
+      Text: "Art\u0131"
+  - Key: Walls on all four sides.
+    Translations:
+    - Code: tr
+      Text: "D\xF6rt yanda da duvar."
+  - Key: Doors - element 0 is the 1x door, 3 the 4x one
+    Translations:
+    - Code: tr
+      Text: "Kap\u0131lar - 0. eleman 1x kap\u0131, 3. eleman 4x kap\u0131"
+  - Key: Door Inset
+    Translations:
+    - Code: tr
+      Text: "Kap\u0131 \u0130\xE7e \xC7ekme"
+  - Key: How far the door is pulled in from the board's edge cell onto the wall,
+      in cells. The wall runs on under it.
+    Translations:
+    - Code: tr
+      Text: "Kap\u0131n\u0131n tahtan\u0131n kenar h\xFCcresinden duvar\u0131n \xFCst\xFCne
+        ne kadar i\xE7eri \xE7ekildi\u011Fi, h\xFCcre cinsinden. Duvar alt\u0131ndan
+        devam eder."
+  - Key: Door Thickness
+    Translations:
+    - Code: tr
+      Text: "Kap\u0131 Kal\u0131nl\u0131\u011F\u0131"
+  - Key: The door's size across the wall, in cells. Make it cover the wall under
+      it.
+    Translations:
+    - Code: tr
+      Text: "Kap\u0131n\u0131n duvara dik boyutu, h\xFCcre cinsinden. Alt\u0131ndaki
+        duvar\u0131 \xF6rtecek kadar olmal\u0131."
+  - Key: Door Overhang
+    Translations:
+    - Code: tr
+      Text: "Kap\u0131 Ta\u015Fmas\u0131"
+  - Key: How far the door reaches past its cells at each end, in cells, so no wall
+      shows at its ends.
+    Translations:
+    - Code: tr
+      Text: "Kap\u0131n\u0131n iki ucundan h\xFCcrelerinin ne kadar \xF6tesine ta\u015Ft\u0131\u011F\u0131,
+        h\xFCcre cinsinden; u\xE7larda duvar g\xF6r\xFCnmesin diye."
+  - Key: Door Top
+    Translations:
+    - Code: tr
+      Text: "\xDCst Kap\u0131lar"
+  - Key: Doors in the top wall. An empty slot uses the generated door, tinted with
+      the jelly it waits for.
+    Translations:
+    - Code: tr
+      Text: "\xDCst duvardaki kap\u0131lar. Bo\u015F slot, bekledi\u011Fi j\xF6lenin
+        renginde \xFCretilmi\u015F kap\u0131y\u0131 kullan\u0131r."
+  - Key: Door Bottom
+    Translations:
+    - Code: tr
+      Text: "Alt Kap\u0131lar"
+  - Key: Door Left
+    Translations:
+    - Code: tr
+      Text: "Sol Kap\u0131lar"
+  - Key: Door Right
+    Translations:
+    - Code: tr
+      Text: "Sa\u011F Kap\u0131lar"
+  - Key: Placement
+    Translations:
+    - Code: tr
+      Text: "Yerle\u015Fim"
+  - Key: Piece Size
+    Translations:
+    - Code: tr
+      Text: "Par\xE7a Boyutu"
+  - Key: Size of a painted wall piece, in cells. Above 1 lets pieces overlap so the
+      joins do not show.
+    Translations:
+    - Code: tr
+      Text: "\xC7izilmi\u015F duvar par\xE7as\u0131n\u0131n boyutu, h\xFCcre cinsinden.
+        1'in \xFCst\xFC par\xE7alar\u0131 hafif\xE7e \xFCst \xFCste bindirir, ekler
+        g\xF6r\xFCnmez."
+  - Key: Piece Offset
+    Translations:
+    - Code: tr
+      Text: "Par\xE7a Kaymas\u0131"
+  - Key: Moves painted wall pieces and doors off their cells, in cells (x right,
+      y up).
+    Translations:
+    - Code: tr
+      Text: "\xC7izilmi\u015F duvar par\xE7alar\u0131n\u0131 ve kap\u0131lar\u0131
+        h\xFCcrelerinden kayd\u0131r\u0131r, h\xFCcre cinsinden (x sa\u011Fa, y yukar\u0131)."
+  - Key: Frame Inset
+    Translations:
+    - Code: tr
+      Text: "\xC7er\xE7eve \u0130\xE7e \xC7ekme"
+  - Key: Moves the painted wall round the board toward the middle, in cells; corners
+      move both ways. Near 1 sets a wall painted on the outer edge of its square
+      against the floor.
+    Translations:
+    - Code: tr
+      Text: "Tahtan\u0131n \xE7evresindeki \xE7izilmi\u015F duvar\u0131 ortaya do\u011Fru
+        \xE7eker, h\xFCcre cinsinden; k\xF6\u015Feler iki y\xF6nde kayar. 1'e yak\u0131n
+        de\u011Fer, karesinin d\u0131\u015F kenar\u0131na \xE7izilmi\u015F duvar\u0131
+        zemine yaslar."
+  - Key: Icon Size
+    Translations:
+    - Code: tr
+      Text: "\u0130kon Boyutu"
+  - Key: Size of the jelly drawn on a door, as a share of the door's size.
+    Translations:
+    - Code: tr
+      Text: "Kap\u0131n\u0131n \xFCst\xFCnde \xE7izilen j\xF6lenin boyutu, kap\u0131n\u0131n
+        boyutuna oranla."
+  - Key: Icon Offset
+    Translations:
+    - Code: tr
+      Text: "\u0130kon Kaymas\u0131"
+  - Key: Moves the jelly drawn on a door, in cells.
+    Translations:
+    - Code: tr
+      Text: "Kap\u0131n\u0131n \xFCst\xFCnde \xE7izilen j\xF6leyi kayd\u0131r\u0131r,
+        h\xFCcre cinsinden."
+  - Key: Counter Colour
+    Translations:
+    - Code: tr
+      Text: "Saya\xE7 Rengi"
+  - Key: How many more jellies a door takes, shown as +N at its corner.
+    Translations:
+    - Code: tr
+      Text: "Kap\u0131n\u0131n daha ka\xE7 j\xF6le alaca\u011F\u0131; k\xF6\u015Fesinde
+        +N olarak g\xF6sterilir."
+  - Key: Counter Badge
+    Translations:
+    - Code: tr
+      Text: "Saya\xE7 Arka Plan\u0131"
+  - Key: Counter Size
+    Translations:
+    - Code: tr
+      Text: "Saya\xE7 Boyutu"
+  - Key: Counter Offset
+    Translations:
+    - Code: tr
+      Text: "Saya\xE7 Kaymas\u0131"
+  - Key: Where the +N badge sits, from the door's top-right corner, in cells.
+    Translations:
+    - Code: tr
+      Text: "+N rozetinin kap\u0131n\u0131n sa\u011F \xFCst k\xF6\u015Fesine g\xF6re
+        yeri, h\xFCcre cinsinden."
+  - Key: The walls and doors of the board. Changes preview immediately in Play Mode.
+    Translations:
+    - Code: tr
+      Text: "Tahtan\u0131n duvarlar\u0131 ve kap\u0131lar\u0131. De\u011Fi\u015Fiklikler
+        Play Mode'da an\u0131nda g\xF6r\xFCn\xFCr."
+  - Key: Feel
+    Translations:
+    - Code: tr
+      Text: His
+  - Key: Look
+    Translations:
+    - Code: tr
+      Text: "G\xF6r\xFCn\xFC\u015F"
+  - Key: Hud
+    Translations:
+    - Code: tr
+      Text: "Aray\xFCz"
+  - Key: How the jellies move and react
+    Translations:
+    - Code: tr
+      Text: "J\xF6lelerin nas\u0131l hareket edip tepki verdi\u011Fi"
+  - Key: 'How the board looks: art, shading, colours, walls'
+    Translations:
+    - Code: tr
+      Text: "Tahtan\u0131n g\xF6r\xFCn\xFC\u015F\xFC: g\xF6rseller, g\xF6lgeler,
+        renkler, duvarlar"
+  - Key: The screen around the board
+    Translations:
+    - Code: tr
+      Text: "Tahtan\u0131n \xE7evresindeki ekran"
+  - Key: Each part is an asset of its own. Edit it here or open it on its own; changes
+      preview immediately in Play Mode.
+    Translations:
+    - Code: tr
+      Text: "Her b\xF6l\xFCm ayr\u0131 bir asset. Burada ya da kendi ba\u015F\u0131na
+        a\xE7arak d\xFCzenle; de\u011Fi\u015Fiklikler Play Mode'da an\u0131nda g\xF6r\xFCn\xFCr."
+  - Key: 'Assign a {0} asset: the screen does not open without it.'
+    Translations:
+    - Code: tr
+      Text: "Bir {0} asset'i ata: ekran onsuz a\xE7\u0131lmaz."
+  - Key: Refresh preview
+    Translations:
+    - Code: tr
+      Text: "\xD6nizlemeyi yenile"
+  - Key: "JELLY \u2022 LEVELS"
+    Translations:
+    - Code: tr
+      Text: "J\xD6LE \u2022 LEVELLER"
+  - Key: The order is the level number. Press Open to edit a level.
+    Translations:
+    - Code: tr
+      Text: "S\u0131ra level numaras\u0131d\u0131r. Bir level'i d\xFCzenlemek i\xE7in
+        A\xE7'a bas."
+  - Key: Start level
+    Translations:
+    - Code: tr
+      Text: "Ba\u015Flang\u0131\xE7 level'i"
+  - Key: (empty row)
+    Translations:
+    - Code: tr
+      Text: "(bo\u015F sat\u0131r)"
+  - Key: This level has errors; open it and read the warnings.
+    Translations:
+    - Code: tr
+      Text: "Bu level'de hata var; a\xE7 ve uyar\u0131lar\u0131 oku."
+  - Key: "\u25B6 start"
+    Translations:
+    - Code: tr
+      Text: "\u25B6 ba\u015Flang\u0131\xE7"
+  - Key: Open
+    Translations:
+    - Code: tr
+      Text: "A\xE7"
+  - Key: 'Copy: the copy goes right after it'
+    Translations:
+    - Code: tr
+      Text: "Kopyala: kopya hemen arkas\u0131na gelir"
+  - Key: Remove from the list (the file is kept)
+    Translations:
+    - Code: tr
+      Text: "Listeden \xE7\u0131kar (dosya silinmez)"
+  - Key: + Add new level
+    Translations:
+    - Code: tr
+      Text: + Yeni level ekle
+  - Key: Add an existing level
+    Translations:
+    - Code: tr
+      Text: Var olan bir level ekle
+  - Key: 'Advanced: raw list'
+    Translations:
+    - Code: tr
+      Text: "Geli\u015Fmi\u015F: ham liste"
+  - Key: No CD_JellyLevels asset found. Create one with Create > Jelly Fuse > Level
+      List.
+    Translations:
+    - Code: tr
+      Text: "CD_JellyLevels asset'i bulunamad\u0131. Create > Jelly Fuse > Level
+        List ile olu\u015Ftur."
+  - Key: Pick a level on the left, or add a new one.
+    Translations:
+    - Code: tr
+      Text: "Soldan bir level se\xE7 ya da yeni bir tane ekle."
+  - Key: "JELLY \u2022 LEVEL DESIGNER"
+    Translations:
+    - Code: tr
+      Text: "J\xD6LE \u2022 LEVEL TASARIMCISI"
+  - Key: "Level settings: {0}  |  {1} \xD7 {2}  |  {3} s"
+    Translations:
+    - Code: tr
+      Text: "Level ayarlar\u0131: {0}  |  {1} \xD7 {2}  |  {3} sn"
+  - Key: Level name
+    Translations:
+    - Code: tr
+      Text: "Level ad\u0131"
+  - Key: Hint
+    Translations:
+    - Code: tr
+      Text: "\u0130pucu"
+  - Key: Width
+    Translations:
+    - Code: tr
+      Text: "Geni\u015Flik"
+  - Key: Height
+    Translations:
+    - Code: tr
+      Text: "Y\xFCkseklik"
+  - Key: Time (s)
+    Translations:
+    - Code: tr
+      Text: "S\xFCre (sn)"
+  - Key: This level still has exits from before doors. The game turns them into doors
+      as it loads; convert them here to edit them as doors.
+    Translations:
+    - Code: tr
+      Text: "Bu level'de kap\u0131lardan \xF6nceki eski \xE7\u0131k\u0131\u015Flar
+        var. Oyun y\xFCklerken onlar\u0131 kap\u0131ya \xE7evirir; kap\u0131 olarak
+        d\xFCzenlemek i\xE7in burada \xE7evir."
+  - Key: Convert old exits to doors
+    Translations:
+    - Code: tr
+      Text: "Eski \xE7\u0131k\u0131\u015Flar\u0131 kap\u0131ya \xE7evir"
+  - Key: Jelly
+    Translations:
+    - Code: tr
+      Text: "J\xF6le"
+  - Key: Door
+    Translations:
+    - Code: tr
+      Text: "Kap\u0131"
+  - Key: Wall
+    Translations:
+    - Code: tr
+      Text: Duvar
+  - Key: Empty
+    Translations:
+    - Code: tr
+      Text: "Bo\u015F"
+  - Key: Erase
+    Translations:
+    - Code: tr
+      Text: Sil
+  - Key: 'Click empty floor: place a jelly.  Click a jelly: select.  Drag: move.'
+    Translations:
+    - Code: tr
+      Text: "Bo\u015F zemine t\u0131kla: j\xF6le koy.  J\xF6leye t\u0131kla: se\xE7. 
+        S\xFCr\xFCkle: ta\u015F\u0131."
+  - Key: 'Click the wall round the board (its outermost cells): place a door.  Click
+      a door: select it, then set the jellies it takes below the board.  Drag: move.'
+    Translations:
+    - Code: tr
+      Text: "Tahtan\u0131n \xE7evresindeki duvara (en d\u0131\u015F h\xFCcrelere)
+        t\u0131kla: kap\u0131 koy.  Kap\u0131ya t\u0131kla: se\xE7, sonra alaca\u011F\u0131
+        j\xF6leleri tahtan\u0131n alt\u0131nda ayarla.  S\xFCr\xFCkle: ta\u015F\u0131."
+  - Key: Drag to paint walls.
+    Translations:
+    - Code: tr
+      Text: "Duvar boyamak i\xE7in s\xFCr\xFCkle."
+  - Key: 'Drag to paint empty cells: no floor, nothing can pass.'
+    Translations:
+    - Code: tr
+      Text: "Bo\u015F h\xFCcre boyamak i\xE7in s\xFCr\xFCkle: zemin yok, hi\xE7bir
+        \u015Fey ge\xE7emez."
+  - Key: 'Click or drag: delete what is underneath.'
+    Translations:
+    - Code: tr
+      Text: "T\u0131kla ya da s\xFCr\xFCkle: alt\u0131ndakini sil."
+  - Key: Right-click deletes with any tool.  Esc deselects.
+    Translations:
+    - Code: tr
+      Text: "Sa\u011F t\u0131k her ara\xE7la siler.  Esc se\xE7imi kald\u0131r\u0131r."
+  - Key: No CD_JellyPalette found. Create one and set it on CD_JellyLevels.
+    Translations:
+    - Code: tr
+      Text: "CD_JellyPalette bulunamad\u0131. Bir tane olu\u015Ftur ve CD_JellyLevels'a
+        ata."
+  - Key: Colour
+    Translations:
+    - Code: tr
+      Text: Renk
+  - Key: Shape
+    Translations:
+    - Code: tr
+      Text: "\u015Eekil"
+  - Key: Rotate
+    Translations:
+    - Code: tr
+      Text: "D\xF6nd\xFCr"
+  - Key: Two
+    Translations:
+    - Code: tr
+      Text: "\u0130kili"
+  - Key: Three
+    Translations:
+    - Code: tr
+      Text: "\xDC\xE7l\xFC"
+  - Key: Four
+    Translations:
+    - Code: tr
+      Text: "D\xF6rtl\xFC"
+  - Key: Square
+    Translations:
+    - Code: tr
+      Text: Kare
+  - Key: Small L
+    Translations:
+    - Code: tr
+      Text: "K\xFC\xE7\xFCk L"
+  - Key: Small J
+    Translations:
+    - Code: tr
+      Text: "K\xFC\xE7\xFCk J"
+  - Key: That jelly is wider than the door, so it cannot pass. Make the door wider.
+    Translations:
+    - Code: tr
+      Text: "Bu j\xF6le kap\u0131dan geni\u015F, ge\xE7emez. Kap\u0131y\u0131 geni\u015Flet."
+  - Key: That shape does not fit here. Move it or make room first.
+    Translations:
+    - Code: tr
+      Text: "Bu \u015Fekil buraya s\u0131\u011Fm\u0131yor. \xD6nce ta\u015F\u0131
+        ya da yer a\xE7."
+  - Key: A door that wide does not fit there.
+    Translations:
+    - Code: tr
+      Text: "O geni\u015Flikte bir kap\u0131 oraya s\u0131\u011Fm\u0131yor."
+  - Key: Extra colours
+    Translations:
+    - Code: tr
+      Text: Ek renkler
+  - Key: Colours only this level uses. The shared ones are in CD_JellyPalette.
+    Translations:
+    - Code: tr
+      Text: "Yaln\u0131zca bu level'in kulland\u0131\u011F\u0131 renkler. Ortak olanlar
+        CD_JellyPalette'te."
+  - Key: Delete
+    Translations:
+    - Code: tr
+      Text: Sil
+  - Key: Recolour what uses it first.
+    Translations:
+    - Code: tr
+      Text: "\xD6nce onu kullananlar\u0131n rengini de\u011Fi\u015Ftir."
+  - Key: + Add colour
+    Translations:
+    - Code: tr
+      Text: + Renk ekle
+  - Key: "Selected jelly \xB7 {0} \xB7 {1} cells"
+    Translations:
+    - Code: tr
+      Text: "Se\xE7ili j\xF6le \xB7 {0} \xB7 {1} h\xFCcre"
+  - Key: Name
+    Translations:
+    - Code: tr
+      Text: Ad
+  - Key: Delete this jelly
+    Translations:
+    - Code: tr
+      Text: "Bu j\xF6leyi sil"
+  - Key: "Selected door {0} \xB7 {1} \xB7 {2}x"
+    Translations:
+    - Code: tr
+      Text: "Se\xE7ili kap\u0131 {0} \xB7 {1} \xB7 {2}x"
+  - Key: bottom
+    Translations:
+    - Code: tr
+      Text: alt
+  - Key: top
+    Translations:
+    - Code: tr
+      Text: "\xFCst"
+  - Key: left
+    Translations:
+    - Code: tr
+      Text: sol
+  - Key: right
+    Translations:
+    - Code: tr
+      Text: "sa\u011F"
+  - Key: 'The jellies it takes, in order: when one passes, the next is waited for.
+      Select one to set its colour and shape above.'
+    Translations:
+    - Code: tr
+      Text: "Ald\u0131\u011F\u0131 j\xF6leler, s\u0131ras\u0131yla: biri ge\xE7ince
+        s\u0131radaki beklenir. Rengini ve \u015Feklini yukar\u0131dan ayarlamak
+        i\xE7in birini se\xE7."
+  - Key: + Add next jelly
+    Translations:
+    - Code: tr
+      Text: "+ S\u0131radaki j\xF6leyi ekle"
+  - Key: The door takes it after the last one. It starts as a copy of the selected
+      jelly.
+    Translations:
+    - Code: tr
+      Text: "Kap\u0131 onu sonuncudan sonra al\u0131r. Se\xE7ili j\xF6lenin kopyas\u0131
+        olarak ba\u015Flar."
+  - Key: "\u2190 Earlier"
+    Translations:
+    - Code: tr
+      Text: "\u2190 \xD6nce"
+  - Key: "Later \u2192"
+    Translations:
+    - Code: tr
+      Text: "Sonra \u2192"
+  - Key: Remove this jelly
+    Translations:
+    - Code: tr
+      Text: "Bu j\xF6leyi \xE7\u0131kar"
+  - Key: Delete door
+    Translations:
+    - Code: tr
+      Text: "Kap\u0131y\u0131 sil"
+  - Key: Cell size
+    Translations:
+    - Code: tr
+      Text: "H\xFCcre boyutu"
+  - Key: How big each cell of the map is drawn.
+    Translations:
+    - Code: tr
+      Text: "Haritan\u0131n her h\xFCcresinin ne kadar b\xFCy\xFCk \xE7izildi\u011Fi."
+  - Key: Fit
+    Translations:
+    - Code: tr
+      Text: "S\u0131\u011Fd\u0131r"
+  - Key: Size the cells so the whole map fits the view.
+    Translations:
+    - Code: tr
+      Text: "H\xFCcreleri, haritan\u0131n tamam\u0131 g\xF6r\xFCn\xFCme s\u0131\u011Facak
+        \u015Fekilde boyutland\u0131r."
+  - Key: It does not fit there.
+    Translations:
+    - Code: tr
+      Text: "Oraya s\u0131\u011Fm\u0131yor."
+  - Key: A corner cannot hold a door.
+    Translations:
+    - Code: tr
+      Text: "K\xF6\u015Feye kap\u0131 konamaz."
+  - Key: 'Doors go in the wall round the board: its outermost cells.'
+    Translations:
+    - Code: tr
+      Text: "Kap\u0131lar tahtan\u0131n \xE7evresindeki duvara, yani en d\u0131\u015F
+        h\xFCcrelere konur."
+  - Key: The jelly must fit on empty floor, inside the wall round the board.
+    Translations:
+    - Code: tr
+      Text: "J\xF6le, tahtan\u0131n \xE7evresindeki duvar\u0131n i\xE7inde bo\u015F
+        zemine s\u0131\u011Fmal\u0131."
+  - Key: A door must fit on its side, clear of other doors, with no wall or empty
+      cell in front of it.
+    Translations:
+    - Code: tr
+      Text: "Kap\u0131 kendi kenar\u0131na s\u0131\u011Fmal\u0131, ba\u015Fka kap\u0131larla
+        \xE7ak\u0131\u015Fmamal\u0131 ve \xF6n\xFCnde duvar ya da bo\u015F h\xFCcre
+        olmamal\u0131."
+  - Key: Cannot paint over a jelly.
+    Translations:
+    - Code: tr
+      Text: "J\xF6lenin \xFCst\xFCne boyanamaz."
+  - Key: 'Balance: each colour''s jelly cells must equal the cells its doors take'
+    Translations:
+    - Code: tr
+      Text: "Denge: her rengin j\xF6le h\xFCcreleri, kap\u0131lar\u0131n\u0131n alaca\u011F\u0131
+        h\xFCcrelere e\u015Fit olmal\u0131"
+  - Key: "\u2192 {0} jelly cells missing"
+    Translations:
+    - Code: tr
+      Text: "\u2192 {0} j\xF6le h\xFCcresi eksik"
+  - Key: "\u2192 {0} extra jelly cells"
+    Translations:
+    - Code: tr
+      Text: "\u2192 {0} j\xF6le h\xFCcresi fazla"
+  - Key: '{0}:  {1} jelly / {2} at doors   {3}'
+    Translations:
+    - Code: tr
+      Text: "{0}:  {1} j\xF6le / {2} kap\u0131larda   {3}"
+  - Key: Level is valid. Test solvability in Play Mode.
+    Translations:
+    - Code: tr
+      Text: "Level ge\xE7erli. \xC7\xF6z\xFClebilirli\u011Fi Play Mode'da dene."
+  - Key: 'In the level list: {0} / {1}'
+    Translations:
+    - Code: tr
+      Text: 'Level listesinde: {0} / {1}'
+  - Key: Not in the level list, so the game never opens it.
+    Translations:
+    - Code: tr
+      Text: "Level listesinde de\u011Fil, oyun onu hi\xE7 a\xE7maz."
+  - Key: Add to the end of the list
+    Translations:
+    - Code: tr
+      Text: Listenin sonuna ekle
+  - Key: Open list
+    Translations:
+    - Code: tr
+      Text: "Listeyi a\xE7"
+  - Key: Save
+    Translations:
+    - Code: tr
+      Text: Kaydet
+  - Key: Duplicate as new level
+    Translations:
+    - Code: tr
+      Text: Yeni level olarak kopyala
+  - Key: The copy is added to the level list right after this level.
+    Translations:
+    - Code: tr
+      Text: "Kopya, level listesinde bu level'in hemen arkas\u0131na eklenir."
+  - Key: Press Restart in Play Mode to load edits. Ctrl+Z undoes.
+    Translations:
+    - Code: tr
+      Text: "D\xFCzenlemeleri y\xFCklemek i\xE7in Play Mode'da Yeniden Ba\u015Flat'a
+        bas. Ctrl+Z geri al\u0131r."
+  - Key: 'Advanced: raw data'
+    Translations:
+    - Code: tr
+      Text: "Geli\u015Fmi\u015F: ham veri"
+  - Key: Walls
+    Translations:
+    - Code: tr
+      Text: Duvarlar
+  - Key: Holes
+    Translations:
+    - Code: tr
+      Text: "Bo\u015F h\xFCcreler"
+  - Key: Shapes
+    Translations:
+    - Code: tr
+      Text: "\u015Eekiller"
+  - Key: Doors
+    Translations:
+    - Code: tr
+      Text: "Kap\u0131lar"
+  - Key: T
+    Translations:
+    - Code: tr
+      Text: 
+  - Key: S
+    Translations:
+    - Code: tr
+      Text: 
+  - Key: Z
+    Translations:
+    - Code: tr
+      Text: 
+  - Key: L
+    Translations:
+    - Code: tr
+      Text: 
+  - Key: J
+    Translations:
+    - Code: tr
+      Text: 
+  - Key: Outside area
+    Translations:
+    - Code: tr
+      Text: "D\u0131\u015F alan"
+  - Key: How many cells round the board the map shows.
+    Translations:
+    - Code: tr
+      Text: "Haritan\u0131n tahtan\u0131n \xE7evresinde ka\xE7 h\xFCcre g\xF6sterdi\u011Fi."
+  - Key: Fit to jelly
+    Translations:
+    - Code: en
+      Text: Fit to jelly
+    - Code: tr
+      Text: "J\xF6leye g\xF6re daralt"
+  - Key: 'On: for each jelly the door opens only as wide as that jelly, from its
+      first cell, and the rest of it is wall. Off: it stays open across its whole
+      size.'
+    Translations:
+    - Code: en
+      Text: 'On: for each jelly the door opens only as wide as that jelly, from its
+        first cell, and the rest of it is wall. Off: it stays open across its whole
+        size.'
+    - Code: tr
+      Text: "A\xE7\u0131k: kap\u0131 her j\xF6le i\xE7in yaln\u0131zca o j\xF6le
+        kadar, ilk h\xFCcresinden ba\u015Flayarak a\xE7\u0131l\u0131r; kalan\u0131
+        duvar olur. Kapal\u0131: kap\u0131 t\xFCm boyunca a\xE7\u0131k kal\u0131r."
+  - Key: Pull reach
+    Translations:
+    - Code: en
+      Text: Pull reach
+    - Code: tr
+      Text: "\xC7ekme mesafesi"
+  - Key: 'A jelly this door waits for, let go of in its rows (or columns) with up
+      to this many free cells between it and the door, is drawn the rest of the way
+      in. 0: it has to be put right in front of the door.'
+    Translations:
+    - Code: en
+      Text: 'A jelly this door waits for, let go of in its rows (or columns) with
+        up to this many free cells between it and the door, is drawn the rest of
+        the way in. 0: it has to be put right in front of the door.'
+    - Code: tr
+      Text: "Kap\u0131n\u0131n bekledi\u011Fi j\xF6le, kap\u0131n\u0131n sat\u0131rlar\u0131nda
+        (ya da s\xFCtunlar\u0131nda) b\u0131rak\u0131ld\u0131\u011F\u0131nda kap\u0131yla
+        aras\u0131nda en fazla bu kadar bo\u015F h\xFCcre varsa kap\u0131ya \xE7ekilir.
+        0: j\xF6le tam kap\u0131n\u0131n \xF6n\xFCne konmal\u0131d\u0131r."
+  - Key: Own pull reach
+    Translations:
+    - Code: en
+      Text: Own pull reach
+    - Code: tr
+      Text: "Kendi \xE7ekme mesafesi"
+  - Key: 'Off: the door uses Default Pull Reach from the level list. On: it uses
+      its own, set below.'
+    Translations:
+    - Code: en
+      Text: 'Off: the door uses Default Pull Reach from the level list. On: it uses
+        its own, set below.'
+    - Code: tr
+      Text: "Kapal\u0131: kap\u0131, b\xF6l\xFCm listesindeki varsay\u0131lan \xE7ekme
+        mesafesini kullan\u0131r. A\xE7\u0131k: a\u015Fa\u011F\u0131da ayarlanan
+        kendi de\u011Ferini kullan\u0131r."
+  - Key: Frozen
+    Translations:
+    - Code: en
+      Text: Frozen
+    - Code: tr
+      Text: "Donmu\u015F"
+  - Key: Thaws after
+    Translations:
+    - Code: en
+      Text: Thaws after
+    - Code: tr
+      Text: "\xC7\xF6z\xFClme say\u0131s\u0131"
+  - Key: How many jellies must go through doors, anywhere on the board, before it
+      thaws.
+    Translations:
+    - Code: en
+      Text: How many jellies must go through doors, anywhere on the board, before
+        it thaws.
+    - Code: tr
+      Text: "\xC7\xF6z\xFClmesi i\xE7in tahtan\u0131n herhangi bir yerinde ka\xE7
+        j\xF6lenin kap\u0131lardan ge\xE7mesi gerekti\u011Fi."
+  - Key: 'Frozen: the jelly cannot be moved or fused until this many jellies have
+      gone through doors.'
+    Translations:
+    - Code: en
+      Text: 'Frozen: the jelly cannot be moved or fused until this many jellies have
+        gone through doors.'
+    - Code: tr
+      Text: "Donmu\u015F: bu kadar j\xF6le kap\u0131lardan ge\xE7ene kadar j\xF6le
+        hareket ettirilemez ve birle\u015Fmez."
+  - Key: 'Frozen: the door takes nothing, and stands like wall, until this many jellies
+      have gone through the other doors.'
+    Translations:
+    - Code: en
+      Text: 'Frozen: the door takes nothing, and stands like wall, until this many
+        jellies have gone through the other doors.'
+    - Code: tr
+      Text: "Donmu\u015F: bu kadar j\xF6le di\u011Fer kap\u0131lardan ge\xE7ene kadar
+        kap\u0131 hi\xE7bir \u015Fey almaz ve duvar gibi durur."
+  - Key: Arrow block
+    Translations:
+    - Code: en
+      Text: Arrow block
+    - Code: tr
+      Text: Ok blok
+  - Key: 'On: the jelly moves only one way, set below.'
+    Translations:
+    - Code: en
+      Text: 'On: the jelly moves only one way, set below.'
+    - Code: tr
+      Text: "A\xE7\u0131k: j\xF6le sadece a\u015Fa\u011F\u0131da se\xE7ilen y\xF6nde
+        hareket eder."
+  - Key: Moves
+    Translations:
+    - Code: en
+      Text: Moves
+    - Code: tr
+      Text: "Hareket y\xF6n\xFC"
+  - Key: The one way the jelly can move.
+    Translations:
+    - Code: en
+      Text: The one way the jelly can move.
+    - Code: tr
+      Text: "J\xF6lenin hareket edebilece\u011Fi tek y\xF6n."
+  - Key: Free arrows after fusion
+    Translations:
+    - Code: en
+      Text: Free arrows after fusion
+    - Code: tr
+      Text: "Birle\u015Fmeden sonra oklar\u0131 kald\u0131r"
+  - Key: 'Tutorial'
+    Translations:
+    - Code: tr
+      Text: "\u00D6\u011Fretici"
+  - Key: 'Click a cell of the jelly to lead, then the cells to lead it through, in order; the last one is where it is let go of (a door cell sends it out). Right-click takes back the last cell.'
+    Translations:
+    - Code: tr
+      Text: "Y\u00F6nlendirilecek j\u00F6lenin bir h\u00FCcresine, sonra s\u0131rayla ge\u00E7ece\u011Fi h\u00FCcrelere t\u0131kla; sonuncusu b\u0131rak\u0131laca\u011F\u0131 yer (kap\u0131 h\u00FCcresi j\u00F6leyi d\u0131\u015Far\u0131 g\u00F6nderir). Sa\u011F t\u0131k son h\u00FCcreyi geri al\u0131r."
+  - Key: 'Tutorial steps'
+    Translations:
+    - Code: tr
+      Text: "\u00D6\u011Fretici ad\u0131mlar\u0131"
+  - Key: 'No tutorial. Add a step, then click on the map.'
+    Translations:
+    - Code: tr
+      Text: "\u00D6\u011Fretici yok. Bir ad\u0131m ekle, sonra haritaya t\u0131kla."
+  - Key: 'Step {0}: {1} cells'
+    Translations:
+    - Code: tr
+      Text: "Ad\u0131m {0}: {1} h\u00FCcre"
+  - Key: 'Clear'
+    Translations:
+    - Code: tr
+      Text: "Temizle"
+  - Key: '+ Add step'
+    Translations:
+    - Code: tr
+      Text: "+ Ad\u0131m ekle"
+  - Key: 'The first cell of a step is on the jelly to lead.'
+    Translations:
+    - Code: tr
+      Text: "Ad\u0131m\u0131n ilk h\u00FCcresi y\u00F6nlendirilecek j\u00F6lenin \u00FCst\u00FCnde olmal\u0131."
+  - Key: 'Text key'
+    Translations:
+    - Code: tr
+      Text: "Yaz\u0131 anahtar\u0131"
+  - Key: 'The localization key of the text shown during this step. Empty: no text.'
+    Translations:
+    - Code: tr
+      Text: "Bu ad\u0131m s\u0131ras\u0131nda g\u00F6sterilen yaz\u0131n\u0131n \u00E7eviri anahtar\u0131. Bo\u015F: yaz\u0131 yok."
+  - Key: 'Text (English)'
+    Translations:
+    - Code: tr
+      Text: "Yaz\u0131 (\u0130ngilizce)"
+  - Key: "The board must be 3 to 20 cells wide and tall."
+    Translations:
+    - Code: tr
+      Text: "Tahta en az 3, en fazla 20 h\u00FCcre geni\u015Fli\u011Finde ve y\u00FCksekli\u011Finde olmal\u0131."
+  - Key: "The time limit must be more than 0 seconds."
+    Translations:
+    - Code: tr
+      Text: "S\u00FCre 0 saniyeden fazla olmal\u0131."
+  - Key: "There is no jelly on the board. Place at least one."
+    Translations:
+    - Code: tr
+      Text: "Tahtada hi\u00E7 j\u00F6le yok. En az bir tane koy."
+  - Key: "There is no door. Place at least one in the wall round the board."
+    Translations:
+    - Code: tr
+      Text: "Hi\u00E7 kap\u0131 yok. Tahtan\u0131n \u00E7evresindeki duvara en az bir kap\u0131 koy."
+  - Key: "An extra colour has no name, or two extra colours share an ID."
+    Translations:
+    - Code: tr
+      Text: "Ek renklerden birinin ad\u0131 yok ya da iki ek renk ayn\u0131 numaray\u0131 kullan\u0131yor."
+  - Key: "Colour number {0} is used but not defined. Pick another colour for its jellies."
+    Translations:
+    - Code: tr
+      Text: "{0} numaral\u0131 renk kullan\u0131lm\u0131\u015F ama tan\u0131ml\u0131 de\u011Fil. O j\u00F6leler i\u00E7in ba\u015Fka bir renk se\u00E7."
+  - Key: "A wall or empty cell at {0} is off the board or painted twice. Erase it."
+    Translations:
+    - Code: tr
+      Text: "{0} konumundaki duvar ya da bo\u015F h\u00FCcre tahtan\u0131n d\u0131\u015F\u0131nda ya da iki kez boyanm\u0131\u015F. Sil."
+  - Key: "{0}: its cells are not all joined side by side. Every jelly must be one piece."
+    Translations:
+    - Code: tr
+      Text: "{0}: h\u00FCcreleri yan yana ba\u011Fl\u0131 de\u011Fil. Her j\u00F6le tek par\u00E7a olmal\u0131."
+  - Key: "{0}: it sits in the wall round the board. Move it inside."
+    Translations:
+    - Code: tr
+      Text: "{0}: tahtan\u0131n \u00E7evresindeki duvar\u0131n \u00FCst\u00FCnde duruyor. \u0130\u00E7eri ta\u015F\u0131."
+  - Key: "{0}: cell {1} is off the board or already taken by a wall or another jelly."
+    Translations:
+    - Code: tr
+      Text: "{0}: {1} h\u00FCcresi tahtan\u0131n d\u0131\u015F\u0131nda ya da orada zaten duvar veya ba\u015Fka bir j\u00F6le var."
+  - Key: "{0}: a door is 1 to {1} cells wide."
+    Translations:
+    - Code: tr
+      Text: "{0}: kap\u0131 1 ile {1} h\u00FCcre aras\u0131 geni\u015Flikte olmal\u0131."
+  - Key: "{0}: it runs into a corner. Move it along its side."
+    Translations:
+    - Code: tr
+      Text: "{0}: k\u00F6\u015Feye ta\u015F\u0131yor. Kenar\u0131 boyunca kayd\u0131r."
+  - Key: "{0}: it overlaps another door on the same side. Move one of them."
+    Translations:
+    - Code: tr
+      Text: "{0}: ayn\u0131 kenardaki ba\u015Fka bir kap\u0131yla \u00FCst \u00FCste. Birini kayd\u0131r."
+  - Key: "{0}: a wall stands in the door at {1}. Erase the wall or move the door."
+    Translations:
+    - Code: tr
+      Text: "{0}: kap\u0131n\u0131n {1} h\u00FCcresinde duvar var. Duvar\u0131 sil ya da kap\u0131y\u0131 kayd\u0131r."
+  - Key: "{0}: an empty cell is in the door at {1}. Erase it or move the door."
+    Translations:
+    - Code: tr
+      Text: "{0}: kap\u0131n\u0131n {1} h\u00FCcresi bo\u015F h\u00FCcre. Bo\u015F h\u00FCcreyi sil ya da kap\u0131y\u0131 kayd\u0131r."
+  - Key: "{0}: it waits for no jelly. Add one to its queue."
+    Translations:
+    - Code: tr
+      Text: "{0}: hi\u00E7 j\u00F6le beklemiyor. Kuyru\u011Funa bir j\u00F6le ekle."
+  - Key: "{0}: {1} in its queue is not one joined piece."
+    Translations:
+    - Code: tr
+      Text: "{0}: kuyru\u011Fundaki {1} tek par\u00E7a de\u011Fil, h\u00FCcreleri ba\u011Fl\u0131 olmal\u0131."
+  - Key: "{0}: {1} in its queue is {2} cells wide and cannot pass a {3}-wide door. Widen the door."
+    Translations:
+    - Code: tr
+      Text: "{0}: kuyru\u011Fundaki {1} {2} h\u00FCcre geni\u015Fli\u011Finde, {3} h\u00FCcrelik kap\u0131dan ge\u00E7emez. Kap\u0131y\u0131 geni\u015Flet."
+  - Key: "{0}: the jellies on the board have {1} cells, but its doors take {2}. Every cell must leave by a door."
+    Translations:
+    - Code: tr
+      Text: "{0}: tahtadaki j\u00F6leler {1} h\u00FCcre, kap\u0131lar ise {2} h\u00FCcre al\u0131yor. Her h\u00FCcre bir kap\u0131dan \u00E7\u0131kmal\u0131."
+  - Key: "A door must fit on its side between the corners, clear of other doors, with no empty cell in front of it."
+    Translations:
+    - Code: tr
+      Text: "Kap\u0131 k\u00F6\u015Felere ta\u015Fmadan kenar\u0131na s\u0131\u011Fmal\u0131, ba\u015Fka kap\u0131larla \u00E7ak\u0131\u015Fmamal\u0131 ve \u00F6n\u00FCnde bo\u015F h\u00FCcre olmamal\u0131."
+  - Key: "Localization table"
+    Translations:
+    - Code: tr
+      Text: "Yerelle\u015Ftirme tablosu"
+  - Key: "The table the pages' texts are written to. The game reads them by key from every table."
+    Translations:
+    - Code: tr
+      Text: "Sayfalar\u0131n yaz\u0131lar\u0131n\u0131n yaz\u0131ld\u0131\u011F\u0131 tablo. Oyun onlar\u0131 anahtarla b\u00FCt\u00FCn tablolardan okur."
+  - Key: "Pick a Game table to write the texts in every language."
+    Translations:
+    - Code: tr
+      Text: "Yaz\u0131lar\u0131 her dilde girmek i\u00E7in bir Game tablosu se\u00E7."
+  - Key: "This is an Editor table: the game does not read it. Pick a Game table."
+    Translations:
+    - Code: tr
+      Text: "Bu bir Editor tablosu, oyun bunu okumaz. Bir Game tablosu se\u00E7."
+  - Key: "No CD_Localization in the project: only the English is edited."
+    Translations:
+    - Code: tr
+      Text: "Projede CD_Localization yok: sadece \u0130ngilizce d\u00FCzenlenir."
+  - Key: "(no key)"
+    Translations:
+    - Code: tr
+      Text: "(anahtar yok)"
+  - Key: "+ Add page"
+    Translations:
+    - Code: tr
+      Text: "+ Sayfa ekle"
+  - Key: "Key"
+    Translations:
+    - Code: tr
+      Text: "Anahtar"
+  - Key: "Image"
+    Translations:
+    - Code: tr
+      Text: "Resim"
+  - Key: "Image size"
+    Translations:
+    - Code: tr
+      Text: "Resim boyutu"
+  - Key: "What asks for this page: a booster's Info Key, or any other feature's."
+    Translations:
+    - Code: tr
+      Text: "Bu sayfay\u0131 isteyen \u015Fey: bir g\u00FC\u00E7lendiricinin Info Key'i ya da ba\u015Fka bir \u00F6zelli\u011Finki."
+  - Key: "The picture's size on the panel, in canvas units. 0: as the panel lays it out."
+    Translations:
+    - Code: tr
+      Text: "Resmin paneldeki boyutu, canvas biriminde. 0: panelin yerle\u015Fimi."
+  - Key: "Title"
+    Translations:
+    - Code: tr
+      Text: "Ba\u015Fl\u0131k"
+  - Key: "Subtitle"
+    Translations:
+    - Code: tr
+      Text: "Alt ba\u015Fl\u0131k"
+  - Key: "Description"
+    Translations:
+    - Code: tr
+      Text: "A\u00E7\u0131klama"
+  - Key: "Button"
+    Translations:
+    - Code: tr
+      Text: "D\u00FC\u011Fme"
+  - Key: "Text"
+    Translations:
+    - Code: tr
+      Text: "Yaz\u0131"
+  - Key: "The text's localization key. Pages may share one: a change here changes it on all of them."
+    Translations:
+    - Code: tr
+      Text: "Yaz\u0131n\u0131n yerelle\u015Ftirme anahtar\u0131. Sayfalar ayn\u0131 anahtar\u0131 payla\u015Fabilir: buradaki de\u011Fi\u015Fiklik hepsini de\u011Fi\u015Ftirir."
+  - Key: "Make key"
+    Translations:
+    - Code: tr
+      Text: "Anahtar olu\u015Ftur"
+  - Key: "Shared by {0} pages."
+    Translations:
+    - Code: tr
+      Text: "{0} sayfa payla\u015F\u0131yor."
+  - Key: "Not in the table yet: typing a text adds it."
+    Translations:
+    - Code: tr
+      Text: "Hen\u00FCz tabloda yok: bir yaz\u0131 girince eklenir."
+  - Key: "Difficulty"
+    Translations:
+    - Code: tr
+      Text: "Zorluk"

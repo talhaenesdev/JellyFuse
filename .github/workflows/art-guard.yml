@@ -1,0 +1,67 @@
+name: Art guard
+
+# A push to art may only change files under Assets/Art/.
+# Anything else in the push is put back the way it was, in a commit of its own.
+
+on:
+  push:
+    branches: [art]
+
+permissions:
+  contents: write
+
+jobs:
+  art-guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Put back files changed outside Assets/Art
+        env:
+          BEFORE: ${{ github.event.before }}
+          AFTER: ${{ github.event.after }}
+        run: |
+          # A brand new branch has nothing to compare with.
+          if [[ "$BEFORE" =~ ^0+$ ]]; then
+            echo "New branch, nothing to check."
+            exit 0
+          fi
+
+          # Only commits made on this branch count. Commits that are already on dev or main
+          # arrive when the branch is brought up to date, and putting those back would carry
+          # the revert into dev on the next merge.
+          COMMITS=$(git rev-list --no-merges "$BEFORE..$AFTER" --not origin/dev origin/main)
+          CHANGED=$(for commit in $COMMITS; do git diff-tree --no-commit-id --name-only -r "$commit"; done | sort -u)
+          # Allowed: anything inside Assets/Art/, and the folder's own .meta file.
+          BLOCKED=$(echo "$CHANGED" | grep -v -E '^Assets/Art/|^Assets/Art\.meta$' | grep -v '^$' || true)
+
+          # The push that first adds this guard is let through; after that, changing or
+          # deleting the guard is put back like any other file.
+          GUARD=".github/workflows/art-guard.yml"
+          if ! git cat-file -e "$BEFORE:$GUARD" 2>/dev/null; then
+            BLOCKED=$(echo "$BLOCKED" | grep -v -x -F "$GUARD" || true)
+          fi
+
+          if [[ -z "$BLOCKED" ]]; then
+            echo "All changed files are under Assets/Art/."
+            exit 0
+          fi
+
+          echo "::warning::Changes outside Assets/Art/ were put back:"
+          echo "$BLOCKED"
+
+          while IFS= read -r file; do
+            if git cat-file -e "$BEFORE:$file" 2>/dev/null; then
+              git checkout "$BEFORE" -- "$file"   # changed or deleted: restore it
+            else
+              git rm -q --cached --ignore-unmatch -- "$file"
+              rm -f -- "$file"                    # newly added: remove it
+            fi
+          done <<< "$BLOCKED"
+
+          git config user.name "art-guard"
+          git config user.email "art-guard@users.noreply.github.com"
+          git commit -m "Revert changes outside Assets/Art" -m "$BLOCKED"
+          git push origin HEAD:art

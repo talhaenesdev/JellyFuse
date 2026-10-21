@@ -1,0 +1,64 @@
+<!--
+  Managed Stripping Level is Medium: the linker removes code nothing calls. FlowIoC injects through
+  reflection ([Inject], [InjectSignal] and [SignalParam] properties, commands made by type), the save
+  file is read with Newtonsoft.Json and the rest below build things by name - code the linker cannot
+  see being used. These assemblies are kept whole; everything else is stripped.
+-->
+<linker>
+  <!-- The game -->
+  <assembly fullname="Assembly-CSharp" preserve="all" ignoreIfMissing="1" />
+  <assembly fullname="Assembly-CSharp-firstpass" preserve="all" ignoreIfMissing="1" />
+  <assembly fullname="FlowIoC" preserve="all" />
+  <assembly fullname="Modules.Connector" preserve="all" />
+  <assembly fullname="Modules.DevTools" preserve="all" />
+  <assembly fullname="Modules.DevTools.Screen" preserve="all" />
+  <assembly fullname="Modules.DevTools.Screen.Signals" preserve="all" />
+  <assembly fullname="Modules.Fps.Screen" preserve="all" />
+  <assembly fullname="Modules.Fps.Screen.Signals" preserve="all" />
+  <assembly fullname="Modules.Gameplay" preserve="all" />
+  <assembly fullname="Modules.Gameplay.Shared" preserve="all" />
+  <assembly fullname="Modules.Gameplay.Signals" preserve="all" />
+  <assembly fullname="Modules.Gameplay.Screen" preserve="all" />
+  <assembly fullname="Modules.Gameplay.Screen.Signals" preserve="all" />
+  <assembly fullname="Modules.Haptic" preserve="all" />
+  <assembly fullname="Modules.Loading" preserve="all" />
+  <assembly fullname="Modules.Loading.Shared" preserve="all" />
+  <assembly fullname="Modules.Loading.Signals" preserve="all" />
+  <assembly fullname="Modules.Loading.Screen" preserve="all" />
+  <assembly fullname="Modules.Loading.Screen.Signals" preserve="all" />
+  <assembly fullname="Modules.LoadingOverlay.Screen" preserve="all" />
+  <assembly fullname="Modules.LoadingOverlay.Screen.Signals" preserve="all" />
+  <assembly fullname="Modules.LocalSave" preserve="all" />
+  <assembly fullname="Modules.Localization" preserve="all" />
+  <assembly fullname="Modules.Localization.Shared" preserve="all" />
+  <assembly fullname="Modules.Localization.Signals" preserve="all" />
+  <assembly fullname="Modules.Main" preserve="all" />
+  <assembly fullname="Modules.Main.Signals" preserve="all" />
+  <assembly fullname="Modules.Main.Screen" preserve="all" />
+  <assembly fullname="Modules.Main.Screen.Signals" preserve="all" />
+  <assembly fullname="Modules.Pause.Screen" preserve="all" />
+  <assembly fullname="Modules.Pause.Screen.Signals" preserve="all" />
+  <assembly fullname="Modules.Profile" preserve="all" />
+  <assembly fullname="Modules.Profile.Shared" preserve="all" />
+  <assembly fullname="Modules.Profile.Signals" preserve="all" />
+  <assembly fullname="Modules.ProfileSelection.Screen" preserve="all" />
+  <assembly fullname="Modules.ProfileSelection.Screen.Signals" preserve="all" />
+  <assembly fullname="Modules.Purchase" preserve="all" />
+  <assembly fullname="Modules.Purchase.Shared" preserve="all" />
+  <assembly fullname="Modules.Purchase.Signals" preserve="all" />
+  <assembly fullname="Modules.Purchase.Screen" preserve="all" />
+  <assembly fullname="Modules.Purchase.Screen.Signals" preserve="all" />
+  <assembly fullname="Modules.Screen" preserve="all" />
+  <assembly fullname="Modules.Screen.Signals" preserve="all" />
+  <assembly fullname="Modules.Settings.Screen" preserve="all" />
+  <assembly fullname="Modules.Settings.Screen.Signals" preserve="all" />
+  <assembly fullname="Modules.UiWidgets" preserve="all" />
+
+  <!-- Libraries that work by reflection -->
+  <assembly fullname="Newtonsoft.Json" preserve="all" ignoreIfMissing="1" />
+  <assembly fullname="Unity.Addressables" preserve="all" />
+  <assembly fullname="Unity.ResourceManager" preserve="all" />
+  <assembly fullname="Unity.InputSystem" preserve="all" />
+  <assembly fullname="Unity.TextMeshPro" preserve="all" />
+  <assembly fullname="UnityEngine.UI" preserve="all" />
+</linker>

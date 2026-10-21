@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e2ec81b9c3d2a54aad6490978b873c2, type: 3}
+  m_Name: CD_Boosters
+  m_EditorClassIdentifier: Modules.Gameplay.Shared::Modules.GameplayModule.Shared.Data.UnityObjects.CD_Boosters
+  Boosters:
+  - Type: 0
+    InfoKey: booster.rocket
+    Enabled: 1
+    Icon: {fileID: 21300000, guid: 7f0ce0640e558f94580766e09969ef7b, type: 3}
+    UnlockLevel: 7
+    FreeUses: 3
+    CoinPrice: 100
+  - Type: 1
+    InfoKey: booster.freezetime
+    Enabled: 1
+    Icon: {fileID: 21300000, guid: d8bb93c07909b234aaa942ae28cd9a66, type: 3}
+    UnlockLevel: 14
+    FreeUses: 3
+    CoinPrice: 80
+  - Type: 2
+    InfoKey: booster.ufo
+    Enabled: 1
+    Icon: {fileID: 21300000, guid: d0dadc71cbb6fbb4db94baf14a16b43c, type: 3}
+    UnlockLevel: 20
+    FreeUses: 3
+    CoinPrice: 150
+  RocketPreferBigPieces: 1
+  RocketWithoutEnoughJellies: 1
+  FreezeSeconds: 10

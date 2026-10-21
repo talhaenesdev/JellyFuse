@@ -1,0 +1,23 @@
+#if UNITY_EDITOR
+using Modules.ProfileModule.ProfileSelectionScreenModule.ViewsMediators;
+using FlowIoC.BaseModule.Attributes;
+using FlowIoC.ScreenModule.RootsContexts;
+
+namespace Modules.ProfileModule.ProfileSelectionScreenModule.ProfileSelectionScreenTestModule.RootsContexts
+{
+    /// <summary>
+    /// A screen's test context opens the screen and nothing else: the production context, listed
+    /// as a sub-context on the test Root, brings the signals, the mediation and the ScreenCVO.
+    /// </summary>
+    [ExcludeFromContextWindow]
+    public class ProfileSelectionScreenTestContext : BaseScreenContext
+    {
+        public override void Launch()
+        {
+            base.Launch();
+			_screenService.Open<ProfileSelectionScreenView>().Show();
+
+        }
+    }
+}
+#endif

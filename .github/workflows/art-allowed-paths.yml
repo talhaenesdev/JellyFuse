@@ -1,0 +1,40 @@
+name: Art allowed paths
+
+# Pull requests into the art branch may only change files under Assets/Art/.
+# Make "art-allowed-paths" a required check in the art branch ruleset, so a
+# pull request that touches anything else cannot merge.
+
+on:
+  pull_request:
+    branches: [art]
+
+jobs:
+  art-allowed-paths:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check changed files
+        env:
+          HEAD_BRANCH: ${{ github.head_ref }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          # Bringing art up to date with dev or main carries their code; that is allowed.
+          if [[ "$HEAD_BRANCH" == "dev" || "$HEAD_BRANCH" == "main" ]]; then
+            echo "Updating art from $HEAD_BRANCH is allowed."
+            exit 0
+          fi
+
+          CHANGED=$(git diff --name-only "$BASE_SHA...$HEAD_SHA")
+          # Allowed: anything inside Assets/Art/, and the folder's own .meta file.
+          BLOCKED=$(echo "$CHANGED" | grep -v -E '^Assets/Art/|^Assets/Art\.meta$' | grep -v '^$' || true)
+
+          if [[ -n "$BLOCKED" ]]; then
+            echo "::error::Pull requests into art may only change files under Assets/Art/. Not allowed:"
+            echo "$BLOCKED"
+            exit 1
+          fi
+          echo "All changed files are under Assets/Art/."

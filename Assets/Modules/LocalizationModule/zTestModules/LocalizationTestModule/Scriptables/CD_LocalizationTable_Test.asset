@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fd28af06e0507248bbd442c49b581f1, type: 3}
+  m_Name: CD_LocalizationTable_Test
+  m_EditorClassIdentifier: Modules.Localization.Shared::Modules.LocalizationModule.Shared.Data.UnityObjects.CD_LocalizationTable
+  Usage: 0
+  Texts:
+  - Key: test.hello
+    Translations:
+    - Code: en
+      Text: Hello
+    - Code: tr
+      Text: Merhaba
+    - Code: de
+      Text: Hallo
+  - Key: test.apples
+    Translations:
+    - Code: en
+      Text: '{0} apples'
+    - Code: tr
+      Text: '{0} elma'
+  - Key: test.only_english
+    Translations:
+    - Code: en
+      Text: Only in English

@@ -1,0 +1,100 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3028663144334893099
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 438063410630817315}
+  - component: {fileID: 5684795143043704223}
+  - component: {fileID: 1535284787322654213}
+  m_Layer: 0
+  m_Name: DevToolsServiceRoot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &438063410630817315
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3028663144334893099}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5684795143043704223
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3028663144334893099}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6b494fb1924e46428f4fba84be3b8af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.DevTools::Modules.DevToolsModule.RootsContexts.DevToolsServiceRoot
+  SubContextTypes:
+  - ContextScript: {fileID: 11500000, guid: 1c48f94cbb368744c9b7ff8ac4096a4e, type: 3}
+    ContextFullName: Modules.DevToolsModule.DevToolsScreenModule.RootsContexts.DevToolsScreenContext
+    ContextName: DevToolsScreenContext
+    AutoSetup: 1
+    IsTest: 0
+    Settings:
+      rid: -2
+  - ContextScript: {fileID: 11500000, guid: 59d85f54d32c8c34388e118640d31410, type: 3}
+    ContextFullName: Modules.DevToolsModule.FpsScreenModule.RootsContexts.FpsScreenContext
+    ContextName: FpsScreenContext
+    AutoSetup: 1
+    IsTest: 0
+    Settings:
+      rid: -2
+  initializeOrder: -30
+  AutoBindInjections: 1
+  AutoBindMediations: 1
+  AutoInitialize: 1
+  AutoSetup: 1
+  AutoLaunch: 1
+  IsTest: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+--- !u!114 &1535284787322654213
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3028663144334893099}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f39bbf08b2e417abc79bcaf1de79c9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FlowIoC::FlowIoC.BaseModule.Adapters.RootAdapter
+  _scriptableMap:
+    m_Keys:
+    - CD_DevTools
+    m_Values:
+    - {fileID: 11400000, guid: cadda3a330b86844ab8c2d913064f7dd, type: 2}
+  _sharedScriptableMap:
+    m_Keys: []
+    m_Values: []
+  _monoMap:
+    m_Keys: []
+    m_Values: []
+  _sharedMonoMap:
+    m_Keys: []
+    m_Values: []

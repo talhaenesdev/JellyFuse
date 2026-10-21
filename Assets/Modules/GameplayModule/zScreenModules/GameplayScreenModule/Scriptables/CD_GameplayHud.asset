@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a3649bab6014328845352f74b672a8d, type: 3}
+  m_Name: CD_GameplayHud
+  m_EditorClassIdentifier: Modules.Gameplay.Screen::Modules.GameplayModule.GameplayScreenModule.Data.UnityObjects.CD_GameplayHud
+  MapAlignToButtons: 1
+  MapFullWidth: 1
+  MapEdgePixels: 20
+  MapInsetLeft: 0
+  MapInsetRight: 0
+  MapVerticalGapExtra: -38
+  MapFillWidth: 1
+  MapSideMargin: 0.03
+  MapTopSpace: 236
+  MapBottomSpace: 222
+  TimeWarningColour: {r: 1, g: 0.5019608, b: 0.54901963, a: 1}
+  TimeWarningSeconds: 20
+  WinPanelDelay: 0.8
+  LosePanelDelay: 0.3
+  CoinFlyCount: 10
+  CoinFlySeconds: 0.7
+  CoinFlyStagger: 0.08
+  CoinFlyScale: 1.2
+  CoinFlyArc: 0.15
+  BoosterDimAlpha: 0.3
+  BoosterPulseSpeed: 1.6
+  BoosterDoorGlow: {r: 0.8, g: 0.95, b: 1, a: 0.9}
+  BoosterFrozenDoorVeil: {r: 0.02, g: 0.02, b: 0.08, a: 0.78}
+  BoosterLockedColour: {r: 0.45, g: 0.45, b: 0.5, a: 1}
+  BoosterArmedColour: {r: 1, g: 0.9, b: 0.45, a: 1}
+  FrostSprite: {fileID: 0}
+  FrostColour: {r: 0.6, g: 0.9, b: 1, a: 0.45}
+  FrostTimeColour: {r: 0.75, g: 0.95, b: 1, a: 1}
+  UfoSprite: {fileID: 21300000, guid: 0e3417248105c904e824b045f74b4b5b, type: 3}
+  UfoSize: {x: 220, y: 140}
+  UfoFlightSeconds: 1.4

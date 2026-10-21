@@ -1,0 +1,353 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec2264475c379fb47aadac639deb05b6, type: 3}
+  m_Name: CD_JellyLevel_03
+  m_EditorClassIdentifier: Modules.Gameplay.Shared::Modules.GameplayModule.Shared.Data.UnityObjects.CD_JellyLevel
+  LevelName: "01 / DI\u015E HEDEFLER"
+  Hint: "Tek pembeyi \xF6nce yukar\u0131, sonra sa\u011Fa s\xFCr\xFCkle. L \u015Feklini
+    sa\u011F kenardan d\u0131\u015Far\u0131 \xE7\u0131kar. Mavi kareyi sol d\u0131\u015F
+    hedefe g\xF6t\xFCr."
+  Width: 20
+  Height: 20
+  Seconds: 120
+  ExtraColours: []
+  _nextColourId: 3
+  Walls: []
+  Holes: []
+  Shapes:
+  - Name: Shape 6
+    Colour: 0
+    Cells:
+    - {x: 7, y: 8}
+    - {x: 8, y: 8}
+    - {x: 7, y: 9}
+    - {x: 8, y: 9}
+  - Name: "\u015Eekil 7"
+    Colour: 0
+    Cells:
+    - {x: 5, y: 11}
+    - {x: 5, y: 12}
+  - Name: "\u015Eekil 8"
+    Colour: 0
+    Cells:
+    - {x: 5, y: 16}
+    - {x: 6, y: 16}
+  - Name: "\u015Eekil 9"
+    Colour: 0
+    Cells:
+    - {x: 7, y: 15}
+  - Name: "\u015Eekil 10"
+    Colour: 0
+    Cells:
+    - {x: 3, y: 12}
+    - {x: 3, y: 11}
+  - Name: "\u015Eekil 11"
+    Colour: 0
+    Cells:
+    - {x: 10, y: 17}
+    - {x: 11, y: 17}
+    - {x: 12, y: 17}
+    - {x: 11, y: 16}
+  - Name: "\u015Eekil 12"
+    Colour: 0
+    Cells:
+    - {x: 13, y: 13}
+    - {x: 14, y: 13}
+    - {x: 13, y: 14}
+    - {x: 14, y: 14}
+  - Name: "\u015Eekil 13"
+    Colour: 0
+    Cells:
+    - {x: 10, y: 12}
+    - {x: 11, y: 12}
+    - {x: 10, y: 13}
+    - {x: 11, y: 13}
+  - Name: "\u015Eekil 14"
+    Colour: 1
+    Cells:
+    - {x: 14, y: 16}
+    - {x: 15, y: 16}
+    - {x: 16, y: 16}
+    - {x: 15, y: 15}
+  - Name: "\u015Eekil 15"
+    Colour: 1
+    Cells:
+    - {x: 17, y: 17}
+    - {x: 18, y: 17}
+    - {x: 17, y: 18}
+    - {x: 18, y: 18}
+  - Name: "\u015Eekil 16"
+    Colour: 1
+    Cells:
+    - {x: 15, y: 12}
+    - {x: 16, y: 12}
+    - {x: 17, y: 12}
+    - {x: 16, y: 11}
+  - Name: "\u015Eekil 17"
+    Colour: 1
+    Cells:
+    - {x: 2, y: 16}
+    - {x: 3, y: 16}
+    - {x: 2, y: 17}
+    - {x: 3, y: 17}
+  - Name: "\u015Eekil 18"
+    Colour: 0
+    Cells:
+    - {x: 9, y: 1}
+    - {x: 10, y: 1}
+    - {x: 11, y: 1}
+  - Name: "\u015Eekil 19"
+    Colour: 1
+    Cells:
+    - {x: 13, y: 3}
+    - {x: 14, y: 3}
+    - {x: 15, y: 3}
+    - {x: 14, y: 2}
+  - Name: "\u015Eekil 20"
+    Colour: 0
+    Cells:
+    - {x: 17, y: 2}
+    - {x: 18, y: 2}
+    - {x: 17, y: 3}
+    - {x: 18, y: 3}
+  - Name: "\u015Eekil 18"
+    Colour: 0
+    Cells:
+    - {x: 2, y: 1}
+    - {x: 3, y: 1}
+    - {x: 2, y: 2}
+    - {x: 3, y: 2}
+  - Name: "\u015Eekil 19"
+    Colour: 0
+    Cells:
+    - {x: 8, y: 15}
+  - Name: "\u015Eekil 18"
+    Colour: 2
+    Cells:
+    - {x: 14, y: 9}
+    - {x: 15, y: 9}
+    - {x: 16, y: 9}
+    - {x: 15, y: 8}
+  - Name: "\u015Eekil 19"
+    Colour: 2
+    Cells:
+    - {x: 14, y: 6}
+    - {x: 15, y: 6}
+    - {x: 16, y: 6}
+    - {x: 15, y: 5}
+  - Name: "\u015Eekil 20"
+    Colour: 0
+    Cells:
+    - {x: 2, y: 14}
+    - {x: 3, y: 14}
+    - {x: 2, y: 15}
+    - {x: 3, y: 15}
+  Doors:
+  - Name: Blue square
+    Side: 2
+    Start: 2
+    Size: 2
+    Queue:
+    - Name: Blue square
+      Colour: 0
+      Cells:
+      - {x: 0, y: 0}
+      - {x: 1, y: 0}
+      - {x: 0, y: 1}
+      - {x: 1, y: 1}
+  - Name: Exit 3
+    Side: 2
+    Start: 15
+    Size: 2
+    Queue:
+    - Name: Exit 3
+      Colour: 0
+      Cells:
+      - {x: 0, y: 0}
+      - {x: 1, y: 0}
+      - {x: 0, y: 1}
+      - {x: 1, y: 1}
+  - Name: Exit 4
+    Side: 1
+    Start: 8
+    Size: 3
+    Queue:
+    - Name: Exit 4
+      Colour: 0
+      Cells:
+      - {x: 0, y: 1}
+      - {x: 1, y: 1}
+      - {x: 2, y: 1}
+      - {x: 1, y: 0}
+    - Name: Target 2
+      Colour: 0
+      Cells:
+      - {x: 0, y: 1}
+      - {x: 1, y: 1}
+      - {x: 2, y: 1}
+      - {x: 1, y: 0}
+  - Name: Exit 5
+    Side: 1
+    Start: 4
+    Size: 2
+    Queue:
+    - Name: Exit 5
+      Colour: 0
+      Cells:
+      - {x: 0, y: 0}
+      - {x: 1, y: 0}
+      - {x: 0, y: 1}
+      - {x: 1, y: 1}
+  - Name: Exit 6
+    Side: 1
+    Start: 1
+    Size: 2
+    Queue:
+    - Name: Exit 6
+      Colour: 1
+      Cells:
+      - {x: 0, y: 0}
+      - {x: 1, y: 0}
+      - {x: 0, y: 1}
+      - {x: 1, y: 1}
+  - Name: Exit 7
+    Side: 1
+    Start: 12
+    Size: 2
+    Queue:
+    - Name: Exit 7
+      Colour: 0
+      Cells:
+      - {x: 0, y: 0}
+      - {x: 1, y: 0}
+      - {x: 0, y: 1}
+      - {x: 1, y: 1}
+  - Name: Exit 8
+    Side: 1
+    Start: 15
+    Size: 2
+    Queue:
+    - Name: Exit 8
+      Colour: 0
+      Cells:
+      - {x: 0, y: 0}
+      - {x: 1, y: 0}
+      - {x: 0, y: 1}
+      - {x: 1, y: 1}
+  - Name: Exit 9
+    Side: 2
+    Start: 12
+    Size: 2
+    Queue:
+    - Name: Exit 9
+      Colour: 0
+      Cells:
+      - {x: 0, y: 0}
+      - {x: 1, y: 0}
+      - {x: 0, y: 1}
+      - {x: 1, y: 1}
+  - Name: Exit 10
+    Side: 3
+    Start: 17
+    Size: 2
+    Queue:
+    - Name: Exit 10
+      Colour: 1
+      Cells:
+      - {x: 0, y: 0}
+      - {x: 1, y: 0}
+      - {x: 0, y: 1}
+      - {x: 1, y: 1}
+  - Name: Exit 11
+    Side: 3
+    Start: 15
+    Size: 2
+    Queue:
+    - Name: Exit 11
+      Colour: 1
+      Cells:
+      - {x: 0, y: 1}
+      - {x: 1, y: 1}
+      - {x: 2, y: 1}
+      - {x: 1, y: 0}
+  - Name: Exit 12
+    Side: 3
+    Start: 12
+    Size: 2
+    Queue:
+    - Name: Exit 12
+      Colour: 1
+      Cells:
+      - {x: 0, y: 1}
+      - {x: 1, y: 1}
+      - {x: 2, y: 1}
+      - {x: 1, y: 0}
+  - Name: Exit 13
+    Side: 3
+    Start: 9
+    Size: 2
+    Queue:
+    - Name: Exit 13
+      Colour: 2
+      Cells:
+      - {x: 0, y: 1}
+      - {x: 1, y: 1}
+      - {x: 2, y: 1}
+      - {x: 1, y: 0}
+  - Name: Exit 14
+    Side: 3
+    Start: 6
+    Size: 2
+    Queue:
+    - Name: Exit 14
+      Colour: 2
+      Cells:
+      - {x: 0, y: 1}
+      - {x: 1, y: 1}
+      - {x: 2, y: 1}
+      - {x: 1, y: 0}
+  - Name: Exit 16
+    Side: 0
+    Start: 17
+    Size: 2
+    Queue:
+    - Name: Exit 16
+      Colour: 0
+      Cells:
+      - {x: 0, y: 0}
+      - {x: 1, y: 0}
+      - {x: 0, y: 1}
+      - {x: 1, y: 1}
+  - Name: Exit 17
+    Side: 0
+    Start: 14
+    Size: 3
+    Queue:
+    - Name: Exit 17
+      Colour: 1
+      Cells:
+      - {x: 0, y: 1}
+      - {x: 1, y: 1}
+      - {x: 2, y: 1}
+      - {x: 1, y: 0}
+  - Name: Exit 18
+    Side: 0
+    Start: 10
+    Size: 3
+    Queue:
+    - Name: Exit 18
+      Colour: 0
+      Cells:
+      - {x: 0, y: 0}
+      - {x: 1, y: 0}
+      - {x: 2, y: 0}
+  Targets: []

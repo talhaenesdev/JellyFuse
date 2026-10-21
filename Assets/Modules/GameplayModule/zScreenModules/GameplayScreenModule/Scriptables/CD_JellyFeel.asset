@@ -1,0 +1,75 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 239cbaeacc7546f998bb29a82d2ed43c, type: 3}
+  m_Name: CD_JellyFeel
+  m_EditorClassIdentifier: Modules.Gameplay.Screen::Modules.GameplayModule.GameplayScreenModule.Data.UnityObjects.CD_JellyFeel
+  AnimateJellies: 1
+  GridDrag: 0
+  DragFollow: 0.5
+  SlideSpeed: 40
+  GrabLift: 0.186
+  LiftTime: 0.08
+  JellyStiffness: 50
+  JellyDamping: 2
+  MoveStretch: 0
+  MaxStretch: 0
+  PullStretch: 0
+  GrabPop: 0
+  LandSquash: 0
+  FusePop: 0
+  NeighbourWobble: 0
+  BreathAmount: 0
+  BreathSpeed: 0
+  SplitTopAndBase: 1
+  BaseShare: 0.11
+  BaseOverlap: 0.08
+  BaseMotion: 0.25
+  TopLag: 0.04
+  TopMaxOffset: 0.14
+  TopSquash: 0.2
+  TopStiffness: 180
+  TopDamping: 26
+  UseRig: 1
+  RigColumns: 8
+  RigRows: 8
+  RigBend: 1
+  RigVerticalStretch: 1.5
+  RigMirrorBottom: 1
+  RigCurve: 1.5
+  RigBulge: 0.45
+  RigTopDip: 0.5
+  FuseHintGlow: 0.35
+  FuseReadyLift: 0.186
+  FuseHintPulse: 0.05
+  FuseHintSpeed: 8
+  DoorEnterTime: 0.55
+  DoorBits: 60
+  DoorBitSize: 0.16
+  DoorBitSpeed: 4
+  DoorBitSpread: 1.2
+  DoorBitLife: 0.5
+  FuseBitsPerCell: 6
+  FuseBitSpeed: 2.5
+  FuseBitSize: 0.14
+  FuseBitLife: 0.45
+  VanishBitsPerCell: 14
+  VanishBitSpeed: 4
+  VanishBitSize: 0.18
+  VanishBitLife: 0.6
+  VanishRing: 1
+  FuseFlash: 0.6
+  FuseFlashTime: 0.25
+  FuseRingSize: 1.6
+  FuseRingTime: 0.45
+  FuseRingAlpha: 0.8
+  FuseShake: 0
+  FuseShakeTime: 0.22

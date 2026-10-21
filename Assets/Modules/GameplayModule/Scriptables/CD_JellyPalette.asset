@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccaa4790fc898e24eaab7b82370d5a72, type: 3}
+  m_Name: CD_JellyPalette
+  m_EditorClassIdentifier: Modules.Gameplay.Shared::Modules.GameplayModule.Shared.Data.UnityObjects.CD_JellyPalette
+  Colours:
+  - Colour: 100
+    Name: Red
+    Tint: {r: 0.9960784, g: 0.3254902, b: 0.4980392, a: 1}
+    Sprite: {fileID: 21300000, guid: 7e2c78f54eb8df64daf1d0e0e960b222, type: 3}
+  - Colour: 0
+    Name: Pink
+    Tint: {r: 1, g: 0.6196078, b: 0.7529412, a: 1}
+    Sprite: {fileID: 21300000, guid: fb0d6c7a32cac3247a641a2f97d3594f, type: 3}
+  - Colour: 101
+    Name: Orange
+    Tint: {r: 1, g: 0.5137255, b: 0.054902, a: 1}
+    Sprite: {fileID: 21300000, guid: bb2931507f54cfb4da7dababca321870, type: 3}
+  - Colour: 2
+    Name: Yellow
+    Tint: {r: 1, g: 0.9254902, b: 0.3254902, a: 1}
+    Sprite: {fileID: 21300000, guid: 98a25e4472b501d4296bfb8806fcaba9, type: 3}
+  - Colour: 102
+    Name: Green
+    Tint: {r: 0.3137255, g: 0.9568627, b: 0.2823529, a: 1}
+    Sprite: {fileID: 21300000, guid: 413956f3b27579d4db3b6c46a290a83d, type: 3}
+  - Colour: 103
+    Name: Mint
+    Tint: {r: 0.0666667, g: 0.8431373, b: 0.8078431, a: 1}
+    Sprite: {fileID: 21300000, guid: 71a39d15c646f1748b8e7d01e7496a94, type: 3}
+  - Colour: 1
+    Name: Blue
+    Tint: {r: 0.1882353, g: 0.7411765, b: 1, a: 1}
+    Sprite: {fileID: 21300000, guid: 4ff6af6412e5f7848833115fbc6b8e65, type: 3}
+  - Colour: 104
+    Name: Navy
+    Tint: {r: 0.5098039, g: 0.4980392, b: 0.9215686, a: 1}
+    Sprite: {fileID: 21300000, guid: 3a0a0f3a9185d9749a6cb286e2cc107c, type: 3}
+  - Colour: 105
+    Name: Purple
+    Tint: {r: 0.9372549, g: 0.3137255, b: 1, a: 1}
+    Sprite: {fileID: 21300000, guid: 018f7a11865a6834ba3fb4ade0bb8324, type: 3}
+  - Colour: 106
+    Name: Gray
+    Tint: {r: 0.8745098, g: 0.9254902, b: 0.9686275, a: 1}
+    Sprite: {fileID: 21300000, guid: aaa6c1a049f7fc14cb15167d2a6f2f6b, type: 3}
+  - Colour: 107
+    Name: Black
+    Tint: {r: 0.149, g: 0.141, b: 0.141, a: 1}
+    Sprite: {fileID: 21300000, guid: b9be61c61c800fa4381c314f902fe454, type: 3}

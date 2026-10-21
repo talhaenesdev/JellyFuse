@@ -1,0 +1,106 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec2264475c379fb47aadac639deb05b6, type: 3}
+  m_Name: CD_JellyLevel_01
+  m_EditorClassIdentifier: Modules.Gameplay.Shared::Modules.GameplayModule.Shared.Data.UnityObjects.CD_JellyLevel
+  LevelName: 01
+  Hint: "Tek pembeyi \xF6nce yukar\u0131, sonra sa\u011Fa s\xFCr\xFCkle. L \u015Feklini
+    sa\u011F kenardan d\u0131\u015Far\u0131 \xE7\u0131kar. Mavi kareyi sol d\u0131\u015F
+    hedefe g\xF6t\xFCr."
+  Width: 7
+  Height: 7
+  Seconds: 180
+  OwnCoinReward: -1
+  FreeArrowAfterFusion: 0
+  ExtraColours: []
+  _nextColourId: 3
+  Walls:
+  - {x: 0, y: 6}
+  - {x: 0, y: 5}
+  - {x: 0, y: 4}
+  - {x: 2, y: 0}
+  - {x: 3, y: 0}
+  - {x: 5, y: 0}
+  - {x: 4, y: 0}
+  - {x: 0, y: 0}
+  - {x: 1, y: 0}
+  - {x: 6, y: 0}
+  Holes: []
+  Shapes:
+  - Name: Jelly 1
+    Colour: 1
+    Cells:
+    - {x: 1, y: 3}
+    - {x: 2, y: 3}
+    - {x: 3, y: 3}
+    Frozen: 0
+    ThawAfter: 3
+    ArrowBlock: 0
+    ArrowAxis: 0
+  - Name: Jelly 2
+    Colour: 102
+    Cells:
+    - {x: 5, y: 1}
+    - {x: 5, y: 2}
+    - {x: 5, y: 3}
+    - {x: 4, y: 1}
+    Frozen: 0
+    ThawAfter: 3
+    ArrowBlock: 0
+    ArrowAxis: 0
+  Doors:
+  - Name: Exit 1
+    Side: 1
+    Start: 1
+    Size: 3
+    FitToJelly: 0
+    OwnPullReach: -1
+    Frozen: 0
+    ThawAfter: 3
+    Queue:
+    - Name: Exit 1
+      Colour: 1
+      Cells:
+      - {x: 0, y: 0}
+      - {x: 1, y: 0}
+      - {x: 2, y: 0}
+      Frozen: 0
+      ThawAfter: 3
+      ArrowBlock: 0
+      ArrowAxis: 0
+  - Name: Door 2
+    Side: 2
+    Start: 1
+    Size: 3
+    FitToJelly: 0
+    OwnPullReach: -1
+    Frozen: 0
+    ThawAfter: 3
+    Queue:
+    - Name: Jelly 1
+      Colour: 102
+      Cells:
+      - {x: 1, y: 0}
+      - {x: 1, y: 1}
+      - {x: 1, y: 2}
+      - {x: 0, y: 0}
+      Frozen: 0
+      ThawAfter: 3
+      ArrowBlock: 0
+      ArrowAxis: 0
+  Tutorial:
+  - Path:
+    - {x: 1, y: 3}
+    - {x: 1, y: 6}
+    TextKey: tutorial.level1.step1
+    Text: Drag the jelly into the door waiting for it!
+  Targets: []

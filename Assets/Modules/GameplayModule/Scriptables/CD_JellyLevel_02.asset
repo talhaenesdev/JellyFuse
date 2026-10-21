@@ -1,0 +1,170 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec2264475c379fb47aadac639deb05b6, type: 3}
+  m_Name: CD_JellyLevel_02
+  m_EditorClassIdentifier: Modules.Gameplay.Shared::Modules.GameplayModule.Shared.Data.UnityObjects.CD_JellyLevel
+  LevelName: "01 / DI\u015E HEDEFLER"
+  Hint: "Tek pembeyi \xF6nce yukar\u0131, sonra sa\u011Fa s\xFCr\xFCkle. L \u015Feklini
+    sa\u011F kenardan d\u0131\u015Far\u0131 \xE7\u0131kar. Mavi kareyi sol d\u0131\u015F
+    hedefe g\xF6t\xFCr."
+  Width: 7
+  Height: 9
+  Seconds: 180
+  OwnCoinReward: -1
+  FreeArrowAfterFusion: 0
+  ExtraColours: []
+  _nextColourId: 4
+  Walls:
+  - {x: 0, y: 7}
+  - {x: 6, y: 7}
+  - {x: 6, y: 6}
+  - {x: 2, y: 0}
+  - {x: 1, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 1}
+  - {x: 0, y: 3}
+  - {x: 0, y: 4}
+  - {x: 0, y: 5}
+  - {x: 6, y: 0}
+  - {x: 6, y: 2}
+  - {x: 6, y: 1}
+  - {x: 0, y: 8}
+  - {x: 2, y: 8}
+  - {x: 3, y: 8}
+  - {x: 4, y: 8}
+  - {x: 5, y: 8}
+  - {x: 6, y: 8}
+  - {x: 3, y: 0}
+  - {x: 4, y: 0}
+  - {x: 5, y: 0}
+  - {x: 1, y: 8}
+  Holes: []
+  Shapes:
+  - Name: Jelly 3
+    Colour: 106
+    Cells:
+    - {x: 4, y: 7}
+    Frozen: 0
+    ThawAfter: 3
+    ArrowBlock: 0
+    ArrowAxis: 0
+  - Name: Jelly 4
+    Colour: 106
+    Cells:
+    - {x: 2, y: 2}
+    - {x: 3, y: 2}
+    Frozen: 0
+    ThawAfter: 3
+    ArrowBlock: 0
+    ArrowAxis: 0
+  - Name: Jelly 5
+    Colour: 2
+    Cells:
+    - {x: 1, y: 4}
+    - {x: 1, y: 3}
+    Frozen: 0
+    ThawAfter: 3
+    ArrowBlock: 0
+    ArrowAxis: 0
+  - Name: Jelly 6
+    Colour: 2
+    Cells:
+    - {x: 4, y: 5}
+    Frozen: 0
+    ThawAfter: 3
+    ArrowBlock: 0
+    ArrowAxis: 0
+  - Name: Jelly 7
+    Colour: 100
+    Cells:
+    - {x: 2, y: 6}
+    Frozen: 0
+    ThawAfter: 3
+    ArrowBlock: 0
+    ArrowAxis: 0
+  - Name: Jelly 8
+    Colour: 100
+    Cells:
+    - {x: 3, y: 4}
+    Frozen: 0
+    ThawAfter: 3
+    ArrowBlock: 0
+    ArrowAxis: 0
+  Doors:
+  - Name: Door 3
+    Side: 2
+    Start: 6
+    Size: 1
+    FitToJelly: 0
+    OwnPullReach: -1
+    Frozen: 0
+    ThawAfter: 3
+    Queue:
+    - Name: Jelly 1
+      Colour: 100
+      Cells:
+      - {x: 0, y: 0}
+      - {x: 1, y: 0}
+      Frozen: 0
+      ThawAfter: 3
+      ArrowBlock: 0
+      ArrowAxis: 0
+  - Name: Door 5
+    Side: 2
+    Start: 2
+    Size: 1
+    FitToJelly: 0
+    OwnPullReach: -1
+    Frozen: 0
+    ThawAfter: 3
+    Queue:
+    - Name: Jelly 1
+      Colour: 106
+      Cells:
+      - {x: 2, y: 0}
+      - {x: 1, y: 0}
+      - {x: 0, y: 0}
+      Frozen: 0
+      ThawAfter: 3
+      ArrowBlock: 0
+      ArrowAxis: 0
+  - Name: Door 5
+    Side: 3
+    Start: 3
+    Size: 3
+    FitToJelly: 0
+    OwnPullReach: -1
+    Frozen: 0
+    ThawAfter: 3
+    Queue:
+    - Name: Jelly 1
+      Colour: 2
+      Cells:
+      - {x: 0, y: 0}
+      - {x: 0, y: 1}
+      - {x: 0, y: 2}
+      Frozen: 0
+      ThawAfter: 3
+      ArrowBlock: 0
+      ArrowAxis: 0
+  Tutorial:
+  - Path:
+    - {x: 3, y: 4}
+    - {x: 3, y: 6}
+    TextKey: tutorial.level2.step1
+    Text: Join jellies of one colour into the shape the door wants!
+  - Path:
+    - {x: 2, y: 6}
+    - {x: 0, y: 6}
+    TextKey: tutorial.level2.step2
+    Text: Now take the new shape to its door!
+  Targets: []

@@ -1,0 +1,111 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4486889424014116514
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6714883090345358872}
+  - component: {fileID: 7422317409910993039}
+  - component: {fileID: 8916944322758153294}
+  m_Layer: 0
+  m_Name: GameplaySystemRoot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6714883090345358872
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4486889424014116514}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7422317409910993039
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4486889424014116514}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 543c504df7cafb249ba5fe30eadbe4a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.Gameplay::Modules.GameplayModule.RootsContexts.GameplaySystemRoot
+  SubContextTypes:
+  - ContextScript: {fileID: 11500000, guid: 7e664dc3781d6de41a564dd240d87da4, type: 3}
+    ContextFullName: Modules.GameplayModule.GameplayScreenModule.RootsContexts.GameplayScreenContext
+    ContextName: GameplayScreenContext
+    AutoSetup: 1
+    IsTest: 0
+    Settings:
+      rid: -2
+  - ContextScript: {fileID: 11500000, guid: 781a7c6e16556d84c9e9ddca69eb0fa0, type: 3}
+    ContextFullName: Modules.GameplayModule.SettingsScreenModule.RootsContexts.SettingsScreenContext
+    ContextName: SettingsScreenContext
+    AutoSetup: 1
+    IsTest: 0
+    Settings:
+      rid: -2
+  - ContextScript: {fileID: 11500000, guid: 45897c2489280ae4ca90320f4a6836d2, type: 3}
+    ContextFullName: Modules.GameplayModule.PauseScreenModule.RootsContexts.PauseScreenContext
+    ContextName: PauseScreenContext
+    AutoSetup: 1
+    IsTest: 0
+    Settings:
+      rid: -2
+  initializeOrder: 0
+  AutoBindInjections: 1
+  AutoBindMediations: 1
+  AutoInitialize: 1
+  AutoSetup: 1
+  AutoLaunch: 1
+  IsTest: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+--- !u!114 &8916944322758153294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4486889424014116514}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f39bbf08b2e417abc79bcaf1de79c9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FlowIoC::FlowIoC.BaseModule.Adapters.RootAdapter
+  _scriptableMap:
+    m_Keys: []
+    m_Values: []
+  _sharedScriptableMap:
+    m_Keys:
+    - CD_JellyLevels
+    - CD_Boosters
+    - CD_Lives
+    m_Values:
+    - {fileID: 11400000, guid: ba679b29fbd0432286854610333aac72, type: 2}
+    - {fileID: 11400000, guid: e67a84e6dc67b474f85128767d156939, type: 2}
+    - {fileID: 11400000, guid: 1e8f095a2324b95458a01f4509a446f1, type: 2}
+  _monoMap:
+    m_Keys: []
+    m_Values: []
+  _sharedMonoMap:
+    m_Keys: []
+    m_Values: []

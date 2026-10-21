@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 162b4ada71fb3144597d13e5f9bb28ae, type: 3}
+  m_Name: CD_Haptic_Test
+  m_EditorClassIdentifier: Modules.Haptic::Modules.HapticModule.Data.UnityObjects.CD_Haptic
+  DefaultEnabled: 1
+  LogInEditor: 1
+  Presets:
+  - Preset: 0
+    Effect: 0
+    Enabled: 1
+    MinimumInterval: 0.08
+  - Preset: 1
+    Effect: 1
+    Enabled: 1
+    MinimumInterval: 0.08
+  - Preset: 2
+    Effect: 2
+    Enabled: 1
+    MinimumInterval: 0.08
+  - Preset: 3
+    Effect: 3
+    Enabled: 1
+    MinimumInterval: 0.08
+  - Preset: 4
+    Effect: 4
+    Enabled: 1
+    MinimumInterval: 0.25
+  - Preset: 5
+    Effect: 5
+    Enabled: 1
+    MinimumInterval: 0.25

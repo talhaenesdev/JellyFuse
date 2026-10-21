@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1aecee5cae54a444eb0a5fa054bee647, type: 3}
+  m_Name: CD_InfoPopups
+  m_EditorClassIdentifier: Modules.Gameplay.Screen::Modules.GameplayModule.GameplayScreenModule.Data.UnityObjects.CD_InfoPopups
+  Table: {fileID: 11400000, guid: a51c2e59f37f9a0498502705d04e6856, type: 2}
+  Pages:
+  - Key: booster.rocket
+    TitleKey: info.booster.rocket.title
+    Title: Rocket
+    SubtitleKey: info.booster.subtitle
+    Subtitle: New booster unlocked!
+    Image: {fileID: 21300000, guid: 7f0ce0640e558f94580766e09969ef7b, type: 3}
+    ImageSize: {x: 0, y: 0}
+    DescriptionKey: info.booster.rocket.description
+    Description: 'Tap a door: the jellies it waits for are taken away.'
+    ButtonKey: info.ok
+    Button: OK
+    LeadToBooster: 1
+    Booster: 0
+  - Key: booster.freezetime
+    TitleKey: info.booster.freezetime.title
+    Title: Freeze Time
+    SubtitleKey: info.booster.subtitle
+    Subtitle: New booster unlocked!
+    Image: {fileID: 21300000, guid: d8bb93c07909b234aaa942ae28cd9a66, type: 3}
+    ImageSize: {x: 0, y: 0}
+    DescriptionKey: info.booster.freezetime.description
+    Description: Stops the clock for a while, so you can think.
+    ButtonKey: info.ok
+    Button: OK
+    LeadToBooster: 1
+    Booster: 1
+  - Key: booster.ufo
+    TitleKey: info.booster.ufo.title
+    Title: UFO
+    SubtitleKey: info.booster.subtitle
+    Subtitle: New booster unlocked!
+    Image: {fileID: 21300000, guid: d0dadc71cbb6fbb4db94baf14a16b43c, type: 3}
+    ImageSize: {x: 0, y: 0}
+    DescriptionKey: info.booster.ufo.description
+    Description: 'Tap a jelly: every jelly of its colour is taken away.'
+    ButtonKey: info.ok
+    Button: OK
+    LeadToBooster: 1
+    Booster: 2

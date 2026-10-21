@@ -1,0 +1,340 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fd28af06e0507248bbd442c49b581f1, type: 3}
+  m_Name: CD_DevToolsTexts
+  m_EditorClassIdentifier: Modules.Localization.Shared::Modules.LocalizationModule.Shared.Data.UnityObjects.CD_LocalizationTable
+  Usage: 0
+  Texts:
+  - Key: devtools.title
+    Translations:
+    - Code: en
+      Text: Dev Tools
+    - Code: tr
+      Text: "Geli\u015Ftirici Ara\xE7lar\u0131"
+  - Key: devtools.previous
+    Translations:
+    - Code: en
+      Text: Previous
+    - Code: tr
+      Text: "\xD6nceki"
+  - Key: devtools.refill_lives
+    Translations:
+    - Code: en
+      Text: "Refill Lives"
+    - Code: tr
+      Text: "Canlar\u0131 Yenile"
+  - Key: devtools.reset_player
+    Translations:
+    - Code: en
+      Text: Reset Player
+    - Code: tr
+      Text: "Kullan\u0131c\u0131y\u0131 S\u0131f\u0131rla"
+  - Key: devtools.sliders
+    Translations:
+    - Code: en
+      Text: "Animation Settings"
+    - Code: tr
+      Text: "Animasyon Ayarlar\u0131"
+  - Key: devtools.back
+    Translations:
+    - Code: en
+      Text: "Back"
+    - Code: tr
+      Text: "Geri"
+  - Key: devtools.sliders_empty
+    Translations:
+    - Code: en
+      Text: "Open this page from inside a level."
+    - Code: tr
+      Text: "Bu sayfay\u0131 bir seviyenin i\u00E7inden a\u00E7\u0131n."
+  - Key: devtools.slider.BaseMotion
+    Translations:
+    - Code: en
+      Text: "Base motion"
+    - Code: tr
+      Text: "Taban hareketi"
+  - Key: devtools.slider.TopLag
+    Translations:
+    - Code: en
+      Text: "Top lag"
+    - Code: tr
+      Text: "\u00DCst gecikmesi"
+  - Key: devtools.slider.TopMaxOffset
+    Translations:
+    - Code: en
+      Text: "Top max offset"
+    - Code: tr
+      Text: "\u00DCst en fazla kayma"
+  - Key: devtools.slider.TopSquash
+    Translations:
+    - Code: en
+      Text: "Top squash"
+    - Code: tr
+      Text: "\u00DCst ezilme"
+  - Key: devtools.slider.TopStiffness
+    Translations:
+    - Code: en
+      Text: "Top stiffness"
+    - Code: tr
+      Text: "\u00DCst sertlik"
+  - Key: devtools.slider.TopDamping
+    Translations:
+    - Code: en
+      Text: "Top damping"
+    - Code: tr
+      Text: "\u00DCst s\u00F6nme"
+  - Key: devtools.slider.RigBend
+    Translations:
+    - Code: en
+      Text: "Rig bend"
+    - Code: tr
+      Text: "Rig b\u00FCk\u00FClme"
+  - Key: devtools.slider.RigCurve
+    Translations:
+    - Code: en
+      Text: "Rig curve"
+    - Code: tr
+      Text: "Rig e\u011Frisi"
+  - Key: devtools.slider.RigBulge
+    Translations:
+    - Code: en
+      Text: "Rig bulge"
+    - Code: tr
+      Text: "Rig \u015Fi\u015Fme"
+  - Key: devtools.slider.RigTopDip
+    Translations:
+    - Code: en
+      Text: "Rig top dip"
+    - Code: tr
+      Text: "Rig \u00FCst \u00E7\u00F6kme"
+  - Key: devtools.slider.BaseOverlap
+    Translations:
+    - Code: en
+      Text: "Base overlap"
+    - Code: tr
+      Text: "Taban \u00F6rt\u00FC\u015Fme"
+  - Key: devtools.reset
+    Translations:
+    - Code: en
+      Text: Reset
+    - Code: tr
+      Text: "S\u0131f\u0131rla"
+  - Key: devtools.gameplay.top_bar
+    Translations:
+    - Code: en
+      Text: "Top bar"
+    - Code: tr
+      Text: "\u00DCst bar"
+  - Key: devtools.gameplay.bottom_bar
+    Translations:
+    - Code: en
+      Text: "Bottom bar"
+    - Code: tr
+      Text: "Alt bar"
+  - Key: devtools.game_toggles
+    Translations:
+    - Code: en
+      Text: "Gameplay Settings"
+    - Code: tr
+      Text: "Oynan\u0131\u015F Ayarlar\u0131"
+  - Key: devtools.display_toggles
+    Translations:
+    - Code: en
+      Text: "Display Settings"
+    - Code: tr
+      Text: "G\u00F6r\u00FCn\u00FCm Ayarlar\u0131"
+  - Key: devtools.slider.FuseBitsPerCell
+    Translations:
+    - Code: en
+      Text: "Fuse bits per cell"
+    - Code: tr
+      Text: "Birle\u015Fme par\u00E7ac\u0131k say\u0131s\u0131"
+  - Key: devtools.slider.FuseBitSpeed
+    Translations:
+    - Code: en
+      Text: "Fuse bit speed"
+    - Code: tr
+      Text: "Birle\u015Fme par\u00E7ac\u0131k h\u0131z\u0131"
+  - Key: devtools.slider.FuseBitSize
+    Translations:
+    - Code: en
+      Text: "Fuse bit size"
+    - Code: tr
+      Text: "Birle\u015Fme par\u00E7ac\u0131k boyutu"
+  - Key: devtools.slider.FuseBitLife
+    Translations:
+    - Code: en
+      Text: "Fuse bit life"
+    - Code: tr
+      Text: "Birle\u015Fme par\u00E7ac\u0131k \u00F6mr\u00FC"
+  - Key: devtools.gameplay.path_finding
+    Translations:
+    - Code: en
+      Text: Path finding drag
+    - Code: tr
+      Text: "Yol bulmal\u0131 s\u00FCr\u00FCkleme"
+  - Key: devtools.slider.RigVerticalStretch
+    Translations:
+    - Code: en
+      Text: "Rig vertical stretch"
+    - Code: tr
+      Text: "Rig dikey esneme"
+  - Key: devtools.slider.Look.FuseGlowBloomStrength
+    Translations:
+    - Code: en
+      Text: "Corner bloom strength"
+    - Code: tr
+      Text: "K\u00F6\u015Fe parlama g\u00FCc\u00FC"
+  - Key: devtools.slider.Look.FuseGlowBloomSize
+    Translations:
+    - Code: en
+      Text: "Corner bloom size"
+    - Code: tr
+      Text: "K\u00F6\u015Fe parlama boyu"
+  - Key: devtools.slider.Look.FuseGlowCornerScale
+    Translations:
+    - Code: en
+      Text: "Lit corner scale"
+    - Code: tr
+      Text: "Yanan k\u00F6\u015Fe b\u00FCy\u00FCkl\u00FC\u011F\u00FC"
+  - Key: devtools.slider.Look.FuseGlowSeconds
+    Translations:
+    - Code: en
+      Text: "Corner glow seconds"
+    - Code: tr
+      Text: "K\u00F6\u015Fe parlama s\u00FCresi"
+  - Key: devtools.slider.Look.FuseGlowBlinks
+    Translations:
+    - Code: en
+      Text: "Corner glow blinks"
+    - Code: tr
+      Text: "K\u00F6\u015Fe yan\u0131p s\u00F6nme say\u0131s\u0131"
+  - Key: devtools.slider.FuseFlash
+    Translations:
+    - Code: en
+      Text: "Fuse flash"
+    - Code: tr
+      Text: "Birle\u015Fme parlamas\u0131"
+  - Key: devtools.slider.FuseFlashTime
+    Translations:
+    - Code: en
+      Text: "Fuse flash time"
+    - Code: tr
+      Text: "Birle\u015Fme parlama s\u00FCresi"
+  - Key: devtools.slider.FuseRingSize
+    Translations:
+    - Code: en
+      Text: "Fuse ring size"
+    - Code: tr
+      Text: "Birle\u015Fme halka boyu"
+  - Key: devtools.slider.FuseRingTime
+    Translations:
+    - Code: en
+      Text: "Fuse ring time"
+    - Code: tr
+      Text: "Birle\u015Fme halka s\u00FCresi"
+  - Key: devtools.slider.FuseRingAlpha
+    Translations:
+    - Code: en
+      Text: "Fuse ring strength"
+    - Code: tr
+      Text: "Birle\u015Fme halka g\u00FCc\u00FC"
+  - Key: devtools.slider.FuseShake
+    Translations:
+    - Code: en
+      Text: "Fuse shake"
+    - Code: tr
+      Text: "Birle\u015Fme sars\u0131nt\u0131s\u0131"
+  - Key: devtools.slider.FuseShakeTime
+    Translations:
+    - Code: en
+      Text: "Fuse shake time"
+    - Code: tr
+      Text: "Birle\u015Fme sars\u0131nt\u0131 s\u00FCresi"
+  - Key: devtools.slider.Panel.Duration
+    Translations:
+    - Code: en
+      Text: "Panel open time"
+    - Code: tr
+      Text: "Panel a\u00E7\u0131l\u0131\u015F s\u00FCresi"
+  - Key: devtools.slider.Panel.StartScale
+    Translations:
+    - Code: en
+      Text: "Panel start size"
+    - Code: tr
+      Text: "Panel ba\u015Flang\u0131\u00E7 boyu"
+  - Key: devtools.slider.Panel.SlideDistance
+    Translations:
+    - Code: en
+      Text: "Panel slide distance"
+    - Code: tr
+      Text: "Panel kayma mesafesi"
+  - Key: devtools.slider.Panel.FadeSeconds
+    Translations:
+    - Code: en
+      Text: "Panel fade time"
+    - Code: tr
+      Text: "Panel belirme s\u00FCresi"
+  - Key: devtools.slider.Panel.DimSeconds
+    Translations:
+    - Code: en
+      Text: "Panel dim time"
+    - Code: tr
+      Text: "Panel karartma s\u00FCresi"
+  - Key: devtools.slider.Panel.Delay
+    Translations:
+    - Code: en
+      Text: "Panel delay"
+    - Code: tr
+      Text: "Panel bekleme"
+  - Key: devtools.next
+    Translations:
+    - Code: en
+      Text: Next
+    - Code: tr
+      Text: Sonraki
+  - Key: devtools.reset_boosters
+    Translations:
+    - Code: en
+      Text: Reset Boosters
+    - Code: tr
+      Text: "Boosterları Sıfırla"
+  - Key: devtools.dev.show_fps
+    Translations:
+    - Code: en
+      Text: Show FPS
+    - Code: tr
+      Text: "FPS'i g\xF6ster"
+  - Key: devtools.dev.uncapped_fps
+    Translations:
+    - Code: en
+      Text: Uncapped frame rate
+    - Code: tr
+      Text: "FPS s\u0131n\u0131r\u0131n\u0131 kald\u0131r"
+  - Key: devtools.gameplay.biggest_fuse_first
+    Translations:
+    - Code: en
+      Text: Biggest jelly fuses first
+    - Code: tr
+      Text: "\u00D6nce en b\u00FCy\u00FCk j\u00F6le birle\u015Fir"
+  - Key: devtools.slider.SlideSpeed
+    Translations:
+    - Code: en
+      Text: Slide speed
+    - Code: tr
+      Text: "Takip h\u0131z\u0131"
+  - Key: devtools.slider.DragFollow
+    Translations:
+    - Code: en
+      Text: Drag follow
+    - Code: tr
+      Text: "Parma\u011Fa uzanma"
