@@ -25,6 +25,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         {
             public Button Button;
             public Image Icon;
+            // The tile behind the button: a sibling laid under it, so the button's own image stays the icon.
+            public Image Slot;
             public TMP_Text Badge;
             public UnityEngine.Events.UnityAction Clicked;
             public BoosterStateRVO State;
@@ -47,11 +49,27 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         private void BuildBoosters()
         {
             if (_boosterButtons.Count > 0 || _boosters == null) return;
-            foreach (Transform child in _boosters)
+            var hud = _presentation.Hud;
+            var buttons = new List<Transform>();
+            foreach (Transform child in _boosters) buttons.Add(child);
+            foreach (Transform child in buttons)
             {
                 var button = child.GetComponent<Button>();
                 if (button == null) continue;
                 var entry = new BoosterButton { Button = button, Icon = button.image };
+                if (hud.BoosterSlotSprite != null)
+                {
+                    var slot = new GameObject("Img_BoosterSlot", typeof(RectTransform)).AddComponent<Image>();
+                    var rect = (RectTransform)child;
+                    slot.rectTransform.SetParent(_boosters, false);
+                    slot.rectTransform.SetSiblingIndex(child.GetSiblingIndex());
+                    slot.rectTransform.anchorMin = rect.anchorMin; slot.rectTransform.anchorMax = rect.anchorMax; slot.rectTransform.pivot = rect.pivot;
+                    slot.rectTransform.anchoredPosition = rect.anchoredPosition;
+                    slot.rectTransform.sizeDelta = rect.sizeDelta * hud.BoosterSlotScale;
+                    slot.sprite = hud.BoosterSlotSprite; slot.preserveAspect = true; slot.raycastTarget = false;
+                    slot.gameObject.SetActive(false);
+                    entry.Slot = slot;
+                }
                 var badge = new GameObject("Txt_BoosterBadge", typeof(RectTransform)).AddComponent<TextMeshProUGUI>();
                 badge.rectTransform.SetParent(button.transform, false);
                 badge.rectTransform.anchorMin = new Vector2(.5f, 0); badge.rectTransform.anchorMax = new Vector2(1, .4f);
@@ -81,6 +99,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                 var entry = _boosterButtons[i];
                 entry.State = i < states.Count ? states[i] : null;
                 entry.Button.gameObject.SetActive(entry.State != null);
+                if (entry.Slot != null) entry.Slot.gameObject.SetActive(entry.State != null);
                 if (entry.State == null) continue;
                 if (entry.State.Icon != null) entry.Icon.sprite = entry.State.Icon;
                 entry.Badge.text = !entry.State.Unlocked ? LF("gameplay.booster_locked", "Lv {0}", entry.State.UnlockLevel)
@@ -102,6 +121,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             {
                 if (entry.State == null) continue;
                 entry.Icon.color = _boosterArmed && entry.State.Type == _armedType ? hud.BoosterArmedColour : entry.State.Usable ? Color.white : hud.BoosterLockedColour;
+                if (entry.Slot != null) entry.Slot.color = entry.State.Usable ? hud.BoosterSlotColour : hud.BoosterSlotLockedColour;
             }
         }
 

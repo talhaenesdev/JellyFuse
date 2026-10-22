@@ -53,6 +53,9 @@ MonoBehaviour:
   AutoSetup: 1
   AutoLaunch: 1
   IsTest: 0
+  references:
+    version: 2
+    RefIds: []
 --- !u!1001 &8197000753937167183
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -148,8 +151,28 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7437478905231800531, guid: 14e56ec2c22153c4eb1af8217ea194a4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8550530529126536932}
   m_SourcePrefab: {fileID: 100100000, guid: 14e56ec2c22153c4eb1af8217ea194a4, type: 3}
+--- !u!1 &1654689585424616348 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7437478905231800531, guid: 14e56ec2c22153c4eb1af8217ea194a4, type: 3}
+  m_PrefabInstance: {fileID: 8197000753937167183}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8550530529126536932
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1654689585424616348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b26bf32c5ad36fd4db86b9cc6648bf66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.Screen::Modules.ScreenModule.Entities.SafeAreaRefresh
 --- !u!224 &4438122833470360015 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5500858814746180224, guid: 14e56ec2c22153c4eb1af8217ea194a4, type: 3}

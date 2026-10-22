@@ -43,6 +43,25 @@ namespace Modules.UiWidgetsModule.Entities
             return canvas != null ? (RectTransform)canvas.rootCanvas.transform : null;
         }
 
+        /// <summary>
+        /// Takes the rect as it stands now as the authored one and fits again. For whatever lays the
+        /// object out before the bleed - a ScreenLayout - so the bleed grows from the new place.
+        /// </summary>
+        /// <summary>The rect as authored, before the bleed grew it; false before the first fit.</summary>
+        public bool TryGetAuthored(out Vector2 anchorMin, out Vector2 anchorMax, out Vector2 pivot, out Vector2 anchoredPosition, out Vector2 sizeDelta)
+        {
+            anchorMin = _anchorMin; anchorMax = _anchorMax; pivot = _pivot;
+            sizeDelta = _offsetMax - _offsetMin;
+            anchoredPosition = _offsetMin + Vector2.Scale(sizeDelta, _pivot);
+            return _captured;
+        }
+
+        public void Recapture()
+        {
+            _captured = false;
+            Fit();
+        }
+
         public void Fit()
         {
             var parent = transform.parent as RectTransform;

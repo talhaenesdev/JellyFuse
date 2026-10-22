@@ -76,6 +76,14 @@ namespace Modules.GameplayModule.GameplayScreenModule.Data.UnityObjects
         public Color BoosterLockedColour = new Color(.45f, .45f, .5f, 1);
         [Tooltip("The tint of the booster button waiting for its target.")]
         public Color BoosterArmedColour = new Color(1, .9f, .45f, 1);
+        [Tooltip("The tile drawn behind each booster button. Empty draws none.")]
+        public Sprite BoosterSlotSprite;
+        [Tooltip("The tile's size, as a share of the booster button's.")]
+        [Range(.5f, 2)] public float BoosterSlotScale = 1.15f;
+        [Tooltip("The tile's tint while its booster is usable.")]
+        public Color BoosterSlotColour = Color.white;
+        [Tooltip("The tile's tint while its booster is locked, or cannot be paid for.")]
+        public Color BoosterSlotLockedColour = new Color(.55f, .5f, .65f, 1);
         [Tooltip("The frost laid over the clock while it is frozen. Without a sprite, the clock's own background is used.")]
         public Sprite FrostSprite;
         public Color FrostColour = new Color(.6f, .9f, 1, .45f);

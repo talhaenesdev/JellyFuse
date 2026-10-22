@@ -23,6 +23,8 @@ namespace Modules.GameplayModule.SettingsScreenModule.ViewsMediators
         [SerializeField, Min(0)] private float _horizontalMargin;
         [Tooltip("Space kept at the top and bottom of the safe area, in screen units.")]
         [SerializeField, Min(0)] private float _verticalMargin;
+        [Tooltip("When set, Design Width and the margins come from its config, and the objects it lists take its places.")]
+        [SerializeField] private ScreenLayout _layout;
 
         [Header("Header")]
         [SerializeField] private TMP_Text _title;
@@ -47,6 +49,7 @@ namespace Modules.GameplayModule.SettingsScreenModule.ViewsMediators
 
         private void OnEnable()
         {
+            if (_layout != null) _layout.Changed += FitDialogToSafeArea;
             _closeButton.onClick.AddListener(OnCloseClicked);
             _notificationsSwitch.Requested += OnNotificationsClicked;
             _soundsSwitch.Requested += OnSoundsClicked;
@@ -56,6 +59,7 @@ namespace Modules.GameplayModule.SettingsScreenModule.ViewsMediators
 
         private void OnDisable()
         {
+            if (_layout != null) _layout.Changed -= FitDialogToSafeArea;
             _closeButton.onClick.RemoveListener(OnCloseClicked);
             _notificationsSwitch.Requested -= OnNotificationsClicked;
             _soundsSwitch.Requested -= OnSoundsClicked;
@@ -112,13 +116,19 @@ namespace Modules.GameplayModule.SettingsScreenModule.ViewsMediators
             var root = (RectTransform)transform;
             if (root.rect.width <= 0 || root.rect.height <= 0 || Screen.width <= 0 || Screen.height <= 0) return;
 
+            var config = _layout != null ? _layout.Config : null;
+            float designWidth = config != null ? config.DesignWidth : _designWidth;
+            float horizontalMargin = config != null ? config.HorizontalMargin : _horizontalMargin;
+            float verticalMargin = config != null ? config.VerticalMargin : _verticalMargin;
             Rect safe = Screen.safeArea;
-            float width = safe.width / Screen.width * root.rect.width - _horizontalMargin * 2;
-            float height = safe.height / Screen.height * root.rect.height - _verticalMargin * 2;
-            float scale = Mathf.Max(.1f, width / _designWidth);
+            float width = safe.width / Screen.width * root.rect.width - horizontalMargin * 2;
+            float height = safe.height / Screen.height * root.rect.height - verticalMargin * 2;
+            float scale = Mathf.Max(.1f, width / designWidth);
+            if (config != null && config.MaxScale > 0) scale = Mathf.Min(scale, config.MaxScale);
             _dialog.anchorMin = _dialog.anchorMax = _dialog.pivot = new Vector2(.5f, .5f);
             _dialog.localScale = Vector3.one * scale;
-            _dialog.sizeDelta = new Vector2(_designWidth, height / scale);
+            _dialog.sizeDelta = new Vector2(designWidth, height / scale);
+            if (_layout != null) _layout.SetDirty();
 
             Vector2 safeCenter = safe.center;
             Vector2 screenCenter = new(Screen.width * .5f, Screen.height * .5f);

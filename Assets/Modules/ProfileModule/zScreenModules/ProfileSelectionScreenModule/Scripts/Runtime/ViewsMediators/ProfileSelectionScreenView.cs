@@ -29,6 +29,8 @@ namespace Modules.ProfileModule.ProfileSelectionScreenModule.ViewsMediators
         [Min(0)] [SerializeField] private float _verticalMargin = 120;
         [Tooltip("Prevents the dialog becoming excessively large on tablets.")]
         [Min(.1f)] [SerializeField] private float _maximumScale = 1.98f;
+        [Tooltip("When set, the margins and Max Scale come from its config, and the objects it lists take its places.")]
+        [SerializeField] private ScreenLayout _layout;
         [SerializeField] private RectTransform _itemsRoot;
         [SerializeField] private Button _itemTemplate;
         [SerializeField] private Color _selectedTabColor = Color.white;
@@ -62,6 +64,7 @@ namespace Modules.ProfileModule.ProfileSelectionScreenModule.ViewsMediators
 
         private void OnEnable()
         {
+            if (_layout != null) _layout.Changed += FitDialogToSafeArea;
             _closeButton.onClick.AddListener(Hide);
             _avatarTabButton.onClick.AddListener(ShowAvatars);
             _frameTabButton.onClick.AddListener(ShowFrames);
@@ -70,6 +73,7 @@ namespace Modules.ProfileModule.ProfileSelectionScreenModule.ViewsMediators
 
         private void OnDisable()
         {
+            if (_layout != null) _layout.Changed -= FitDialogToSafeArea;
             _closeButton.onClick.RemoveListener(Hide);
             _avatarTabButton.onClick.RemoveListener(ShowAvatars);
             _frameTabButton.onClick.RemoveListener(ShowFrames);
@@ -130,25 +134,34 @@ namespace Modules.ProfileModule.ProfileSelectionScreenModule.ViewsMediators
             if (_selection == null) return;
             if (_showingFrames)
             {
+                // Each frame is shown round the avatar picked, so the player sees what they would get.
+                ProfileIconVO icon = _selection.Icons.Find(value => value.Id == _draftIconId);
                 foreach (ProfileFrameVO frame in _selection.Frames)
-                    CreateItem(frame.Id, frame.DisplayName, frame.Sprite, frame.FallbackColor);
+                    CreateItem(frame.Id, frame.DisplayName, icon?.Sprite, icon?.FallbackColor ?? Color.white, frame.Sprite, frame.FallbackColor);
             }
             else
             {
                 foreach (ProfileIconVO icon in _selection.Icons)
-                    CreateItem(icon.Id, icon.DisplayName, icon.Sprite, icon.FallbackColor);
+                    CreateItem(icon.Id, icon.DisplayName, icon.Sprite, icon.FallbackColor, null, Color.white);
             }
             RefreshSelection();
         }
 
-        private void CreateItem(string id, string displayName, Sprite sprite, Color fallbackColor)
+        private void CreateItem(string id, string displayName, Sprite sprite, Color fallbackColor, Sprite frameSprite, Color frameColor)
         {
             Button item = Instantiate(_itemTemplate, _itemsRoot);
             item.name = (_showingFrames ? "Btn_ProfileFrame_" : "Btn_ProfileIcon_") + id;
             item.gameObject.SetActive(true);
             Image image = item.transform.Find("Img_Icon")?.GetComponent<Image>();
+            Image frame = item.transform.Find("Img_Frame")?.GetComponent<Image>();
             TMP_Text label = item.GetComponentInChildren<TMP_Text>(true);
-            if (image != null) { image.sprite = sprite; image.color = fallbackColor; }
+            if (image != null) { image.sprite = sprite; image.color = fallbackColor; image.enabled = sprite != null; }
+            if (frame != null)
+            {
+                frame.gameObject.SetActive(frameSprite != null);
+                frame.sprite = frameSprite;
+                frame.color = frameColor;
+            }
             if (label != null) label.text = displayName;
             UnityEngine.Events.UnityAction action = () => Select(id);
             item.onClick.AddListener(action);
@@ -199,14 +212,19 @@ namespace Modules.ProfileModule.ProfileSelectionScreenModule.ViewsMediators
             Rect safe = Screen.safeArea;
             float safeWidth = rootRect.width * safe.width / Screen.width;
             float safeHeight = rootRect.height * safe.height / Screen.height;
-            float widthScale = Mathf.Max(.01f, (safeWidth - _horizontalMargin * 2) / _dialog.sizeDelta.x);
-            float heightScale = Mathf.Max(.01f, (safeHeight - _verticalMargin * 2) / _dialog.sizeDelta.y);
-            float scale = Mathf.Min(widthScale, heightScale, _maximumScale);
+            var config = _layout != null ? _layout.Config : null;
+            float horizontalMargin = config != null ? config.HorizontalMargin : _horizontalMargin;
+            float verticalMargin = config != null ? config.VerticalMargin : _verticalMargin;
+            float maximumScale = config != null && config.MaxScale > 0 ? config.MaxScale : _maximumScale;
+            float widthScale = Mathf.Max(.01f, (safeWidth - horizontalMargin * 2) / _dialog.sizeDelta.x);
+            float heightScale = Mathf.Max(.01f, (safeHeight - verticalMargin * 2) / _dialog.sizeDelta.y);
+            float scale = Mathf.Min(widthScale, heightScale, maximumScale);
             _dialog.localScale = Vector3.one * scale;
 
             float normalizedX = safe.center.x / Screen.width - .5f;
             float normalizedY = safe.center.y / Screen.height - .5f;
             _dialog.anchoredPosition = new Vector2(rootRect.width * normalizedX, rootRect.height * normalizedY);
+            if (_layout != null) _layout.SetDirty();
         }
 
         private void UnwireItems()

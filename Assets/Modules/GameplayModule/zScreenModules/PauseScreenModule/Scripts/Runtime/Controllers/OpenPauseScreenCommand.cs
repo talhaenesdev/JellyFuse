@@ -6,6 +6,7 @@ using FlowIoC.ScreenModule.Service;
 using Modules.GameplayModule.PauseScreenModule.Models;
 using Modules.GameplayModule.PauseScreenModule.ViewsMediators;
 using Modules.GameplayModule.Shared.Enums;
+using Modules.AudioModule.Services;
 using Modules.HapticModule.Services;
 using Modules.LocalizationModule.Services;
 
@@ -16,6 +17,7 @@ namespace Modules.GameplayModule.PauseScreenModule.Controllers
     {
         [Inject] private IScreenService _screenService { get; set; }
         [Inject] private IHapticService _haptics { get; set; }
+        [Inject] private IAudioService _audio { get; set; }
         [Inject] private ILocalizationService _localization { get; set; }
         [Inject] private IPauseSettingsModel _settings { get; set; }
 
@@ -33,8 +35,8 @@ namespace Modules.GameplayModule.PauseScreenModule.Controllers
                     return;
                 }
                 screen.SetLocalizer(_localization.Get);
-                screen.ShowOption(SettingsOption.Sounds, _settings.IsEnabled(SettingsOption.Sounds));
-                screen.ShowOption(SettingsOption.Music, _settings.IsEnabled(SettingsOption.Music));
+                screen.ShowOption(SettingsOption.Sounds, _audio.SoundsEnabled);
+                screen.ShowOption(SettingsOption.Music, _audio.MusicEnabled);
                 screen.ShowOption(SettingsOption.Haptics, _haptics.Enabled);
                 Release();
             }

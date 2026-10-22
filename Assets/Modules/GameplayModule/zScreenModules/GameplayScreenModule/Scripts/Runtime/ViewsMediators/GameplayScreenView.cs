@@ -27,6 +27,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         [Header("Layout")]
         [Tooltip("The 760-unit-wide column everything sits in; scaled to the screen's width.")]
         [SerializeField] private RectTransform _content;
+        [Tooltip("Where the column's size and the listed objects' places come from. Empty keeps 760 x 1000 and the prefab's places.")]
+        [SerializeField] private Modules.UiWidgetsModule.Entities.ScreenLayout _layout;
         [Tooltip("The area the board is drawn in. Its edges come from CD_GameplayHud's map placement.")]
         [SerializeField] private RectTransform _board;
         [SerializeField] private JellySpriteBoardView _spriteBoard;
@@ -154,6 +156,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
 
         private void OnEnable()
         {
+            if (_layout != null) _layout.Changed += FitLayout;
             _undo.onClick.AddListener(OnUndoClicked);
             _settings.onClick.AddListener(OnSettingsClicked);
             _restart.onClick.AddListener(OnRestartClicked);
@@ -170,6 +173,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         }
         private void OnDisable()
         {
+            if (_layout != null) _layout.Changed -= FitLayout;
             _undo.onClick.RemoveListener(OnUndoClicked);
             _settings.onClick.RemoveListener(OnSettingsClicked);
             _restart.onClick.RemoveListener(OnRestartClicked);
@@ -252,9 +256,14 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         {
             // Fit the column's width to the screen; a short, wide screen fits its height instead.
             var rect = ((RectTransform)transform).rect;
-            float scale = Mathf.Max(.01f, Mathf.Min(rect.width / LAYOUT_WIDTH, rect.height / MIN_HEIGHT));
+            var config = _layout != null ? _layout.Config : null;
+            float scale = config != null
+                ? config.FitScale(rect.size)
+                : Mathf.Max(.01f, Mathf.Min(rect.width / LAYOUT_WIDTH, rect.height / MIN_HEIGHT));
             _content.localScale = Vector3.one * scale;
             _content.sizeDelta = new Vector2(rect.width / scale, rect.height / scale);
+            // The listed objects take their places before the board measures the buttons around it.
+            if (_layout != null) _layout.Apply();
             var hud = _presentation.Hud;
             float left = _content.sizeDelta.x * hud.MapSideMargin, right = left;
             float top = hud.MapTopSpace, bottom = hud.MapBottomSpace;

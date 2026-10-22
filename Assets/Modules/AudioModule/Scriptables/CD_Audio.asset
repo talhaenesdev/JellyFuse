@@ -1,0 +1,117 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5abd6952f41dd294d8e961a2dc0d6669, type: 3}
+  m_Name: CD_Audio
+  m_EditorClassIdentifier: Modules.Audio::Modules.AudioModule.Data.UnityObjects.CD_Audio
+  DefaultSoundsEnabled: 1
+  DefaultMusicEnabled: 1
+  SoundsVolume: 1
+  MusicVolume: 1
+  MusicCrossfade: 0.8
+  UiClickSounds: 1
+  Voices: 10
+  Cues:
+  - Cue: 0
+    Enabled: 1
+    Clips:
+    - {fileID: 8300000, guid: 918c93d5e1006ca408afaeb9e5164d39, type: 3}
+    - {fileID: 8300000, guid: f467ec2636f6eb64493b76f51787396f, type: 3}
+    Volume: 0.5
+    PitchJitter: 0.05
+    MinimumInterval: 0.05
+  - Cue: 1
+    Enabled: 1
+    Clips:
+    - {fileID: 8300000, guid: aa3d077b9c8bce649a0b7f4f3b60eff9, type: 3}
+    - {fileID: 8300000, guid: 51e5145931f8e8c489aaa33e0ac6b945, type: 3}
+    - {fileID: 8300000, guid: 21faa2b51f6399f43b52da9bfacb34c1, type: 3}
+    Volume: 0.6
+    PitchJitter: 0.06
+    MinimumInterval: 0.06
+  - Cue: 2
+    Enabled: 1
+    Clips:
+    - {fileID: 8300000, guid: 8ba54cc049ed05240bb8f6f53eb695ad, type: 3}
+    - {fileID: 8300000, guid: 9592c22e23db0104c99f1655685c2ee0, type: 3}
+    Volume: 0.8
+    PitchJitter: 0.04
+    MinimumInterval: 0.08
+  - Cue: 3
+    Enabled: 1
+    Clips:
+    - {fileID: 8300000, guid: 2924fffa2ad301b47bbe44bdc27d1d35, type: 3}
+    Volume: 0.75
+    PitchJitter: 0.03
+    MinimumInterval: 0.1
+  - Cue: 4
+    Enabled: 1
+    Clips:
+    - {fileID: 8300000, guid: c34e86e886ada89419b8203ef0ab6585, type: 3}
+    Volume: 0.85
+    PitchJitter: 0
+    MinimumInterval: 0.5
+  - Cue: 5
+    Enabled: 1
+    Clips:
+    - {fileID: 8300000, guid: 881411476d54ec144a503ce94f91412c, type: 3}
+    Volume: 0.8
+    PitchJitter: 0
+    MinimumInterval: 0.5
+  - Cue: 6
+    Enabled: 1
+    Clips:
+    - {fileID: 8300000, guid: a9e2081fc383e5748949cbc00001de0f, type: 3}
+    Volume: 0.6
+    PitchJitter: 0.03
+    MinimumInterval: 0.06
+  - Cue: 7
+    Enabled: 1
+    Clips:
+    - {fileID: 8300000, guid: 2ff7f76e6b4ab224db274b327905326c, type: 3}
+    Volume: 0.85
+    PitchJitter: 0.03
+    MinimumInterval: 0.2
+  - Cue: 8
+    Enabled: 1
+    Clips:
+    - {fileID: 8300000, guid: 36870aa5cded49b4ea8326b503cac15a, type: 3}
+    Volume: 0.8
+    PitchJitter: 0
+    MinimumInterval: 0.2
+  - Cue: 9
+    Enabled: 1
+    Clips:
+    - {fileID: 8300000, guid: b0ac9e1179ea37740942e44fd6a9df80, type: 3}
+    Volume: 0.75
+    PitchJitter: 0
+    MinimumInterval: 0.2
+  - Cue: 10
+    Enabled: 1
+    Clips:
+    - {fileID: 8300000, guid: f824a01f2a4798242bc846e3c8e50799, type: 3}
+    Volume: 0.55
+    PitchJitter: 0.03
+    MinimumInterval: 0.05
+  - Cue: 11
+    Enabled: 1
+    Clips:
+    - {fileID: 8300000, guid: 50e46fe813f0f6346a7799f15b006467, type: 3}
+    Volume: 0.6
+    PitchJitter: 0
+    MinimumInterval: 0.15
+  Music:
+  - Track: 1
+    Clip: {fileID: 8300000, guid: 7b9489cbf64721d449bfaf1cfca09fe8, type: 3}
+    Volume: 0.4
+  - Track: 2
+    Clip: {fileID: 8300000, guid: 6f9209531ff2d0e46827c690a1b03ef2, type: 3}
+    Volume: 0.32

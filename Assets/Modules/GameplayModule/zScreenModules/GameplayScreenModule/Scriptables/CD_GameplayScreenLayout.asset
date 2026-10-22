@@ -1,0 +1,124 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3980e6afffc5744e89f208d8267b261, type: 3}
+  m_Name: CD_GameplayScreenLayout
+  m_EditorClassIdentifier: Modules.UiWidgets::Modules.UiWidgetsModule.Data.UnityObjects.CD_ScreenLayout
+  DesignWidth: 760
+  MinHeight: 1000
+  HorizontalMargin: 0
+  VerticalMargin: 0
+  MaxScale: 0
+  Elements:
+  - Path: Pnl_Layout/Pnl_Coins
+    OverrideAnchors: 1
+    AnchorMin: {x: 0, y: 1}
+    AnchorMax: {x: 0, y: 1}
+    Pivot: {x: 0, y: 0.5}
+    OverridePosition: 1
+    Position: {x: 47, y: -60}
+    OverrideSize: 1
+    Size: {x: 172, y: 48}
+    OverrideScale: 0
+    Scale: 1
+    OverrideActive: 0
+    Active: 1
+  - Path: Pnl_Layout/Pnl_Level
+    OverrideAnchors: 1
+    AnchorMin: {x: 1, y: 1}
+    AnchorMax: {x: 1, y: 1}
+    Pivot: {x: 1, y: 0.5}
+    OverridePosition: 1
+    Position: {x: -47, y: -60}
+    OverrideSize: 1
+    Size: {x: 164, y: 48}
+    OverrideScale: 0
+    Scale: 1
+    OverrideActive: 0
+    Active: 1
+  - Path: Pnl_Layout/Pnl_Clock
+    OverrideAnchors: 1
+    AnchorMin: {x: 0.5, y: 1}
+    AnchorMax: {x: 0.5, y: 1}
+    Pivot: {x: 0.5, y: 0.5}
+    OverridePosition: 1
+    Position: {x: 0, y: -148}
+    OverrideSize: 1
+    Size: {x: 212, y: 68}
+    OverrideScale: 0
+    Scale: 1
+    OverrideActive: 0
+    Active: 1
+  - Path: Pnl_Layout/Btn_Undo
+    OverrideAnchors: 1
+    AnchorMin: {x: 0, y: 1}
+    AnchorMax: {x: 0, y: 1}
+    Pivot: {x: 0.5, y: 0.5}
+    OverridePosition: 1
+    Position: {x: 89, y: -148}
+    OverrideSize: 1
+    Size: {x: 84, y: 84}
+    OverrideScale: 0
+    Scale: 1
+    OverrideActive: 0
+    Active: 1
+  - Path: Pnl_Layout/Btn_Settings
+    OverrideAnchors: 1
+    AnchorMin: {x: 1, y: 1}
+    AnchorMax: {x: 1, y: 1}
+    Pivot: {x: 1, y: 0.5}
+    OverridePosition: 1
+    Position: {x: -47, y: -148}
+    OverrideSize: 1
+    Size: {x: 76, y: 76}
+    OverrideScale: 0
+    Scale: 1
+    OverrideActive: 0
+    Active: 1
+  - Path: Pnl_Layout/Pnl_Boosters
+    OverrideAnchors: 1
+    AnchorMin: {x: 0.5, y: 0}
+    AnchorMax: {x: 0.5, y: 0}
+    Pivot: {x: 0.5, y: 0.5}
+    OverridePosition: 1
+    Position: {x: 0, y: 150}
+    OverrideSize: 1
+    Size: {x: 500, y: 126}
+    OverrideScale: 0
+    Scale: 1
+    OverrideActive: 0
+    Active: 1
+  - Path: Pnl_Layout/Img_TopBar
+    OverrideAnchors: 1
+    AnchorMin: {x: 0, y: 1}
+    AnchorMax: {x: 1, y: 1}
+    Pivot: {x: 0.5, y: 1}
+    OverridePosition: 1
+    Position: {x: 0, y: 0}
+    OverrideSize: 1
+    Size: {x: 4000, y: 146}
+    OverrideScale: 0
+    Scale: 1
+    OverrideActive: 0
+    Active: 1
+  - Path: Pnl_Layout/Img_BottomBar
+    OverrideAnchors: 1
+    AnchorMin: {x: 0, y: 0}
+    AnchorMax: {x: 1, y: 0}
+    Pivot: {x: 0.5, y: 0}
+    OverridePosition: 1
+    Position: {x: 0, y: -2000}
+    OverrideSize: 1
+    Size: {x: 4000, y: 2150}
+    OverrideScale: 0
+    Scale: 1
+    OverrideActive: 0
+    Active: 1

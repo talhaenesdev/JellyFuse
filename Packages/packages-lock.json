@@ -1,5 +1,21 @@
 {
   "dependencies": {
+    "com.coplaydev.unity-mcp": {
+      "version": "file:com.coplaydev.unity-mcp",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.unity.modules.animation": "1.0.0",
+        "com.unity.modules.imageconversion": "1.0.0",
+        "com.unity.modules.physics": "1.0.0",
+        "com.unity.modules.physics2d": "1.0.0",
+        "com.unity.modules.uielements": "1.0.0",
+        "com.unity.modules.screencapture": "1.0.0",
+        "com.unity.modules.unitywebrequest": "1.0.0",
+        "com.unity.nuget.newtonsoft-json": "3.0.2",
+        "com.unity.test-framework": "1.1.31"
+      }
+    },
     "com.flowarc.flowioc.core": {
       "version": "https://github.com/FlowArc/FlowIoC.git",
       "depth": 0,
@@ -263,7 +279,7 @@
     },
     "com.unity.modules.animation": {
       "version": "1.0.0",
-      "depth": 2,
+      "depth": 1,
       "source": "builtin",
       "dependencies": {}
     },
@@ -296,7 +312,7 @@
     },
     "com.unity.modules.imageconversion": {
       "version": "1.0.0",
-      "depth": 2,
+      "depth": 1,
       "source": "builtin",
       "dependencies": {}
     },
@@ -320,7 +336,7 @@
     },
     "com.unity.modules.physics": {
       "version": "1.0.0",
-      "depth": 2,
+      "depth": 1,
       "source": "builtin",
       "dependencies": {}
     },
@@ -364,7 +380,7 @@
     },
     "com.unity.modules.unitywebrequest": {
       "version": "1.0.0",
-      "depth": 2,
+      "depth": 1,
       "source": "builtin",
       "dependencies": {}
     },

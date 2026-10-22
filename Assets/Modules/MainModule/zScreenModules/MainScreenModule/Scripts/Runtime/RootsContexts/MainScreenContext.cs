@@ -1,6 +1,8 @@
 using FlowIoC.ScreenModule.Data;
 using FlowIoC.ScreenModule.Enums;
 using FlowIoC.ScreenModule.RootsContexts;
+using Modules.AudioModule.Enums;
+using Modules.AudioModule.Services;
 using Modules.MainModule.MainScreenModule.Controllers;
 using Modules.MainModule.MainScreenModule.Signals;
 using Modules.MainModule.MainScreenModule.ViewsMediators;
@@ -31,7 +33,9 @@ namespace Modules.MainModule.MainScreenModule.RootsContexts
         {
             base.CommandBindings();
 
-            CommandBinder.Bind(_signals.Incoming.OpenMainScreen).ToSequence<OpenMainScreenCommand>();
+            CommandBinder.Bind(_signals.Incoming.OpenMainScreen)
+                .ToSequence<OpenMainScreenCommand>()
+                .ToSequence<IAudioService.Commands.PlayMusic>(MusicTrack.Menu);
         }
     }
 }

@@ -22,6 +22,8 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
     {
         [Tooltip("The 760-unit-wide column everything sits in; scaled to the screen's width.")]
         [SerializeField] private RectTransform _content;
+        [Tooltip("Where the column's size and the listed objects' places come from. Empty keeps 760 x 1000 and the prefab's places.")]
+        [SerializeField] private ScreenLayout _layout;
         [SerializeField] private Button _playButton;
         [SerializeField] private TMP_Text _playLabel;
         [SerializeField] private Button _settingsButton;
@@ -75,6 +77,7 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
 
         private void OnEnable()
         {
+            if (_layout != null) _layout.Changed += FitLayout;
             _playButton.onClick.AddListener(OnPlayClicked);
             _settingsButton.onClick.AddListener(OnSettingsClicked);
             _homeButton.onClick.AddListener(OnHomeClicked);
@@ -86,6 +89,7 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
 
         private void OnDisable()
         {
+            if (_layout != null) _layout.Changed -= FitLayout;
             _playButton.onClick.RemoveListener(OnPlayClicked);
             _settingsButton.onClick.RemoveListener(OnSettingsClicked);
             _homeButton.onClick.RemoveListener(OnHomeClicked);
@@ -214,9 +218,13 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
         {
             if (_content == null) return;
             var rect = ((RectTransform)transform).rect;
-            float scale = Mathf.Max(.01f, Mathf.Min(rect.width / LAYOUT_WIDTH, rect.height / MIN_HEIGHT));
+            var config = _layout != null ? _layout.Config : null;
+            float scale = config != null
+                ? config.FitScale(rect.size)
+                : Mathf.Max(.01f, Mathf.Min(rect.width / LAYOUT_WIDTH, rect.height / MIN_HEIGHT));
             _content.localScale = Vector3.one * scale;
             _content.sizeDelta = new Vector2(rect.width / scale, rect.height / scale);
+            if (_layout != null) _layout.SetDirty();
         }
 
         /// <summary>The function that turns a key into text in the language in use (ILocalizationService.Get). Redraws every text.</summary>
