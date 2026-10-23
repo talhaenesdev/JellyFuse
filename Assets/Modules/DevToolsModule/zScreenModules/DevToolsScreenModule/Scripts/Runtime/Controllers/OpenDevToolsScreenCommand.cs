@@ -21,6 +21,12 @@ namespace Modules.DevToolsModule.DevToolsScreenModule.Controllers
         public override async void Execute()
         {
             Retain();
+            // A store build ships with the panel switched off: the taps that ask for it open nothing.
+            if (!_devTools.PanelEnabled)
+            {
+                Stop();
+                return;
+            }
             try
             {
                 DevToolsScreenView screen = await _screenService.Open<DevToolsScreenView>().Show<DevToolsScreenView>();

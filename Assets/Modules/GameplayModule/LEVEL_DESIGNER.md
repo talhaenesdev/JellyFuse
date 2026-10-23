@@ -4,12 +4,12 @@ Make and edit levels without writing code.
 
 ## Editor language
 
-The editor can be shown in Turkish: **Morvin → Localization**, set *Editor language* to *Türkçe*. It
+The editor can be shown in Turkish: **Floria → Localization**, set *Editor language* to *Türkçe*. It
 changes only your own editor. The translations are in `GameplayModule/Scriptables/Localization/CD_EditorTexts`.
 
 ## Open the editor
 
-**Morvin → Gameplay → Levels**
+**Floria → Gameplay → Levels**
 
 The window has two sides:
 
@@ -97,7 +97,7 @@ and it fits through the door's width. The door shows the jelly it waits for, wit
 ones after it.
 
 Levels made before doors show a **Convert old exits to doors** button. Press it to edit them as
-doors. **Morvin → Gameplay → Convert Old Exits To Doors** converts every level at once.
+doors. **Floria → Gameplay → Convert Old Exits To Doors** converts every level at once.
 
 ### 5. Check the balance
 

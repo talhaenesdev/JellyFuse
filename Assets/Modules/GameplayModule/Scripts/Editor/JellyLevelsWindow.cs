@@ -24,7 +24,7 @@ namespace Modules.GameplayModule.Editor
         private Vector2 _listScroll, _levelScroll;
         private readonly EditorTexts _texts = new();
 
-        [MenuItem("Morvin/Gameplay/Levels", false, 0)]
+        [MenuItem("Floria/Gameplay/Levels", false, 0)]
         private static void Open()
         {
             var window = GetWindow<JellyLevelsWindow>("Levels");

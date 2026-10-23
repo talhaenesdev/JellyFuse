@@ -19,7 +19,7 @@ localization, localisation, language, translation, Turkish, CSV, ILocalizationSe
 4. Redraw on a change: wire `LocalizationSignals.Outgoing.LanguageChanged` to the screen's Incoming
    in a Connector. Change the language with `ILocalizationService.SetLanguage(code)`,
    `Incoming.SetLanguage`, or the step `ILocalizationService.Commands.SetLanguage`.
-5. Translators: Tools/FlowIoC-Modules/Localization/Panel (also Morvin/Localization) exports a table
+5. Translators: Tools/FlowIoC-Modules/Localization/Panel (also Floria/Localization) exports a table
    to CSV (Key, then one column per language) and imports it back. UTF-8 with a BOM, quoted the way
    Google Sheets and Excel write it.
 

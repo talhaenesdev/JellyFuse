@@ -28,9 +28,9 @@ namespace Modules.LocalizationModule.Editor
 
         [MenuItem(MENU_PATH, false, MENU_PRIORITY)]
         private static void Open() => ModulePanelWindow.Open<LocalizationPanel>();
-        // The project's own tools live under Morvin; the same panel opens from there.
-        [MenuItem("Morvin/Localization", false, 50)]
-        private static void OpenFromMorvin() => ModulePanelWindow.Open<LocalizationPanel>();
+        // The project's own tools live under Floria; the same panel opens from there.
+        [MenuItem("Floria/Localization", false, 50)]
+        private static void OpenFromFloria() => ModulePanelWindow.Open<LocalizationPanel>();
 
         public override string Title => "Localization";
         public override string Module => "LocalizationModule";

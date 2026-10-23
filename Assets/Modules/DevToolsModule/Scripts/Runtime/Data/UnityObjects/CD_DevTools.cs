@@ -11,6 +11,9 @@ namespace Modules.DevToolsModule.Data.UnityObjects
     [CreateAssetMenu(fileName = "CD_DevTools", menuName = "Dev Tools/Config")]
     public sealed class CD_DevTools : ScriptableObject
     {
+        [Tooltip("Off for a store build: the hidden panel never opens, and every switch reads its DefaultOn, " +
+                 "whatever this device saved - a switch left on while testing never reaches a player.")]
+        public bool PanelEnabled = true;
         public List<DevToggleCVO> Toggles = new();
     }
 }

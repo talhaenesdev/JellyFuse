@@ -41,11 +41,19 @@ namespace Modules.GameplayModule.SettingsScreenModule.ViewsMediators
         [SerializeField] private SlideSwitch _musicSwitch;
         [SerializeField] private SlideSwitch _hapticsSwitch;
 
+        [Header("Language")]
+        [SerializeField] private TMP_Text _languageLabel;
+        [Tooltip("Shows the language in use, in its own name; a tap moves on to the next one offered.")]
+        [SerializeField] private Button _languageButton;
+        [SerializeField] private TMP_Text _languageValue;
+
         public Action<string> LanguagePicked;
         public Action CloseClicked;
         public Action<SettingsOption> OptionClicked;
 
         private Func<string, string> _localize;
+        private IReadOnlyList<LanguageCVO> _languages;
+        private string _language;
 
         private void OnEnable()
         {
@@ -55,6 +63,7 @@ namespace Modules.GameplayModule.SettingsScreenModule.ViewsMediators
             _soundsSwitch.Requested += OnSoundsClicked;
             _musicSwitch.Requested += OnMusicClicked;
             _hapticsSwitch.Requested += OnHapticsClicked;
+            if (_languageButton != null) _languageButton.onClick.AddListener(OnLanguageClicked);
         }
 
         private void OnDisable()
@@ -65,15 +74,22 @@ namespace Modules.GameplayModule.SettingsScreenModule.ViewsMediators
             _soundsSwitch.Requested -= OnSoundsClicked;
             _musicSwitch.Requested -= OnMusicClicked;
             _hapticsSwitch.Requested -= OnHapticsClicked;
+            if (_languageButton != null) _languageButton.onClick.RemoveListener(OnLanguageClicked);
         }
 
         public void ShowLanguages(IReadOnlyList<LanguageCVO> languages, string current, Func<string, string> localize)
         {
             _localize = localize;
+            _languages = languages;
+            _language = current;
             RefreshTexts();
         }
 
-        public void ShowCurrent(string code) => RefreshTexts();
+        public void ShowCurrent(string code)
+        {
+            _language = code;
+            RefreshTexts();
+        }
 
         public void ShowOption(SettingsOption option, bool enabled)
         {
@@ -144,6 +160,26 @@ namespace Modules.GameplayModule.SettingsScreenModule.ViewsMediators
             _soundsLabel.text = L("settings.sounds", "Sounds") + ":";
             _musicLabel.text = L("settings.music", "Music") + ":";
             _hapticsLabel.text = L("settings.haptics", "Haptics") + ":";
+            if (_languageLabel != null) _languageLabel.text = L("settings.language", "Language") + ":";
+            if (_languageValue != null) _languageValue.text = LanguageAt(IndexOf(_language))?.Name ?? _language;
+        }
+
+        private int IndexOf(string code)
+        {
+            if (_languages != null)
+                for (int i = 0; i < _languages.Count; i++)
+                    if (_languages[i].Code == code) return i;
+            return -1;
+        }
+
+        private LanguageCVO LanguageAt(int index) => _languages != null && index >= 0 && index < _languages.Count ? _languages[index] : null;
+
+        // Raw input: a tap asks for the language after the one in use, round to the first.
+        private void OnLanguageClicked()
+        {
+            if (_languages == null || _languages.Count < 2) return;
+            var next = LanguageAt((IndexOf(_language) + 1) % _languages.Count);
+            if (next != null) LanguagePicked?.Invoke(next.Code);
         }
 
         private string L(string key, string fallback)

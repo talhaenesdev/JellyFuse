@@ -10,6 +10,8 @@ namespace Modules.DevToolsModule.Services
     public interface IDevToolsService
     {
         IReadOnlyList<DevToggleCVO> Toggles { get; }
+        /// <summary>Whether the developer panel may open. Off (CD_DevTools.PanelEnabled), every switch reads its DefaultOn.</summary>
+        bool PanelEnabled { get; }
         bool IsOn(string key);
         /// <summary>Sets and keeps the switch on this device; false when CD_DevTools does not list the key.</summary>
         bool Set(string key, bool on);

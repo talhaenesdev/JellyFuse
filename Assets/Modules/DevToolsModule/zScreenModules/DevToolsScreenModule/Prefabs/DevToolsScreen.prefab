@@ -373,6 +373,7 @@ GameObject:
   - component: {fileID: 9123448237244829424}
   - component: {fileID: 8771012745172377637}
   - component: {fileID: 7860834321119923126}
+  - component: {fileID: 3194773027675032432}
   m_Layer: 0
   m_Name: Btn_ResetBoosters
   m_TagString: Untagged
@@ -483,6 +484,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &3194773027675032432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 949409843715943413}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 147470804a76c34429a0166703ac7abc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.UiWidgets::Modules.UiWidgetsModule.Entities.ButtonPressAnimator
+  _preset: {fileID: 11400000, guid: 4adb6251a9f198d4c933edde813d17a0, type: 2}
 --- !u!1 &975855006706323045
 GameObject:
   m_ObjectHideFlags: 0
@@ -1252,6 +1266,7 @@ GameObject:
   - component: {fileID: 5199902672824890733}
   - component: {fileID: 8460505627248424761}
   - component: {fileID: 5973295855241592898}
+  - component: {fileID: 6620389961376909376}
   m_Layer: 0
   m_Name: Btn_GameToggles
   m_TagString: Untagged
@@ -1362,6 +1377,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &6620389961376909376
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2259322340207180380}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 147470804a76c34429a0166703ac7abc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.UiWidgets::Modules.UiWidgetsModule.Entities.ButtonPressAnimator
+  _preset: {fileID: 11400000, guid: 4adb6251a9f198d4c933edde813d17a0, type: 2}
 --- !u!1 &2353466069157203890
 GameObject:
   m_ObjectHideFlags: 0
@@ -1449,6 +1477,7 @@ GameObject:
   - component: {fileID: 6741843983962992207}
   - component: {fileID: 4560461115348857914}
   - component: {fileID: 8921169706736910388}
+  - component: {fileID: 5459048927267235854}
   m_Layer: 0
   m_Name: Btn_DisplayToggles
   m_TagString: Untagged
@@ -1559,6 +1588,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &5459048927267235854
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2726590874995733736}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 147470804a76c34429a0166703ac7abc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.UiWidgets::Modules.UiWidgetsModule.Entities.ButtonPressAnimator
+  _preset: {fileID: 11400000, guid: 4adb6251a9f198d4c933edde813d17a0, type: 2}
 --- !u!1 &3137608345287334759
 GameObject:
   m_ObjectHideFlags: 0
@@ -1646,6 +1688,7 @@ GameObject:
   - component: {fileID: 6556537769891860398}
   - component: {fileID: 1268752730382216954}
   - component: {fileID: 7815049961723493335}
+  - component: {fileID: 6578733408345310441}
   m_Layer: 0
   m_Name: Btn_Sliders
   m_TagString: Untagged
@@ -1756,6 +1799,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &6578733408345310441
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3348826445589903171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 147470804a76c34429a0166703ac7abc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.UiWidgets::Modules.UiWidgetsModule.Entities.ButtonPressAnimator
+  _preset: {fileID: 11400000, guid: 4adb6251a9f198d4c933edde813d17a0, type: 2}
 --- !u!1 &3375393587056683822
 GameObject:
   m_ObjectHideFlags: 0
@@ -2139,6 +2195,7 @@ GameObject:
   - component: {fileID: 2640974027718868737}
   - component: {fileID: 8118736313603959902}
   - component: {fileID: 2135950450089627676}
+  - component: {fileID: 3559952393367195040}
   m_Layer: 0
   m_Name: Btn_RefillLives
   m_TagString: Untagged
@@ -2249,6 +2306,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &3559952393367195040
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5187963216046093897}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 147470804a76c34429a0166703ac7abc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.UiWidgets::Modules.UiWidgetsModule.Entities.ButtonPressAnimator
+  _preset: {fileID: 11400000, guid: 4adb6251a9f198d4c933edde813d17a0, type: 2}
 --- !u!1 &5248941262490989148
 GameObject:
   m_ObjectHideFlags: 0
@@ -3206,6 +3276,7 @@ GameObject:
   - component: {fileID: 4303104789784095213}
   - component: {fileID: 7580510061932207494}
   - component: {fileID: 8581564059269811077}
+  - component: {fileID: 240815345169796374}
   m_Layer: 0
   m_Name: Btn_ResetPlayer
   m_TagString: Untagged
@@ -3316,6 +3387,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &240815345169796374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8186056728094543869}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 147470804a76c34429a0166703ac7abc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.UiWidgets::Modules.UiWidgetsModule.Entities.ButtonPressAnimator
+  _preset: {fileID: 11400000, guid: 4adb6251a9f198d4c933edde813d17a0, type: 2}
 --- !u!1 &8408570476109947328
 GameObject:
   m_ObjectHideFlags: 0
@@ -3515,6 +3599,7 @@ GameObject:
   - component: {fileID: 238546438937134050}
   - component: {fileID: 4868050293032070009}
   - component: {fileID: 7546836020722247366}
+  - component: {fileID: 2326226166557477598}
   m_Layer: 0
   m_Name: Btn_Back
   m_TagString: Untagged
@@ -3625,6 +3710,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2326226166557477598
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8499941871910180979}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 147470804a76c34429a0166703ac7abc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.UiWidgets::Modules.UiWidgetsModule.Entities.ButtonPressAnimator
+  _preset: {fileID: 11400000, guid: 4adb6251a9f198d4c933edde813d17a0, type: 2}
 --- !u!1 &8706728103851115381
 GameObject:
   m_ObjectHideFlags: 0

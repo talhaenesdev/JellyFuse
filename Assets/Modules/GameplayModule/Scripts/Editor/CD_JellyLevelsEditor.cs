@@ -12,7 +12,7 @@ namespace Modules.GameplayModule.Editor
     /// <summary>
     /// The level list as a designer reads it: one numbered row per level, with the buttons to open,
     /// move, copy and remove it, and one button to add a new level at the end.
-    /// Shown on its own in the inspector, and as the left side of the Levels window (Morvin/Gameplay/Levels).
+    /// Shown on its own in the inspector, and as the left side of the Levels window (Floria/Gameplay/Levels).
     /// </summary>
     [CustomEditor(typeof(CD_JellyLevels))]
     public sealed class CD_JellyLevelsEditor : UnityEditor.Editor

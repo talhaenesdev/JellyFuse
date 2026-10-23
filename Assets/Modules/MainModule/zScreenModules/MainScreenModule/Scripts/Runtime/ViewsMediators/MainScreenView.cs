@@ -74,6 +74,7 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
         private RectTransform[] _navImages;
         private Vector3[] _navImageScales;
         private Tween _selectorTween;
+        private int _selectedTab;
 
         private void OnEnable()
         {
@@ -128,8 +129,14 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
         {
             base.AfterScreenActivation();
             FitLayout();
+            PickTab(_selectedTab, false);
         }
-        private void OnRectTransformDimensionsChange() { if (_built) FitLayout(); }
+        private void OnRectTransformDimensionsChange()
+        {
+            if (!_built) return;
+            FitLayout();
+            PickTab(_selectedTab, false);
+        }
 
         private void Build()
         {
@@ -159,7 +166,9 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
         private void PickTab(int index, bool slide)
         {
             if (_navSelector == null || index < 0 || index >= _navTabs.Length) return;
+            _selectedTab = index;
             var tab = (RectTransform)_navTabs[index].transform;
+            LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)tab.parent);
             KillNavigationTweens();
 
             Vector3 targetWorld = tab.TransformPoint(tab.rect.center);

@@ -21,7 +21,11 @@ namespace Modules.GameplayModule.Controllers
             // One frame never takes more than Unity's longest step: back from the background, the first frame's
             // real time is all the time the game was away, and the clock does not run while the player is gone.
             bool expired = _model.Tick(Mathf.Min(Time.unscaledDeltaTime, Time.maximumDeltaTime));
-            if (wasFrozen && _model.ClockFreezeSeconds <= 0) _signals.Outgoing.ClockFrozen.Dispatch(0f);
+            if (wasFrozen && _model.ClockFreezeSeconds <= 0)
+            {
+                _signals.Outgoing.ClockFrozen.Dispatch(0f);
+                _internalSignals.ClockThawed.Dispatch();
+            }
             if (Mathf.CeilToInt(_model.RemainingSeconds) != previousSecond)
                 _signals.Outgoing.TimeChanged.Dispatch(_model.RemainingSeconds);
             if (expired)

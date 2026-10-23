@@ -28,7 +28,7 @@ namespace Modules.GameplayModule.Controllers
             if (level == null || !levels.IsPlayable(_model.LevelIndex))
             {
                 string why = level == null ? "no playable level from the start level on" : level.name + ": " + string.Join("; ", level.Validate());
-                FlowLogger.LogError($"StartPuzzleCommand - cannot start a level: {why}. Fix it in Morvin/Gameplay/Levels.");
+                FlowLogger.LogError($"StartPuzzleCommand - cannot start a level: {why}. Fix it in Floria/Gameplay/Levels.");
                 Retain();
                 Stop();
                 return;

@@ -172,6 +172,8 @@ namespace Modules.GameplayModule.RootsContexts
                 .ToSequence<AnnounceLivesCommand>()
                 .ToSequence<ScheduleNotificationsCommand>();
             CommandBinder.Bind(_internalSignals.Tick).ToSequence<TickPuzzleCommand>();
+            // Freeze Time could not be used while the clock was frozen; now it can again.
+            CommandBinder.Bind(_internalSignals.ClockThawed).ToSequence<AnnounceBoostersCommand>();
             CommandBinder.Bind(_internalSignals.PayWin)
                 .ToSequence<AddCoinsCommand>()
                 .ToSequence<IAudioService.Commands.Play>(AudioCue.Coin)

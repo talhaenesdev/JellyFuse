@@ -41,6 +41,9 @@ namespace Modules.LoadingModule.LoadingScreenModule.ViewsMediators
         [SerializeField] private TMP_Text _failedText;
         [SerializeField] private Button _retryButton;
 
+        [Tooltip("Shows the build's version (Player Settings > Version) in a corner. Empty shows none.")]
+        [SerializeField] private TMP_Text _version;
+
         private float _target;
         private float _shown;
         private float _childTarget;
@@ -78,6 +81,7 @@ namespace Modules.LoadingModule.LoadingScreenModule.ViewsMediators
             base.BeforeScreenActivation();
 
             ShowingSet = null;
+            if (_version != null) _version.text = "v" + Application.version;
             _target = _shown = 0f;
             _childTarget = _childShown = 0f;
             SetFill(_fill, 0f);

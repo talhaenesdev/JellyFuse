@@ -10,6 +10,15 @@ Reusable UI pieces any screen can put in its prefab - drawing components with no
 - From code: `Play()`, `Play(preset)`, `SetText(text)` (sets the text and plays, counting from the number before), `Stop()` (puts the text back; a count stopped half way shows its end).
 - It uses DOTween's core API only (`DOTween.To`, `DOScale`), so it needs no DOTween module assembly.
 
+## Button press
+- **ButtonPressAnimator** sits beside every Button in the game's UI prefabs: the button shrinks while
+  held and springs back when let go, then returns to the scale it had before the press. It never
+  touches the click.
+- Every animator points at the one preset, `Scriptables/CD_ButtonPress` (scale held, shrink and
+  release times and eases, whether a non-interactable button moves). Tune all buttons there.
+- A new Button gets it by adding the component; a button made from a template, or from a prefab
+  that has it (Btn_Green_General, Btn_Close), carries it already.
+
 ## Concepts
 UI widget, text background, pill, capsule, mirrored cap, nine slice, MirroredCapBackground, label background, text animation, DOTween, TextAnimator, CD_TextAnimation, count up, typewriter, wave, pop
 

@@ -24,12 +24,15 @@ namespace Modules.DevToolsModule.Models
         public bool IsPostConstructed { get; set; }
         public bool IsDeconstructed { get; set; }
         public IReadOnlyList<DevToggleCVO> Toggles => _toggles;
+        /// <summary>Whether the panel may open; off, every switch is its DefaultOn.</summary>
+        public bool PanelEnabled { get; private set; } = true;
 
         public void PostConstruct()
         {
             _toggles.Clear();
             var config = _root.GetComponent<RootAdapter>().GetScriptable<CD_DevTools>();
             if (config == null) return;
+            PanelEnabled = config.PanelEnabled;
             foreach (var toggle in config.Toggles)
                 if (toggle != null && !string.IsNullOrWhiteSpace(toggle.Key)) _toggles.Add(toggle);
         }
@@ -41,13 +44,14 @@ namespace Modules.DevToolsModule.Models
         {
             var toggle = Find(key);
             if (toggle == null) return false;
+            if (!PanelEnabled) return toggle.DefaultOn;
             return PlayerPrefs.GetInt(PREFS_PREFIX + key, toggle.DefaultOn ? 1 : 0) == 1;
         }
 
         /// <summary>Sets and keeps a listed switch; a key the config does not list is ignored.</summary>
         public bool Set(string key, bool on)
         {
-            if (Find(key) == null) return false;
+            if (Find(key) == null || !PanelEnabled) return false;
             PlayerPrefs.SetInt(PREFS_PREFIX + key, on ? 1 : 0);
             PlayerPrefs.Save();
             return true;

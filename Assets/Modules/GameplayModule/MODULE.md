@@ -13,7 +13,7 @@ the start level and the CD_JellyPalette every level draws its colours from. Star
 builds the level at LevelIndex with that palette; empty or invalid entries are skipped (logged).
 ExampleJellyLevelFactory is only a rule-check fixture.
 
-Morvin/Gameplay/Levels opens the level window: the list on the left (CD_JellyLevelsEditor), the
+Floria/Gameplay/Levels opens the level window: the list on the left (CD_JellyLevelsEditor), the
 selected level's designer on the right (JellyLevelEditor). One toolbar - Jelly, Door, Wall, Empty,
 Erase - with twelve shape presets; click to place, click to select, drag to move, right-click to
 delete. LEVEL_DESIGNER.md is the designer's guide. Level snapshots are immutable: edits take
@@ -27,7 +27,7 @@ cells as wall except where a door opens, painted or not, and no jelly may start 
 (CD_JellyLevel.Doors) are the gaps in that wall: a side, a first cell along it (never a corner), a
 width of 1-4 cells, and a queue of jellies (colour and shape, local cells). Levels made
 before doors keep their old exits in a hidden Targets list; the game converts them as it loads, and
-the level editor's Convert button or Morvin/Gameplay/Convert Old Exits To Doors rewrites the asset.
+the level editor's Convert button or Floria/Gameplay/Convert Old Exits To Doors rewrites the asset.
 A converted door spans every row its jellies did; old exits sharing rows on one side become one
 door taking the first exit's jellies, then the next's.
 

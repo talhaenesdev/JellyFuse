@@ -64,8 +64,9 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             var sprite = _winCoinIcon.GetComponent<Image>() != null ? _winCoinIcon.GetComponent<Image>().sprite : null;
             var root = (RectTransform)transform;
             Vector2 start = Local(root, _winCoinIcon), end = Local(root, _coinIcon);
-            // As big as the coin icon it flies to, times Coin Fly Scale.
-            var size = _coinIcon.rect.size * (_coinIcon.lossyScale.x / root.lossyScale.x) * hud.CoinFlyScale;
+            // As big as the coin icon it flies to, times Coin Fly Scale - read off its height, since the
+            // icon's idle turn runs its width through nothing.
+            var size = _coinIcon.rect.size * (_coinIcon.lossyScale.y / root.lossyScale.y) * hud.CoinFlyScale;
             float arc = Vector2.Distance(start, end) * hud.CoinFlyArc;
             while (_flyingCoins.Count < flying)
             {

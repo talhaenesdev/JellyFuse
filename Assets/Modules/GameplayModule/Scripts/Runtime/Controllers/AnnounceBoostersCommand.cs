@@ -33,7 +33,9 @@ namespace Modules.GameplayModule.Controllers
                 {
                     Type = booster.Type, Icon = booster.Icon, Unlocked = unlocked, UnlockLevel = booster.UnlockLevel,
                     Count = count, Price = booster.CoinPrice,
-                    Usable = unlocked && progress != null && (count > 0 || coins >= booster.CoinPrice),
+                    // A freeze does not stack: while the clock is frozen, Freeze Time waits until it runs again.
+                    Usable = unlocked && progress != null && (count > 0 || coins >= booster.CoinPrice)
+                        && !(booster.Type == BoosterType.FreezeTime && _model.ClockFreezeSeconds > 0),
                 });
             }
             _signals.Outgoing.BoostersChanged.Dispatch(states);

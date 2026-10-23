@@ -895,7 +895,7 @@ namespace Modules.GameplayModule.Editor
         }
 
         /// <summary>Turns the old exits of every level in the project into doors, in one undo step.</summary>
-        [MenuItem("Morvin/Gameplay/Convert Old Exits To Doors", false, 20)]
+        [MenuItem("Floria/Gameplay/Convert Old Exits To Doors", false, 20)]
         private static void ConvertAllLevels()
         {
             var levels = AssetDatabase.FindAssets("t:CD_JellyLevel")
