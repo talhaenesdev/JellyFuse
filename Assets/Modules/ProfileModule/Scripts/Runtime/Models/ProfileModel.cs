@@ -51,6 +51,11 @@ namespace Modules.ProfileModule.Models
                 }
             }
 
+            Reload();
+        }
+
+        public void Reload()
+        {
             string selectedId = _profile != null ? _profile.SelectedIconId : null;
             if (!_icons.TryGetValue(selectedId ?? string.Empty, out ProfileIconCVO selected))
             {

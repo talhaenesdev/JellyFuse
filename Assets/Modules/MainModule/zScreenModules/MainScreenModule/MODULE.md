@@ -9,7 +9,10 @@ main menu, title screen, play button
 ## Layout
 Authored in Prefabs/MainScreen - move, resize and recolour there. Objects are named Type_What: Btn_ a button, Txt_ a text, Img_ an image, Pnl_ a container or card.
 - Img_Background behind everything; Pnl_Layout is the 760-unit-wide column, scaled to the screen.
-- Pnl_Coins top left (Txt_Coins), Btn_Settings top right, Btn_Play just above the bar.
+- Pnl_Coins top left and Btn_Settings top right stay visible on both pages.
+- Pnl_HomePage contains the avatar medallion, level presentation and Btn_Play.
+- Pnl_ShopPage contains the SHOP header, daily offer and the four visual product cards. Purchase
+  buttons are presentation-only until the game's offer catalogue and store backend are defined.
 - Pnl_NavBar along the bottom: five tabs - Btn_Nav_Shop, Btn_Nav_Levels, Btn_Home,
   Btn_Nav_Events, Btn_Nav_Profile - with Img_SlotSeparator_1..4 between them and Img_NavSeparator
   on top. Img_NavSelector slides behind the tab picked (MainScreenView's Selector Time); the screen
@@ -19,6 +22,8 @@ Authored in Prefabs/MainScreen - move, resize and recolour there. Objects are na
   the prefab is the fallback. OpenMainScreenCommand hands the screen ILocalizationService.Get.
 - Btn_Settings opens the settings screen (SettingsConnectorSubContext); HomeClicked is announced
   and not wired yet. ApplyCoins shows a count; nothing sends one yet.
+- Shop is index 0 and Home is index 1. MainScreenView switches the two authored page panels while
+  keeping the shared HUD and navigation alive on the same pooled screen.
 - Navigation uses DOTween: Selector Time moves Img_NavSelector without changing its authored size;
   Selected Tab Scale and Tab Scale Time control the selected tab image. Home is index 1 and is
   selected whenever the pooled screen opens.

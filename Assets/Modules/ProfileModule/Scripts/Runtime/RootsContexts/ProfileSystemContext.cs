@@ -35,6 +35,9 @@ namespace Modules.ProfileModule.RootsContexts
         {
             base.CommandBindings();
             CommandBinder.Bind(_signals.Incoming.RequestCurrentIcon).ToSequence<PublishCurrentProfileIconCommand>();
+            CommandBinder.Bind(_signals.Incoming.ReloadProfile)
+                .ToSequence<ReloadProfileCommand>()
+                .ToSequence<PublishCurrentProfileIconCommand>();
             CommandBinder.Bind(_signals.Incoming.OpenSelection).ToSequence<OpenProfileSelectionCommand>();
             CommandBinder.Bind(_signals.Incoming.SaveProfile)
                 .ToSequence<SaveProfileCommand>()

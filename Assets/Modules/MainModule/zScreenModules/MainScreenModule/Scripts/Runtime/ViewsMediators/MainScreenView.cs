@@ -26,9 +26,15 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
         [SerializeField] private ScreenLayout _layout;
         [SerializeField] private Button _playButton;
         [SerializeField] private TMP_Text _playLabel;
+        [SerializeField] private TMP_Text _levelLabel;
         [SerializeField] private Button _settingsButton;
         [SerializeField] private Button _homeButton;
         [SerializeField] private TMP_Text _homeLabel;
+        [Header("Pages")]
+        [Tooltip("Home content shown by the Home navigation tab.")]
+        [SerializeField] private GameObject _homePage;
+        [Tooltip("Shop content shown by the Shop navigation tab.")]
+        [SerializeField] private GameObject _shopPage;
         [SerializeField] private TMP_Text _coins;
         [Tooltip("The lives the player holds, as lives/max.")]
         [SerializeField] private TMP_Text _lives;
@@ -167,6 +173,7 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
         {
             if (_navSelector == null || index < 0 || index >= _navTabs.Length) return;
             _selectedTab = index;
+            ShowPage(index);
             var tab = (RectTransform)_navTabs[index].transform;
             LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)tab.parent);
             KillNavigationTweens();
@@ -200,6 +207,13 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
                 }
                 else _navImages[i].localScale = targetScale;
             }
+        }
+
+        private void ShowPage(int index)
+        {
+            bool showShop = index == 0;
+            if (_homePage != null) _homePage.SetActive(!showShop);
+            if (_shopPage != null) _shopPage.SetActive(showShop);
         }
 
         private void CacheNavigationImages()
@@ -253,7 +267,9 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
         private void UpdatePlayLabel()
         {
             if (_playLabel == null) return;
-            _playLabel.text = _nextLevel > 0 ? string.Format(L("main.play.level", "Level {0}"), _nextLevel) : L("main.play", _playEnglish);
+            _playLabel.text = L("main.play", _playEnglish);
+            if (_levelLabel != null && _nextLevel > 0)
+                _levelLabel.text = string.Format(L("main.play.level", "Level {0}"), _nextLevel);
         }
         public void ApplyCoins(int coins) { if (_coins != null) _coins.text = coins.ToString(); }
         public void ApplyLives(Modules.GameplayModule.Shared.Data.ValueObjects.LivesStateRVO state) { if (_lives != null) _lives.text = $"{state.Lives}/{state.MaxLives}"; }

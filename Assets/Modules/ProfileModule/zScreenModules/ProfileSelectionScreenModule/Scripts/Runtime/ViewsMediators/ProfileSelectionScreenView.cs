@@ -200,8 +200,12 @@ namespace Modules.ProfileModule.ProfileSelectionScreenModule.ViewsMediators
 
         private void RefreshTabs()
         {
-            if (_avatarTabLabel != null) _avatarTabLabel.color = !_showingFrames ? _selectedTabColor : _normalTabColor;
-            if (_frameTabLabel != null) _frameTabLabel.color = _showingFrames ? _selectedTabColor : _normalTabColor;
+            if (_avatarTabButton?.targetGraphic != null)
+                _avatarTabButton.targetGraphic.color = !_showingFrames ? _selectedTabColor : _normalTabColor;
+            if (_frameTabButton?.targetGraphic != null)
+                _frameTabButton.targetGraphic.color = _showingFrames ? _selectedTabColor : _normalTabColor;
+            if (_avatarTabLabel != null) _avatarTabLabel.color = Color.white;
+            if (_frameTabLabel != null) _frameTabLabel.color = Color.white;
         }
 
         private void FitDialogToSafeArea()

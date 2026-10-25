@@ -26,6 +26,10 @@ it only shows what the snapshot says (FuseReady included) and turns pointer posi
   Btn_Undo, Pnl_Clock, Btn_Settings, Pnl_Board (the board is drawn in code inside it), Txt_Warning,
   Btn_Restart, Pnl_WinDim/Pnl_WinCard, Pnl_LoseDim/Pnl_LoseCard. Colours, sizes and positions live
   there; CD_GameplayHud keeps only map placement, the timer warning and the panel delays.
+- The HUD uses the same cosmic navy, purple, cyan and gold visual family as MainScreen. The top
+  status strip, clock, circular utility buttons and bottom booster capsule leave the board's pointer
+  area unchanged. Atlas_Gameplay packs gameplay textures and the screen's small UI sprites; the
+  large cosmic backdrop stays outside the atlas.
 - Texts are keyed (gameplay.*) and read through LocalizationModule; the English in GameplayScreenView
   is the fallback. OpenGameplayScreenCommand hands the screen ILocalizationService.Get, and
   ApplyLanguage (wired from LanguageChanged in LocalizationConnectorSubContext) redraws them.

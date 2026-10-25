@@ -8,5 +8,8 @@ namespace Modules.ProfileModule.Models
         ProfileFrameVO CurrentFrame { get; }
         ProfileSelectionRVO CreateSelection();
         bool Save(ProfileEditVO edit);
+
+        /// <summary>Reads the selected icon and frame from SD_PlayerProfile again, after its values were replaced.</summary>
+        void Reload();
     }
 }

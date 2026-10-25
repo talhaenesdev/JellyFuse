@@ -9,6 +9,11 @@
   <assembly fullname="Assembly-CSharp" preserve="all" ignoreIfMissing="1" />
   <assembly fullname="Assembly-CSharp-firstpass" preserve="all" ignoreIfMissing="1" />
   <assembly fullname="FlowIoC" preserve="all" />
+  <assembly fullname="Modules.Account" preserve="all" />
+  <assembly fullname="Modules.Account.Signals" preserve="all" />
+  <assembly fullname="Modules.CloudSave" preserve="all" />
+  <assembly fullname="Modules.CloudSync" preserve="all" />
+  <assembly fullname="Modules.CloudSync.Signals" preserve="all" />
   <assembly fullname="Modules.Audio" preserve="all" />
   <assembly fullname="Modules.Connector" preserve="all" />
   <assembly fullname="Modules.DevTools" preserve="all" />
@@ -59,6 +64,10 @@
 
   <!-- Libraries that work by reflection -->
   <assembly fullname="Newtonsoft.Json" preserve="all" ignoreIfMissing="1" />
+  <assembly fullname="Unity.Services.Core" preserve="all" />
+  <assembly fullname="Unity.Services.Authentication" preserve="all" />
+  <assembly fullname="Unity.Services.CloudSave" preserve="all" />
+  <assembly fullname="Google.Play.Games" preserve="all" />
   <assembly fullname="Unity.Addressables" preserve="all" />
   <assembly fullname="Unity.ResourceManager" preserve="all" />
   <assembly fullname="Unity.InputSystem" preserve="all" />
