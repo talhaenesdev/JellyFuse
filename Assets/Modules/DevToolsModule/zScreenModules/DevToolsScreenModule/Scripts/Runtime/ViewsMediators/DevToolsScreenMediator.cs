@@ -39,6 +39,8 @@ namespace Modules.DevToolsModule.DevToolsScreenModule.ViewsMediators
             _signals.Incoming.ShowSliders.AddListener(_view.ShowSliders);
             _view.ToggleRequested += OnToggleRequested;
             _internalSignals.ToggleChanged.AddListener(_view.ShowToggle);
+            _view.PinSubmitted += OnPinSubmitted;
+            _internalSignals.PinRejected.AddListener(_view.ShowPinRejected);
         }
 
         private void OnScreenHidden(IScreenBody screen)
@@ -54,6 +56,13 @@ namespace Modules.DevToolsModule.DevToolsScreenModule.ViewsMediators
             _signals.Incoming.ShowSliders.RemoveListener(_view.ShowSliders);
             _view.ToggleRequested -= OnToggleRequested;
             _internalSignals.ToggleChanged.RemoveListener(_view.ShowToggle);
+            _view.PinSubmitted -= OnPinSubmitted;
+            _internalSignals.PinRejected.RemoveListener(_view.ShowPinRejected);
+        }
+
+        private void OnPinSubmitted(string pin)
+        {
+            if (_view.Data.HasState(ScreenState.AvailableToSendSignal)) _internalSignals.PinEntered.Dispatch(pin);
         }
 
         private void OnToggleRequested(string key, bool on)

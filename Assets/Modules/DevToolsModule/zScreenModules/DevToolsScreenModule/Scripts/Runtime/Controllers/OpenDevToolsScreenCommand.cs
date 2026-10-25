@@ -21,7 +21,8 @@ namespace Modules.DevToolsModule.DevToolsScreenModule.Controllers
         public override async void Execute()
         {
             Retain();
-            // A store build ships with the panel switched off: the taps that ask for it open nothing.
+            // A store build ships with the panel switched off: the taps that ask for it open nothing,
+            // until this device is unlocked through the secret gesture and the PIN.
             if (!_devTools.PanelEnabled)
             {
                 Stop();
@@ -29,7 +30,9 @@ namespace Modules.DevToolsModule.DevToolsScreenModule.Controllers
             }
             try
             {
-                DevToolsScreenView screen = await _screenService.Open<DevToolsScreenView>().Show<DevToolsScreenView>();
+                // Already open behind the PIN pad: that panel is filled rather than a second opened.
+                if (!_screenService.TryGet.Screen(out DevToolsScreenView screen))
+                    screen = await _screenService.Open<DevToolsScreenView>().Show<DevToolsScreenView>();
                 if (screen == null)
                 {
                     FlowLogger.LogError("OpenDevToolsScreenCommand - the screen did not open.");
@@ -37,6 +40,7 @@ namespace Modules.DevToolsModule.DevToolsScreenModule.Controllers
                     return;
                 }
                 screen.SetLocalizer(_localization.Get);
+                screen.ShowPinPad(false);
                 screen.ShowToggles(_devTools.Toggles);
                 foreach (var toggle in _devTools.Toggles) screen.ShowToggle(toggle.Key, _devTools.IsOn(toggle.Key));
                 Release();

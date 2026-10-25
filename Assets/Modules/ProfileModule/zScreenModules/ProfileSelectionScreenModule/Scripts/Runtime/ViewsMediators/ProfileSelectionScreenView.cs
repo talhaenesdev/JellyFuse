@@ -49,6 +49,7 @@ namespace Modules.ProfileModule.ProfileSelectionScreenModule.ViewsMediators
         {
             base.BeforeScreenActivation();
             FitDialogToSafeArea();
+            ResetItemsScroll();
         }
 
         public override void AfterScreenActivation()
@@ -145,6 +146,7 @@ namespace Modules.ProfileModule.ProfileSelectionScreenModule.ViewsMediators
                     CreateItem(icon.Id, icon.DisplayName, icon.Sprite, icon.FallbackColor, null, Color.white);
             }
             RefreshSelection();
+            ResetItemsScroll();
         }
 
         private void CreateItem(string id, string displayName, Sprite sprite, Color fallbackColor, Sprite frameSprite, Color frameColor)
@@ -237,6 +239,15 @@ namespace Modules.ProfileModule.ProfileSelectionScreenModule.ViewsMediators
                 if (_items[i] != null) _items[i].onClick.RemoveListener(_itemActions[i]);
             _items.Clear();
             _itemActions.Clear();
+        }
+
+        private void ResetItemsScroll()
+        {
+            ScrollRect scroll = _itemsRoot != null ? _itemsRoot.GetComponentInParent<ScrollRect>() : null;
+            if (scroll == null) return;
+            Canvas.ForceUpdateCanvases();
+            scroll.StopMovement();
+            scroll.verticalNormalizedPosition = 1f;
         }
 
         protected override void PlayShowAnimation() => ShowCompleted?.Invoke(this);

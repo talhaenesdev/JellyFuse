@@ -37,6 +37,21 @@ namespace Modules.UiWidgetsModule.Entities
 
         public CD_CounterSpend Settings { get => _settings; set => _settings = value; }
 
+        /// <summary>
+        /// Establishes the counter's current value without presenting it as a spend. Screens use this
+        /// when they are first filled after opening; later decreases still play the normal effect.
+        /// </summary>
+        public void SetWithoutEffect(string text)
+        {
+            if (_text == null) _text = GetComponent<TMP_Text>();
+            StopCount();
+            _target = null;
+            _writing = true;
+            _text.text = _written = text;
+            _writing = false;
+            _known = Number(text, out _shown);
+        }
+
         private void Awake()
         {
             _text = GetComponent<TMP_Text>();

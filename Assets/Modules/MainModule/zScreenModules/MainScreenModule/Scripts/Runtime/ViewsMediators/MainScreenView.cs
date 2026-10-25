@@ -6,6 +6,7 @@ using FlowIoC.ScreenModule.ViewsMediators.Screen;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Modules.MainModule.MainScreenModule.Data.UnityObjects;
 using Modules.ProfileModule.Shared.Data.ValueObjects;
 using Modules.UiWidgetsModule.Entities;
 
@@ -30,6 +31,11 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
         [SerializeField] private Button _settingsButton;
         [SerializeField] private Button _homeButton;
         [SerializeField] private TMP_Text _homeLabel;
+        [Header("Theme")]
+        [Tooltip("Main menu button colours. Edit CD_MainScreenTheme in the Project window.")]
+        [SerializeField] private CD_MainScreenTheme _theme;
+        [Tooltip("The presentation-only purchase panels shown on the Shop page.")]
+        [SerializeField] private Graphic[] _shopBuyPanels;
         [Header("Pages")]
         [Tooltip("Home content shown by the Home navigation tab.")]
         [SerializeField] private GameObject _homePage;
@@ -75,6 +81,7 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
         private readonly List<(TMP_Text Label, string Key, string English)> _keyedTexts = new();
         private bool _built;
         private int _nextLevel;
+        private bool _coinsInitialized;
         private string _playEnglish = "Play";
         private readonly List<UnityEngine.Events.UnityAction> _tabActions = new();
         private RectTransform[] _navImages;
@@ -127,7 +134,9 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
         public override void BeforeScreenActivation()
         {
             base.BeforeScreenActivation();
+            _coinsInitialized = false;
             Build();
+            ApplyTheme();
             // A pooled screen opens on Home again, whatever was picked last time.
             PickTab(_homeTab, false);
         }
@@ -159,6 +168,7 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
                 if (_navTabs[i] != _homeButton) Keyed(_navTabs[i].GetComponentInChildren<TMP_Text>(true), "main.nav." + i);
             }
             CacheNavigationImages();
+            ApplyTheme();
             FitLayout();
         }
 
@@ -207,6 +217,49 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
                 }
                 else _navImages[i].localScale = targetScale;
             }
+            ApplyNavigationColors(index);
+        }
+
+        private void ApplyTheme()
+        {
+            if (_theme == null) return;
+            SetButtonColor(_playButton, _theme.PlayButton);
+            SetButtonColor(_settingsButton, _theme.UtilityButton);
+            SetButtonColor(_profileButton, _theme.UtilityButton);
+            SetButtonColor(_livesPlusButton, _theme.UtilityButton);
+            if (_playLabel != null) _playLabel.color = _theme.ButtonText;
+            if (_homeLabel != null) _homeLabel.color = _theme.ButtonText;
+            if (_shopBuyPanels != null)
+                foreach (Graphic panel in _shopBuyPanels)
+                    if (panel != null) panel.color = _theme.ShopBuyButton;
+            if (_navSelector != null)
+            {
+                Image selector = _navSelector.GetComponent<Image>();
+                if (selector != null) selector.color = _theme.NavigationSelector;
+            }
+            ApplyNavigationColors(_selectedTab);
+        }
+
+        private void ApplyNavigationColors(int selectedIndex)
+        {
+            if (_theme == null || _navTabs == null) return;
+            for (int i = 0; i < _navTabs.Length; i++)
+            {
+                Button tab = _navTabs[i];
+                SetButtonColor(tab, i == selectedIndex ? _theme.NavigationSelected : _theme.NavigationNormal);
+                TMP_Text label = tab != null ? tab.GetComponentInChildren<TMP_Text>(true) : null;
+                if (label != null)
+                    label.color = i == selectedIndex ? _theme.NavigationTextSelected : _theme.NavigationTextNormal;
+            }
+        }
+
+        // The theme tints, it does not reveal: a button whose graphic is an invisible tap area (the
+        // lives "+", drawn into the capsule art) stays invisible. Every other graphic takes the colour
+        // as given, so recolouring a tab again and again never compounds.
+        private static void SetButtonColor(Button button, Color color)
+        {
+            if (button == null || button.targetGraphic == null || button.targetGraphic.color.a <= 0f) return;
+            button.targetGraphic.color = color;
         }
 
         private void ShowPage(int index)
@@ -271,7 +324,22 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
             if (_levelLabel != null && _nextLevel > 0)
                 _levelLabel.text = string.Format(L("main.play.level", "Level {0}"), _nextLevel);
         }
-        public void ApplyCoins(int coins) { if (_coins != null) _coins.text = coins.ToString(); }
+        public void ApplyCoins(int coins)
+        {
+            if (_coins == null) return;
+            string text = coins.ToString();
+            if (!_coinsInitialized)
+            {
+                _coinsInitialized = true;
+                var spendEffect = _coins.GetComponent<CounterSpendEffect>();
+                if (spendEffect != null)
+                {
+                    spendEffect.SetWithoutEffect(text);
+                    return;
+                }
+            }
+            _coins.text = text;
+        }
         public void ApplyLives(Modules.GameplayModule.Shared.Data.ValueObjects.LivesStateRVO state) { if (_lives != null) _lives.text = $"{state.Lives}/{state.MaxLives}"; }
         public void ApplyProfileIcon(ProfileIconVO icon)
         {

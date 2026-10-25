@@ -27,10 +27,12 @@ namespace Modules.UiWidgetsModule.Entities
 
         private void OnDisable()
         {
-            // A screen hidden mid-press comes back from the pool at its own size, not shrunk.
+            // A screen hidden mid-press - or mid-spring back, which is every button that closes its
+            // own screen: the click lands on the release - comes back from the pool at its own size.
+            bool moving = _pressed || (_tween != null && _tween.IsActive());
             _tween?.Kill();
             _tween = null;
-            if (_pressed) transform.localScale = _restScale;
+            if (moving) transform.localScale = _restScale;
             _pressed = false;
         }
 
@@ -39,7 +41,9 @@ namespace Modules.UiWidgetsModule.Entities
             if (eventData.button != PointerEventData.InputButton.Left) return;
             bool animateDisabled = _preset != null && _preset.AnimateWhenDisabled;
             if (_selectable != null && !_selectable.IsInteractable() && !animateDisabled) return;
-            if (!_pressed) _restScale = transform.localScale;
+            // Only a button at rest says what its size is; one still springing back is mid-way.
+            bool atRest = !_pressed && (_tween == null || !_tween.IsActive());
+            if (atRest) _restScale = transform.localScale;
             _pressed = true;
             Animate(_restScale * (_preset != null ? _preset.PressedScale : .92f), _preset != null ? _preset.PressDuration : .07f, _preset != null ? _preset.PressEase : Ease.OutQuad);
         }

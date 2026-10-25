@@ -12,5 +12,16 @@ namespace Modules.DevToolsModule.DevToolsScreenModule.Signals
         public Signal<string, bool> SetToggle = new();
         /// <summary>A switch now holds this value.</summary>
         public Signal<string, bool> ToggleChanged = new();
+
+        /// <summary>Start watching for the secret corner gesture.</summary>
+        public Signal ListenForSecret = new();
+        /// <summary>Every frame while the gesture is watched for.</summary>
+        public Signal SecretTick = new(hideCommandLog: true);
+        /// <summary>The four corners were tapped in order, in time.</summary>
+        public Signal SecretEntered = new();
+        /// <summary>Enter was pressed on the PIN pad: the digits typed.</summary>
+        public Signal<string> PinEntered = new();
+        /// <summary>The PIN typed did not match.</summary>
+        public Signal PinRejected = new();
     }
 }

@@ -2,6 +2,7 @@ using FlowIoC.ScreenModule.Data;
 using FlowIoC.ScreenModule.Enums;
 using FlowIoC.ScreenModule.RootsContexts;
 using Modules.DevToolsModule.DevToolsScreenModule.Controllers;
+using Modules.DevToolsModule.DevToolsScreenModule.Models;
 using Modules.DevToolsModule.DevToolsScreenModule.Signals;
 using Modules.DevToolsModule.DevToolsScreenModule.ViewsMediators;
 
@@ -30,11 +31,31 @@ namespace Modules.DevToolsModule.DevToolsScreenModule.RootsContexts
             _internalSignals = InjectionBinder.Bind<DevToolsScreenInternalSignals>();
         }
 
+        public override void InjectionBindings()
+        {
+            base.InjectionBindings();
+            InjectionBinder.Bind<SecretGestureModel>();
+        }
+
         public override void CommandBindings()
         {
             base.CommandBindings();
             CommandBinder.Bind(_signals.Incoming.OpenDevToolsScreen).ToSequence<OpenDevToolsScreenCommand>();
             CommandBinder.Bind(_internalSignals.SetToggle).ToSequence<SetDevToggleCommand>();
+
+            // The secret way in, for a store build: four corners in order, then the PIN.
+            CommandBinder.Bind(_internalSignals.ListenForSecret).ToSequence<StartSecretListeningCommand>();
+            CommandBinder.Bind(_internalSignals.SecretTick).ToSequence<DetectSecretCornerCommand>();
+            CommandBinder.Bind(_internalSignals.SecretEntered).ToSequence<OpenDevToolsPinCommand>();
+            CommandBinder.Bind(_internalSignals.PinEntered)
+                .ToSequence<UnlockDevToolsCommand>()
+                .ToSequence<OpenDevToolsScreenCommand>();
+        }
+
+        public override void Launch()
+        {
+            base.Launch();
+            _internalSignals.ListenForSecret.Dispatch();
         }
     }
 }

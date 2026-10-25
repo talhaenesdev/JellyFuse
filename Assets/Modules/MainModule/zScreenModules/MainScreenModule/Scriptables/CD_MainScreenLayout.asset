@@ -26,7 +26,7 @@ MonoBehaviour:
     OverridePosition: 1
     Position: {x: 0, y: 0}
     OverrideSize: 1
-    Size: {x: 0, y: 170}
+    Size: {x: 0, y: 140}
     OverrideScale: 0
     Scale: 1
     OverrideActive: 0
@@ -34,12 +34,12 @@ MonoBehaviour:
   - Path: Pnl_Layout/Pnl_NavBar
     OverrideAnchors: 1
     AnchorMin: {x: 0, y: 0}
-    AnchorMax: {x: 1, y: 0}
+    AnchorMax: {x: 0, y: 0}
     Pivot: {x: 0.5, y: 0}
     OverridePosition: 1
-    Position: {x: 0, y: 50}
+    Position: {x: 0, y: 56}
     OverrideSize: 1
-    Size: {x: 0, y: 130}
+    Size: {x: 0, y: 160}
     OverrideScale: 0
     Scale: 1
     OverrideActive: 0
@@ -50,10 +50,62 @@ MonoBehaviour:
     AnchorMax: {x: 0.5, y: 0}
     Pivot: {x: 0.5, y: 0}
     OverridePosition: 1
-    Position: {x: 0, y: 300}
+    Position: {x: 0, y: 381}
     OverrideSize: 1
-    Size: {x: 380, y: 130}
+    Size: {x: 434, y: 160}
     OverrideScale: 0
     Scale: 1
+    OverrideActive: 0
+    Active: 1
+  - Path: Pnl_Layout/Pnl_NavBar/Buttons_Area/Btn_Nav_Shop/Img_Home
+    OverrideAnchors: 0
+    AnchorMin: {x: 0.5, y: 0}
+    AnchorMax: {x: 0.5, y: 0}
+    Pivot: {x: 0.5, y: 0}
+    OverridePosition: 0
+    Position: {x: 0, y: 381}
+    OverrideSize: 1
+    Size: {x: 150, y: 130}
+    OverrideScale: 0
+    Scale: 1
+    OverrideActive: 0
+    Active: 1
+  - Path: Pnl_Layout/Pnl_NavBar/Buttons_Area/Btn_Home/Img_Home
+    OverrideAnchors: 0
+    AnchorMin: {x: 0.5, y: 0}
+    AnchorMax: {x: 0.5, y: 0}
+    Pivot: {x: 0.5, y: 0}
+    OverridePosition: 0
+    Position: {x: 0, y: 381}
+    OverrideSize: 1
+    Size: {x: 220, y: 136}
+    OverrideScale: 0
+    Scale: 1
+    OverrideActive: 0
+    Active: 1
+  - Path: Pnl_Layout/Pnl_NavBar/Buttons_Area/Btn_Nav_Events/Img_Collection
+    OverrideAnchors: 0
+    AnchorMin: {x: 0.5, y: 0}
+    AnchorMax: {x: 0.5, y: 0}
+    Pivot: {x: 0.5, y: 0}
+    OverridePosition: 0
+    Position: {x: 0, y: 381}
+    OverrideSize: 1
+    Size: {x: 150, y: 130}
+    OverrideScale: 0
+    Scale: 1
+    OverrideActive: 0
+    Active: 1
+  - Path: Pnl_Layout/Pnl_NavBar/Img_Selector
+    OverrideAnchors: 0
+    AnchorMin: {x: 0.5, y: 0}
+    AnchorMax: {x: 0.5, y: 0}
+    Pivot: {x: 0.5, y: 0}
+    OverridePosition: 1
+    Position: {x: 0, y: 32.8}
+    OverrideSize: 1
+    Size: {x: 250, y: 262}
+    OverrideScale: 1
+    Scale: 1.24
     OverrideActive: 0
     Active: 1
