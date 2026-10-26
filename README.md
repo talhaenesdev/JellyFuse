@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="StoreAssets/JellyFuse_Icon_512.png" width="128" alt="Jelly Fuse icon">
+  <img src="docs/images/icon.png" width="128" alt="Jelly Fuse icon">
 </p>
 
 <h1 align="center">Jelly Fuse</h1>
@@ -17,7 +17,11 @@
 </p>
 
 <p align="center">
-  <img src="StoreAssets/JellyFuse_Feature_1024x500.png" width="720" alt="Jelly Fuse feature graphic">
+  <a href="https://horseman7.itch.io/jelly-fuse"><img src="https://img.shields.io/badge/Download%20APK-itch.io-FA5C5C?style=for-the-badge&logo=itchdotio&logoColor=white" alt="Download on itch.io"></a>
+</p>
+
+<p align="center">
+  <img src="docs/images/banner.jpg" width="720" alt="Jelly Fuse feature graphic">
 </p>
 
 ## About
@@ -27,9 +31,9 @@ door waits for a jelly of one colour and one shape. Drag jellies around the boar
 pieces into bigger ones, and send each one out through the door that fits it before the clock runs out.
 
 <p align="center">
-  <img src="StoreAssets/JellyFuse_Screen_1_Menu.png" width="260" alt="Main menu">
+  <img src="docs/images/menu.jpg" width="260" alt="Main menu">
   &nbsp;&nbsp;
-  <img src="StoreAssets/JellyFuse_Screen_2_Gameplay.png" width="260" alt="Gameplay">
+  <img src="docs/images/gameplay.jpg" width="260" alt="Gameplay">
 </p>
 
 ## Features
@@ -87,7 +91,8 @@ Together these cut the release bundle from 73 MB to 64.5 MB.
 
 ## Status
 
-Jelly Fuse is in **closed testing on Google Play**. A public release is planned.
+Jelly Fuse is in **closed testing on Google Play**, and a public release is planned. You can already
+try the Android build on [itch.io](https://horseman7.itch.io/jelly-fuse).
 
 ## Author
 
