@@ -31,9 +31,9 @@ door waits for a jelly of one colour and one shape. Drag jellies around the boar
 pieces into bigger ones, and send each one out through the door that fits it before the clock runs out.
 
 <p align="center">
-  <img src="docs/images/menu.jpg" width="260" alt="Main menu">
+  <img src="docs/images/menu.webp" width="260" alt="Main menu">
   &nbsp;&nbsp;
-  <img src="docs/images/gameplay.jpg" width="260" alt="Gameplay">
+  <img src="docs/images/gameplay.png" width="260" alt="Gameplay">
 </p>
 
 ## Features
