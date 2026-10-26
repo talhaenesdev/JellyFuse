@@ -33,7 +33,6 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
             _view.NavTabClicked += OnNavTabClicked;
             _view.ProfileIconClicked += OnProfileIconClicked;
             _view.LivesPlusClicked += OnLivesPlusClicked;
-            _view.DevToolsRequested += OnDevToolsRequested;
             _signals.Incoming.ApplyNextLevel.AddListener(_view.ApplyNextLevel);
             _signals.Incoming.ApplyLanguage.AddListener(_view.ApplyLanguage);
             _signals.Incoming.ApplyCoins.AddListener(_view.ApplyCoins);
@@ -51,7 +50,6 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
             _view.NavTabClicked -= OnNavTabClicked;
             _view.ProfileIconClicked -= OnProfileIconClicked;
             _view.LivesPlusClicked -= OnLivesPlusClicked;
-            _view.DevToolsRequested -= OnDevToolsRequested;
             _signals.Incoming.ApplyNextLevel.RemoveListener(_view.ApplyNextLevel);
             _signals.Incoming.ApplyLanguage.RemoveListener(_view.ApplyLanguage);
             _signals.Incoming.ApplyCoins.RemoveListener(_view.ApplyCoins);
@@ -82,10 +80,6 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
             if (_view.Data.HasState(ScreenState.AvailableToSendSignal)) _signals.Outgoing.HomeClicked.Dispatch();
         }
 
-        private void OnDevToolsRequested()
-        {
-            if (_view.Data.HasState(ScreenState.AvailableToSendSignal)) _signals.Outgoing.DevToolsRequested.Dispatch();
-        }
         private void OnLivesPlusClicked()
         {
             if (_view.Data.HasState(ScreenState.AvailableToSendSignal)) _signals.Outgoing.LivesPlusClicked.Dispatch();

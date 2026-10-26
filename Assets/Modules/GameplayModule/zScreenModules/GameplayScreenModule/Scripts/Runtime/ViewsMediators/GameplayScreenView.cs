@@ -42,9 +42,6 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         [SerializeField] private Button _settings;
         [Tooltip("The row of boosters under the map; the map keeps the side gap from its top.")]
         [SerializeField] private RectTransform _boosters;
-        [Tooltip("Tapped three times within Dev Tools Tap Window seconds, it opens the developer panel.")]
-        [SerializeField] private Button _devToolsTrigger;
-        [SerializeField, Min(.1f)] private float _devToolsTapWindow = 1f;
         [Tooltip("The bar behind the HUD at the top; a developer switch shows or hides it.")]
         [SerializeField] private GameObject _topBar;
         [Tooltip("The bar behind the boosters at the bottom; a developer switch shows or hides it.")]
@@ -85,8 +82,6 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         public event Action<float> JellyMelting;
         /// <summary>The retry panel's close button: the player leaves the level for the main menu.</summary>
         public event Action QuitClicked;
-        /// <summary>Three quick taps on the level label.</summary>
-        public event Action DevToolsRequested;
 #if UNITY_EDITOR
         /// <summary>Editor-only cheats: N next level, B previous level, W win, L lose.</summary>
         public event Action<int> SkipLevelPressed;
@@ -160,7 +155,6 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             _undo.onClick.AddListener(OnUndoClicked);
             _settings.onClick.AddListener(OnSettingsClicked);
             _restart.onClick.AddListener(OnRestartClicked);
-            if (_devToolsTrigger != null) _devToolsTrigger.onClick.AddListener(OnDevToolsTapped);
             _nextButton.onClick.AddListener(OnNextClicked);
             _winClose.onClick.AddListener(OnNextClicked);
             _tryAgain.onClick.AddListener(OnRestartClicked);
@@ -177,7 +171,6 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             _undo.onClick.RemoveListener(OnUndoClicked);
             _settings.onClick.RemoveListener(OnSettingsClicked);
             _restart.onClick.RemoveListener(OnRestartClicked);
-            if (_devToolsTrigger != null) _devToolsTrigger.onClick.RemoveListener(OnDevToolsTapped);
             _nextButton.onClick.RemoveListener(OnNextClicked);
             _winClose.onClick.RemoveListener(OnNextClicked);
             _tryAgain.onClick.RemoveListener(OnRestartClicked);
@@ -200,17 +193,6 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         {
             if (!paused || !isActiveAndEnabled || !_hasBoard || _snapshot == null || _snapshot.Status != PuzzleStatus.Playing) return;
             SettingsClicked?.Invoke();
-        }
-        private int _devToolsTaps;
-        private float _devToolsFirstTap;
-        // Raw input: three taps close together are one request.
-        private void OnDevToolsTapped()
-        {
-            float now = Time.unscaledTime;
-            if (_devToolsTaps == 0 || now - _devToolsFirstTap > _devToolsTapWindow) { _devToolsTaps = 0; _devToolsFirstTap = now; }
-            if (++_devToolsTaps < 3) return;
-            _devToolsTaps = 0;
-            DevToolsRequested?.Invoke();
         }
         private void OnRestartClicked() { HidePanels(); StopPresentation(); RestartClicked?.Invoke(); }
         // With no level after this one, Continue plays this one again.

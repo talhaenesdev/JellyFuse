@@ -46,9 +46,6 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
         [SerializeField] private TMP_Text _lives;
         [Tooltip("The + by the lives: opens the purchase popup on lives.")]
         [SerializeField] private Button _livesPlusButton;
-        [Tooltip("Tapped three times within Dev Tools Tap Window seconds, it opens the developer panel.")]
-        [SerializeField] private Button _devToolsTrigger;
-        [SerializeField, Min(.1f)] private float _devToolsTapWindow = 1f;
         [Header("Profile")]
         [SerializeField] private Button _profileButton;
         [SerializeField] private ProfileAvatar _profileAvatar;
@@ -73,8 +70,6 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
         public Action<int> NavTabClicked;
         public Action ProfileIconClicked;
         public Action LivesPlusClicked;
-        /// <summary>Three quick taps on the coin icon.</summary>
-        public Action DevToolsRequested;
 
         private const float LAYOUT_WIDTH = 760, MIN_HEIGHT = 1000;
         private Func<string, string> _localize;
@@ -97,7 +92,6 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
             _homeButton.onClick.AddListener(OnHomeClicked);
             _profileButton.onClick.AddListener(OnProfileIconClicked);
             if (_livesPlusButton != null) _livesPlusButton.onClick.AddListener(OnLivesPlusClicked);
-            if (_devToolsTrigger != null) _devToolsTrigger.onClick.AddListener(OnDevToolsTapped);
             for (int i = 0; i < _tabActions.Count; i++) _navTabs[i].onClick.AddListener(_tabActions[i]);
         }
 
@@ -109,7 +103,6 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
             _homeButton.onClick.RemoveListener(OnHomeClicked);
             _profileButton.onClick.RemoveListener(OnProfileIconClicked);
             if (_livesPlusButton != null) _livesPlusButton.onClick.RemoveListener(OnLivesPlusClicked);
-            if (_devToolsTrigger != null) _devToolsTrigger.onClick.RemoveListener(OnDevToolsTapped);
             for (int i = 0; i < _tabActions.Count; i++) _navTabs[i].onClick.RemoveListener(_tabActions[i]);
             KillNavigationTweens();
         }
@@ -119,17 +112,6 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
         private void OnHomeClicked() => HomeClicked?.Invoke();
         private void OnProfileIconClicked() => ProfileIconClicked?.Invoke();
         private void OnLivesPlusClicked() => LivesPlusClicked?.Invoke();
-        private int _devToolsTaps;
-        private float _devToolsFirstTap;
-        // Raw input: three taps close together are one request.
-        private void OnDevToolsTapped()
-        {
-            float now = Time.unscaledTime;
-            if (_devToolsTaps == 0 || now - _devToolsFirstTap > _devToolsTapWindow) { _devToolsTaps = 0; _devToolsFirstTap = now; }
-            if (++_devToolsTaps < 3) return;
-            _devToolsTaps = 0;
-            DevToolsRequested?.Invoke();
-        }
 
         public override void BeforeScreenActivation()
         {

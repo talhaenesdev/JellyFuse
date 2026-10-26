@@ -665,7 +665,8 @@ namespace Modules.GameplayModule.Models
             FinishDrag();
             _candidates.Clear();
             foreach (var piece in _pieces)
-                if (piece.Colour == stage.Colour && piece.Cells.Count <= stage.Cells.Count && !IsFrozen(piece.Id)) _candidates.Add(piece);
+                // Only a jelly that could be part of what the door waits for, unturned: a standing 3 never passes for a lying one.
+                if (piece.Colour == stage.Colour && FitsInside(piece.Cells, stage.Cells) && !IsFrozen(piece.Id)) _candidates.Add(piece);
             // Tried in this order, so the first set found is made of the biggest (or smallest) pieces.
             _candidates.Sort((a, b) => biggestFirst ? b.Cells.Count.CompareTo(a.Cells.Count) : a.Cells.Count.CompareTo(b.Cells.Count));
             _picked.Clear(); _best.Clear(); _bestCells = 0;

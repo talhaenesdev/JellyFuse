@@ -8,8 +8,7 @@ dev tools, debug panel, developer toggles, feature flags, IDevToolsService, CD_D
 
 ## Store builds
 `CD_DevTools.PanelEnabled` is the switch for a store build, and it is **off** for the Play Store
-release. While it is off, the three taps that ask for the panel (main menu coin icon, gameplay level
-label) open nothing, `Set` refuses, and every switch reads its `DefaultOn`, whatever this device
+release. While it is off, `Set` refuses, and every switch reads its `DefaultOn`, whatever this device
 saved. A switch left on while testing - the FPS readout, the uncapped frame rate - never reaches a
 player. Tick it again to test on a device.
 
@@ -17,8 +16,8 @@ player. Tick it again to test on a device.
 A store build still opens the panel on a developer's phone: tap the four screen corners in order -
 top-left, top-right, bottom-right, bottom-left - within `CornerSequenceSeconds`, and type the PIN.
 The device then stays unlocked (`DevTools.Unlocked` in PlayerPrefs) until the app's data is cleared,
-and behaves as if `PanelEnabled` were ticked: the usual taps open the panel and the switches read
-what this device saved. Only `CD_DevTools.PinHash` (SHA-256, salted with the game) is in the build;
+and behaves as if `PanelEnabled` were ticked: the switches read what this device saved. The corner
+gesture is the only way in - the old triple taps on the coin icon and level label were removed. Only `CD_DevTools.PinHash` (SHA-256, salted with the game) is in the build;
 a new PIN is typed into the asset's *Set Pin* field and turned into the hash on save. The gesture is
 read from the pointer by `DetectSecretCornerCommand` on a frame tick, so no screen knows about it,
 and taps on buttons in the corners count too.

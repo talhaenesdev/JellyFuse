@@ -28,6 +28,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             // The tile behind the button: a sibling laid under it, so the button's own image stays the icon.
             public Image Slot;
             public TMP_Text Badge;
+            // Beside the price only: says the number is coins, not uses left.
+            public Image PriceCoin;
             public UnityEngine.Events.UnityAction Clicked;
             public BoosterStateRVO State;
         }
@@ -72,12 +74,27 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                 }
                 var badge = new GameObject("Txt_BoosterBadge", typeof(RectTransform)).AddComponent<TextMeshProUGUI>();
                 badge.rectTransform.SetParent(button.transform, false);
-                badge.rectTransform.anchorMin = new Vector2(.5f, 0); badge.rectTransform.anchorMax = new Vector2(1, .4f);
-                badge.rectTransform.offsetMin = badge.rectTransform.offsetMax = Vector2.zero;
-                badge.font = _time.font; badge.fontSize = 34; badge.alignment = TextAlignmentOptions.BottomRight;
+                // The whole width of the slot, on one line: "Lv 14" no longer breaks in two.
+                badge.rectTransform.anchorMin = new Vector2(0, 0); badge.rectTransform.anchorMax = new Vector2(1, .4f);
+                badge.rectTransform.offsetMin = new Vector2(0, 2); badge.rectTransform.offsetMax = new Vector2(-6, 0);
+                badge.font = _time.font; badge.fontSize = 30; badge.alignment = TextAlignmentOptions.BottomRight;
+                badge.textWrappingMode = TextWrappingModes.NoWrap;
                 badge.fontStyle = FontStyles.Bold; badge.outlineWidth = .25f; badge.outlineColor = new Color32(40, 30, 60, 255);
                 badge.raycastTarget = false;
                 entry.Badge = badge;
+                var coinSprite = _coinIcon != null ? _coinIcon.GetComponent<Image>() : null;
+                if (coinSprite != null && coinSprite.sprite != null)
+                {
+                    var coin = new GameObject("Img_PriceCoin", typeof(RectTransform)).AddComponent<Image>();
+                    coin.rectTransform.SetParent(badge.transform, false);
+                    // Pinned to the badge's bottom-right; moved left of the digits each time the price is written.
+                    coin.rectTransform.anchorMin = coin.rectTransform.anchorMax = new Vector2(1, 0);
+                    coin.rectTransform.pivot = new Vector2(1, 0);
+                    coin.rectTransform.sizeDelta = new Vector2(30, 30);
+                    coin.sprite = coinSprite.sprite; coin.preserveAspect = true; coin.raycastTarget = false;
+                    coin.gameObject.SetActive(false);
+                    entry.PriceCoin = coin;
+                }
                 int index = _boosterButtons.Count;
                 entry.Clicked = () => OnBoosterClicked(index);
                 _boosterButtons.Add(entry);
@@ -103,7 +120,14 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                 if (entry.State == null) continue;
                 if (entry.State.Icon != null) entry.Icon.sprite = entry.State.Icon;
                 entry.Badge.text = !entry.State.Unlocked ? LF("gameplay.booster_locked", "Lv {0}", entry.State.UnlockLevel)
-                    : entry.State.Count > 0 ? entry.State.Count.ToString() : entry.State.Price.ToString();
+                    // An amount owned reads "x3"; a price is gold, so the two are never confused.
+                    : entry.State.Count > 0 ? "x" + entry.State.Count : "<color=#FFD23F>" + entry.State.Price + "</color>";
+                bool priced = entry.State.Unlocked && entry.State.Count <= 0;
+                if (entry.PriceCoin != null)
+                {
+                    entry.PriceCoin.gameObject.SetActive(priced);
+                    if (priced) entry.PriceCoin.rectTransform.anchoredPosition = new Vector2(-entry.Badge.GetPreferredValues(entry.Badge.text).x - 2, 4);
+                }
             }
             if (_boosterArmed && !ArmedStillUsable()) Disarm();
             if (_lesson && !LessonButton(out _)) EndBoosterLesson();

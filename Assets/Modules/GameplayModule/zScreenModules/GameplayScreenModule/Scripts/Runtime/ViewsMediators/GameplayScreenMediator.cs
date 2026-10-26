@@ -38,7 +38,6 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             _view.QuitClicked += OnQuitClicked;
             _view.JellyMelting += OnJellyMelting;
             _view.BoosterChosen += OnBoosterChosen;
-            _view.DevToolsRequested += OnDevToolsRequested;
             _signals.Incoming.SendTuningSliders.AddListener(OnSendTuningSliders);
             _signals.Incoming.SetTuned.AddListener(_view.SetTuned);
             _signals.Incoming.ResetTuning.AddListener(OnResetTuning);
@@ -77,7 +76,6 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             _view.QuitClicked -= OnQuitClicked;
             _view.JellyMelting -= OnJellyMelting;
             _view.BoosterChosen -= OnBoosterChosen;
-            _view.DevToolsRequested -= OnDevToolsRequested;
             _signals.Incoming.SendTuningSliders.RemoveListener(OnSendTuningSliders);
             _signals.Incoming.SetTuned.RemoveListener(_view.SetTuned);
             _signals.Incoming.ResetTuning.RemoveListener(OnResetTuning);
@@ -129,10 +127,6 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
 #endif
         // Not guarded: the lives are brought up to date whatever state the screen is in.
         private void OnLivesRefreshRequested() => _signals.Outgoing.LivesRefreshRequested.Dispatch();
-        private void OnDevToolsRequested()
-        {
-            if (_view.Data.HasState(ScreenState.AvailableToSendSignal)) _signals.Outgoing.DevToolsRequested.Dispatch();
-        }
         // Not guarded: the developer panel sits over the screen while it asks.
         // The page shows the defaults straight away.
         private void OnResetTuning(string page)
