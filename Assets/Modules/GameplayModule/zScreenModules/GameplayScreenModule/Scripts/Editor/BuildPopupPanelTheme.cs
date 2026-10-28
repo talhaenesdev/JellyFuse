@@ -13,16 +13,19 @@ namespace Modules.GameplayModule.GameplayScreenModule.Editor
 {
     internal static class BuildPopupPanelTheme
     {
-        private const string SESSION_KEY = "WobbleFuse.PopupPanelThemeBuilt.v7";
+        private const string SESSION_KEY = "WobbleFuse.PopupPanelThemeBuilt.v8";
         private const string ART = "Assets/Art/Generated/UI/PopupPanels/";
         private const string ATLAS = "Assets/Art/Atlases/Atlas_UI_Common.spriteatlasv2";
         private const string GAMEPLAY_PREFAB = "Assets/Modules/GameplayModule/zScreenModules/GameplayScreenModule/Prefabs/GameplayScreen.prefab";
         private const string PAUSE_PREFAB = "Assets/Modules/GameplayModule/zScreenModules/PauseScreenModule/Prefabs/PauseScreen.prefab";
         private const string SETTINGS_PREFAB = "Assets/Modules/GameplayModule/zScreenModules/SettingsScreenModule/Prefabs/SettingsScreen.prefab";
         private const string PROFILE_PREFAB = "Assets/Modules/ProfileModule/zScreenModules/ProfileSelectionScreenModule/Prefabs/ProfileSelectionScreen.prefab";
+        private const string PURCHASE_PREFAB = "Assets/Modules/PurchaseModule/zScreenModules/PurchaseScreenModule/Prefabs/PurchaseScreen.prefab";
         private const string CLOSE_PREFAB = "Assets/Modules/UiWidgetsModule/Prefabs/Btn_Close.prefab";
         private const string INFO_ASSET = "Assets/Modules/GameplayModule/zScreenModules/GameplayScreenModule/Scriptables/CD_InfoPopups.asset";
 
+        // Every popup's close button: big enough to read as the way out and to hit with a thumb.
+        private static readonly Vector2 CLOSE_SIZE = new(92, 92);
         private static readonly Color32 PANEL_INK = new(0x4A, 0x13, 0x9E, 0xFF);
         private static readonly Color32 PANEL_GOLD = new(0xFF, 0xD2, 0x3F, 0xFF);
 
@@ -67,6 +70,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.Editor
             Sprite settings = Sprite("SPR_UI_Panel_Settings.png");
             Sprite retry = Sprite("SPR_UI_Panel_Retry.png");
             Sprite profile = Sprite("SPR_UI_Panel_Profile.png");
+            Sprite moreLives = Sprite("SPR_UI_Panel_MoreLives.png");
             Sprite close = Sprite("SPR_UI_Button_ClosePopup.png");
 
             AssignInfoPageSprites(rocket, freeze, ufo);
@@ -75,12 +79,13 @@ namespace Modules.GameplayModule.GameplayScreenModule.Editor
             BuildResultPanels(win, lose, retry);
             BuildSettingsPanel(settings);
             BuildProfilePanel(profile);
+            BuildMoreLivesPanel(moreLives);
             BuildSharedCloseButton(close);
             foreach ((string path, string[] fields) in CloseConsumers) AssignCloseButtons(path, fields, close);
             AssignEveryCloseButton(close);
 
             AssetDatabase.SaveAssets();
-            Debug.Log("Popup panel theme rebuilt: boosters, pause, win, lose, retry, settings, profile and shared buttons.");
+            Debug.Log("Popup panel theme rebuilt: boosters, pause, win, lose, retry, settings, profile, more lives and shared buttons.");
         }
 
         private static void AssignInfoPageSprites(Sprite rocket, Sprite freeze, Sprite ufo)
@@ -173,7 +178,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.Editor
                 image.sprite = close;
                 image.type = Image.Type.Simple;
                 image.preserveAspect = true;
-                ((RectTransform)root.transform).sizeDelta = new Vector2(76, 76);
+                ((RectTransform)root.transform).sizeDelta = CLOSE_SIZE;
                 PrefabUtility.SaveAsPrefabAsset(root, CLOSE_PREFAB);
             }
             finally { PrefabUtility.UnloadPrefabContents(root); }
@@ -199,6 +204,38 @@ namespace Modules.GameplayModule.GameplayScreenModule.Editor
                 TMP_Text title = FindRecursive(dialog, "TMP_title")?.GetComponent<TMP_Text>();
                 if (title != null) InkTitle(title);
                 PrefabUtility.SaveAsPrefabAsset(root, PROFILE_PREFAB);
+            }
+            finally { PrefabUtility.UnloadPrefabContents(root); }
+        }
+
+        private static void BuildMoreLivesPanel(Sprite moreLives)
+        {
+            GameObject root = PrefabUtility.LoadPrefabContents(PURCHASE_PREFAB);
+            try
+            {
+                MonoBehaviour view = FindBehaviourWithProperty(root, "_content");
+                if (view == null) throw new MissingReferenceException("PurchaseScreenView was not found.");
+                SerializedObject serialized = new(view);
+                RectTransform content = serialized.FindProperty("_content").objectReferenceValue as RectTransform;
+                if (content == null) throw new MissingReferenceException("Purchase content panel was not found.");
+                // The card is the popup inside the content, which carries the fitter and the animation; the
+                // art goes there so it grows, fits and animates with it.
+                Transform stale = content.Find("Img_MoreLivesPanelTheme");
+                if (stale != null) Object.DestroyImmediate(stale.gameObject);
+                Transform card = content.Find("Pnl_PopupPurchase");
+                if (card == null) throw new MissingReferenceException("Pnl_PopupPurchase was not found.");
+                ThemeCard(card, "Img_MoreLivesPanelTheme", moreLives, new Vector2(-104, -134), new Vector2(104, 226));
+                // The screen already scales the content to its share of the screen, so the card's own fitter
+                // keeps no margin of its own: the art fills the content and the content keeps the margin.
+                foreach (MonoBehaviour behaviour in card.GetComponents<MonoBehaviour>())
+                {
+                    if (behaviour == null || behaviour.GetType().Name != "PopupFitter") continue;
+                    SerializedObject fitter = new(behaviour);
+                    fitter.FindProperty("_horizontalMargin").floatValue = 0;
+                    fitter.FindProperty("_maxHeightShare").floatValue = 1;
+                    fitter.ApplyModifiedPropertiesWithoutUndo();
+                }
+                PrefabUtility.SaveAsPrefabAsset(root, PURCHASE_PREFAB);
             }
             finally { PrefabUtility.UnloadPrefabContents(root); }
         }
@@ -336,28 +373,34 @@ namespace Modules.GameplayModule.GameplayScreenModule.Editor
             foreach (string path in paths)
             {
                 GameObject asset = AssetDatabase.LoadAssetAtPath<GameObject>(path);
-                if (asset == null || !HasOldClose(asset, close)) continue;
+                if (asset == null || !HasCloseToFix(asset, close)) continue;
                 GameObject root = PrefabUtility.LoadPrefabContents(path);
                 try
                 {
                     foreach (Button button in root.GetComponentsInChildren<Button>(true))
-                        if (IsOldClose(button, close)) AssignButtonSprite(button, close);
+                    {
+                        if (!IsClose(button, close)) continue;
+                        AssignButtonSprite(button, close);
+                        ((RectTransform)button.transform).sizeDelta = CLOSE_SIZE;
+                    }
                     PrefabUtility.SaveAsPrefabAsset(root, path);
                 }
                 finally { PrefabUtility.UnloadPrefabContents(root); }
             }
         }
 
-        private static bool HasOldClose(GameObject root, Sprite close)
+        private static bool HasCloseToFix(GameObject root, Sprite close)
         {
             foreach (Button button in root.GetComponentsInChildren<Button>(true))
-                if (IsOldClose(button, close)) return true;
+                if (IsClose(button, close) && (((Image)button.targetGraphic).sprite != close || ((RectTransform)button.transform).sizeDelta != CLOSE_SIZE))
+                    return true;
             return false;
         }
 
-        private static bool IsOldClose(Button button, Sprite close)
+        private static bool IsClose(Button button, Sprite close)
         {
-            if (button.targetGraphic is not Image image || image.sprite == close) return false;
+            if (button.targetGraphic is not Image image) return false;
+            if (image.sprite == close) return true;
             string sprite = image.sprite != null ? image.sprite.name.ToLowerInvariant() : "";
             return button.name.ToLowerInvariant().Contains("close") || sprite.Contains("cross");
         }
