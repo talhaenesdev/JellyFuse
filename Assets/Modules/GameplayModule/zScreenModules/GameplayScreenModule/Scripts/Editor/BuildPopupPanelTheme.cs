@@ -13,11 +13,12 @@ namespace Modules.GameplayModule.GameplayScreenModule.Editor
 {
     internal static class BuildPopupPanelTheme
     {
-        private const string SESSION_KEY = "WobbleFuse.PopupPanelThemeBuilt.v3";
+        private const string SESSION_KEY = "WobbleFuse.PopupPanelThemeBuilt.v5";
         private const string ART = "Assets/Art/Generated/UI/PopupPanels/";
         private const string ATLAS = "Assets/Art/Atlases/Atlas_UI_Common.spriteatlasv2";
         private const string GAMEPLAY_PREFAB = "Assets/Modules/GameplayModule/zScreenModules/GameplayScreenModule/Prefabs/GameplayScreen.prefab";
         private const string PAUSE_PREFAB = "Assets/Modules/GameplayModule/zScreenModules/PauseScreenModule/Prefabs/PauseScreen.prefab";
+        private const string SETTINGS_PREFAB = "Assets/Modules/GameplayModule/zScreenModules/SettingsScreenModule/Prefabs/SettingsScreen.prefab";
         private const string CLOSE_PREFAB = "Assets/Modules/UiWidgetsModule/Prefabs/Btn_Close.prefab";
         private const string INFO_ASSET = "Assets/Modules/GameplayModule/zScreenModules/GameplayScreenModule/Scriptables/CD_InfoPopups.asset";
 
@@ -60,16 +61,21 @@ namespace Modules.GameplayModule.GameplayScreenModule.Editor
             Sprite pause = Sprite("SPR_UI_Panel_Pause.png");
             Sprite pauseResume = Sprite("SPR_UI_Button_PauseResume.png");
             Sprite pauseQuit = Sprite("SPR_UI_Button_PauseQuit.png");
+            Sprite win = Sprite("SPR_UI_Panel_Win.png");
+            Sprite lose = Sprite("SPR_UI_Panel_Lose.png");
+            Sprite settings = Sprite("SPR_UI_Panel_Settings.png");
             Sprite close = Sprite("SPR_UI_Button_ClosePopup.png");
 
             AssignInfoPageSprites(rocket, freeze, ufo);
             BuildGameplayInfoPanel();
             BuildPausePanel(pause, pauseResume, pauseQuit);
+            BuildResultPanels(win, lose);
+            BuildSettingsPanel(settings);
             BuildSharedCloseButton(close);
             foreach ((string path, string[] fields) in CloseConsumers) AssignCloseButtons(path, fields, close);
 
             AssetDatabase.SaveAssets();
-            Debug.Log("Popup panel theme rebuilt: booster panels, pause panel and shared close buttons.");
+            Debug.Log("Popup panel theme rebuilt: boosters, pause, win, lose, settings and shared buttons.");
         }
 
         private static void AssignInfoPageSprites(Sprite rocket, Sprite freeze, Sprite ufo)
@@ -166,6 +172,115 @@ namespace Modules.GameplayModule.GameplayScreenModule.Editor
                 PrefabUtility.SaveAsPrefabAsset(root, CLOSE_PREFAB);
             }
             finally { PrefabUtility.UnloadPrefabContents(root); }
+        }
+
+        private static void BuildResultPanels(Sprite win, Sprite lose)
+        {
+            GameObject root = PrefabUtility.LoadPrefabContents(GAMEPLAY_PREFAB);
+            try
+            {
+                GameplayScreenView view = root.GetComponent<GameplayScreenView>();
+                SerializedObject serialized = new(view);
+                RectTransform winPanel = serialized.FindProperty("_winPanel").objectReferenceValue as RectTransform;
+                RectTransform losePanel = serialized.FindProperty("_losePanel").objectReferenceValue as RectTransform;
+                if (winPanel == null || losePanel == null) throw new MissingReferenceException("Win or lose panel was not found.");
+                // The art's frame and crest sit outside the card, so the card's content lands on its light inside.
+                ThemeCard(winPanel, "Img_WinPanelTheme", win, new Vector2(-104, -134), new Vector2(104, 226));
+                ThemeCard(losePanel, "Img_LosePanelTheme", lose, new Vector2(-104, -134), new Vector2(104, 226));
+                PrefabUtility.SaveAsPrefabAsset(root, GAMEPLAY_PREFAB);
+            }
+            finally { PrefabUtility.UnloadPrefabContents(root); }
+        }
+
+        private static void BuildSettingsPanel(Sprite settings)
+        {
+            GameObject root = PrefabUtility.LoadPrefabContents(SETTINGS_PREFAB);
+            try
+            {
+                Transform panel = FindRecursive(root.transform, "Img_SettingsBox");
+                if (panel == null) throw new MissingReferenceException("Img_SettingsBox was not found.");
+                // One piece of art behind the title bar and the box together: the gear crest above the title.
+                // The bar keeps to the dialog's top while the box keeps to its middle, so the gap between them
+                // is the phone's. The title and close move onto the box, above its rows, and the art frames the
+                // box alone: its crest above the title, its light inside behind title and rows.
+                Transform old = panel.parent.Find("Img_SettingsPanelTheme");
+                if (old != null) Object.DestroyImmediate(old.gameObject);
+                ThemeCard(panel, "Img_SettingsPanelTheme", settings, new Vector2(-56, -130), new Vector2(56, 287));
+                Transform bar = FindRecursive(root.transform, "Top_Bar");
+                if (bar != null)
+                {
+                    Transform barImage = bar.Find("Img_Top");
+                    if (barImage != null && barImage.TryGetComponent(out Image barFill)) barFill.color = new Color(barFill.color.r, barFill.color.g, barFill.color.b, 0);
+                    MoveOntoBox(bar.Find("Txt_Title"), panel, new Vector2(.5f, 1), new Vector2(0, 58));
+                    MoveOntoBox(bar.Find("Btn_Close"), panel, new Vector2(1, 1), new Vector2(-8, 58));
+                }
+                Transform movedTitle = panel.Find("Txt_Title");
+                if (movedTitle != null && movedTitle.TryGetComponent(out TMP_Text titleText)) InkTitle(titleText);
+                PrefabUtility.SaveAsPrefabAsset(root, SETTINGS_PREFAB);
+            }
+            finally { PrefabUtility.UnloadPrefabContents(root); }
+        }
+
+        /// <summary>
+        /// Lays panel art behind a card: the card's own fill and old drawn background go, its labels turn
+        /// dark for the art's light inside, and the dark wells in it turn purple.
+        /// </summary>
+        private static Image ThemeCard(Transform card, string name, Sprite sprite, Vector2 min, Vector2 max) =>
+            ThemeCard(card, card, name, sprite, min, max);
+
+        private static Image ThemeCard(Transform card, Transform holder, string name, Sprite sprite, Vector2 min, Vector2 max)
+        {
+            Image theme = CreateThemeImage(holder, name, min, max);
+            theme.sprite = sprite;
+            Image fill = card.GetComponent<Image>();
+            if (fill != null && fill != theme) { fill.sprite = null; fill.color = new Color(1, 1, 1, 0); }
+            Transform background = card.Find("Pnl_Background");
+            if (background != null) background.gameObject.SetActive(false);
+            foreach (Transform child in card)
+            {
+                if (child == theme.transform) continue;
+                if (child.TryGetComponent(out TMP_Text text)) { if (child.name == "Txt_Title") InkTitle(text); else text.color = PANEL_INK; }
+                else if (child.GetComponent<Selectable>() == null && child.TryGetComponent(out Image well) && well.sprite != null && well.color.r < .3f && well.color.g < .3f)
+                    well.color = new Color32(0x6E, 0x22, 0xD6, 0xE6);
+            }
+            return theme;
+        }
+
+        private static void MoveOntoBox(Transform item, Transform box, Vector2 anchor, Vector2 position)
+        {
+            if (item == null) return;
+            item.SetParent(box, false);
+            RectTransform rect = (RectTransform)item;
+            rect.anchorMin = rect.anchorMax = anchor;
+            rect.pivot = new Vector2(.5f, .5f);
+            rect.anchoredPosition = position;
+        }
+
+        private static void InkTitle(TMP_Text title)
+        {
+            title.color = new Color32(0x9B, 0x3C, 0xF5, 0xFF);
+            title.outlineWidth = 0;
+        }
+
+        private static void AssignPanelSprite(Transform panel, Sprite sprite)
+        {
+            Image image = panel.GetComponent<Image>();
+            if (image == null) image = panel.gameObject.AddComponent<Image>();
+            image.sprite = sprite;
+            image.type = Image.Type.Simple;
+            image.preserveAspect = false;
+            image.color = Color.white;
+        }
+
+        private static Transform FindRecursive(Transform root, string name)
+        {
+            if (root.name == name) return root;
+            foreach (Transform child in root)
+            {
+                Transform found = FindRecursive(child, name);
+                if (found != null) return found;
+            }
+            return null;
         }
 
         private static void AssignCloseButtons(string path, IReadOnlyList<string> fields, Sprite close)
