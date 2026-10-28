@@ -13,7 +13,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.Editor
 {
     internal static class BuildPopupPanelTheme
     {
-        private const string SESSION_KEY = "WobbleFuse.PopupPanelThemeBuilt.v10";
+        private const string SESSION_KEY = "WobbleFuse.PopupPanelThemeBuilt.v12";
         private const string ART = "Assets/Art/Generated/UI/PopupPanels/";
         private const string ATLAS = "Assets/Art/Atlases/Atlas_UI_Common.spriteatlasv2";
         private const string GAMEPLAY_PREFAB = "Assets/Modules/GameplayModule/zScreenModules/GameplayScreenModule/Prefabs/GameplayScreen.prefab";
@@ -262,7 +262,6 @@ namespace Modules.GameplayModule.GameplayScreenModule.Editor
                 art.anchorMin = art.anchorMax = art.pivot = new Vector2(.5f, .5f);
                 art.sizeDelta = new Vector2(740, 1140);
                 art.anchoredPosition = new Vector2(0, 70);
-                // The bag on the crest names the page, so the title bar would only cover the awning.
                 Transform title = page.Find("Pnl_Title");
                 if (title != null) title.gameObject.SetActive(false);
                 // The offer and the four products, 650 by 895 between them, go in one box scaled into the light inside.
@@ -288,11 +287,32 @@ namespace Modules.GameplayModule.GameplayScreenModule.Editor
                 }
                 ((RectTransform)items).anchoredPosition = new Vector2(0, -32);
                 items.localScale = Vector3.one * .8f;
-                // The shop and events tabs were switched off while they had no page to show.
-                foreach (string tabName in new[] { "Btn_Nav_Shop", "Btn_Nav_Events" })
+                // The shop tab opens the shop; events stay closed until they have a flow of their own.
+                foreach ((string tabName, bool open) in new[] { ("Btn_Nav_Shop", true), ("Btn_Nav_Events", false) })
                 {
                     Transform tab = FindRecursive(root.transform, tabName);
-                    if (tab != null && tab.TryGetComponent(out Button navTab)) navTab.interactable = true;
+                    if (tab != null && tab.TryGetComponent(out Button navTab)) navTab.interactable = open;
+                }
+                // Nothing is sold yet: every price reads Coming soon and every price panel, the offer's too,
+                // shows dimmed. The page is fitted between the top bar and the nav bar by the view.
+                MonoBehaviour mainView = FindBehaviourWithProperty(root, "_shopPriceLabels");
+                if (mainView != null)
+                {
+                    var prices = new List<TMP_Text>();
+                    var panels = new List<Graphic>();
+                    foreach (TMP_Text text in items.GetComponentsInChildren<TMP_Text>(true))
+                    {
+                        if (text.name != "Txt_Price") continue;
+                        prices.Add(text);
+                        if (text.transform.parent.TryGetComponent(out Image panel)) panels.Add(panel);
+                    }
+                    SerializedObject viewObject = new(mainView);
+                    SetArray(viewObject.FindProperty("_shopPriceLabels"), prices);
+                    SetArray(viewObject.FindProperty("_shopBuyPanels"), panels);
+                    viewObject.FindProperty("_shopFrame").objectReferenceValue = art;
+                    viewObject.FindProperty("_topBar").objectReferenceValue = FindRecursive(root.transform, "Top_Panel");
+                    viewObject.FindProperty("_navBar").objectReferenceValue = FindRecursive(root.transform, "Pnl_NavBar");
+                    viewObject.ApplyModifiedPropertiesWithoutUndo();
                 }
                 PrefabUtility.SaveAsPrefabAsset(root, MAIN_PREFAB);
             }
@@ -320,6 +340,22 @@ namespace Modules.GameplayModule.GameplayScreenModule.Editor
                 // The crest stands 156 above the list, so the list starts lower and the crest clears the subtitle.
                 RectTransform listRect = (RectTransform)list;
                 listRect.anchorMax = new Vector2(listRect.anchorMax.x, .74f);
+
+                Transform header = FindRecursive(root.transform, "Pnl_Header");
+                if (header != null)
+                {
+                    if (header.TryGetComponent(out Image plate))
+                        plate.color = new Color(1, 1, 1, 0);
+                    Transform title = FindRecursive(header, "Txt_Title");
+                    if (title != null) title.gameObject.SetActive(false);
+                    RectTransform headerRect = (RectTransform)header;
+                    headerRect.anchorMin = new Vector2(.05f, .86f);
+                    headerRect.anchorMax = new Vector2(.95f, .97f);
+                    headerRect.anchoredPosition = Vector2.zero;
+                    headerRect.sizeDelta = Vector2.zero;
+                }
+                Transform subtitle = FindRecursive(root.transform, "Txt_Subtitle");
+                if (subtitle != null) subtitle.gameObject.SetActive(false);
 
                 PrefabUtility.SaveAsPrefabAsset(root, EVENTS_PREFAB);
             }
@@ -423,6 +459,37 @@ namespace Modules.GameplayModule.GameplayScreenModule.Editor
         {
             title.color = new Color32(0x9B, 0x3C, 0xF5, 0xFF);
             title.outlineWidth = 0;
+        }
+
+        private static void StyleTopTitle(Transform header, string caption, Vector2 position, Vector2 size)
+        {
+            RectTransform rect = (RectTransform)header;
+            rect.anchorMin = rect.anchorMax = rect.pivot = new Vector2(.5f, .5f);
+            rect.anchoredPosition = position;
+            rect.sizeDelta = size;
+
+            if (header.TryGetComponent(out Image plate))
+            {
+                plate.color = new Color32(0x83, 0x32, 0xE8, 0xFF);
+                plate.raycastTarget = false;
+            }
+
+            TMP_Text label = FindRecursive(header, "Txt_Title")?.GetComponent<TMP_Text>();
+            if (label == null) label = header.GetComponentInChildren<TMP_Text>(true);
+            if (label == null) return;
+            label.text = caption;
+            label.color = PANEL_GOLD;
+            label.fontSize = 52;
+            label.fontStyle = FontStyles.Bold;
+            label.alignment = TextAlignmentOptions.Center;
+            label.outlineColor = PANEL_INK;
+            label.outlineWidth = .2f;
+            RectTransform labelRect = (RectTransform)label.transform;
+            labelRect.anchorMin = Vector2.zero;
+            labelRect.anchorMax = Vector2.one;
+            bool hasButton = header.GetComponentInChildren<Button>(true) != null;
+            labelRect.offsetMin = new Vector2(hasButton ? 108 : 28, 8);
+            labelRect.offsetMax = new Vector2(-28, -8);
         }
 
         private static void AssignPanelSprite(Transform panel, Sprite sprite)
@@ -582,6 +649,12 @@ namespace Modules.GameplayModule.GameplayScreenModule.Editor
                 if (behaviour != null && new SerializedObject(behaviour).FindProperty(property) != null)
                     return behaviour;
             return null;
+        }
+
+        private static void SetArray<T>(SerializedProperty array, IReadOnlyList<T> values) where T : Object
+        {
+            array.arraySize = values.Count;
+            for (int i = 0; i < values.Count; i++) array.GetArrayElementAtIndex(i).objectReferenceValue = values[i];
         }
 
         /// <summary>Gives the sprite its nine-slice border, in pixels: left, bottom, right, top.</summary>

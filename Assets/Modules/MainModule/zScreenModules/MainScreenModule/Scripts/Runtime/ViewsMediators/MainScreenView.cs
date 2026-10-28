@@ -41,6 +41,14 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
         [SerializeField] private GameObject _homePage;
         [Tooltip("Shop content shown by the Shop navigation tab.")]
         [SerializeField] private GameObject _shopPage;
+        [Tooltip("The shop's price labels; nothing is sold yet, so each reads Coming soon.")]
+        [SerializeField] private TMP_Text[] _shopPriceLabels;
+        [Tooltip("The shop's framed art. The page is scaled and centred so it stays between the top bar and the nav bar.")]
+        [SerializeField] private RectTransform _shopFrame;
+        [SerializeField] private RectTransform _topBar;
+        [SerializeField] private RectTransform _navBar;
+        [Tooltip("Room kept above the nav bar and below the top bar, in the content's units.")]
+        [Min(0)] [SerializeField] private float _shopGap = 12;
         [SerializeField] private TMP_Text _coins;
         [Tooltip("The lives the player holds, as lives/max.")]
         [SerializeField] private TMP_Text _lives;
@@ -140,6 +148,8 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
         private void LateUpdate()
         {
             if (!_built || _content == null) return;
+            // The top and nav bars are placed by the layout asset after this view fits, so the shop follows them here.
+            FitShopPage();
             if (((RectTransform)transform).rect.size == _fittedSize && _content.sizeDelta == _fittedContent) return;
             FitLayout();
             PickTab(_selectedTab, false);
@@ -152,6 +162,8 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
             if (_playLabel != null) _playEnglish = _playLabel.text;
             UpdatePlayLabel();
             Keyed(_homeLabel, "main.home");
+            if (_shopPriceLabels != null)
+                foreach (TMP_Text price in _shopPriceLabels) Keyed(price, "main.shop.soon", "Coming soon");
             for (int i = 0; i < _navTabs.Length; i++)
             {
                 int index = i;
@@ -226,9 +238,10 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
             SetButtonColor(_livesPlusButton, _theme.UtilityButton);
             if (_playLabel != null) _playLabel.color = _theme.ButtonText;
             if (_homeLabel != null) _homeLabel.color = _theme.ButtonText;
+            // Nothing is sold yet: the buy panels show their colour dimmed, so they read as not yet open.
             if (_shopBuyPanels != null)
                 foreach (Graphic panel in _shopBuyPanels)
-                    if (panel != null) panel.color = _theme.ShopBuyButton;
+                    if (panel != null) panel.color = Color.Lerp(_theme.ShopBuyButton, Color.gray, .55f);
             if (_navSelector != null)
             {
                 Image selector = _navSelector.GetComponent<Image>();
@@ -304,6 +317,38 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
             if (_layout != null) _layout.SetDirty();
         }
 
+        /// <summary>
+        /// Scales the shop page so its frame fits between the top bar's bottom and the nav bar's top, and
+        /// centres the frame in that space. Never grows it past its authored size.
+        /// </summary>
+        private void FitShopPage()
+        {
+            if (_shopPage == null || !_shopPage.activeSelf || _shopFrame == null || _topBar == null || _navBar == null) return;
+            var page = (RectTransform)_shopPage.transform;
+            var parent = page.parent as RectTransform;
+            if (parent == null) return;
+            float top = Edge(_topBar, parent, false) - _shopGap;
+            float bottom = Edge(_navBar, parent, true) + _shopGap;
+            if (top <= bottom) return;
+            // The frame as authored in the page, unscaled: its height, width and centre.
+            Rect frame = _shopFrame.rect;
+            Vector2 frameCentre = (Vector2)_shopFrame.localPosition + frame.center;
+            float scale = Mathf.Min(1f, (top - bottom) / frame.height, parent.rect.width / frame.width);
+            page.localScale = Vector3.one * scale;
+            float centre = (top + bottom) * .5f;
+            float pageCentre = parent.rect.center.y;
+            page.anchoredPosition = new Vector2(0, centre - pageCentre - frameCentre.y * scale);
+        }
+
+        // The bottom (or top) edge of a rect, in another rect's space.
+        private readonly Vector3[] _edgeCorners = new Vector3[4];
+        private float Edge(RectTransform rect, RectTransform space, bool top)
+        {
+            rect.GetWorldCorners(_edgeCorners);
+            float a = space.InverseTransformPoint(_edgeCorners[0]).y, b = space.InverseTransformPoint(_edgeCorners[1]).y;
+            return top ? Mathf.Max(a, b) : Mathf.Min(a, b);
+        }
+
         /// <summary>The function that turns a key into text in the language in use (ILocalizationService.Get). Redraws every text.</summary>
         public void SetLocalizer(Func<string, string> localize) { _localize = localize; ApplyLanguage(null); }
         /// <summary>The game's language changed.</summary>
@@ -358,11 +403,12 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
             string text = _localize?.Invoke(key);
             return string.IsNullOrEmpty(text) || text == key ? english : text;
         }
-        private void Keyed(TMP_Text label, string key)
+        private void Keyed(TMP_Text label, string key) => Keyed(label, key, label != null ? label.text : null);
+        private void Keyed(TMP_Text label, string key, string english)
         {
             if (label == null) return;
-            _keyedTexts.Add((label, key, label.text));
-            label.text = L(key, label.text);
+            _keyedTexts.Add((label, key, english));
+            label.text = L(key, english);
         }
 
         protected override void PlayShowAnimation() => ShowCompleted?.Invoke(this);
