@@ -32,6 +32,7 @@ namespace Modules.PurchaseModule.PurchaseScreenModule.ViewsMediators
             _view.CloseClicked += OnClose;
             _view.RefreshRequested += OnRefresh;
             _signals.Incoming.ApplyOffer.AddListener(OnApplyOffer);
+            _signals.Incoming.Close.AddListener(OnClose);
         }
 
         private void OnScreenHidden(IScreenBody screen)
@@ -40,6 +41,7 @@ namespace Modules.PurchaseModule.PurchaseScreenModule.ViewsMediators
             _view.CloseClicked -= OnClose;
             _view.RefreshRequested -= OnRefresh;
             _signals.Incoming.ApplyOffer.RemoveListener(OnApplyOffer);
+            _signals.Incoming.Close.RemoveListener(OnClose);
         }
 
         // An update for another offer than the one shown is not this popup's.

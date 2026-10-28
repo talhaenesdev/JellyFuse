@@ -72,6 +72,8 @@ namespace Modules.GameplayModule.Signals
         public Signal<PurchaseOfferVO> LivesOfferOpened = new();
         /// <summary>The lives offer changed, for an open purchase popup to redraw.</summary>
         public Signal<PurchaseOfferVO> LivesOfferChanged = new();
+        /// <summary>The lives offer did its job - a life bought for a level that waited - and can close.</summary>
+        public Signal LivesOfferFinished = new();
         /// <summary>What the level's tutorial shows now; JellyTutorialRVO.None when there is none, or it is over.</summary>
         public Signal<JellyTutorialRVO> TutorialChanged = new();
         /// <summary>Something new the player should be told about - a booster that just opened: its info page's key.</summary>

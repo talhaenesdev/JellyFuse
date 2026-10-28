@@ -16,6 +16,8 @@ namespace Modules.PurchaseModule.PurchaseScreenModule.Signals
         public Signal<PurchaseOfferVO> Open = new();
         /// <summary>The offer changed - bought, refilled: the popup redraws it while it shows that offer.</summary>
         public Signal<PurchaseOfferVO> ApplyOffer = new();
+        /// <summary>Closes the popup, as its close button does.</summary>
+        public Signal Close = new();
     }
 
     public class PurchaseScreenSignalsOutgoing

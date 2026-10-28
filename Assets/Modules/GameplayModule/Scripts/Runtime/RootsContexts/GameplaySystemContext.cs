@@ -5,6 +5,7 @@ using Modules.HapticModule.Services;
 using Modules.GameplayModule.Signals;
 using FlowIoC.BaseModule.Contexts;
 using Modules.GameplayModule.Controllers;
+using Modules.GameplayModule.Enums;
 using Modules.GameplayModule.Models;
 using Modules.LocalSaveModule.Services;
 
@@ -45,7 +46,7 @@ namespace Modules.GameplayModule.RootsContexts
             base.CommandBindings();
             CommandBinder.Bind(_signals.Incoming.Start)
                 .ToSequence<RefreshLivesCommand>()
-                .ToSequence<RequireLifeCommand>()
+                .ToSequence<RequireLifeCommand>(WaitingLevelStart.Replay)
                 .ToSequence<StartPuzzleCommand>()
                 .ToSequence<StartTutorialCommand>()
                 .ToSequence<IAudioService.Commands.PlayMusic>(MusicTrack.Gameplay)
@@ -72,6 +73,7 @@ namespace Modules.GameplayModule.RootsContexts
             CommandBinder.Bind(_signals.Incoming.Stop).ToSequence<StopPuzzleClockCommand>();
             // The gameplay screen closed: back to the menu. A level still being played costs a life.
             CommandBinder.Bind(_signals.Incoming.Quit)
+                .ToSequence<ForgetWaitingLevelCommand>()
                 .ToSequence<LoseLifeOnQuitCommand>()
                 .ToSequence<StopPuzzleClockCommand>()
                 .ToSequence<LeaveLevelCommand>()
@@ -83,7 +85,7 @@ namespace Modules.GameplayModule.RootsContexts
                 .ToSequence<StartPuzzleClockCommand>();
             CommandBinder.Bind(_signals.Incoming.NextLevel)
                 .ToSequence<RefreshLivesCommand>()
-                .ToSequence<RequireLifeCommand>()
+                .ToSequence<RequireLifeCommand>(WaitingLevelStart.Next)
                 .ToSequence<NextPuzzleLevelCommand>()
                 .ToSequence<StartPuzzleCommand>()
                 .ToSequence<StartTutorialCommand>()
@@ -165,7 +167,9 @@ namespace Modules.GameplayModule.RootsContexts
                 .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
                 .ToSequence<AnnounceLivesCommand>()
                 .ToSequence<ScheduleNotificationsCommand>()
-                .ToSequence<AnnounceLivesOfferCommand>();
+                .ToSequence<AnnounceLivesOfferCommand>()
+                // Bought for a level that waited for a life: that level starts.
+                .ToSequence<StartWaitingLevelCommand>();
             CommandBinder.Bind(_signals.Incoming.ResetLives)
                 .ToSequence<ResetLivesCommand>()
                 .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)

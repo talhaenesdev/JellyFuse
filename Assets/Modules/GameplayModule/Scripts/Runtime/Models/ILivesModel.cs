@@ -18,5 +18,7 @@ namespace Modules.GameplayModule.Models
         /// <summary>Back to full, as after a whole wait.</summary>
         void Fill(SD_JellyProgress progress, CD_Lives config);
         LivesStateRVO State(SD_JellyProgress progress, CD_Lives config, long now);
+        /// <summary>The level start held back for want of a life, run once one is bought; None when nothing waits.</summary>
+        Enums.WaitingLevelStart WaitingStart { get; set; }
     }
 }

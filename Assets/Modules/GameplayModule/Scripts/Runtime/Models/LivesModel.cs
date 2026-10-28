@@ -6,6 +6,8 @@ namespace Modules.GameplayModule.Models
 {
     public sealed class LivesModel : ILivesModel
     {
+        public Enums.WaitingLevelStart WaitingStart { get; set; }
+
         public void Refresh(SD_JellyProgress progress, CD_Lives config, long now)
         {
             if (!progress.LivesGranted)

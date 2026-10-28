@@ -740,10 +740,24 @@ namespace Modules.GameplayModule.GameplayScreenModule.Editor
                 importer.spriteImportMode = SpriteImportMode.Single;
                 importer.alphaIsTransparency = true;
                 importer.mipmapEnabled = false;
-                importer.maxTextureSize = 2048;
+                // Sized to what the screen shows, not to the art as painted: a button is drawn about
+                // 340 pixels wide, the close button about 120, a panel at most a phone's width.
+                int max = MaxSize(System.IO.Path.GetFileNameWithoutExtension(asset));
+                importer.maxTextureSize = max;
                 importer.textureCompression = TextureImporterCompression.CompressedHQ;
+                TextureImporterPlatformSettings android = importer.GetPlatformTextureSettings("Android");
+                if (android.overridden) { android.maxTextureSize = max; importer.SetPlatformTextureSettings(android); }
                 importer.SaveAndReimport();
             }
+        }
+
+        private static int MaxSize(string sprite)
+        {
+            if (sprite == "SPR_UI_Button_ClosePopup") return 256;
+            if (sprite.StartsWith("SPR_UI_Button_")) return 512;
+            // Sliced, with its border and slice scale set against the art at full size.
+            if (sprite == "SPR_UI_Panel_Profile") return 2048;
+            return 1024;
         }
 
         private static void AddToAtlas()
@@ -752,6 +766,11 @@ namespace Modules.GameplayModule.GameplayScreenModule.Editor
             Object folder = AssetDatabase.LoadAssetAtPath<Object>(ART.TrimEnd('/'));
             if (atlas == null || folder == null) throw new MissingReferenceException("Popup atlas or art folder was not found.");
             SpriteAtlasExtensions.Add(atlas, new[] { folder });
+            // Painted panel art keeps well at 6x6 blocks, at under half the size of 4x4.
+            TextureImporterPlatformSettings android = atlas.GetPlatformSettings("Android");
+            android.overridden = true;
+            android.format = TextureImporterFormat.ASTC_6x6;
+            atlas.SetPlatformSettings(android);
             EditorUtility.SetDirty(atlas);
         }
     }

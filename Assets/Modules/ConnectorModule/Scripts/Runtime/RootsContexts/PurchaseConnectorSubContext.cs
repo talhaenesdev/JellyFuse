@@ -31,6 +31,7 @@ namespace Modules.ConnectorModule.RootsContexts
             // Lives, sold by Gameplay.
             _gameplaySignals.Outgoing.LivesOfferOpened.Connect(_purchaseSignals.Incoming.Open, GROUP);
             _gameplaySignals.Outgoing.LivesOfferChanged.Connect(_purchaseSignals.Incoming.ApplyOffer, GROUP);
+            _gameplaySignals.Outgoing.LivesOfferFinished.Connect(_purchaseSignals.Incoming.Close, GROUP);
         }
 
         private void OutgoingSignals()
