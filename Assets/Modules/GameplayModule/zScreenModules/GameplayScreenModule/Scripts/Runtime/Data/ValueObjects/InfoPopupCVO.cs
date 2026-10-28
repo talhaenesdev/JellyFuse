@@ -18,6 +18,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.Data.ValueObjects
         public string Title = "New!";
         public string SubtitleKey;
         public string Subtitle;
+        [Tooltip("The separately authored panel frame shown behind this page.")]
+        public Sprite PanelSprite;
         public Sprite Image;
         [Tooltip("The picture's size on the panel, in canvas units. 0: as the panel lays it out.")]
         public Vector2 ImageSize;

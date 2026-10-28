@@ -17,6 +17,13 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         [Tooltip("The panel's root, dim and all; shown while a page is up.")]
         [SerializeField] private GameObject _infoPanel;
         [SerializeField] private TMP_Text _infoTitle, _infoSubtitle, _infoDescription, _infoButtonLabel;
+        [SerializeField] private Image _infoPanelTheme;
+        [Tooltip("The drawn card, hidden while a page brings its own panel art.")]
+        [SerializeField] private GameObject _infoPanelBackground;
+        [Tooltip("Text colours on a page's panel art, whose inside is light: title, subtitle, description.")]
+        [SerializeField] private Color _infoThemedTitle = new Color32(0x9B, 0x3C, 0xF5, 0xFF);
+        [SerializeField] private Color _infoThemedSubtitle = new Color32(0x6E, 0x22, 0xD6, 0xFF);
+        [SerializeField] private Color _infoThemedText = new Color32(0x4A, 0x13, 0x9E, 0xFF);
         [SerializeField] private Image _infoImage;
         [SerializeField] private Button _infoButton, _infoClose;
 
@@ -24,6 +31,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         // The tutorial's dark, laid behind the panel.
         private TutorialVeil _infoVeil;
         private string _infoShown;
+        // The colours as authored, for pages without panel art.
+        private Color[] _infoPlainColours;
 
         /// <summary>Shows the page with this key; one asked for while another shows comes after it.</summary>
         public void ShowInfo(string key)
@@ -41,6 +50,15 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             SetInfoText(_infoSubtitle, page.SubtitleKey, page.Subtitle);
             SetInfoText(_infoDescription, page.DescriptionKey, page.Description);
             SetInfoText(_infoButtonLabel, page.ButtonKey, page.Button);
+            if (_infoPanelTheme != null)
+            {
+                _infoPanelTheme.gameObject.SetActive(page.PanelSprite != null);
+                _infoPanelTheme.sprite = page.PanelSprite;
+                _infoPanelTheme.preserveAspect = false;
+            }
+            bool themed = _infoPanelTheme != null && page.PanelSprite != null;
+            if (_infoPanelBackground != null) _infoPanelBackground.SetActive(!themed);
+            TintInfoText(themed);
             if (_infoImage != null)
             {
                 _infoImage.gameObject.SetActive(page.Image != null);
@@ -51,6 +69,17 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             _infoPanel.SetActive(true);
             ShowInfoVeil(true);
             _infoPanel.transform.SetAsLastSibling();
+        }
+        private void TintInfoText(bool themed)
+        {
+            TMP_Text[] labels = { _infoTitle, _infoSubtitle, _infoDescription };
+            Color[] tints = { _infoThemedTitle, _infoThemedSubtitle, _infoThemedText };
+            if (_infoPlainColours == null)
+            {
+                _infoPlainColours = new Color[labels.Length];
+                for (int i = 0; i < labels.Length; i++) if (labels[i] != null) _infoPlainColours[i] = labels[i].color;
+            }
+            for (int i = 0; i < labels.Length; i++) if (labels[i] != null) labels[i].color = themed ? tints[i] : _infoPlainColours[i];
         }
         private void SetInfoText(TMP_Text label, string key, string english)
         {

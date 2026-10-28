@@ -65,12 +65,13 @@ namespace Modules.GameplayModule.GameplayScreenModule.Editor
         {
             EditorGUI.BeginChangeCheck();
             string key = EditorGUILayout.TextField(new GUIContent(T("Key"), T("What asks for this page: a booster's Info Key, or any other feature's.")), page.Key);
+            var panelSprite = (Sprite)EditorGUILayout.ObjectField(T("Panel sprite"), page.PanelSprite, typeof(Sprite), false);
             var image = (Sprite)EditorGUILayout.ObjectField(T("Image"), page.Image, typeof(Sprite), false);
             var size = EditorGUILayout.Vector2Field(new GUIContent(T("Image size"), T("The picture's size on the panel, in canvas units. 0: as the panel lays it out.")), page.ImageSize);
             bool lead = EditorGUILayout.Toggle(new GUIContent(T("Lead to booster"), T("On: once the page is closed, the player is led to use this booster - everything else is dark until it is used.")), page.LeadToBooster);
             var booster = page.Booster;
             if (lead) booster = (BoosterType)EditorGUILayout.EnumPopup(T("Booster"), page.Booster);
-            if (EditorGUI.EndChangeCheck()) Change(popups, "Info page", () => { page.Key = key; page.Image = image; page.ImageSize = size; page.LeadToBooster = lead; page.Booster = booster; });
+            if (EditorGUI.EndChangeCheck()) Change(popups, "Info page", () => { page.Key = key; page.PanelSprite = panelSprite; page.Image = image; page.ImageSize = size; page.LeadToBooster = lead; page.Booster = booster; });
 
             DrawText(popups, page, localization, "Title", "title", () => page.TitleKey, v => page.TitleKey = v, () => page.Title, v => page.Title = v, false);
             DrawText(popups, page, localization, "Subtitle", "subtitle", () => page.SubtitleKey, v => page.SubtitleKey = v, () => page.Subtitle, v => page.Subtitle = v, false);

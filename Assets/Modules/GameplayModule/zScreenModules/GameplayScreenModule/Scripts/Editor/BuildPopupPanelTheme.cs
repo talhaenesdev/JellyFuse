@@ -1,0 +1,282 @@
+#if UNITY_EDITOR
+using System.Collections.Generic;
+using Modules.GameplayModule.GameplayScreenModule.Data.UnityObjects;
+using Modules.GameplayModule.GameplayScreenModule.ViewsMediators;
+using TMPro;
+using UnityEditor;
+using UnityEditor.U2D;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.U2D;
+
+namespace Modules.GameplayModule.GameplayScreenModule.Editor
+{
+    internal static class BuildPopupPanelTheme
+    {
+        private const string SESSION_KEY = "WobbleFuse.PopupPanelThemeBuilt.v3";
+        private const string ART = "Assets/Art/Generated/UI/PopupPanels/";
+        private const string ATLAS = "Assets/Art/Atlases/Atlas_UI_Common.spriteatlasv2";
+        private const string GAMEPLAY_PREFAB = "Assets/Modules/GameplayModule/zScreenModules/GameplayScreenModule/Prefabs/GameplayScreen.prefab";
+        private const string PAUSE_PREFAB = "Assets/Modules/GameplayModule/zScreenModules/PauseScreenModule/Prefabs/PauseScreen.prefab";
+        private const string CLOSE_PREFAB = "Assets/Modules/UiWidgetsModule/Prefabs/Btn_Close.prefab";
+        private const string INFO_ASSET = "Assets/Modules/GameplayModule/zScreenModules/GameplayScreenModule/Scriptables/CD_InfoPopups.asset";
+
+        private static readonly Color32 PANEL_INK = new(0x4A, 0x13, 0x9E, 0xFF);
+        private static readonly Color32 PANEL_GOLD = new(0xFF, 0xD2, 0x3F, 0xFF);
+
+        private static readonly (string Path, string[] Fields)[] CloseConsumers =
+        {
+            (GAMEPLAY_PREFAB, new[] { "_infoClose", "_loseClose", "_retryClose" }),
+            (PAUSE_PREFAB, new[] { "_closeButton" }),
+            ("Assets/Modules/GameplayModule/zScreenModules/SettingsScreenModule/Prefabs/SettingsScreen.prefab", new[] { "_closeButton" }),
+            ("Assets/Modules/PurchaseModule/zScreenModules/PurchaseScreenModule/Prefabs/PurchaseScreen.prefab", new[] { "_closeButton" }),
+            ("Assets/Modules/ProfileModule/zScreenModules/ProfileSelectionScreenModule/Prefabs/ProfileSelectionScreen.prefab", new[] { "_closeButton" }),
+            ("Assets/Modules/DevToolsModule/zScreenModules/DevToolsScreenModule/Prefabs/DevToolsScreen.prefab", new[] { "_closeButton" }),
+        };
+
+        [InitializeOnLoadMethod]
+        private static void ScheduleBuild()
+        {
+            if (SessionState.GetBool(SESSION_KEY, false)) return;
+            EditorApplication.delayCall += BuildOnce;
+        }
+
+        private static void BuildOnce()
+        {
+            if (SessionState.GetBool(SESSION_KEY, false)) return;
+            Build();
+            SessionState.SetBool(SESSION_KEY, true);
+        }
+
+        [MenuItem("Tools/Wobble Fuse/Rebuild Popup Panel Theme")]
+        public static void Build()
+        {
+            ImportSprites();
+            AddToAtlas();
+
+            Sprite rocket = Sprite("SPR_UI_Panel_BoosterRocket.png");
+            Sprite freeze = Sprite("SPR_UI_Panel_BoosterFreezeTime.png");
+            Sprite ufo = Sprite("SPR_UI_Panel_BoosterUfo.png");
+            Sprite pause = Sprite("SPR_UI_Panel_Pause.png");
+            Sprite pauseResume = Sprite("SPR_UI_Button_PauseResume.png");
+            Sprite pauseQuit = Sprite("SPR_UI_Button_PauseQuit.png");
+            Sprite close = Sprite("SPR_UI_Button_ClosePopup.png");
+
+            AssignInfoPageSprites(rocket, freeze, ufo);
+            BuildGameplayInfoPanel();
+            BuildPausePanel(pause, pauseResume, pauseQuit);
+            BuildSharedCloseButton(close);
+            foreach ((string path, string[] fields) in CloseConsumers) AssignCloseButtons(path, fields, close);
+
+            AssetDatabase.SaveAssets();
+            Debug.Log("Popup panel theme rebuilt: booster panels, pause panel and shared close buttons.");
+        }
+
+        private static void AssignInfoPageSprites(Sprite rocket, Sprite freeze, Sprite ufo)
+        {
+            CD_InfoPopups pages = AssetDatabase.LoadAssetAtPath<CD_InfoPopups>(INFO_ASSET);
+            if (pages == null) throw new MissingReferenceException("CD_InfoPopups was not found.");
+            foreach (var page in pages.Pages)
+            {
+                if (page == null) continue;
+                page.PanelSprite = page.Key switch
+                {
+                    "booster.rocket" => rocket,
+                    "booster.freezetime" => freeze,
+                    "booster.ufo" => ufo,
+                    _ => page.PanelSprite,
+                };
+            }
+            EditorUtility.SetDirty(pages);
+        }
+
+        private static void BuildGameplayInfoPanel()
+        {
+            GameObject root = PrefabUtility.LoadPrefabContents(GAMEPLAY_PREFAB);
+            try
+            {
+                GameplayScreenView view = root.GetComponent<GameplayScreenView>();
+                SerializedObject serialized = new(view);
+                GameObject panel = serialized.FindProperty("_infoPanel").objectReferenceValue as GameObject;
+                TMP_Text title = serialized.FindProperty("_infoTitle").objectReferenceValue as TMP_Text;
+                if (panel == null || title == null) throw new MissingReferenceException("Gameplay info panel references are incomplete.");
+
+                Transform card = TopChildUnder(title.transform, panel.transform);
+                Image theme = CreateThemeImage(card, "Img_InfoPanelTheme", new Vector2(-66, -78), new Vector2(66, 200));
+                Image old = card.GetComponent<Image>();
+                if (old != null && old != theme) old.color = new Color(old.color.r, old.color.g, old.color.b, 0);
+
+                serialized.FindProperty("_infoPanelTheme").objectReferenceValue = theme;
+                Transform background = card.Find("Pnl_Background");
+                if (background != null) serialized.FindProperty("_infoPanelBackground").objectReferenceValue = background.gameObject;
+                serialized.ApplyModifiedPropertiesWithoutUndo();
+                PrefabUtility.SaveAsPrefabAsset(root, GAMEPLAY_PREFAB);
+            }
+            finally { PrefabUtility.UnloadPrefabContents(root); }
+        }
+
+        private static void BuildPausePanel(Sprite pause, Sprite resumeSprite, Sprite quitSprite)
+        {
+            GameObject root = PrefabUtility.LoadPrefabContents(PAUSE_PREFAB);
+            try
+            {
+                MonoBehaviour view = FindBehaviourWithProperty(root, "_resumeButton");
+                if (view == null) throw new MissingReferenceException("PauseScreenView was not found.");
+                SerializedObject serialized = new(view);
+                TMP_Text title = serialized.FindProperty("_title").objectReferenceValue as TMP_Text;
+                Button resume = serialized.FindProperty("_resumeButton").objectReferenceValue as Button;
+                Button quit = serialized.FindProperty("_quitButton").objectReferenceValue as Button;
+                if (title == null || resume == null || quit == null) throw new MissingReferenceException("Pause panel references are incomplete.");
+
+                Transform card = CommonAncestor(title.transform, resume.transform, quit.transform);
+                Image theme = CreateThemeImage(card, "Img_PausePanelTheme", new Vector2(-45, -50), new Vector2(45, 50));
+                theme.sprite = pause;
+
+                Image old = card.GetComponent<Image>();
+                if (old != null && old != theme) old.color = new Color(old.color.r, old.color.g, old.color.b, 0);
+                // The old drawn card sits above the art; the art is the card now.
+                Transform background = card.Find("Pnl_Background");
+                if (background != null) background.gameObject.SetActive(false);
+                // The art's inside is light, so labels on it turn dark; text inside buttons and tracks stays.
+                foreach (TMP_Text text in card.GetComponentsInChildren<TMP_Text>(true))
+                {
+                    if (text == title) { text.color = PANEL_GOLD; text.outlineColor = PANEL_INK; text.outlineWidth = .2f; continue; }
+                    if (text.GetComponentInParent<Selectable>(true) != null) continue;
+                    text.color = PANEL_INK;
+                }
+                Transform divider = card.Find("Img_Divider");
+                if (divider != null && divider.TryGetComponent(out Image line)) line.color = new Color32(0x6E, 0x22, 0xD6, 0x55);
+                AssignButtonSprite(resume, resumeSprite);
+                AssignButtonSprite(quit, quitSprite);
+                PrefabUtility.SaveAsPrefabAsset(root, PAUSE_PREFAB);
+            }
+            finally { PrefabUtility.UnloadPrefabContents(root); }
+        }
+
+        private static void BuildSharedCloseButton(Sprite close)
+        {
+            GameObject root = PrefabUtility.LoadPrefabContents(CLOSE_PREFAB);
+            try
+            {
+                Image image = root.GetComponent<Image>();
+                image.sprite = close;
+                image.type = Image.Type.Simple;
+                image.preserveAspect = true;
+                ((RectTransform)root.transform).sizeDelta = new Vector2(76, 76);
+                PrefabUtility.SaveAsPrefabAsset(root, CLOSE_PREFAB);
+            }
+            finally { PrefabUtility.UnloadPrefabContents(root); }
+        }
+
+        private static void AssignCloseButtons(string path, IReadOnlyList<string> fields, Sprite close)
+        {
+            GameObject root = PrefabUtility.LoadPrefabContents(path);
+            try
+            {
+                bool changed = false;
+                foreach (MonoBehaviour behaviour in root.GetComponentsInChildren<MonoBehaviour>(true))
+                {
+                    if (behaviour == null) continue;
+                    SerializedObject serialized = new(behaviour);
+                    foreach (string field in fields)
+                    {
+                        SerializedProperty property = serialized.FindProperty(field);
+                        if (property?.objectReferenceValue is not Button button) continue;
+                        Image image = button.targetGraphic as Image ?? button.GetComponent<Image>();
+                        if (image == null) continue;
+                        image.sprite = close;
+                        image.type = Image.Type.Simple;
+                        image.preserveAspect = true;
+                        image.color = Color.white;
+                        changed = true;
+                    }
+                }
+                if (changed) PrefabUtility.SaveAsPrefabAsset(root, path);
+            }
+            finally { PrefabUtility.UnloadPrefabContents(root); }
+        }
+
+        private static Image CreateThemeImage(Transform parent, string name, Vector2 min, Vector2 max)
+        {
+            Transform old = parent.Find(name);
+            if (old != null) Object.DestroyImmediate(old.gameObject);
+            GameObject go = new(name, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+            go.layer = LayerMask.NameToLayer("UI");
+            go.transform.SetParent(parent, false);
+            go.transform.SetAsFirstSibling();
+            RectTransform rect = (RectTransform)go.transform;
+            rect.anchorMin = Vector2.zero;
+            rect.anchorMax = Vector2.one;
+            rect.offsetMin = min;
+            rect.offsetMax = max;
+            Image image = go.GetComponent<Image>();
+            image.raycastTarget = false;
+            image.preserveAspect = false;
+            return image;
+        }
+
+        private static Transform TopChildUnder(Transform child, Transform ancestor)
+        {
+            Transform current = child;
+            while (current.parent != null && current.parent != ancestor) current = current.parent;
+            return current;
+        }
+
+        private static Transform CommonAncestor(params Transform[] transforms)
+        {
+            for (Transform candidate = transforms[0]; candidate != null; candidate = candidate.parent)
+            {
+                bool containsAll = true;
+                for (int i = 1; i < transforms.Length; i++)
+                    if (!transforms[i].IsChildOf(candidate)) { containsAll = false; break; }
+                if (containsAll) return candidate;
+            }
+            throw new MissingReferenceException("A common popup panel ancestor was not found.");
+        }
+
+        private static void AssignButtonSprite(Button button, Sprite sprite)
+        {
+            if (button?.targetGraphic is not Image image) return;
+            image.sprite = sprite;
+            image.type = Image.Type.Simple;
+            image.preserveAspect = true;
+            image.color = Color.white;
+        }
+
+        private static MonoBehaviour FindBehaviourWithProperty(GameObject root, string property)
+        {
+            foreach (MonoBehaviour behaviour in root.GetComponentsInChildren<MonoBehaviour>(true))
+                if (behaviour != null && new SerializedObject(behaviour).FindProperty(property) != null)
+                    return behaviour;
+            return null;
+        }
+
+        private static Sprite Sprite(string name) => AssetDatabase.LoadAssetAtPath<Sprite>(ART + name);
+
+        private static void ImportSprites()
+        {
+            foreach (string path in AssetDatabase.FindAssets("t:Texture2D", new[] { ART }))
+            {
+                string asset = AssetDatabase.GUIDToAssetPath(path);
+                if (AssetImporter.GetAtPath(asset) is not TextureImporter importer) continue;
+                importer.textureType = TextureImporterType.Sprite;
+                importer.spriteImportMode = SpriteImportMode.Single;
+                importer.alphaIsTransparency = true;
+                importer.mipmapEnabled = false;
+                importer.maxTextureSize = 2048;
+                importer.textureCompression = TextureImporterCompression.CompressedHQ;
+                importer.SaveAndReimport();
+            }
+        }
+
+        private static void AddToAtlas()
+        {
+            SpriteAtlas atlas = AssetDatabase.LoadAssetAtPath<SpriteAtlas>(ATLAS);
+            Object folder = AssetDatabase.LoadAssetAtPath<Object>(ART.TrimEnd('/'));
+            if (atlas == null || folder == null) throw new MissingReferenceException("Popup atlas or art folder was not found.");
+            SpriteAtlasExtensions.Add(atlas, new[] { folder });
+            EditorUtility.SetDirty(atlas);
+        }
+    }
+}
+#endif
