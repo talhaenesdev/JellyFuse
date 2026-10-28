@@ -56,6 +56,19 @@ namespace Modules.UiWidgetsModule.Entities
             return _captured;
         }
 
+        /// <summary>
+        /// Puts the rect back as authored, before the bleed grew it. For whatever lays the object out
+        /// before the bleed and sets only some of the rect: what it leaves alone must be the authored
+        /// value, not the grown one, or every refit grows it again from the last.
+        /// </summary>
+        public void Restore()
+        {
+            if (!_captured) return;
+            var self = Self;
+            self.anchorMin = _anchorMin; self.anchorMax = _anchorMax; self.pivot = _pivot;
+            self.offsetMin = _offsetMin; self.offsetMax = _offsetMax;
+        }
+
         public void Recapture()
         {
             _captured = false;

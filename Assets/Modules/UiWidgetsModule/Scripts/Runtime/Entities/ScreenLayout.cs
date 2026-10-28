@@ -54,6 +54,8 @@ namespace Modules.UiWidgetsModule.Entities
                 RectTransform target = Find(element.Path);
                 if (target == null) continue;
                 if (element.OverrideActive && target.gameObject.activeSelf != element.Active) target.gameObject.SetActive(element.Active);
+                // A bled object starts from its authored rect, so what the asset leaves alone is not the grown one.
+                if (target.TryGetComponent(out ScreenBleed bled)) bled.Restore();
                 if (element.OverrideAnchors)
                 {
                     target.anchorMin = element.AnchorMin;
