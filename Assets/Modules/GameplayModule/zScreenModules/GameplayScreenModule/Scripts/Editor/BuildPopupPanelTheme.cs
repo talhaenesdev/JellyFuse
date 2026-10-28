@@ -13,12 +13,13 @@ namespace Modules.GameplayModule.GameplayScreenModule.Editor
 {
     internal static class BuildPopupPanelTheme
     {
-        private const string SESSION_KEY = "WobbleFuse.PopupPanelThemeBuilt.v6";
+        private const string SESSION_KEY = "WobbleFuse.PopupPanelThemeBuilt.v7";
         private const string ART = "Assets/Art/Generated/UI/PopupPanels/";
         private const string ATLAS = "Assets/Art/Atlases/Atlas_UI_Common.spriteatlasv2";
         private const string GAMEPLAY_PREFAB = "Assets/Modules/GameplayModule/zScreenModules/GameplayScreenModule/Prefabs/GameplayScreen.prefab";
         private const string PAUSE_PREFAB = "Assets/Modules/GameplayModule/zScreenModules/PauseScreenModule/Prefabs/PauseScreen.prefab";
         private const string SETTINGS_PREFAB = "Assets/Modules/GameplayModule/zScreenModules/SettingsScreenModule/Prefabs/SettingsScreen.prefab";
+        private const string PROFILE_PREFAB = "Assets/Modules/ProfileModule/zScreenModules/ProfileSelectionScreenModule/Prefabs/ProfileSelectionScreen.prefab";
         private const string CLOSE_PREFAB = "Assets/Modules/UiWidgetsModule/Prefabs/Btn_Close.prefab";
         private const string INFO_ASSET = "Assets/Modules/GameplayModule/zScreenModules/GameplayScreenModule/Scriptables/CD_InfoPopups.asset";
 
@@ -65,6 +66,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.Editor
             Sprite lose = Sprite("SPR_UI_Panel_Lose.png");
             Sprite settings = Sprite("SPR_UI_Panel_Settings.png");
             Sprite retry = Sprite("SPR_UI_Panel_Retry.png");
+            Sprite profile = Sprite("SPR_UI_Panel_Profile.png");
             Sprite close = Sprite("SPR_UI_Button_ClosePopup.png");
 
             AssignInfoPageSprites(rocket, freeze, ufo);
@@ -72,12 +74,13 @@ namespace Modules.GameplayModule.GameplayScreenModule.Editor
             BuildPausePanel(pause, pauseResume, pauseQuit);
             BuildResultPanels(win, lose, retry);
             BuildSettingsPanel(settings);
+            BuildProfilePanel(profile);
             BuildSharedCloseButton(close);
             foreach ((string path, string[] fields) in CloseConsumers) AssignCloseButtons(path, fields, close);
             AssignEveryCloseButton(close);
 
             AssetDatabase.SaveAssets();
-            Debug.Log("Popup panel theme rebuilt: boosters, pause, win, lose, retry, settings and shared buttons.");
+            Debug.Log("Popup panel theme rebuilt: boosters, pause, win, lose, retry, settings, profile and shared buttons.");
         }
 
         private static void AssignInfoPageSprites(Sprite rocket, Sprite freeze, Sprite ufo)
@@ -172,6 +175,30 @@ namespace Modules.GameplayModule.GameplayScreenModule.Editor
                 image.preserveAspect = true;
                 ((RectTransform)root.transform).sizeDelta = new Vector2(76, 76);
                 PrefabUtility.SaveAsPrefabAsset(root, CLOSE_PREFAB);
+            }
+            finally { PrefabUtility.UnloadPrefabContents(root); }
+        }
+
+        private static void BuildProfilePanel(Sprite profile)
+        {
+            GameObject root = PrefabUtility.LoadPrefabContents(PROFILE_PREFAB);
+            try
+            {
+                MonoBehaviour view = FindBehaviourWithProperty(root, "_dialog");
+                if (view == null) throw new MissingReferenceException("ProfileSelectionScreenView was not found.");
+                SerializedObject serialized = new(view);
+                RectTransform dialog = serialized.FindProperty("_dialog").objectReferenceValue as RectTransform;
+                if (dialog == null) throw new MissingReferenceException("Profile dialog was not found.");
+                // The dialog is far taller than the art's shape, so the art is sliced: crest, corners and edges
+                // keep their drawing and only the plain middle grows. 732 wide stays inside the 32 the screen
+                // keeps at each side, and the borders drawn at 1/1.6 leave a light inside wider than the 537 content.
+                profile = SliceSprite("SPR_UI_Panel_Profile.png", new Vector4(110, 190, 110, 380));
+                Image theme = ThemeCard(dialog, "Img_ProfilePanelTheme", profile, new Vector2(-16, -101), new Vector2(16, 222));
+                theme.type = Image.Type.Sliced;
+                theme.pixelsPerUnitMultiplier = 1.6f;
+                TMP_Text title = FindRecursive(dialog, "TMP_title")?.GetComponent<TMP_Text>();
+                if (title != null) InkTitle(title);
+                PrefabUtility.SaveAsPrefabAsset(root, PROFILE_PREFAB);
             }
             finally { PrefabUtility.UnloadPrefabContents(root); }
         }
@@ -379,6 +406,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.Editor
             Image image = go.GetComponent<Image>();
             image.raycastTarget = false;
             image.preserveAspect = false;
+            // A card that lays out its children would lay the art out as one of them.
+            if (parent.GetComponent<LayoutGroup>() != null) go.AddComponent<LayoutElement>().ignoreLayout = true;
             // The art reaches past the card, so the card's fitter measures both and keeps the art on screen.
             foreach (MonoBehaviour behaviour in parent.GetComponents<MonoBehaviour>())
             {
@@ -424,6 +453,17 @@ namespace Modules.GameplayModule.GameplayScreenModule.Editor
                 if (behaviour != null && new SerializedObject(behaviour).FindProperty(property) != null)
                     return behaviour;
             return null;
+        }
+
+        /// <summary>Gives the sprite its nine-slice border, in pixels: left, bottom, right, top.</summary>
+        private static Sprite SliceSprite(string name, Vector4 border)
+        {
+            if (AssetImporter.GetAtPath(ART + name) is TextureImporter importer && importer.spriteBorder != border)
+            {
+                importer.spriteBorder = border;
+                importer.SaveAndReimport();
+            }
+            return Sprite(name);
         }
 
         private static Sprite Sprite(string name) => AssetDatabase.LoadAssetAtPath<Sprite>(ART + name);
