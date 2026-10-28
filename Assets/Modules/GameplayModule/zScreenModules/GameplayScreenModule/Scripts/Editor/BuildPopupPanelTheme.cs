@@ -285,8 +285,27 @@ namespace Modules.GameplayModule.GameplayScreenModule.Editor
                         child.anchoredPosition = position;
                     }
                 }
+                // One even grid: the 650 by 250 offer over two rows of 310 cards, 28 between every block.
+                // 926 tall and 648 wide, at .78 it sits in the frame's 614 by 775 light inside with room
+                // round it, centred on that inside.
+                const float gap = 28, card = 310, offerHeight = 250;
+                float gridTop = (offerHeight + card * 2 + gap * 2) * .5f;
+                float row1 = gridTop - offerHeight - gap - card * .5f, row2 = row1 - card - gap;
+                float column = (card + gap) * .5f;
+                Place(items, "Pnl_DailyOffer", new Vector2(0, gridTop - offerHeight * .5f));
+                Place(items, "Pnl_Product_COINS", new Vector2(-column, row1));
+                Place(items, "Pnl_Product_LIVES", new Vector2(column, row1));
+                Place(items, "Pnl_Product_BOOSTERS", new Vector2(-column, row2));
+                Place(items, "Pnl_Product_NOADS", new Vector2(column, row2));
+                // The discount badge keeps to the offer's corner, clear of the coin.
+                Transform offer = items.Find("Pnl_DailyOffer");
+                if (offer != null)
+                {
+                    Place(offer, "Pnl_Discount", new Vector2(325 - 58 - 14, 125 - 36 - 14));
+                    Place(offer, "Img_DailyCoin", new Vector2(150, 10));
+                }
                 ((RectTransform)items).anchoredPosition = new Vector2(0, -32);
-                items.localScale = Vector3.one * .8f;
+                items.localScale = Vector3.one * .78f;
                 // The shop tab opens the shop; events stay closed until they have a flow of their own.
                 foreach ((string tabName, bool open) in new[] { ("Btn_Nav_Shop", true), ("Btn_Nav_Events", false) })
                 {
@@ -649,6 +668,11 @@ namespace Modules.GameplayModule.GameplayScreenModule.Editor
                 if (behaviour != null && new SerializedObject(behaviour).FindProperty(property) != null)
                     return behaviour;
             return null;
+        }
+
+        private static void Place(Transform parent, string child, Vector2 position)
+        {
+            if (parent.Find(child) is RectTransform rect) rect.anchoredPosition = position;
         }
 
         private static void SetArray<T>(SerializedProperty array, IReadOnlyList<T> values) where T : Object
