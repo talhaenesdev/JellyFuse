@@ -13,7 +13,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.Editor
 {
     internal static class BuildPopupPanelTheme
     {
-        private const string SESSION_KEY = "WobbleFuse.PopupPanelThemeBuilt.v5";
+        private const string SESSION_KEY = "WobbleFuse.PopupPanelThemeBuilt.v6";
         private const string ART = "Assets/Art/Generated/UI/PopupPanels/";
         private const string ATLAS = "Assets/Art/Atlases/Atlas_UI_Common.spriteatlasv2";
         private const string GAMEPLAY_PREFAB = "Assets/Modules/GameplayModule/zScreenModules/GameplayScreenModule/Prefabs/GameplayScreen.prefab";
@@ -64,18 +64,20 @@ namespace Modules.GameplayModule.GameplayScreenModule.Editor
             Sprite win = Sprite("SPR_UI_Panel_Win.png");
             Sprite lose = Sprite("SPR_UI_Panel_Lose.png");
             Sprite settings = Sprite("SPR_UI_Panel_Settings.png");
+            Sprite retry = Sprite("SPR_UI_Panel_Retry.png");
             Sprite close = Sprite("SPR_UI_Button_ClosePopup.png");
 
             AssignInfoPageSprites(rocket, freeze, ufo);
             BuildGameplayInfoPanel();
             BuildPausePanel(pause, pauseResume, pauseQuit);
-            BuildResultPanels(win, lose);
+            BuildResultPanels(win, lose, retry);
             BuildSettingsPanel(settings);
             BuildSharedCloseButton(close);
             foreach ((string path, string[] fields) in CloseConsumers) AssignCloseButtons(path, fields, close);
+            AssignEveryCloseButton(close);
 
             AssetDatabase.SaveAssets();
-            Debug.Log("Popup panel theme rebuilt: boosters, pause, win, lose, settings and shared buttons.");
+            Debug.Log("Popup panel theme rebuilt: boosters, pause, win, lose, retry, settings and shared buttons.");
         }
 
         private static void AssignInfoPageSprites(Sprite rocket, Sprite freeze, Sprite ufo)
@@ -174,7 +176,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.Editor
             finally { PrefabUtility.UnloadPrefabContents(root); }
         }
 
-        private static void BuildResultPanels(Sprite win, Sprite lose)
+        private static void BuildResultPanels(Sprite win, Sprite lose, Sprite retry)
         {
             GameObject root = PrefabUtility.LoadPrefabContents(GAMEPLAY_PREFAB);
             try
@@ -183,10 +185,12 @@ namespace Modules.GameplayModule.GameplayScreenModule.Editor
                 SerializedObject serialized = new(view);
                 RectTransform winPanel = serialized.FindProperty("_winPanel").objectReferenceValue as RectTransform;
                 RectTransform losePanel = serialized.FindProperty("_losePanel").objectReferenceValue as RectTransform;
-                if (winPanel == null || losePanel == null) throw new MissingReferenceException("Win or lose panel was not found.");
+                RectTransform retryPanel = serialized.FindProperty("_retryPanel").objectReferenceValue as RectTransform;
+                if (winPanel == null || losePanel == null || retryPanel == null) throw new MissingReferenceException("Win, lose or retry panel was not found.");
                 // The art's frame and crest sit outside the card, so the card's content lands on its light inside.
                 ThemeCard(winPanel, "Img_WinPanelTheme", win, new Vector2(-104, -134), new Vector2(104, 226));
                 ThemeCard(losePanel, "Img_LosePanelTheme", lose, new Vector2(-104, -134), new Vector2(104, 226));
+                ThemeCard(retryPanel, "Img_RetryPanelTheme", retry, new Vector2(-104, -134), new Vector2(104, 226));
                 PrefabUtility.SaveAsPrefabAsset(root, GAMEPLAY_PREFAB);
             }
             finally { PrefabUtility.UnloadPrefabContents(root); }
@@ -213,6 +217,15 @@ namespace Modules.GameplayModule.GameplayScreenModule.Editor
                     if (barImage != null && barImage.TryGetComponent(out Image barFill)) barFill.color = new Color(barFill.color.r, barFill.color.g, barFill.color.b, 0);
                     MoveOntoBox(bar.Find("Txt_Title"), panel, new Vector2(.5f, 1), new Vector2(0, 58));
                     MoveOntoBox(bar.Find("Btn_Close"), panel, new Vector2(1, 1), new Vector2(-8, 58));
+                }
+                // The screen is fitted by its design width; the art is 562 wide, so the width takes it in with room to spare.
+                MonoBehaviour layout = FindBehaviourWithProperty(root, "_config");
+                if (layout != null && new SerializedObject(layout).FindProperty("_config").objectReferenceValue is ScriptableObject config)
+                {
+                    SerializedObject configObject = new(config);
+                    configObject.FindProperty("DesignWidth").floatValue = 600;
+                    configObject.ApplyModifiedPropertiesWithoutUndo();
+                    EditorUtility.SetDirty(config);
                 }
                 Transform movedTitle = panel.Find("Txt_Title");
                 if (movedTitle != null && movedTitle.TryGetComponent(out TMP_Text titleText)) InkTitle(titleText);
@@ -283,6 +296,45 @@ namespace Modules.GameplayModule.GameplayScreenModule.Editor
             return null;
         }
 
+        /// <summary>
+        /// Every close button in every module's prefabs, wherever no view names it: a button whose name
+        /// says close, or one still drawn with the old cross. Popups nested in other prefabs are done first,
+        /// so the screens that hold them inherit the new sprite.
+        /// </summary>
+        private static void AssignEveryCloseButton(Sprite close)
+        {
+            var paths = new List<string>();
+            foreach (string guid in AssetDatabase.FindAssets("t:Prefab", new[] { "Assets/Modules" })) paths.Add(AssetDatabase.GUIDToAssetPath(guid));
+            paths.Sort((a, b) => (a.Contains("/Popups/") || a.Contains("Pnl_") ? 0 : 1).CompareTo(b.Contains("/Popups/") || b.Contains("Pnl_") ? 0 : 1));
+            foreach (string path in paths)
+            {
+                GameObject asset = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+                if (asset == null || !HasOldClose(asset, close)) continue;
+                GameObject root = PrefabUtility.LoadPrefabContents(path);
+                try
+                {
+                    foreach (Button button in root.GetComponentsInChildren<Button>(true))
+                        if (IsOldClose(button, close)) AssignButtonSprite(button, close);
+                    PrefabUtility.SaveAsPrefabAsset(root, path);
+                }
+                finally { PrefabUtility.UnloadPrefabContents(root); }
+            }
+        }
+
+        private static bool HasOldClose(GameObject root, Sprite close)
+        {
+            foreach (Button button in root.GetComponentsInChildren<Button>(true))
+                if (IsOldClose(button, close)) return true;
+            return false;
+        }
+
+        private static bool IsOldClose(Button button, Sprite close)
+        {
+            if (button.targetGraphic is not Image image || image.sprite == close) return false;
+            string sprite = image.sprite != null ? image.sprite.name.ToLowerInvariant() : "";
+            return button.name.ToLowerInvariant().Contains("close") || sprite.Contains("cross");
+        }
+
         private static void AssignCloseButtons(string path, IReadOnlyList<string> fields, Sprite close)
         {
             GameObject root = PrefabUtility.LoadPrefabContents(path);
@@ -327,6 +379,14 @@ namespace Modules.GameplayModule.GameplayScreenModule.Editor
             Image image = go.GetComponent<Image>();
             image.raycastTarget = false;
             image.preserveAspect = false;
+            // The art reaches past the card, so the card's fitter measures both and keeps the art on screen.
+            foreach (MonoBehaviour behaviour in parent.GetComponents<MonoBehaviour>())
+            {
+                if (behaviour == null || behaviour.GetType().Name != "PopupFitter") continue;
+                SerializedObject fitter = new(behaviour);
+                fitter.FindProperty("_frame").objectReferenceValue = rect;
+                fitter.ApplyModifiedPropertiesWithoutUndo();
+            }
             return image;
         }
 
