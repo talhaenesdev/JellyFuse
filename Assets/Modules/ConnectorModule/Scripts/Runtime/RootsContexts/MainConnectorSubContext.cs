@@ -5,6 +5,7 @@ using Modules.GameplayModule.Signals;
 using Modules.LoadingModule.LoadingScreenModule.Signals;
 using Modules.LocalizationModule.Signals;
 using Modules.MainModule.MainScreenModule.Signals;
+using Modules.MainModule.EventsScreenModule.Signals;
 using Modules.MainModule.Signals;
 using Modules.ProfileModule.Signals;
 using Modules.ProfileModule.ProfileSelectionScreenModule.Signals;
@@ -17,6 +18,7 @@ namespace Modules.ConnectorModule.RootsContexts
         private const string LIVES_GROUP = nameof(MainConnectorSubContext) + ".Lives";
         private MainSignals _mainSignals;
         private MainScreenSignals _mainScreenSignals;
+        private EventsScreenSignals _eventsScreenSignals;
         private GameplayScreenSignals _gameplayScreenSignals;
         private GameplaySignals _gameplaySignals;
         private LoadingScreenSignals _loadingScreenSignals;
@@ -30,6 +32,7 @@ namespace Modules.ConnectorModule.RootsContexts
 
             _mainSignals = InjectionBinderCrossContext.GetInstance<MainSignals>();
             _mainScreenSignals = InjectionBinderCrossContext.GetInstance<MainScreenSignals>();
+            _eventsScreenSignals = InjectionBinderCrossContext.GetInstance<EventsScreenSignals>();
             _gameplayScreenSignals = InjectionBinderCrossContext.GetInstance<GameplayScreenSignals>();
             _gameplaySignals = InjectionBinderCrossContext.GetInstance<GameplaySignals>();
             _loadingScreenSignals = InjectionBinderCrossContext.GetInstance<LoadingScreenSignals>();
@@ -55,6 +58,7 @@ namespace Modules.ConnectorModule.RootsContexts
             _profileSignals.Outgoing.FrameChanged.Connect(_mainScreenSignals.Incoming.ApplyProfileFrame);
             _profileSignals.Outgoing.SelectionRequested.Connect(_profileSelectionSignals.Incoming.Open);
             _profileSignals.Outgoing.ProfileSaved.Connect(_profileSelectionSignals.Incoming.ProfileSaved);
+            _eventsScreenSignals.Outgoing.BackClicked.Connect(_mainScreenSignals.Incoming.OpenMainScreen);
         }
 
         private void OutgoingSignals()
@@ -71,6 +75,7 @@ namespace Modules.ConnectorModule.RootsContexts
             _gameplaySignals.Outgoing.CurrentLevelChanged.Connect(_mainScreenSignals.Incoming.ApplyNextLevel, LIVES_GROUP);
             _mainScreenSignals.Outgoing.ProfileIconRequested.Connect(_profileSignals.Incoming.RequestCurrentIcon);
             _mainScreenSignals.Outgoing.ProfileIconClicked.Connect(_profileSignals.Incoming.OpenSelection);
+            _mainScreenSignals.Outgoing.EventsClicked.Connect(_eventsScreenSignals.Incoming.OpenEventsScreen);
             _profileSelectionSignals.Outgoing.SaveRequested.Connect(_profileSignals.Incoming.SaveProfile);
         }
 
@@ -92,6 +97,7 @@ namespace Modules.ConnectorModule.RootsContexts
             _profileSignals.Outgoing.FrameChanged.Disconnect();
             _profileSignals.Outgoing.SelectionRequested.Disconnect();
             _profileSignals.Outgoing.ProfileSaved.Disconnect();
+            _eventsScreenSignals.Outgoing.BackClicked.Disconnect();
         }
 
         private void UnbindOutgoingSignals()
@@ -100,6 +106,7 @@ namespace Modules.ConnectorModule.RootsContexts
             _gameplayScreenSignals.Outgoing.HomeClicked.Disconnect();
             _mainScreenSignals.Outgoing.ProfileIconRequested.Disconnect();
             _mainScreenSignals.Outgoing.ProfileIconClicked.Disconnect();
+            _mainScreenSignals.Outgoing.EventsClicked.Disconnect();
             _profileSelectionSignals.Outgoing.SaveRequested.Disconnect();
             // Its own group, so the gameplay screen keeps hearing about the lives.
             SignalConnector.DisconnectGroup(LIVES_GROUP);

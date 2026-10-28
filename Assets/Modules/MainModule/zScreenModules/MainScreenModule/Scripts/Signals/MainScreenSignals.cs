@@ -34,6 +34,8 @@ namespace Modules.MainModule.MainScreenModule.Signals
         public Signal HomeClicked = new();
         /// <summary>A tab of the navigation bar was picked: its index, left to right (2 is Home).</summary>
         public Signal<int> NavTabClicked = new();
+        /// <summary>The Events navigation item was pressed.</summary>
+        public Signal EventsClicked = new();
         public Signal ProfileIconClicked = new();
         public Signal ProfileIconRequested = new();
         /// <summary>The + by the lives was pressed: more lives are offered.</summary>

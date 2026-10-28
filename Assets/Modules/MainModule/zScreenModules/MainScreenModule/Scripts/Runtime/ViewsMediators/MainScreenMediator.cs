@@ -72,7 +72,14 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
 
         private void OnNavTabClicked(int index)
         {
-            if (_view.Data.HasState(ScreenState.AvailableToSendSignal)) _signals.Outgoing.NavTabClicked.Dispatch(index);
+            if (!_view.Data.HasState(ScreenState.AvailableToSendSignal)) return;
+            if (index == 2)
+            {
+                _view.Hide();
+                _signals.Outgoing.EventsClicked.Dispatch();
+                return;
+            }
+            _signals.Outgoing.NavTabClicked.Dispatch(index);
         }
 
         private void OnHomeClicked()

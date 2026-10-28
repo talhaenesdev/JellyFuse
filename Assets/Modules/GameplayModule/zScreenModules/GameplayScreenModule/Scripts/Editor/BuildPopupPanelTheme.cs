@@ -13,7 +13,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.Editor
 {
     internal static class BuildPopupPanelTheme
     {
-        private const string SESSION_KEY = "WobbleFuse.PopupPanelThemeBuilt.v8";
+        private const string SESSION_KEY = "WobbleFuse.PopupPanelThemeBuilt.v10";
         private const string ART = "Assets/Art/Generated/UI/PopupPanels/";
         private const string ATLAS = "Assets/Art/Atlases/Atlas_UI_Common.spriteatlasv2";
         private const string GAMEPLAY_PREFAB = "Assets/Modules/GameplayModule/zScreenModules/GameplayScreenModule/Prefabs/GameplayScreen.prefab";
@@ -21,6 +21,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.Editor
         private const string SETTINGS_PREFAB = "Assets/Modules/GameplayModule/zScreenModules/SettingsScreenModule/Prefabs/SettingsScreen.prefab";
         private const string PROFILE_PREFAB = "Assets/Modules/ProfileModule/zScreenModules/ProfileSelectionScreenModule/Prefabs/ProfileSelectionScreen.prefab";
         private const string PURCHASE_PREFAB = "Assets/Modules/PurchaseModule/zScreenModules/PurchaseScreenModule/Prefabs/PurchaseScreen.prefab";
+        private const string MAIN_PREFAB = "Assets/Modules/MainModule/zScreenModules/MainScreenModule/Prefabs/MainScreen.prefab";
+        private const string EVENTS_PREFAB = "Assets/Modules/MainModule/zScreenModules/EventsScreenModule/Prefabs/EventsScreen.prefab";
         private const string CLOSE_PREFAB = "Assets/Modules/UiWidgetsModule/Prefabs/Btn_Close.prefab";
         private const string INFO_ASSET = "Assets/Modules/GameplayModule/zScreenModules/GameplayScreenModule/Scriptables/CD_InfoPopups.asset";
 
@@ -71,6 +73,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.Editor
             Sprite retry = Sprite("SPR_UI_Panel_Retry.png");
             Sprite profile = Sprite("SPR_UI_Panel_Profile.png");
             Sprite moreLives = Sprite("SPR_UI_Panel_MoreLives.png");
+            Sprite shopEmpty = Sprite("SPR_UI_Screen_ShopEmpty.png");
+            Sprite events = Sprite("SPR_UI_Screen_Events.png");
             Sprite close = Sprite("SPR_UI_Button_ClosePopup.png");
 
             AssignInfoPageSprites(rocket, freeze, ufo);
@@ -80,12 +84,14 @@ namespace Modules.GameplayModule.GameplayScreenModule.Editor
             BuildSettingsPanel(settings);
             BuildProfilePanel(profile);
             BuildMoreLivesPanel(moreLives);
+            BuildEmptyShopPage(shopEmpty);
+            BuildEventsPage(events);
             BuildSharedCloseButton(close);
             foreach ((string path, string[] fields) in CloseConsumers) AssignCloseButtons(path, fields, close);
             AssignEveryCloseButton(close);
 
             AssetDatabase.SaveAssets();
-            Debug.Log("Popup panel theme rebuilt: boosters, pause, win, lose, retry, settings, profile, more lives and shared buttons.");
+            Debug.Log("Popup panel theme rebuilt: boosters, pause, win, lose, retry, settings, profile, more lives, shop, events and shared buttons.");
         }
 
         private static void AssignInfoPageSprites(Sprite rocket, Sprite freeze, Sprite ufo)
@@ -236,6 +242,86 @@ namespace Modules.GameplayModule.GameplayScreenModule.Editor
                     fitter.ApplyModifiedPropertiesWithoutUndo();
                 }
                 PrefabUtility.SaveAsPrefabAsset(root, PURCHASE_PREFAB);
+            }
+            finally { PrefabUtility.UnloadPrefabContents(root); }
+        }
+
+        private static void BuildEmptyShopPage(Sprite shopEmpty)
+        {
+            GameObject root = PrefabUtility.LoadPrefabContents(MAIN_PREFAB);
+            try
+            {
+                Transform page = FindRecursive(root.transform, "Pnl_ShopPage");
+                if (page == null) throw new MissingReferenceException("Pnl_ShopPage was not found.");
+
+                // The art frames the shop's products. The page is 760 by 1000 and fills the screen's width, so
+                // the art is 740 by 1140, its awning above the page's top; its light inside is 606 by 753.
+                foreach (Transform child in page) child.gameObject.SetActive(true);
+                ThemeCard(page, "Img_ShopEmptyPanelTheme", shopEmpty, Vector2.zero, Vector2.zero);
+                RectTransform art = (RectTransform)page.Find("Img_ShopEmptyPanelTheme");
+                art.anchorMin = art.anchorMax = art.pivot = new Vector2(.5f, .5f);
+                art.sizeDelta = new Vector2(740, 1140);
+                art.anchoredPosition = new Vector2(0, 70);
+                // The bag on the crest names the page, so the title bar would only cover the awning.
+                Transform title = page.Find("Pnl_Title");
+                if (title != null) title.gameObject.SetActive(false);
+                // The offer and the four products, 650 by 895 between them, go in one box scaled into the light inside.
+                Transform items = page.Find("Pnl_ShopItems");
+                if (items == null)
+                {
+                    var box = new GameObject("Pnl_ShopItems", typeof(RectTransform));
+                    box.layer = page.gameObject.layer;
+                    items = box.transform;
+                    items.SetParent(page, false);
+                    RectTransform boxRect = (RectTransform)items;
+                    boxRect.anchorMin = boxRect.anchorMax = boxRect.pivot = new Vector2(.5f, .5f);
+                    boxRect.sizeDelta = new Vector2(650, 895);
+                    var moved = new List<RectTransform>();
+                    foreach (Transform child in page)
+                        if (child.name == "Pnl_DailyOffer" || child.name.StartsWith("Pnl_Product_")) moved.Add((RectTransform)child);
+                    foreach (RectTransform child in moved)
+                    {
+                        Vector2 position = child.anchoredPosition - new Vector2(0, 42);
+                        child.SetParent(items, false);
+                        child.anchoredPosition = position;
+                    }
+                }
+                ((RectTransform)items).anchoredPosition = new Vector2(0, -32);
+                items.localScale = Vector3.one * .8f;
+                // The shop and events tabs were switched off while they had no page to show.
+                foreach (string tabName in new[] { "Btn_Nav_Shop", "Btn_Nav_Events" })
+                {
+                    Transform tab = FindRecursive(root.transform, tabName);
+                    if (tab != null && tab.TryGetComponent(out Button navTab)) navTab.interactable = true;
+                }
+                PrefabUtility.SaveAsPrefabAsset(root, MAIN_PREFAB);
+            }
+            finally { PrefabUtility.UnloadPrefabContents(root); }
+        }
+
+        private static void BuildEventsPage(Sprite events)
+        {
+            GameObject root = PrefabUtility.LoadPrefabContents(EVENTS_PREFAB);
+            try
+            {
+                Transform list = FindRecursive(root.transform, "Pnl_EventList");
+                Transform viewport = list != null ? list.Find("Viewport") : null;
+                if (list == null || viewport == null) throw new MissingReferenceException("Events list or its viewport was not found.");
+
+                // The illustrated frame is the page shell. Event cards remain independent children of the
+                // ScrollRect, so any number of events can still be laid out and scrolled normally.
+                Image theme = ThemeCard(list, "Img_EventsPanelTheme", events, new Vector2(-16, -18), new Vector2(16, 156));
+                theme.preserveAspect = false;
+
+                // Keep the cards inside the light centre and clear of the calendar/trophy crest.
+                RectTransform viewportRect = (RectTransform)viewport;
+                viewportRect.offsetMin = new Vector2(58, 52);
+                viewportRect.offsetMax = new Vector2(-58, -132);
+                // The crest stands 156 above the list, so the list starts lower and the crest clears the subtitle.
+                RectTransform listRect = (RectTransform)list;
+                listRect.anchorMax = new Vector2(listRect.anchorMax.x, .74f);
+
+                PrefabUtility.SaveAsPrefabAsset(root, EVENTS_PREFAB);
             }
             finally { PrefabUtility.UnloadPrefabContents(root); }
         }

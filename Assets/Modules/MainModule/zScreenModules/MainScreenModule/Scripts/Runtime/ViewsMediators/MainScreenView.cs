@@ -134,6 +134,16 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
             FitLayout();
             PickTab(_selectedTab, false);
         }
+        // A device can settle the screen's size after the screen opened without telling this view; the content
+        // then keeps its authored height and the top bar hangs from the middle of the screen. Fit again whenever
+        // the size differs from the one last fitted.
+        private void LateUpdate()
+        {
+            if (!_built || _content == null) return;
+            if (((RectTransform)transform).rect.size == _fittedSize && _content.sizeDelta == _fittedContent) return;
+            FitLayout();
+            PickTab(_selectedTab, false);
+        }
 
         private void Build()
         {
@@ -156,6 +166,11 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
 
         private void OnTabClicked(int index)
         {
+            if (index == 2)
+            {
+                NavTabClicked?.Invoke(index);
+                return;
+            }
             PickTab(index, true);
             NavTabClicked?.Invoke(index);
         }
@@ -247,7 +262,8 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
         private void ShowPage(int index)
         {
             bool showShop = index == 0;
-            if (_homePage != null) _homePage.SetActive(!showShop);
+            bool showHome = index == _homeTab;
+            if (_homePage != null) _homePage.SetActive(showHome);
             if (_shopPage != null) _shopPage.SetActive(showShop);
         }
 
@@ -271,17 +287,20 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
             foreach (RectTransform image in _navImages) image?.DOKill();
         }
 
+        private Vector2 _fittedSize, _fittedContent;
         /// <summary>Fits the column's width to the screen; a short, wide screen fits its height instead.</summary>
         private void FitLayout()
         {
             if (_content == null) return;
             var rect = ((RectTransform)transform).rect;
+            _fittedSize = rect.size;
             var config = _layout != null ? _layout.Config : null;
             float scale = config != null
                 ? config.FitScale(rect.size)
                 : Mathf.Max(.01f, Mathf.Min(rect.width / LAYOUT_WIDTH, rect.height / MIN_HEIGHT));
             _content.localScale = Vector3.one * scale;
             _content.sizeDelta = new Vector2(rect.width / scale, rect.height / scale);
+            _fittedContent = _content.sizeDelta;
             if (_layout != null) _layout.SetDirty();
         }
 
