@@ -86,6 +86,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.Editor
             BuildMoreLivesPanel(moreLives);
             BuildEmptyShopPage(shopEmpty);
             BuildEventsPage(events);
+            BuildPopupActionButtons(pauseResume, pauseQuit);
             BuildSharedCloseButton(close);
             foreach ((string path, string[] fields) in CloseConsumers) AssignCloseButtons(path, fields, close);
             AssignEveryCloseButton(close);
@@ -668,6 +669,41 @@ namespace Modules.GameplayModule.GameplayScreenModule.Editor
                 if (behaviour != null && new SerializedObject(behaviour).FindProperty(property) != null)
                     return behaviour;
             return null;
+        }
+
+        /// <summary>
+        /// The popups' action buttons wear the pause panel's buttons: the blue one where play goes on,
+        /// the purple one where a level starts over.
+        /// </summary>
+        private static void BuildPopupActionButtons(Sprite blue, Sprite purple)
+        {
+            ActionButtons(GAMEPLAY_PREFAB, new[]
+            {
+                ("Pnl_PopupWin/Btn_Continue", blue), ("Pnl_PopupInfo/Btn_Primary", blue),
+                ("Pnl_PopupLose/Btn_TryAgain", purple), ("Pnl_PopupRetry/Btn_Retry", purple),
+            });
+            ActionButtons(PURCHASE_PREFAB, new[] { ("Pnl_PopupPurchase/Btn_Buy", blue) });
+        }
+
+        private static void ActionButtons(string path, (string Button, Sprite Sprite)[] buttons)
+        {
+            GameObject root = PrefabUtility.LoadPrefabContents(path);
+            try
+            {
+                foreach ((string name, Sprite sprite) in buttons)
+                {
+                    string[] parts = name.Split('/');
+                    Transform popup = FindRecursive(root.transform, parts[0]);
+                    Transform found = popup != null ? popup.Find(parts[1]) : null;
+                    if (found == null || !found.TryGetComponent(out Button button)) throw new MissingReferenceException(name + " was not found in " + path + ".");
+                    AssignButtonSprite(button, sprite);
+                    // The old two-half face under the label would show through the new art.
+                    Transform face = found.Find("Pnl_MirroredBackground");
+                    if (face != null) face.gameObject.SetActive(false);
+                }
+                PrefabUtility.SaveAsPrefabAsset(root, path);
+            }
+            finally { PrefabUtility.UnloadPrefabContents(root); }
         }
 
         private static void Place(Transform parent, string child, Vector2 position)
