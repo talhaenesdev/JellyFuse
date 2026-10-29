@@ -270,7 +270,7 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!1 &8422424619318553175
+--- !u!1 &7824261428907294005
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -278,9 +278,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 8928377204782814538}
-  - component: {fileID: 4068992219011440022}
-  - component: {fileID: 2602209471989910134}
+  - component: {fileID: 5905621639675013920}
+  - component: {fileID: 5512918291326532554}
+  - component: {fileID: 6348692109951474846}
   m_Layer: 5
   m_Name: Img_MoreLivesPanelTheme
   m_TagString: Untagged
@@ -288,13 +288,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &8928377204782814538
+--- !u!224 &5905621639675013920
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8422424619318553175}
+  m_GameObject: {fileID: 7824261428907294005}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -307,21 +307,21 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 46}
   m_SizeDelta: {x: 208, y: 360}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &4068992219011440022
+--- !u!222 &5512918291326532554
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8422424619318553175}
+  m_GameObject: {fileID: 7824261428907294005}
   m_CullTransparentMesh: 1
---- !u!114 &2602209471989910134
+--- !u!114 &6348692109951474846
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8422424619318553175}
+  m_GameObject: {fileID: 7824261428907294005}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
@@ -465,7 +465,7 @@ PrefabInstance:
     - target: {fileID: 529928898130639860, guid: 525fc936b5c9f96418df773a99a42a8c, type: 3}
       propertyPath: _frame
       value: 
-      objectReference: {fileID: 8928377204782814538}
+      objectReference: {fileID: 5905621639675013920}
     - target: {fileID: 529928898130639860, guid: 525fc936b5c9f96418df773a99a42a8c, type: 3}
       propertyPath: _maxHeightShare
       value: 1
@@ -747,7 +747,7 @@ PrefabInstance:
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 3099642905608329323, guid: 525fc936b5c9f96418df773a99a42a8c, type: 3}
       insertIndex: 0
-      addedObject: {fileID: 8928377204782814538}
+      addedObject: {fileID: 5905621639675013920}
     - targetCorrespondingSourceObject: {fileID: 8498335954117955309, guid: 525fc936b5c9f96418df773a99a42a8c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5133830699422232099}
