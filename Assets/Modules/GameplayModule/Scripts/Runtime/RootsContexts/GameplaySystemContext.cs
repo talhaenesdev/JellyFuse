@@ -131,6 +131,11 @@ namespace Modules.GameplayModule.RootsContexts
                 .ToSequence<AnnounceLivesCommand>()
                 .ToSequence<ScheduleNotificationsCommand>();
 #endif
+            CommandBinder.Bind(_signals.Incoming.GrantShopProduct)
+                .ToSequence<GrantShopProductCommand>()
+                .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
+                .ToSequence<AnnounceBoostersCommand>()
+                .ToSequence<AnnounceLivesCommand>();
             CommandBinder.Bind(_signals.Incoming.ResetBoosters)
                 .ToSequence<ResetBoostersCommand>()
                 .ToSequence<GrantBoostersCommand>()

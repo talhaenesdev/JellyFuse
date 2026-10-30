@@ -24,6 +24,8 @@ namespace Modules.GameplayModule.Shared.Data.UnityObjects
         public bool LivesGranted;
         [Tooltip("When the next life comes back, in Unix seconds; 0 while lives are full.")]
         public long NextLifeAt;
+        [Tooltip("Whether the player bought the removal of ads. Bought once, kept for ever.")]
+        public bool NoAds;
 
         /// <summary>The player's entry for a booster, made when it has none yet.</summary>
         public BoosterSVO Booster(BoosterType type)

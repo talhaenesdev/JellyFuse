@@ -33,13 +33,16 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
             _view.NavTabClicked += OnNavTabClicked;
             _view.ProfileIconClicked += OnProfileIconClicked;
             _view.LivesPlusClicked += OnLivesPlusClicked;
+            _view.ShopBuyClicked += OnShopBuyClicked;
             _signals.Incoming.ApplyNextLevel.AddListener(_view.ApplyNextLevel);
             _signals.Incoming.ApplyLanguage.AddListener(_view.ApplyLanguage);
             _signals.Incoming.ApplyCoins.AddListener(_view.ApplyCoins);
             _signals.Incoming.ApplyLives.AddListener(_view.ApplyLives);
             _signals.Incoming.ApplyProfileIcon.AddListener(_view.ApplyProfileIcon);
             _signals.Incoming.ApplyProfileFrame.AddListener(_view.ApplyProfileFrame);
+            _signals.Incoming.ApplyShopPrices.AddListener(_view.ApplyShopPrices);
             _signals.Outgoing.ProfileIconRequested.Dispatch();
+            _signals.Outgoing.ShopPricesRequested.Dispatch();
         }
 
         private void OnScreenHidden(IScreenBody screen)
@@ -50,12 +53,14 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
             _view.NavTabClicked -= OnNavTabClicked;
             _view.ProfileIconClicked -= OnProfileIconClicked;
             _view.LivesPlusClicked -= OnLivesPlusClicked;
+            _view.ShopBuyClicked -= OnShopBuyClicked;
             _signals.Incoming.ApplyNextLevel.RemoveListener(_view.ApplyNextLevel);
             _signals.Incoming.ApplyLanguage.RemoveListener(_view.ApplyLanguage);
             _signals.Incoming.ApplyCoins.RemoveListener(_view.ApplyCoins);
             _signals.Incoming.ApplyLives.RemoveListener(_view.ApplyLives);
             _signals.Incoming.ApplyProfileIcon.RemoveListener(_view.ApplyProfileIcon);
             _signals.Incoming.ApplyProfileFrame.RemoveListener(_view.ApplyProfileFrame);
+            _signals.Incoming.ApplyShopPrices.RemoveListener(_view.ApplyShopPrices);
         }
 
         private void OnPlayClicked()
@@ -91,6 +96,11 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
         {
             if (_view.Data.HasState(ScreenState.AvailableToSendSignal)) _signals.Outgoing.LivesPlusClicked.Dispatch();
         }
+        private void OnShopBuyClicked(string productId)
+        {
+            if (_view.Data.HasState(ScreenState.AvailableToSendSignal)) _signals.Outgoing.ShopBuyClicked.Dispatch(productId);
+        }
+
         private void OnProfileIconClicked()
         {
             if (_view.Data.HasState(ScreenState.AvailableToSendSignal))

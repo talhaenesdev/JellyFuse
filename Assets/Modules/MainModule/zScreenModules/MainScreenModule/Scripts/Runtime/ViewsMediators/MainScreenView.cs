@@ -34,15 +34,17 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
         [Header("Theme")]
         [Tooltip("Main menu button colours. Edit CD_MainScreenTheme in the Project window.")]
         [SerializeField] private CD_MainScreenTheme _theme;
-        [Tooltip("The presentation-only purchase panels shown on the Shop page.")]
+        [Tooltip("The Shop page's buy panels, in the order of the price labels and the product ids.")]
         [SerializeField] private Graphic[] _shopBuyPanels;
         [Header("Pages")]
         [Tooltip("Home content shown by the Home navigation tab.")]
         [SerializeField] private GameObject _homePage;
         [Tooltip("Shop content shown by the Shop navigation tab.")]
         [SerializeField] private GameObject _shopPage;
-        [Tooltip("The shop's price labels; nothing is sold yet, so each reads Coming soon.")]
+        [Tooltip("The shop's price labels. Each reads Coming soon until the store answers with its price.")]
         [SerializeField] private TMP_Text[] _shopPriceLabels;
+        [Tooltip("The store product id each buy panel sells, in the order of the panels.")]
+        [SerializeField] private string[] _shopProductIds;
         [Tooltip("The shop's framed art. The page is scaled and centred so it stays between the top bar and the nav bar.")]
         [SerializeField] private RectTransform _shopFrame;
         [SerializeField] private RectTransform _topBar;
@@ -78,6 +80,8 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
         public Action<int> NavTabClicked;
         public Action ProfileIconClicked;
         public Action LivesPlusClicked;
+        /// <summary>A shop buy panel with a price was pressed: its product id.</summary>
+        public Action<string> ShopBuyClicked;
 
         private const float LAYOUT_WIDTH = 760, MIN_HEIGHT = 1000;
         private Func<string, string> _localize;
@@ -101,6 +105,7 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
             _profileButton.onClick.AddListener(OnProfileIconClicked);
             if (_livesPlusButton != null) _livesPlusButton.onClick.AddListener(OnLivesPlusClicked);
             for (int i = 0; i < _tabActions.Count; i++) _navTabs[i].onClick.AddListener(_tabActions[i]);
+            for (int i = 0; i < _shopActions.Count; i++) if (_shopButtons[i] != null) _shopButtons[i].onClick.AddListener(_shopActions[i]);
         }
 
         private void OnDisable()
@@ -112,6 +117,7 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
             _profileButton.onClick.RemoveListener(OnProfileIconClicked);
             if (_livesPlusButton != null) _livesPlusButton.onClick.RemoveListener(OnLivesPlusClicked);
             for (int i = 0; i < _tabActions.Count; i++) _navTabs[i].onClick.RemoveListener(_tabActions[i]);
+            for (int i = 0; i < _shopActions.Count; i++) if (_shopButtons[i] != null) _shopButtons[i].onClick.RemoveListener(_shopActions[i]);
             KillNavigationTweens();
         }
 
@@ -120,6 +126,9 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
         private void OnHomeClicked() => HomeClicked?.Invoke();
         private void OnProfileIconClicked() => ProfileIconClicked?.Invoke();
         private void OnLivesPlusClicked() => LivesPlusClicked?.Invoke();
+        private readonly List<UnityEngine.Events.UnityAction> _shopActions = new();
+        private Button[] _shopButtons;
+        private IReadOnlyDictionary<string, string> _shopPrices;
 
         public override void BeforeScreenActivation()
         {
@@ -164,6 +173,21 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
             Keyed(_homeLabel, "main.home");
             if (_shopPriceLabels != null)
                 foreach (TMP_Text price in _shopPriceLabels) Keyed(price, "main.shop.soon", "Coming soon");
+            if (_shopBuyPanels != null)
+            {
+                _shopButtons = new Button[_shopBuyPanels.Length];
+                for (int i = 0; i < _shopBuyPanels.Length; i++)
+                {
+                    int index = i;
+                    _shopButtons[i] = _shopBuyPanels[i] != null ? _shopBuyPanels[i].GetComponent<Button>() : null;
+                    _shopActions.Add(() => OnShopBuyClicked(index));
+                    if (_shopButtons[i] != null)
+                    {
+                        _shopButtons[i].interactable = false;
+                        if (isActiveAndEnabled) _shopButtons[i].onClick.AddListener(_shopActions[i]);
+                    }
+                }
+            }
             for (int i = 0; i < _navTabs.Length; i++)
             {
                 int index = i;
@@ -238,10 +262,7 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
             SetButtonColor(_livesPlusButton, _theme.UtilityButton);
             if (_playLabel != null) _playLabel.color = _theme.ButtonText;
             if (_homeLabel != null) _homeLabel.color = _theme.ButtonText;
-            // Nothing is sold yet: the buy panels show their colour dimmed, so they read as not yet open.
-            if (_shopBuyPanels != null)
-                foreach (Graphic panel in _shopBuyPanels)
-                    if (panel != null) panel.color = Color.Lerp(_theme.ShopBuyButton, Color.gray, .55f);
+            TintShopPanels();
             if (_navSelector != null)
             {
                 Image selector = _navSelector.GetComponent<Image>();
@@ -386,6 +407,42 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
             }
             _coins.text = text;
         }
+        /// <summary>The store's prices by product id. A panel the store has no price for stays Coming soon.</summary>
+        public void ApplyShopPrices(IReadOnlyDictionary<string, string> prices)
+        {
+            _shopPrices = prices;
+            if (_shopPriceLabels == null || _shopProductIds == null) return;
+            for (int i = 0; i < _shopPriceLabels.Length && i < _shopProductIds.Length; i++)
+            {
+                TMP_Text label = _shopPriceLabels[i];
+                if (label == null || prices == null || !prices.TryGetValue(_shopProductIds[i], out string price)) continue;
+                _keyedTexts.RemoveAll(keyed => keyed.Label == label);
+                label.text = price;
+            }
+            TintShopPanels();
+        }
+
+        private bool IsPriced(int index) =>
+            _shopPrices != null && _shopProductIds != null && index < _shopProductIds.Length && _shopPrices.ContainsKey(_shopProductIds[index]);
+
+        // A panel with no price yet shows its colour dimmed, so it reads as not yet open.
+        private void TintShopPanels()
+        {
+            if (_shopBuyPanels == null || _theme == null) return;
+            for (int i = 0; i < _shopBuyPanels.Length; i++)
+            {
+                if (_shopBuyPanels[i] == null) continue;
+                bool priced = IsPriced(i);
+                _shopBuyPanels[i].color = priced ? _theme.ShopBuyButton : Color.Lerp(_theme.ShopBuyButton, Color.gray, .55f);
+                if (_shopButtons != null && _shopButtons[i] != null) _shopButtons[i].interactable = priced;
+            }
+        }
+
+        private void OnShopBuyClicked(int index)
+        {
+            if (IsPriced(index)) ShopBuyClicked?.Invoke(_shopProductIds[index]);
+        }
+
         public void ApplyLives(Modules.GameplayModule.Shared.Data.ValueObjects.LivesStateRVO state) { if (_lives != null) _lives.text = $"{state.Lives}/{state.MaxLives}"; }
         public void ApplyProfileIcon(ProfileIconVO icon)
         {

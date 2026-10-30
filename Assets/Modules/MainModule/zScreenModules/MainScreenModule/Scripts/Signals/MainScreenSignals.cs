@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using FlowIoC.BaseModule.Signals;
 using Modules.ProfileModule.Shared.Data.ValueObjects;
 
@@ -23,6 +24,8 @@ namespace Modules.MainModule.MainScreenModule.Signals
         /// <summary>The profile icon currently selected by the player.</summary>
         public Signal<ProfileIconVO> ApplyProfileIcon = new();
         public Signal<ProfileFrameVO> ApplyProfileFrame = new();
+        /// <summary>The store's localized price of each product, by product id.</summary>
+        public Signal<IReadOnlyDictionary<string, string>> ApplyShopPrices = new();
     }
 
     public class MainScreenSignalsOutgoing
@@ -42,5 +45,9 @@ namespace Modules.MainModule.MainScreenModule.Signals
         public Signal LivesPlusClicked = new();
         /// <summary>The coin icon was tapped three times quickly: the developer panel opens.</summary>
         public Signal DevToolsRequested = new();
+        /// <summary>The screen opened and wants the store's prices.</summary>
+        public Signal ShopPricesRequested = new();
+        /// <summary>A priced shop panel was pressed: the product id to buy.</summary>
+        public Signal<string> ShopBuyClicked = new();
     }
 }

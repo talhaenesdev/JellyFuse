@@ -40,6 +40,8 @@ namespace Modules.GameplayModule.Signals
         public Signal RefreshLivesOffer = new();
         /// <summary>Buy lives with coins.</summary>
         public Signal BuyLives = new();
+        /// <summary>A product was paid for with real money: its store id. What it gives is in CD_ShopProducts.</summary>
+        public Signal<string> GrantShopProduct = new();
 #if UNITY_EDITOR
         /// <summary>Editor-only cheat: end this level as won or lost at once.</summary>
         public Signal<PuzzleStatus> ForceResult = new();
