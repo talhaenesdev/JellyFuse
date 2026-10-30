@@ -67,7 +67,8 @@ namespace Modules.GameplayModule.RootsContexts
                 .ToSequence<CheckWinPaymentCommand>()
                 .ToSequence<PlayPuzzleFeedbackCommand>()
                 .ToSequence<PlayPuzzleSoundCommand>()
-                .ToSequence<RecordPuzzleResultCommand>();
+                .ToSequence<RecordPuzzleResultCommand>()
+                .ToSequence<RequestReviewCommand>();
             CommandBinder.Bind(_signals.Incoming.Undo)
                 .ToSequence<UndoPuzzleCommand>()
                 .ToSequence<IAudioService.Commands.Play>(AudioCue.Undo)
@@ -124,6 +125,7 @@ namespace Modules.GameplayModule.RootsContexts
                 .ToSequence<PlayPuzzleFeedbackCommand>()
                 .ToSequence<PlayPuzzleSoundCommand>()
                 .ToSequence<RecordPuzzleResultCommand>()
+                .ToSequence<RequestReviewCommand>()
                 .ToSequence<LoseLifeCommand>()
                 .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
                 .ToSequence<AnnounceLivesCommand>()
