@@ -821,7 +821,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -169, y: -308}
+  m_AnchoredPosition: {x: 0, y: -308}
   m_SizeDelta: {x: 310, y: 310}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4602796447603509708
@@ -4471,7 +4471,6 @@ MonoBehaviour:
   - {fileID: 3390358989548233981}
   - {fileID: 7148710096128742284}
   - {fileID: 8799046990966256873}
-  - {fileID: 3907607994860594344}
   _homePage: {fileID: 8462931953656801964}
   _shopPage: {fileID: 2311472521710224695}
   _shopPriceLabels:
@@ -4479,13 +4478,11 @@ MonoBehaviour:
   - {fileID: 6740880285300059228}
   - {fileID: 6668410541087095252}
   - {fileID: 8527315055679289436}
-  - {fileID: 7943333192954440066}
   _shopProductIds:
   - daily_offer
   - coins_1000
   - lives_5
   - boosters_3
-  - no_ads
   _shopFrame: {fileID: 4019197687531202584}
   _topBar: {fileID: 2257970293549236191}
   _navBar: {fileID: 4841172069111191868}
@@ -5255,7 +5252,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4668633179191134521
 RectTransform:
   m_ObjectHideFlags: 0
