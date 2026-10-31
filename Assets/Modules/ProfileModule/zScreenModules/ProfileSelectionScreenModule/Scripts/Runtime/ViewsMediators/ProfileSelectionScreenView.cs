@@ -4,6 +4,7 @@ using FlowIoC.BaseModule.Injectable.Components;
 using FlowIoC.ScreenModule.ViewsMediators.Screen;
 using Modules.ProfileModule.Shared.Data.ValueObjects;
 using Modules.UiWidgetsModule.Entities;
+using Modules.UiWidgetsModule.Enums;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -158,6 +159,12 @@ namespace Modules.ProfileModule.ProfileSelectionScreenModule.ViewsMediators
             Image frame = item.transform.Find("Img_Frame")?.GetComponent<Image>();
             TMP_Text label = item.GetComponentInChildren<TMP_Text>(true);
             if (image != null) { image.sprite = sprite; image.color = fallbackColor; image.enabled = sprite != null; }
+            if (image != null && sprite != null)
+            {
+                IconIdleAnimator animator = image.GetComponent<IconIdleAnimator>();
+                if (animator == null) animator = image.gameObject.AddComponent<IconIdleAnimator>();
+                animator.Configure(IconIdleStyle.AvatarFloat, .25f, .055f);
+            }
             if (frame != null)
             {
                 frame.gameObject.SetActive(frameSprite != null);

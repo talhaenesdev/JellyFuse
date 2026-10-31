@@ -7,5 +7,7 @@ namespace Modules.UiWidgetsModule.Enums
         HeartBeat = 0,
         /// <summary>Turns once around its vertical axis, then a rest - a coin.</summary>
         CoinFlip = 1,
+        /// <summary>Breathes, floats and tilts gently - a profile character.</summary>
+        AvatarFloat = 2,
     }
 }

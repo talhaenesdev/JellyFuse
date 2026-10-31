@@ -138,6 +138,7 @@ GameObject:
   - component: {fileID: 7888041025696066537}
   - component: {fileID: 788170643416341820}
   - component: {fileID: 7278357430758660591}
+  - component: {fileID: 2431991291172304610}
   m_Layer: 0
   m_Name: Img_ProfileIcon
   m_TagString: Untagged
@@ -202,3 +203,19 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &2431991291172304610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7559729479499009128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa4a93be8683f2748a3a00b5bd5025cd, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Modules.UiWidgets::Modules.UiWidgetsModule.Entities.IconIdleAnimator
+  _style: 2
+  _rest: 0.35
+  _strength: 0.065
+  _randomStart: 1
