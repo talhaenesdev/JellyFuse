@@ -28,11 +28,15 @@ namespace Modules.PurchaseModule.PurchaseScreenModule.ViewsMediators
         [SerializeField] private TMP_Text _info;
         [SerializeField] private Button _buyButton;
         [SerializeField] private TMP_Text _buyLabel;
+        [Tooltip("Shows an ad for the offer's reward; hidden for an offer with no watch text.")]
+        [SerializeField] private Button _watchButton;
+        [SerializeField] private TMP_Text _watchLabel;
         [SerializeField] private Button _closeButton;
         [Tooltip("How see-through the buy button is when the offer cannot be bought.")]
         [SerializeField, Range(0, 1)] private float _disabledAlpha = .5f;
 
         public event Action BuyClicked;
+        public event Action WatchClicked;
         public event Action CloseClicked;
         /// <summary>The countdown ran out: the offer should be sent again.</summary>
         public event Action RefreshRequested;
@@ -59,15 +63,18 @@ namespace Modules.PurchaseModule.PurchaseScreenModule.ViewsMediators
             FitLayout();
             _buyButton.onClick.AddListener(OnBuyClicked);
             _closeButton.onClick.AddListener(OnCloseClicked);
+            if (_watchButton != null) _watchButton.onClick.AddListener(OnWatchClicked);
         }
         private void OnDisable()
         {
             _buyButton.onClick.RemoveListener(OnBuyClicked);
             _closeButton.onClick.RemoveListener(OnCloseClicked);
+            if (_watchButton != null) _watchButton.onClick.RemoveListener(OnWatchClicked);
             if (_countdown != null) { StopCoroutine(_countdown); _countdown = null; }
         }
         private void OnBuyClicked() => BuyClicked?.Invoke();
         private void OnCloseClicked() => CloseClicked?.Invoke();
+        private void OnWatchClicked() => WatchClicked?.Invoke();
 
         public void ShowOffer(PurchaseOfferVO offer)
         {
@@ -85,10 +92,20 @@ namespace Modules.PurchaseModule.PurchaseScreenModule.ViewsMediators
             _amount.text = Offer.Amount;
             DrawInfo();
             _buyLabel.text = Format(L(Offer.BuyKey, Offer.Buy), Offer.Price.ToString());
-            _buyButton.interactable = Offer.CanBuy;
-            var group = _buyButton.GetComponent<CanvasGroup>();
-            if (group == null) group = _buyButton.gameObject.AddComponent<CanvasGroup>();
-            group.alpha = Offer.CanBuy ? 1 : _disabledAlpha;
+            DrawButton(_buyButton, Offer.CanBuy);
+            if (_watchButton == null) return;
+            bool watch = !string.IsNullOrEmpty(Offer.Watch) || !string.IsNullOrEmpty(Offer.WatchKey);
+            _watchButton.gameObject.SetActive(watch);
+            if (!watch) return;
+            if (_watchLabel != null) _watchLabel.text = Format(L(Offer.WatchKey, Offer.Watch), Offer.WatchAmount.ToString());
+            DrawButton(_watchButton, Offer.CanWatch);
+        }
+        private void DrawButton(Button button, bool usable)
+        {
+            button.interactable = usable;
+            var group = button.GetComponent<CanvasGroup>();
+            if (group == null) group = button.gameObject.AddComponent<CanvasGroup>();
+            group.alpha = usable ? 1 : _disabledAlpha;
         }
         private void DrawInfo() => _info.text = Format(L(Offer.InfoKey, Offer.Info), Clock(_seconds));
 

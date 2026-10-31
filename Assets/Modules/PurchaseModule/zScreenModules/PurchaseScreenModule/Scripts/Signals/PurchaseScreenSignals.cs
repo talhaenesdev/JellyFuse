@@ -27,11 +27,18 @@ namespace Modules.PurchaseModule.PurchaseScreenModule.Signals
 
         private readonly Dictionary<string, Signal> _bought = new();
         private readonly Dictionary<string, Signal> _refresh = new();
+        private readonly Dictionary<string, Signal> _watched = new();
 
         /// <summary>Buy was pressed on the offer with this key. One signal per key, so a Connector wires each seller without an if.</summary>
         public Signal Bought(string key)
         {
             if (!_bought.TryGetValue(key, out var signal)) _bought[key] = signal = new Signal();
+            return signal;
+        }
+        /// <summary>Watch ad was pressed on the offer with this key.</summary>
+        public Signal Watched(string key)
+        {
+            if (!_watched.TryGetValue(key, out var signal)) _watched[key] = signal = new Signal();
             return signal;
         }
         /// <summary>The countdown of the offer with this key ran out: the seller should send the offer again.</summary>

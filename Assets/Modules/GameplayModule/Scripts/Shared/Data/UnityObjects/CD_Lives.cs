@@ -24,6 +24,8 @@ namespace Modules.GameplayModule.Shared.Data.UnityObjects
         [Min(0)] public int CoinPrice = 100;
         [Tooltip("Lives one purchase gives.")]
         [Min(1)] public int LivesPerPurchase = 1;
+        [Tooltip("Lives one watched rewarded ad gives; 0 offers no ad.")]
+        [Min(0)] public int LivesPerAd = 1;
 
         [Header("Purchase popup")]
         [Tooltip("The picture on the popup; the lives held are written over it.")]
@@ -36,6 +38,8 @@ namespace Modules.GameplayModule.Shared.Data.UnityObjects
         public string FullKey = "lives.full";
         [Tooltip("Localization key of the buy button; {0} is the price.")]
         public string BuyKey = "lives.buy";
+        [Tooltip("Localization key of the watch-ad button; {0} is the lives it gives.")]
+        public string WatchKey = "lives.watch_ad";
 
         public long RefillSeconds => System.Math.Max(1, (long)Mathf.Round(RefillMinutes * 60));
     }

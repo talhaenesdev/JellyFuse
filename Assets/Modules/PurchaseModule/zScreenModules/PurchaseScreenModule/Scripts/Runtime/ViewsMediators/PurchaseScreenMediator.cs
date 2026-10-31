@@ -30,6 +30,7 @@ namespace Modules.PurchaseModule.PurchaseScreenModule.ViewsMediators
         {
             _view.BuyClicked += OnBuy;
             _view.CloseClicked += OnClose;
+            _view.WatchClicked += OnWatch;
             _view.RefreshRequested += OnRefresh;
             _signals.Incoming.ApplyOffer.AddListener(OnApplyOffer);
             _signals.Incoming.Close.AddListener(OnClose);
@@ -39,6 +40,7 @@ namespace Modules.PurchaseModule.PurchaseScreenModule.ViewsMediators
         {
             _view.BuyClicked -= OnBuy;
             _view.CloseClicked -= OnClose;
+            _view.WatchClicked -= OnWatch;
             _view.RefreshRequested -= OnRefresh;
             _signals.Incoming.ApplyOffer.RemoveListener(OnApplyOffer);
             _signals.Incoming.Close.RemoveListener(OnClose);
@@ -53,6 +55,11 @@ namespace Modules.PurchaseModule.PurchaseScreenModule.ViewsMediators
         private void OnBuy()
         {
             if (_view.Data.HasState(ScreenState.AvailableToSendSignal) && _view.Offer != null) _signals.Outgoing.Bought(_view.Offer.Key).Dispatch();
+        }
+
+        private void OnWatch()
+        {
+            if (_view.Data.HasState(ScreenState.AvailableToSendSignal) && _view.Offer != null) _signals.Outgoing.Watched(_view.Offer.Key).Dispatch();
         }
 
         private void OnRefresh()

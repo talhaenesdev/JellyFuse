@@ -1,3 +1,4 @@
+using Modules.AdsModule.Services;
 using Modules.AudioModule.Enums;
 using Modules.AudioModule.Services;
 using Modules.HapticModule.Enums;
@@ -182,6 +183,16 @@ namespace Modules.GameplayModule.RootsContexts
                 .ToSequence<ScheduleNotificationsCommand>()
                 .ToSequence<AnnounceLivesOfferCommand>()
                 // Bought for a level that waited for a life: that level starts.
+                .ToSequence<StartWaitingLevelCommand>();
+            CommandBinder.Bind(_signals.Incoming.WatchAdForLives)
+                .ToSequence<RefreshLivesCommand>()
+                .ToSequence<IAdsService.Commands.ShowRewarded>()
+                .ToSequence<GrantAdLivesCommand>()
+                .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
+                .ToSequence<AnnounceLivesCommand>()
+                .ToSequence<ScheduleNotificationsCommand>()
+                .ToSequence<AnnounceLivesOfferCommand>()
+                // Watched for a level that waited for a life: that level starts.
                 .ToSequence<StartWaitingLevelCommand>();
             CommandBinder.Bind(_signals.Incoming.ResetLives)
                 .ToSequence<ResetLivesCommand>()

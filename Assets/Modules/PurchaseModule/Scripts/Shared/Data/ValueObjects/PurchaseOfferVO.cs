@@ -23,5 +23,9 @@ namespace Modules.PurchaseModule.Shared.Data.ValueObjects
         public string BuyKey, Buy;
         public int Price;
         public bool CanBuy;
+        /// <summary>The watch-ad button's text; a {0} in it is what the ad gives. Empty: the popup shows no such button.</summary>
+        public string WatchKey, Watch;
+        public int WatchAmount;
+        public bool CanWatch;
     }
 }

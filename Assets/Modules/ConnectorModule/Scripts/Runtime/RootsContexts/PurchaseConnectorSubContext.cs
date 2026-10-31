@@ -37,6 +37,7 @@ namespace Modules.ConnectorModule.RootsContexts
         private void OutgoingSignals()
         {
             _purchaseSignals.Outgoing.Bought(GameplayOffers.LIVES).Connect(_gameplaySignals.Incoming.BuyLives, GROUP);
+            _purchaseSignals.Outgoing.Watched(GameplayOffers.LIVES).Connect(_gameplaySignals.Incoming.WatchAdForLives, GROUP);
             _purchaseSignals.Outgoing.RefreshRequested(GameplayOffers.LIVES).Connect(_gameplaySignals.Incoming.RefreshLivesOffer, GROUP);
         }
 

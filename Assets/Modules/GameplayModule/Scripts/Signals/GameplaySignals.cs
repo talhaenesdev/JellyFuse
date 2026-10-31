@@ -38,6 +38,8 @@ namespace Modules.GameplayModule.Signals
         public Signal OpenLivesOffer = new();
         /// <summary>Send the lives offer again: its countdown ran out.</summary>
         public Signal RefreshLivesOffer = new();
+        /// <summary>Show a rewarded ad and give CD_Lives' lives per ad once it is watched.</summary>
+        public Signal WatchAdForLives = new();
         /// <summary>Buy lives with coins.</summary>
         public Signal BuyLives = new();
         /// <summary>A product was paid for with real money: its store id. What it gives is in CD_ShopProducts.</summary>

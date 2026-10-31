@@ -2,6 +2,7 @@ using System;
 using FlowIoC.BaseModule.Controller;
 using FlowIoC.BaseModule.Injectable.Attributes;
 using FlowIoC.BaseModule.SharedData;
+using Modules.AdsModule.Services;
 using Modules.GameplayModule.Enums;
 using Modules.GameplayModule.Models;
 using Modules.GameplayModule.Shared.Data.UnityObjects;
@@ -19,6 +20,7 @@ namespace Modules.GameplayModule.Controllers
     {
         [Inject] private ISharedDataModel _shared { get; set; }
         [Inject] private ILivesModel _lives { get; set; }
+        [Inject] private IAdsService _ads { get; set; }
         [InjectSignal] private GameplaySignals _signals { get; set; }
 
         public override void Execute(WaitingLevelStart start)
@@ -34,7 +36,7 @@ namespace Modules.GameplayModule.Controllers
             var state = _lives.State(progress, config, DateTimeOffset.UtcNow.ToUnixTimeSeconds());
             _signals.Outgoing.LivesChanged.Dispatch(state);
             _signals.Outgoing.OutOfLives.Dispatch(state.SecondsToNext);
-            if (config.BuyWithCoins) _signals.Outgoing.LivesOfferOpened.Dispatch(LivesOfferFunction.Build(_lives, progress, config));
+            if (config.BuyWithCoins) _signals.Outgoing.LivesOfferOpened.Dispatch(LivesOfferFunction.Build(_lives, progress, config, _ads.IsRewardedReady));
             Retain();
             Stop();
         }

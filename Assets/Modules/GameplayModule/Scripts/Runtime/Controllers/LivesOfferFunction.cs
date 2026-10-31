@@ -9,7 +9,7 @@ namespace Modules.GameplayModule.Controllers
     /// <summary>The lives offer as the purchase popup shows it, from CD_Lives and the player's progress.</summary>
     internal static class LivesOfferFunction
     {
-        public static PurchaseOfferVO Build(ILivesModel lives, SD_JellyProgress progress, CD_Lives config)
+        public static PurchaseOfferVO Build(ILivesModel lives, SD_JellyProgress progress, CD_Lives config, bool adReady)
         {
             var state = lives.State(progress, config, DateTimeOffset.UtcNow.ToUnixTimeSeconds());
             bool full = state.Lives >= state.MaxLives;
@@ -24,6 +24,9 @@ namespace Modules.GameplayModule.Controllers
                 BuyKey = config.BuyKey, Buy = "Buy {0}",
                 Price = config.CoinPrice,
                 CanBuy = !full && progress.Coins >= config.CoinPrice,
+                WatchKey = config.LivesPerAd > 0 ? config.WatchKey : null, Watch = config.LivesPerAd > 0 ? "Watch ad +{0}" : null,
+                WatchAmount = config.LivesPerAd,
+                CanWatch = !full && adReady && config.LivesPerAd > 0,
             };
         }
     }
