@@ -26,6 +26,8 @@ namespace Modules.GameplayModule.Shared.Data.UnityObjects
         public long NextLifeAt;
         [Tooltip("Whether the player bought the removal of ads. Bought once, kept for ever.")]
         public bool NoAds;
+        /// <summary>The day each once-a-day product was last bought.</summary>
+        public List<ShopPurchaseDaySVO> ShopPurchaseDays = new();
 
         /// <summary>The player's entry for a booster, made when it has none yet.</summary>
         public BoosterSVO Booster(BoosterType type)

@@ -136,7 +136,9 @@ namespace Modules.GameplayModule.RootsContexts
                 .ToSequence<GrantShopProductCommand>()
                 .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
                 .ToSequence<AnnounceBoostersCommand>()
-                .ToSequence<AnnounceLivesCommand>();
+                .ToSequence<AnnounceLivesCommand>()
+                .ToSequence<AnnounceShopSoldOutCommand>();
+            CommandBinder.Bind(_signals.Incoming.RequestShopSoldOut).ToSequence<AnnounceShopSoldOutCommand>();
             CommandBinder.Bind(_signals.Incoming.ResetBoosters)
                 .ToSequence<ResetBoostersCommand>()
                 .ToSequence<GrantBoostersCommand>()

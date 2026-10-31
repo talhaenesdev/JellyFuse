@@ -44,6 +44,8 @@ namespace Modules.GameplayModule.Signals
         public Signal BuyLives = new();
         /// <summary>A product was paid for with real money: its store id. What it gives is in CD_ShopProducts.</summary>
         public Signal<string> GrantShopProduct = new();
+        /// <summary>Announce which once-a-day shop products are sold out today.</summary>
+        public Signal RequestShopSoldOut = new();
 #if UNITY_EDITOR
         /// <summary>Editor-only cheat: end this level as won or lost at once.</summary>
         public Signal<PuzzleStatus> ForceResult = new();
@@ -60,6 +62,8 @@ namespace Modules.GameplayModule.Signals
         public Signal<int> CoinsEarned = new();
         /// <summary>The coins the player now holds.</summary>
         public Signal<int> CoinsChanged = new();
+        /// <summary>The once-a-day shop products already bought today, by product id.</summary>
+        public Signal<IReadOnlyList<string>> ShopSoldOutChanged = new();
         /// <summary>The level Play starts now, counted from 1.</summary>
         public Signal<int> CurrentLevelChanged = new();
         /// <summary>How each booster stands now, in the order of the HUD's booster buttons.</summary>

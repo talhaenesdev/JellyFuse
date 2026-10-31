@@ -129,6 +129,7 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
         private readonly List<UnityEngine.Events.UnityAction> _shopActions = new();
         private Button[] _shopButtons;
         private IReadOnlyDictionary<string, string> _shopPrices;
+        private readonly HashSet<string> _shopSoldOut = new();
 
         public override void BeforeScreenActivation()
         {
@@ -412,10 +413,31 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
         {
             _shopPrices = prices;
             if (_shopPriceLabels == null || _shopProductIds == null) return;
+            DrawShopLabels();
+        }
+
+        /// <summary>The products sold out today: their panels say so and cannot be pressed until tomorrow.</summary>
+        public void ApplyShopSoldOut(IReadOnlyList<string> soldOut)
+        {
+            _shopSoldOut.Clear();
+            if (soldOut != null) _shopSoldOut.UnionWith(soldOut);
+            DrawShopLabels();
+        }
+
+        private void DrawShopLabels()
+        {
+            if (_shopPriceLabels == null || _shopProductIds == null) return;
             for (int i = 0; i < _shopPriceLabels.Length && i < _shopProductIds.Length; i++)
             {
                 TMP_Text label = _shopPriceLabels[i];
-                if (label == null || prices == null || !prices.TryGetValue(_shopProductIds[i], out string price)) continue;
+                if (label == null) continue;
+                if (_shopSoldOut.Contains(_shopProductIds[i]))
+                {
+                    _keyedTexts.RemoveAll(keyed => keyed.Label == label);
+                    Keyed(label, "main.shop.tomorrow", "Tomorrow");
+                    continue;
+                }
+                if (_shopPrices == null || !_shopPrices.TryGetValue(_shopProductIds[i], out string price)) continue;
                 _keyedTexts.RemoveAll(keyed => keyed.Label == label);
                 label.text = price;
             }
@@ -423,7 +445,8 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
         }
 
         private bool IsPriced(int index) =>
-            _shopPrices != null && _shopProductIds != null && index < _shopProductIds.Length && _shopPrices.ContainsKey(_shopProductIds[index]);
+            _shopPrices != null && _shopProductIds != null && index < _shopProductIds.Length && _shopPrices.ContainsKey(_shopProductIds[index])
+            && !_shopSoldOut.Contains(_shopProductIds[index]);
 
         // A panel with no price yet shows its colour dimmed, so it reads as not yet open.
         private void TintShopPanels()

@@ -13,5 +13,7 @@ namespace Modules.GameplayModule.Shared.Data.ValueObjects
         /// <summary>Uses added to each booster listed.</summary>
         public List<BoosterSVO> Boosters = new();
         public bool RemovesAds;
+        /// <summary>Sold once a day: bought today, the shop shows it sold out until the player's midnight.</summary>
+        public bool OncePerDay;
     }
 }

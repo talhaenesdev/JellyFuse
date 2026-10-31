@@ -5,6 +5,7 @@ using FlowIoC.BaseModule.SharedData;
 using FlowIoC.ConsoleModule;
 using Modules.GameplayModule.Models;
 using Modules.GameplayModule.Shared.Data.UnityObjects;
+using Modules.GameplayModule.Shared.Data.ValueObjects;
 using Modules.GameplayModule.Signals;
 
 namespace Modules.GameplayModule.Controllers
@@ -44,6 +45,14 @@ namespace Modules.GameplayModule.Controllers
             foreach (var booster in product.Boosters)
                 if (booster != null && booster.Count > 0) progress.Booster(booster.Type).Count += booster.Count;
             if (product.RemovesAds) progress.NoAds = true;
+            if (product.OncePerDay) MarkBoughtToday(progress);
+        }
+
+        private void MarkBoughtToday(SD_JellyProgress progress)
+        {
+            var bought = progress.ShopPurchaseDays.Find(day => day.ProductId == _productId);
+            if (bought == null) progress.ShopPurchaseDays.Add(bought = new ShopPurchaseDaySVO { ProductId = _productId });
+            bought.Day = ShopDayFunction.Today();
         }
     }
 }

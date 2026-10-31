@@ -26,6 +26,8 @@ namespace Modules.MainModule.MainScreenModule.Signals
         public Signal<ProfileFrameVO> ApplyProfileFrame = new();
         /// <summary>The store's localized price of each product, by product id.</summary>
         public Signal<IReadOnlyDictionary<string, string>> ApplyShopPrices = new();
+        /// <summary>The products sold out today, by product id: their panels wait until tomorrow.</summary>
+        public Signal<IReadOnlyList<string>> ApplyShopSoldOut = new();
     }
 
     public class MainScreenSignalsOutgoing
@@ -47,6 +49,8 @@ namespace Modules.MainModule.MainScreenModule.Signals
         public Signal DevToolsRequested = new();
         /// <summary>The screen opened and wants the store's prices.</summary>
         public Signal ShopPricesRequested = new();
+        /// <summary>The screen opened and wants to know which products are sold out today.</summary>
+        public Signal ShopSoldOutRequested = new();
         /// <summary>A priced shop panel was pressed: the product id to buy.</summary>
         public Signal<string> ShopBuyClicked = new();
     }

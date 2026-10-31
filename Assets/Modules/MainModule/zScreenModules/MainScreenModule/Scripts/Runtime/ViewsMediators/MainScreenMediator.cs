@@ -41,8 +41,10 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
             _signals.Incoming.ApplyProfileIcon.AddListener(_view.ApplyProfileIcon);
             _signals.Incoming.ApplyProfileFrame.AddListener(_view.ApplyProfileFrame);
             _signals.Incoming.ApplyShopPrices.AddListener(_view.ApplyShopPrices);
+            _signals.Incoming.ApplyShopSoldOut.AddListener(_view.ApplyShopSoldOut);
             _signals.Outgoing.ProfileIconRequested.Dispatch();
             _signals.Outgoing.ShopPricesRequested.Dispatch();
+            _signals.Outgoing.ShopSoldOutRequested.Dispatch();
         }
 
         private void OnScreenHidden(IScreenBody screen)
@@ -61,6 +63,7 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
             _signals.Incoming.ApplyProfileIcon.RemoveListener(_view.ApplyProfileIcon);
             _signals.Incoming.ApplyProfileFrame.RemoveListener(_view.ApplyProfileFrame);
             _signals.Incoming.ApplyShopPrices.RemoveListener(_view.ApplyShopPrices);
+            _signals.Incoming.ApplyShopSoldOut.RemoveListener(_view.ApplyShopSoldOut);
         }
 
         private void OnPlayClicked()
