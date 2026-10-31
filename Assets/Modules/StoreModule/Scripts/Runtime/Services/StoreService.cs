@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using FlowIoC.ConsoleModule;
 using Modules.StoreModule.Data.ValueObjects;
+using Modules.StoreModule.Services.Sub;
 using UnityEngine.Purchasing;
 
 namespace Modules.StoreModule.Services
@@ -14,6 +16,7 @@ namespace Modules.StoreModule.Services
         private Action<IReadOnlyDictionary<string, string>> _onPrices;
         private readonly HashSet<string> _consumable = new();
         private bool _ready;
+        private readonly PurchaseVerifySubService _verify = new();
         public IReadOnlyDictionary<string, string> Prices { get; private set; }
 
         public async void Connect(IReadOnlyList<StoreProductCVO> products, Action<IReadOnlyDictionary<string, string>> onPrices, Action<string> onPaid)
@@ -65,18 +68,41 @@ namespace Modules.StoreModule.Services
             _store.FetchPurchases();
         }
 
-        private void OnPurchasePending(PendingOrder order)
+        // Paid for now, or left pending last time. Granted and confirmed only once the server agrees; an
+        // order left unconfirmed is delivered again next launch, and one Google never sold is refunded by Play
+        // after three days unconfirmed.
+        private async void OnPurchasePending(PendingOrder order)
         {
-            foreach (var item in order.CartOrdered.Items()) _onPaid?.Invoke(item.Product.definition.id);
+            foreach (var item in order.CartOrdered.Items())
+            {
+                string id = item.Product.definition.id;
+                var verdict = await VerifyOrder(id, order.Info, _consumable.Contains(id));
+                if (verdict != PurchaseVerdict.Valid) return;
+                _onPaid?.Invoke(id);
+            }
             _store.ConfirmPurchase(order);
         }
 
         // The restore: what the player owns for ever is granted again.
-        private void OnPurchasesFetched(Orders orders)
+        private async void OnPurchasesFetched(Orders orders)
         {
             foreach (var order in orders.ConfirmedOrders)
             foreach (var item in order.CartOrdered.Items())
-                if (!_consumable.Contains(item.Product.definition.id)) _onPaid?.Invoke(item.Product.definition.id);
+            {
+                string id = item.Product.definition.id;
+                if (_consumable.Contains(id)) continue;
+                if (await VerifyOrder(id, order.Info, false) == PurchaseVerdict.Valid) _onPaid?.Invoke(id);
+            }
+        }
+
+        // Only Google Play has a server to ask; the Editor's fake store is trusted.
+        private Task<PurchaseVerdict> VerifyOrder(string productId, IOrderInfo info, bool consumable)
+        {
+#if UNITY_ANDROID && !UNITY_EDITOR
+            return _verify.Verify(productId, info?.Google?.PurchaseToken, consumable);
+#else
+            return Task.FromResult(PurchaseVerdict.Valid);
+#endif
         }
     }
 }
