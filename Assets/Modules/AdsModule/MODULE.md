@@ -9,10 +9,10 @@ ads, rewarded ad, rewarded video, LevelPlay, ironSource, watch ad, reward, IAdsS
 ## Decisions
 - **A sequence waits on the ad through `IAdsService.Commands.ShowRewarded`.** It carries on only when the ad closed with its reward, and stops when no ad was ready, the ad failed or the player closed it early.
 - **Rewarded ads stay with no-ads.** They are the player's choice; the no-ads purchase is for ads the player does not ask for.
-- **`CD_Ads` ships LevelPlay's test app**, so a build shows test ads until the game's own app key and ad unit are filled in.
+- **`CD_Ads` holds the game's own LevelPlay app** (`2928c5c8d`, organisation horseman AS Publisher) and its `rewarded_lives` ad unit. Test phones belong under LevelPlay > Setup > Test devices, never a tap on a live ad.
 
 ## Known gaps
-- `CD_Ads` holds LevelPlay's test app key; replace it with the game's own from the LevelPlay dashboard before release.
+- The LevelPlay app is registered as not live yet (status Temp); add its Google Play URL there once the game is public.
 - No consent (GDPR / UMP) prompt is shown before ads.
 - Only Android is configured.
 
