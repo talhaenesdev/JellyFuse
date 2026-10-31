@@ -40,6 +40,12 @@ namespace Modules.GameplayModule.Signals
         public Signal RefreshLivesOffer = new();
         /// <summary>Show a rewarded ad and give CD_Lives' lives per ad once it is watched.</summary>
         public Signal WatchAdForLives = new();
+        /// <summary>Show a rewarded ad and pay the win's coins again (CD_AdRewards).</summary>
+        public Signal WatchAdForDoubleReward = new();
+        /// <summary>Show a rewarded ad and play on a level lost to the clock with more time (CD_AdRewards).</summary>
+        public Signal WatchAdForTime = new();
+        /// <summary>Show a rewarded ad and give today's free use of this booster (CD_AdRewards).</summary>
+        public Signal<BoosterType> WatchAdForBooster = new();
         /// <summary>Buy lives with coins.</summary>
         public Signal BuyLives = new();
         /// <summary>A product was paid for with real money: its store id. What it gives is in CD_ShopProducts.</summary>
@@ -86,5 +92,7 @@ namespace Modules.GameplayModule.Signals
         public Signal<JellyTutorialRVO> TutorialChanged = new();
         /// <summary>Something new the player should be told about - a booster that just opened: its info page's key.</summary>
         public Signal<string> InfoRequested = new();
+        /// <summary>The rewarded ads the result panels offer now.</summary>
+        public Signal<AdOffersRVO> AdOffersChanged = new();
     }
 }

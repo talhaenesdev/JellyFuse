@@ -1,6 +1,7 @@
 using FlowIoC.BaseModule.Controller;
 using FlowIoC.BaseModule.Injectable.Attributes;
 using FlowIoC.BaseModule.SharedData;
+using Modules.AdsModule.Services;
 using Modules.GameplayModule.Models;
 using Modules.GameplayModule.Shared.Data.UnityObjects;
 using Modules.GameplayModule.Shared.Data.ValueObjects;
@@ -15,6 +16,7 @@ namespace Modules.GameplayModule.Controllers
     {
         [Inject] private ISharedDataModel _shared { get; set; }
         [Inject] private IJellyPuzzleModel _model { get; set; }
+        [Inject] private IAdsService _ads { get; set; }
         [InjectSignal] private GameplaySignals _signals { get; set; }
 
         public override void Execute()
@@ -29,13 +31,15 @@ namespace Modules.GameplayModule.Controllers
                 if (booster == null || !booster.Enabled) continue;
                 int count = progress != null ? progress.Booster(booster.Type).Count : 0;
                 bool unlocked = _model.LevelIndex + 1 >= booster.UnlockLevel;
+                bool freeByAd = _ads.IsRewardedReady && BoosterAdFunction.Offered(_shared, _model, booster.Type);
                 states.Add(new BoosterStateRVO
                 {
                     Type = booster.Type, Icon = booster.Icon, Unlocked = unlocked, UnlockLevel = booster.UnlockLevel,
                     Count = count, Price = booster.CoinPrice,
                     // A freeze does not stack: while the clock is frozen, Freeze Time waits until it runs again.
-                    Usable = unlocked && progress != null && (count > 0 || coins >= booster.CoinPrice)
+                    Usable = unlocked && progress != null && (count > 0 || coins >= booster.CoinPrice || freeByAd)
                         && !(booster.Type == BoosterType.FreezeTime && _model.ClockFreezeSeconds > 0),
+                    FreeByAd = freeByAd,
                 });
             }
             _signals.Outgoing.BoostersChanged.Dispatch(states);

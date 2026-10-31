@@ -34,11 +34,15 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
 
         public void ApplyReward(int coins)
         {
-            if (_winReward != null) _winReward.text = coins.ToString();
+            // More coins for a win already on show - an ad paid it again - add to what the panel reads, and fly at once.
+            bool onShow = _winPanel != null && _winPanel.parent.gameObject.activeSelf;
+            if (_winReward != null)
+                _winReward.text = (onShow && int.TryParse(_winReward.text, out var was) ? was + coins : coins).ToString();
             if (coins <= 0) return;
             // The count stays where it was until the win panel shows the coins flying in.
             if (_shownCoins < 0 && _coins != null && int.TryParse(_coins.text, out var shown)) _shownCoins = shown;
             _pendingReward += coins;
+            if (onShow) StartCoinFlight();
         }
 
         private void ShowCoins(int coins)

@@ -25,6 +25,14 @@ namespace Modules.GameplayModule.Models
         bool WinPaid { get; set; }
         /// <summary>The loss of the level being played has cost its life; cleared when a level starts.</summary>
         bool LifeTaken { get; set; }
+        /// <summary>The coins this level's win paid, before any ad doubled them.</summary>
+        int WinReward { get; set; }
+        /// <summary>A watched ad already paid this win's coins again.</summary>
+        bool RewardDoubled { get; set; }
+        /// <summary>A watched ad already gave this level more time.</summary>
+        bool TimeExtended { get; }
+        /// <summary>A level lost to the clock is played on with these seconds, once a level. False when it was not lost to the clock.</summary>
+        bool ExtendTime(float seconds);
         /// <summary>A level is on screen: set when one starts, cleared when the gameplay screen closes.</summary>
         bool InPlay { get; set; }
         /// <summary>The clock has started: it waits for the level's first move.</summary>

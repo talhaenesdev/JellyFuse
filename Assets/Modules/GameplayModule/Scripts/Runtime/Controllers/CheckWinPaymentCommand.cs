@@ -24,6 +24,7 @@ namespace Modules.GameplayModule.Controllers
             _model.WinPaid = true;
             var levels = _shared.GetScriptable<CD_JellyLevels>();
             int reward = levels != null ? levels.CoinReward(_model.LevelIndex) : 0;
+            _model.WinReward = reward;
             _internalSignals.PayWin.Dispatch(reward);
         }
     }

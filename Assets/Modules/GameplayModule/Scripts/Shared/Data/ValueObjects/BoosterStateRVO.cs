@@ -14,5 +14,7 @@ namespace Modules.GameplayModule.Shared.Data.ValueObjects
         public int Price;
         /// <summary>Usable now: a use left, or the coins to buy one.</summary>
         public bool Usable;
+        /// <summary>No use left, and today's free booster is offered for an ad: pressing it shows the ad.</summary>
+        public bool FreeByAd;
     }
 }

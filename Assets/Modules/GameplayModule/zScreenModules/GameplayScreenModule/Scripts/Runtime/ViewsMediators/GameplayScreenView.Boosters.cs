@@ -121,8 +121,11 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                 if (entry.State.Icon != null) entry.Icon.sprite = entry.State.Icon;
                 entry.Badge.text = !entry.State.Unlocked ? LF("gameplay.booster_locked", "Lv {0}", entry.State.UnlockLevel)
                     // An amount owned reads "x3"; a price is gold, so the two are never confused.
-                    : entry.State.Count > 0 ? "x" + entry.State.Count : "<color=#FFD23F>" + entry.State.Price + "</color>";
-                bool priced = entry.State.Unlocked && entry.State.Count <= 0;
+                    : entry.State.Count > 0 ? "x" + entry.State.Count
+                    // Today's free use for an ad comes before the price.
+                    : entry.State.FreeByAd ? L("gameplay.booster_ad", "AD")
+                    : "<color=#FFD23F>" + entry.State.Price + "</color>";
+                bool priced = entry.State.Unlocked && entry.State.Count <= 0 && !entry.State.FreeByAd;
                 if (entry.PriceCoin != null)
                 {
                     entry.PriceCoin.gameObject.SetActive(priced);
@@ -157,6 +160,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             // In a lesson only the booster taught is taken, and once armed it cannot be let go.
             if (_lesson && state.Type != _lessonType) return;
             if (_boosterArmed && _armedType == state.Type) { if (!_lesson) Disarm(); return; }
+            if (state.FreeByAd && !_lesson) { Disarm(); BoosterAdClicked?.Invoke(state.Type); return; }
             if (!state.Usable) return;
             Disarm();
             if (state.Type == BoosterType.FreezeTime) { EndBoosterLesson(); BoosterChosen?.Invoke(state.Type, 0); ShowHint(state.Type, 2); return; }

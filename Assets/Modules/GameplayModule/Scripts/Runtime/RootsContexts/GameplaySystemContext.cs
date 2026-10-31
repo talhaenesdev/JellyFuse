@@ -130,7 +130,8 @@ namespace Modules.GameplayModule.RootsContexts
                 .ToSequence<LoseLifeCommand>()
                 .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
                 .ToSequence<AnnounceLivesCommand>()
-                .ToSequence<ScheduleNotificationsCommand>();
+                .ToSequence<ScheduleNotificationsCommand>()
+                .ToSequence<AnnounceAdOffersCommand>();
 #endif
             CommandBinder.Bind(_signals.Incoming.GrantShopProduct)
                 .ToSequence<GrantShopProductCommand>()
@@ -159,7 +160,9 @@ namespace Modules.GameplayModule.RootsContexts
                 .ToSequence<LoseLifeCommand>()
                 .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
                 .ToSequence<AnnounceLivesCommand>()
-                .ToSequence<ScheduleNotificationsCommand>();
+                .ToSequence<ScheduleNotificationsCommand>()
+                .ToSequence<AnnounceBoostersCommand>()
+                .ToSequence<AnnounceAdOffersCommand>();
             CommandBinder.Bind(_signals.Incoming.RefreshLives)
                 .ToSequence<RefreshLivesCommand>()
                 .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
@@ -196,6 +199,26 @@ namespace Modules.GameplayModule.RootsContexts
                 .ToSequence<AnnounceLivesOfferCommand>()
                 // Watched for a level that waited for a life: that level starts.
                 .ToSequence<StartWaitingLevelCommand>();
+            CommandBinder.Bind(_signals.Incoming.WatchAdForDoubleReward)
+                .ToSequence<CheckDoubleRewardCommand>()
+                .ToSequence<IAdsService.Commands.ShowRewarded>()
+                .ToSequence<DoubleWinRewardCommand>();
+            CommandBinder.Bind(_signals.Incoming.WatchAdForTime)
+                .ToSequence<CheckExtraTimeCommand>()
+                .ToSequence<IAdsService.Commands.ShowRewarded>()
+                .ToSequence<ExtendTimeCommand>()
+                .ToSequence<StartPuzzleClockCommand>()
+                .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
+                .ToSequence<AnnounceLivesCommand>()
+                .ToSequence<ScheduleNotificationsCommand>()
+                .ToSequence<AnnounceBoostersCommand>()
+                .ToSequence<AnnounceAdOffersCommand>();
+            CommandBinder.Bind(_signals.Incoming.WatchAdForBooster)
+                .ToSequence<CheckBoosterAdCommand>()
+                .ToSequence<IAdsService.Commands.ShowRewarded>()
+                .ToSequence<GrantBoosterAdCommand>()
+                .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
+                .ToSequence<AnnounceBoostersCommand>();
             CommandBinder.Bind(_signals.Incoming.ResetLives)
                 .ToSequence<ResetLivesCommand>()
                 .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
@@ -208,7 +231,8 @@ namespace Modules.GameplayModule.RootsContexts
                 .ToSequence<AddCoinsCommand>()
                 .ToSequence<IAudioService.Commands.Play>(AudioCue.Coin)
                 .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
-                .ToSequence<AnnounceBoostersCommand>();
+                .ToSequence<AnnounceBoostersCommand>()
+                .ToSequence<AnnounceAdOffersCommand>();
         }
 
         public override void Setup()

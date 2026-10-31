@@ -38,6 +38,10 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             _view.QuitClicked += OnQuitClicked;
             _view.JellyMelting += OnJellyMelting;
             _view.BoosterChosen += OnBoosterChosen;
+            _view.DoubleRewardClicked += OnDoubleRewardClicked;
+            _view.ExtraTimeClicked += OnExtraTimeClicked;
+            _view.BoosterAdClicked += OnBoosterAdClicked;
+            _signals.Incoming.ApplyAdOffers.AddListener(_view.ApplyAdOffers);
             _signals.Incoming.SendTuningSliders.AddListener(OnSendTuningSliders);
             _signals.Incoming.SetTuned.AddListener(_view.SetTuned);
             _signals.Incoming.ResetTuning.AddListener(OnResetTuning);
@@ -76,6 +80,10 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             _view.QuitClicked -= OnQuitClicked;
             _view.JellyMelting -= OnJellyMelting;
             _view.BoosterChosen -= OnBoosterChosen;
+            _view.DoubleRewardClicked -= OnDoubleRewardClicked;
+            _view.ExtraTimeClicked -= OnExtraTimeClicked;
+            _view.BoosterAdClicked -= OnBoosterAdClicked;
+            _signals.Incoming.ApplyAdOffers.RemoveListener(_view.ApplyAdOffers);
             _signals.Incoming.SendTuningSliders.RemoveListener(OnSendTuningSliders);
             _signals.Incoming.SetTuned.RemoveListener(_view.SetTuned);
             _signals.Incoming.ResetTuning.RemoveListener(OnResetTuning);
@@ -138,6 +146,18 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         private void OnBoosterChosen(BoosterType type, int target)
         {
             if (_view.Data.HasState(ScreenState.AvailableToSendSignal)) _signals.Outgoing.UseBooster.Dispatch(type, target);
+        }
+        private void OnDoubleRewardClicked()
+        {
+            if (_view.Data.HasState(ScreenState.AvailableToSendSignal)) _signals.Outgoing.DoubleRewardClicked.Dispatch();
+        }
+        private void OnExtraTimeClicked()
+        {
+            if (_view.Data.HasState(ScreenState.AvailableToSendSignal)) _signals.Outgoing.ExtraTimeClicked.Dispatch();
+        }
+        private void OnBoosterAdClicked(BoosterType type)
+        {
+            if (_view.Data.HasState(ScreenState.AvailableToSendSignal)) _signals.Outgoing.BoosterAdClicked.Dispatch(type);
         }
         private void OnSettings()
         {

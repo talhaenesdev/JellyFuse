@@ -71,6 +71,9 @@ namespace Modules.GameplayModule.Models
         public int LevelIndex { get; set; } = -1;
         public bool WinPaid { get; set; }
         public bool LifeTaken { get; set; }
+        public int WinReward { get; set; }
+        public bool RewardDoubled { get; set; }
+        public bool TimeExtended { get; private set; }
         public bool InPlay { get; set; }
         public bool ClockStarted { get; set; }
         /// <summary>The last stage of a door that counts when judging a shape: the one it waits for now, or its whole queue.</summary>
@@ -99,7 +102,21 @@ namespace Modules.GameplayModule.Models
             IsTicking = false;
             WinPaid = false;
             LifeTaken = false;
+            WinReward = 0;
+            RewardDoubled = false;
+            TimeExtended = false;
             InPlay = true;
+        }
+
+        public bool ExtendTime(float seconds)
+        {
+            if (_level == null || Status != PuzzleStatus.Lost || RemainingSeconds > 0 || TimeExtended || seconds <= 0) return false;
+            TimeExtended = true;
+            RemainingSeconds = seconds;
+            Status = PuzzleStatus.Playing;
+            IsTicking = ClockStarted;
+            Changed();
+            return true;
         }
 
         public bool Tick(float seconds)

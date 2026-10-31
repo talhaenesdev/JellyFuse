@@ -28,6 +28,9 @@ namespace Modules.ConnectorModule.RootsContexts
             _screenSignals.Outgoing.SkipLevel.Connect(_gameplaySignals.Incoming.SkipLevel, GROUP);
             _screenSignals.Outgoing.UseBooster.Connect(_gameplaySignals.Incoming.UseBooster, GROUP);
             _screenSignals.Outgoing.LivesRefreshRequested.Connect(_gameplaySignals.Incoming.RefreshLives, GROUP);
+            _screenSignals.Outgoing.DoubleRewardClicked.Connect(_gameplaySignals.Incoming.WatchAdForDoubleReward, GROUP);
+            _screenSignals.Outgoing.ExtraTimeClicked.Connect(_gameplaySignals.Incoming.WatchAdForTime, GROUP);
+            _screenSignals.Outgoing.BoosterAdClicked.Connect(_gameplaySignals.Incoming.WatchAdForBooster, GROUP);
 #if UNITY_EDITOR
             _screenSignals.Outgoing.ForceResult.Connect(_gameplaySignals.Incoming.ForceResult, GROUP);
 #endif
@@ -46,6 +49,7 @@ namespace Modules.ConnectorModule.RootsContexts
             _gameplaySignals.Outgoing.OutOfLives.Connect(_screenSignals.Incoming.ApplyOutOfLives, GROUP);
             _gameplaySignals.Outgoing.TutorialChanged.Connect(_screenSignals.Incoming.ApplyTutorial, GROUP);
             _gameplaySignals.Outgoing.InfoRequested.Connect(_screenSignals.Incoming.ShowInfo, GROUP);
+            _gameplaySignals.Outgoing.AdOffersChanged.Connect(_screenSignals.Incoming.ApplyAdOffers, GROUP);
         }
         public override void DestroyContext()
         {

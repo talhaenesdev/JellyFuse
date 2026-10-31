@@ -162,6 +162,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             _retryButton.onClick.AddListener(OnRestartClicked);
             _retryClose.onClick.AddListener(OnQuitClicked);
             WireBoosters(true);
+            WireAds(true);
             WireInfo(true);
             if (_livesState != null) _lifeCountdown = StartCoroutine(CountLifeTime());
         }
@@ -178,6 +179,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             _retryButton.onClick.RemoveListener(OnRestartClicked);
             _retryClose.onClick.RemoveListener(OnQuitClicked);
             WireBoosters(false);
+            WireAds(false);
             WireInfo(false);
             StopBoosters();
             StopLives();
@@ -361,6 +363,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             string level = LF("gameplay.level_title", "Level {0}", _levelNumber);
             _winLevel.text = level; _loseTitle.text = level; _retryTitle.text = level;
             _nextLabel.text = _hasNextLevel ? L("gameplay.continue", "Continue") : L("gameplay.play_again", "Play again");
+            DrawAdButtons();
         }
         private IEnumerator ShowPanel(RectTransform panel, float delay)
         {
@@ -370,7 +373,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             if (panel == _winPanel) StartCoinFlight();
         }
         private static void ShowDim(RectTransform panel) { panel.parent.gameObject.SetActive(true); panel.parent.SetAsLastSibling(); }
-        public void ApplyLevel(int number, bool hasNext) { _levelNumber = number; _hasNextLevel = hasNext; if (_built) _levelLabel.text = LF("gameplay.level", _levelFormat, number); HidePanels(); }
+        public void ApplyLevel(int number, bool hasNext) { _levelNumber = number; _hasNextLevel = hasNext; if (_built) _levelLabel.text = LF("gameplay.level", _levelFormat, number); _adOffers = AdOffersRVO.None; HidePanels(); }
         /// <summary>The function that turns a key into text in the language in use (ILocalizationService.Get). Redraws every text.</summary>
         public void SetLocalizer(Func<string,string> localize) { _localize = localize; RefreshTexts(); }
         /// <summary>The game's language changed.</summary>

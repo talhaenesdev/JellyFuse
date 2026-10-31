@@ -22,6 +22,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.Signals
         public Signal<int> ApplyCoins = new();
         /// <summary>The coins the level just won paid, shown on the win panel.</summary>
         public Signal<int> ApplyReward = new();
+        /// <summary>The rewarded ads the result panels offer now.</summary>
+        public Signal<AdOffersRVO> ApplyAdOffers = new();
         /// <summary>How each booster stands, in the order of the booster buttons.</summary>
         public Signal<IReadOnlyList<BoosterStateRVO>> ApplyBoosters = new();
         /// <summary>A booster was used on its target: the UFO flies over.</summary>
@@ -69,6 +71,12 @@ namespace Modules.GameplayModule.GameplayScreenModule.Signals
         public Signal<BoosterType, int> UseBooster = new();
         /// <summary>The time to the next life ran out on the HUD: the lives should be brought up to date.</summary>
         public Signal LivesRefreshRequested = new();
+        /// <summary>The win panel's ad button: the win's coins again for an ad.</summary>
+        public Signal DoubleRewardClicked = new();
+        /// <summary>The lose panel's ad button: more time for an ad.</summary>
+        public Signal ExtraTimeClicked = new();
+        /// <summary>A booster with no use left was pressed while today's free one is offered: its free use for an ad.</summary>
+        public Signal<BoosterType> BoosterAdClicked = new();
         /// <summary>The level label was tapped three times quickly: the developer panel opens.</summary>
         public Signal DevToolsRequested = new();
         /// <summary>A developer tuning page's values: the page's name and its sliders.</summary>
