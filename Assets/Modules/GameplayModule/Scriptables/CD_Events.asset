@@ -1,0 +1,78 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29eb1ee9c983e6e4dbbeb3ace3ced1cc, type: 3}
+  m_Name: CD_Events
+  m_EditorClassIdentifier: Modules.Gameplay.Shared::Modules.GameplayModule.Shared.Data.UnityObjects.CD_Events
+  WeekendMultiplier: 2
+  WeekendDays: 050000000600000000000000
+  StreakTierWins: 020000000400000006000000
+  StreakTierBonusPercent: 0a0000001900000032000000
+  LoginRewards:
+  - Coins: 25
+    Booster: 0
+    BoosterCount: 0
+  - Coins: 40
+    Booster: 0
+    BoosterCount: 0
+  - Coins: 0
+    Booster: 0
+    BoosterCount: 1
+  - Coins: 60
+    Booster: 0
+    BoosterCount: 0
+  - Coins: 0
+    Booster: 1
+    BoosterCount: 1
+  - Coins: 80
+    Booster: 0
+    BoosterCount: 0
+  - Coins: 150
+    Booster: 2
+    BoosterCount: 1
+  QuestsPerDay: 3
+  QuestPool:
+  - Type: 0
+    Target: 3
+    Reward:
+      Coins: 50
+      Booster: 0
+      BoosterCount: 0
+  - Type: 0
+    Target: 5
+    Reward:
+      Coins: 80
+      Booster: 0
+      BoosterCount: 0
+  - Type: 1
+    Target: 1
+    Reward:
+      Coins: 30
+      Booster: 0
+      BoosterCount: 0
+  - Type: 1
+    Target: 2
+    Reward:
+      Coins: 50
+      Booster: 0
+      BoosterCount: 0
+  - Type: 2
+    Target: 20
+    Reward:
+      Coins: 30
+      Booster: 0
+      BoosterCount: 0
+  - Type: 2
+    Target: 40
+    Reward:
+      Coins: 60
+      Booster: 0
+      BoosterCount: 0

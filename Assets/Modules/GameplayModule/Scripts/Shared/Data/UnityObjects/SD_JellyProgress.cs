@@ -30,6 +30,15 @@ namespace Modules.GameplayModule.Shared.Data.UnityObjects
         public List<ShopPurchaseDaySVO> ShopPurchaseDays = new();
         /// <summary>The local day today's free booster was taken for an ad (days since 2000-01-01); -1 never.</summary>
         public int FreeBoosterAdDay = -1;
+        [Tooltip("Levels won in a row; a level lost or left starts it again.")]
+        [Min(0)] public int WinStreak;
+        [Tooltip("Login rewards taken in the current run of days, 0 to CD_Events' count.")]
+        [Min(0)] public int LoginRewardsTaken;
+        /// <summary>The local day the last login reward was taken (days since 2000-01-01); -1 never.</summary>
+        public int LoginRewardDay = -1;
+        /// <summary>The local day Quests were picked for; -1 never.</summary>
+        public int QuestDay = -1;
+        public List<QuestSVO> Quests = new();
 
         /// <summary>The player's entry for a booster, made when it has none yet.</summary>
         public BoosterSVO Booster(BoosterType type)

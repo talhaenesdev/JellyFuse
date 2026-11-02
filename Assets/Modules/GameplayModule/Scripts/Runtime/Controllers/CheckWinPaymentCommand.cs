@@ -10,7 +10,7 @@ namespace Modules.GameplayModule.Controllers
 {
     /// <summary>
     /// After a move: when it won the level and the win has not been paid yet, asks for the level's
-    /// coin reward to be paid. A win is paid once, however it is reached.
+    /// coin reward to be paid, with the weekend and win streak bonuses. A win is paid once, however it is reached.
     /// </summary>
     internal class CheckWinPaymentCommand : Command
     {
@@ -24,6 +24,7 @@ namespace Modules.GameplayModule.Controllers
             _model.WinPaid = true;
             var levels = _shared.GetScriptable<CD_JellyLevels>();
             int reward = levels != null ? levels.CoinReward(_model.LevelIndex) : 0;
+            reward = EventsFunction.WinReward(reward, _shared.GetScriptable<SD_JellyProgress>(), _shared.GetScriptable<CD_Events>());
             _model.WinReward = reward;
             _internalSignals.PayWin.Dispatch(reward);
         }

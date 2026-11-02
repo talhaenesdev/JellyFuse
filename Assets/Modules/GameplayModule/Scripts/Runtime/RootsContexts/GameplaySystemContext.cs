@@ -48,6 +48,7 @@ namespace Modules.GameplayModule.RootsContexts
             CommandBinder.Bind(_signals.Incoming.Start)
                 .ToSequence<RefreshLivesCommand>()
                 .ToSequence<RequireLifeCommand>(WaitingLevelStart.Replay)
+                .ToSequence<BreakWinStreakCommand>()
                 .ToSequence<StartPuzzleCommand>()
                 .ToSequence<RecordLevelStartCommand>()
                 .ToSequence<StartTutorialCommand>()
@@ -58,13 +59,16 @@ namespace Modules.GameplayModule.RootsContexts
                 .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
                 .ToSequence<AnnounceBoostersCommand>()
                 .ToSequence<AnnounceLivesCommand>()
-                .ToSequence<ScheduleNotificationsCommand>();
+                .ToSequence<ScheduleNotificationsCommand>()
+                .ToSequence<AnnounceEventsCommand>();
             CommandBinder.Bind(_signals.Incoming.Drag)
                 .ToSequence<CapturePuzzleFeedbackCommand>()
                 .ToSequence<DragJellyCommand>()
                 .ToSequence<StartClockOnMoveCommand>()
                 .ToSequence<StartPuzzleClockCommand>()
                 .ToSequence<AdvanceTutorialCommand>()
+                .ToSequence<CountMergesCommand>()
+                .ToSequence<CountWinCommand>()
                 .ToSequence<CheckWinPaymentCommand>()
                 .ToSequence<PlayPuzzleFeedbackCommand>()
                 .ToSequence<PlayPuzzleSoundCommand>()
@@ -79,17 +83,20 @@ namespace Modules.GameplayModule.RootsContexts
             CommandBinder.Bind(_signals.Incoming.Quit)
                 .ToSequence<ForgetWaitingLevelCommand>()
                 .ToSequence<LoseLifeOnQuitCommand>()
+                .ToSequence<BreakWinStreakCommand>()
                 .ToSequence<StopPuzzleClockCommand>()
                 .ToSequence<LeaveLevelCommand>()
                 .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
                 .ToSequence<AnnounceLivesCommand>()
-                .ToSequence<ScheduleNotificationsCommand>();
+                .ToSequence<ScheduleNotificationsCommand>()
+                .ToSequence<AnnounceEventsCommand>();
             CommandBinder.Bind(_signals.Incoming.Resume)
                 .ToSequence<ResumePuzzleClockCommand>()
                 .ToSequence<StartPuzzleClockCommand>();
             CommandBinder.Bind(_signals.Incoming.NextLevel)
                 .ToSequence<RefreshLivesCommand>()
                 .ToSequence<RequireLifeCommand>(WaitingLevelStart.Next)
+                .ToSequence<BreakWinStreakCommand>()
                 .ToSequence<NextPuzzleLevelCommand>()
                 .ToSequence<StartPuzzleCommand>()
                 .ToSequence<RecordLevelStartCommand>()
@@ -101,7 +108,8 @@ namespace Modules.GameplayModule.RootsContexts
                 .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
                 .ToSequence<AnnounceBoostersCommand>()
                 .ToSequence<AnnounceLivesCommand>()
-                .ToSequence<ScheduleNotificationsCommand>();
+                .ToSequence<ScheduleNotificationsCommand>()
+                .ToSequence<AnnounceEventsCommand>();
             CommandBinder.Bind(_signals.Incoming.SkipLevel)
                 .ToSequence<SkipPuzzleLevelCommand>()
                 .ToSequence<StorePuzzleProgressCommand>()
@@ -122,6 +130,7 @@ namespace Modules.GameplayModule.RootsContexts
             CommandBinder.Bind(_signals.Incoming.ForceResult)
                 .ToSequence<CapturePuzzleFeedbackCommand>()
                 .ToSequence<ForcePuzzleResultCommand>()
+                .ToSequence<CountWinCommand>()
                 .ToSequence<CheckWinPaymentCommand>()
                 .ToSequence<PlayPuzzleFeedbackCommand>()
                 .ToSequence<PlayPuzzleSoundCommand>()
@@ -140,6 +149,24 @@ namespace Modules.GameplayModule.RootsContexts
                 .ToSequence<AnnounceLivesCommand>()
                 .ToSequence<AnnounceShopSoldOutCommand>();
             CommandBinder.Bind(_signals.Incoming.RequestShopSoldOut).ToSequence<AnnounceShopSoldOutCommand>();
+            CommandBinder.Bind(_signals.Incoming.RequestEvents)
+                .ToSequence<RefreshEventsCommand>()
+                .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
+                .ToSequence<AnnounceEventsCommand>();
+            CommandBinder.Bind(_signals.Incoming.ClaimLoginReward)
+                .ToSequence<RefreshEventsCommand>()
+                .ToSequence<ClaimLoginRewardCommand>()
+                .ToSequence<IAudioService.Commands.Play>(AudioCue.Coin)
+                .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
+                .ToSequence<AnnounceBoostersCommand>()
+                .ToSequence<AnnounceEventsCommand>();
+            CommandBinder.Bind(_signals.Incoming.ClaimQuest)
+                .ToSequence<RefreshEventsCommand>()
+                .ToSequence<ClaimQuestCommand>()
+                .ToSequence<IAudioService.Commands.Play>(AudioCue.Coin)
+                .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
+                .ToSequence<AnnounceBoostersCommand>()
+                .ToSequence<AnnounceEventsCommand>();
             CommandBinder.Bind(_signals.Incoming.ResetBoosters)
                 .ToSequence<ResetBoostersCommand>()
                 .ToSequence<GrantBoostersCommand>()
@@ -150,8 +177,10 @@ namespace Modules.GameplayModule.RootsContexts
                 .ToSequence<ApplyBoosterCommand>()
                 .ToSequence<PlayBoosterSoundCommand>()
                 .ToSequence<PayBoosterCommand>()
+                .ToSequence<CountBoosterUseCommand>()
                 .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
                 .ToSequence<AnnounceBoostersCommand>()
+                .ToSequence<CountWinCommand>()
                 .ToSequence<CheckWinPaymentCommand>();
             CommandBinder.Bind(_internalSignals.TimeExpired)
                 .ToSequence<IHapticService.Commands.Play>(HapticPreset.Failure)
@@ -232,7 +261,8 @@ namespace Modules.GameplayModule.RootsContexts
                 .ToSequence<IAudioService.Commands.Play>(AudioCue.Coin)
                 .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
                 .ToSequence<AnnounceBoostersCommand>()
-                .ToSequence<AnnounceAdOffersCommand>();
+                .ToSequence<AnnounceAdOffersCommand>()
+                .ToSequence<AnnounceEventsCommand>();
         }
 
         public override void Setup()

@@ -52,6 +52,12 @@ namespace Modules.GameplayModule.Signals
         public Signal<string> GrantShopProduct = new();
         /// <summary>Announce which once-a-day shop products are sold out today.</summary>
         public Signal RequestShopSoldOut = new();
+        /// <summary>Bring the daily events up to date - a new day may have begun - and announce them.</summary>
+        public Signal RequestEvents = new();
+        /// <summary>Take today's login reward.</summary>
+        public Signal ClaimLoginReward = new();
+        /// <summary>Take the reward of today's quest at this position.</summary>
+        public Signal<int> ClaimQuest = new();
 #if UNITY_EDITOR
         /// <summary>Editor-only cheat: end this level as won or lost at once.</summary>
         public Signal<PuzzleStatus> ForceResult = new();
@@ -94,5 +100,7 @@ namespace Modules.GameplayModule.Signals
         public Signal<string> InfoRequested = new();
         /// <summary>The rewarded ads the result panels offer now.</summary>
         public Signal<AdOffersRVO> AdOffersChanged = new();
+        /// <summary>The daily events: weekend bonus, win streak, login days and today's quests.</summary>
+        public Signal<EventsRVO> EventsChanged = new();
     }
 }
