@@ -1,7 +1,7 @@
 # UiWidgets
 
 ## Purpose
-Reusable UI pieces any screen can put in its prefab - drawing components with no game rules and no signals. MirroredCapBackground draws a text background from a left cap and a middle piece, mirroring the cap for the right end and sizing itself to the text. TextAnimator animates a TextMeshPro text with DOTween from a CD_TextAnimation preset.
+Reusable UI pieces any screen can put in its prefab - drawing components with no game rules and no signals. MirroredCapBackground draws a text background from a left cap and a middle piece, mirroring the cap for the right end and sizing itself to the text. TextAnimator animates a TextMeshPro text with DOTween from a CD_TextAnimation preset. CurvedText bends a TextMeshPro text along an arc.
 
 ## Text animation
 - Add **TextAnimator** next to any TMP text, drag a **CD_TextAnimation** preset onto it, and tick when it plays: *Play On Enable* (each time it is shown) and/or *Play On Text Change* (each time its text changes - a score, a counter).

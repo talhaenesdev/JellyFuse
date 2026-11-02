@@ -1388,6 +1388,7 @@ GameObject:
   - component: {fileID: 6185291949004042760}
   - component: {fileID: 5932841680737808593}
   - component: {fileID: 6352302166927112276}
+  - component: {fileID: 7555260139362599002}
   m_Layer: 5
   m_Name: Txt_Title
   m_TagString: Untagged
@@ -1514,6 +1515,20 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &7555260139362599002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8390562693857760942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bec205f54eee8604dbe170e8ee9dab85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.UiWidgets::Modules.UiWidgetsModule.Entities.CurvedText
+  _curvature: 14
+  _rotateLetters: 1
 --- !u!1 &8503175752715932949
 GameObject:
   m_ObjectHideFlags: 0
@@ -1565,7 +1580,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03cab3481c6e0644b9556052741d16c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: FlowIoC::FlowIoC.BaseModule.Injectable.Components.ViewInjector
-  viewDataList: []
+  viewDataList:
+  - View: {fileID: 3252511606434940951}
+    AutoRegister: 1
+    InjectableView: 0
+    ContextSource: 0
+    SelectedRoot: {fileID: 0}
+    RootName: 
+    IsRegistered: 0
 --- !u!114 &3252511606434940951
 MonoBehaviour:
   m_ObjectHideFlags: 0
