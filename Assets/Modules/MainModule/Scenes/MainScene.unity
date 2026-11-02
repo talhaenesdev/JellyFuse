@@ -2232,7 +2232,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3130000000000000003, guid: f3b0f699afa16cb868fca6344c3a8933, type: 3}
       propertyPath: SubContextTypes.Array.size
-      value: 11
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 3130000000000000003, guid: f3b0f699afa16cb868fca6344c3a8933, type: 3}
       propertyPath: SubContextTypes.Array.data[5].Settings
@@ -2256,6 +2256,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3130000000000000003, guid: f3b0f699afa16cb868fca6344c3a8933, type: 3}
       propertyPath: SubContextTypes.Array.data[10].Settings
+      value: -2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3130000000000000003, guid: f3b0f699afa16cb868fca6344c3a8933, type: 3}
+      propertyPath: SubContextTypes.Array.data[11].Settings
+      value: -2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3130000000000000003, guid: f3b0f699afa16cb868fca6344c3a8933, type: 3}
+      propertyPath: SubContextTypes.Array.data[12].Settings
       value: -2
       objectReference: {fileID: 0}
     - target: {fileID: 3130000000000000003, guid: f3b0f699afa16cb868fca6344c3a8933, type: 3}
@@ -2283,6 +2291,14 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3130000000000000003, guid: f3b0f699afa16cb868fca6344c3a8933, type: 3}
+      propertyPath: SubContextTypes.Array.data[11].AutoSetup
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3130000000000000003, guid: f3b0f699afa16cb868fca6344c3a8933, type: 3}
+      propertyPath: SubContextTypes.Array.data[12].AutoSetup
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3130000000000000003, guid: f3b0f699afa16cb868fca6344c3a8933, type: 3}
       propertyPath: SubContextTypes.Array.data[5].ContextName
       value: PauseConnectorSubContext
       objectReference: {fileID: 0}
@@ -2305,6 +2321,14 @@ PrefabInstance:
     - target: {fileID: 3130000000000000003, guid: f3b0f699afa16cb868fca6344c3a8933, type: 3}
       propertyPath: SubContextTypes.Array.data[10].ContextName
       value: StoreConnectorSubContext
+      objectReference: {fileID: 0}
+    - target: {fileID: 3130000000000000003, guid: f3b0f699afa16cb868fca6344c3a8933, type: 3}
+      propertyPath: SubContextTypes.Array.data[11].ContextName
+      value: DailyQuestsConnectorSubContext
+      objectReference: {fileID: 0}
+    - target: {fileID: 3130000000000000003, guid: f3b0f699afa16cb868fca6344c3a8933, type: 3}
+      propertyPath: SubContextTypes.Array.data[12].ContextName
+      value: LoginRewardsConnectorSubContext
       objectReference: {fileID: 0}
     - target: {fileID: 3130000000000000003, guid: f3b0f699afa16cb868fca6344c3a8933, type: 3}
       propertyPath: SubContextTypes.Array.data[5].ContextScript
@@ -2331,6 +2355,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11500000, guid: b1ed70cecbcb4744985d5571bf2a8357, type: 3}
     - target: {fileID: 3130000000000000003, guid: f3b0f699afa16cb868fca6344c3a8933, type: 3}
+      propertyPath: SubContextTypes.Array.data[11].ContextScript
+      value: 
+      objectReference: {fileID: 11500000, guid: b4d0ae2128551be4480951fafcf331f4, type: 3}
+    - target: {fileID: 3130000000000000003, guid: f3b0f699afa16cb868fca6344c3a8933, type: 3}
+      propertyPath: SubContextTypes.Array.data[12].ContextScript
+      value: 
+      objectReference: {fileID: 11500000, guid: 93de629e647fa694e9a8b084a13df47b, type: 3}
+    - target: {fileID: 3130000000000000003, guid: f3b0f699afa16cb868fca6344c3a8933, type: 3}
       propertyPath: SubContextTypes.Array.data[5].ContextFullName
       value: Modules.ConnectorModule.RootsContexts.PauseConnectorSubContext
       objectReference: {fileID: 0}
@@ -2353,6 +2385,14 @@ PrefabInstance:
     - target: {fileID: 3130000000000000003, guid: f3b0f699afa16cb868fca6344c3a8933, type: 3}
       propertyPath: SubContextTypes.Array.data[10].ContextFullName
       value: Modules.ConnectorModule.RootsContexts.StoreConnectorSubContext
+      objectReference: {fileID: 0}
+    - target: {fileID: 3130000000000000003, guid: f3b0f699afa16cb868fca6344c3a8933, type: 3}
+      propertyPath: SubContextTypes.Array.data[11].ContextFullName
+      value: Modules.ConnectorModule.RootsContexts.DailyQuestsConnectorSubContext
+      objectReference: {fileID: 0}
+    - target: {fileID: 3130000000000000003, guid: f3b0f699afa16cb868fca6344c3a8933, type: 3}
+      propertyPath: SubContextTypes.Array.data[12].ContextFullName
+      value: Modules.ConnectorModule.RootsContexts.LoginRewardsConnectorSubContext
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
