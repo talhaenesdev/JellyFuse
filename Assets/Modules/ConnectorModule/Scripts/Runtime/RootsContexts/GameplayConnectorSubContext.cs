@@ -46,6 +46,7 @@ namespace Modules.ConnectorModule.RootsContexts
             _gameplaySignals.Outgoing.BoosterUsed.Connect(_screenSignals.Incoming.ApplyBoosterUsed, GROUP);
             _gameplaySignals.Outgoing.ClockFrozen.Connect(_screenSignals.Incoming.ApplyClockFrozen, GROUP);
             _gameplaySignals.Outgoing.LivesChanged.Connect(_screenSignals.Incoming.ApplyLives, GROUP);
+            _gameplaySignals.Outgoing.EventsChanged.Connect(_screenSignals.Incoming.ApplyEvents, GROUP);
             _gameplaySignals.Outgoing.OutOfLives.Connect(_screenSignals.Incoming.ApplyOutOfLives, GROUP);
             _gameplaySignals.Outgoing.TutorialChanged.Connect(_screenSignals.Incoming.ApplyTutorial, GROUP);
             _gameplaySignals.Outgoing.InfoRequested.Connect(_screenSignals.Incoming.ShowInfo, GROUP);

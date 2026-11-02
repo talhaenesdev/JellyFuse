@@ -51,6 +51,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             _signals.Incoming.ShowInfo.AddListener(_view.ShowInfo);
             _view.LivesRefreshRequested += OnLivesRefreshRequested;
             _signals.Incoming.ApplyLives.AddListener(_view.ApplyLives);
+            _signals.Incoming.ApplyEvents.AddListener(_view.ApplyEvents);
             _signals.Incoming.ApplyOutOfLives.AddListener(_view.ApplyOutOfLives);
             _signals.Incoming.ApplyBoosters.AddListener(_view.ApplyBoosters);
             _signals.Incoming.ApplyBoosterUsed.AddListener(_view.ApplyBoosterUsed);
@@ -93,6 +94,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             _signals.Incoming.ShowInfo.RemoveListener(_view.ShowInfo);
             _view.LivesRefreshRequested -= OnLivesRefreshRequested;
             _signals.Incoming.ApplyLives.RemoveListener(_view.ApplyLives);
+            _signals.Incoming.ApplyEvents.RemoveListener(_view.ApplyEvents);
             _signals.Incoming.ApplyOutOfLives.RemoveListener(_view.ApplyOutOfLives);
             _signals.Incoming.ApplyBoosters.RemoveListener(_view.ApplyBoosters);
             _signals.Incoming.ApplyBoosterUsed.RemoveListener(_view.ApplyBoosterUsed);

@@ -32,6 +32,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.Signals
         public Signal<float> ApplyClockFrozen = new(hideCommandLog: true);
         /// <summary>The lives the player holds, and when the next comes back.</summary>
         public Signal<LivesStateRVO> ApplyLives = new();
+        /// <summary>The daily events; the HUD shows the win streak.</summary>
+        public Signal<EventsRVO> ApplyEvents = new();
         /// <summary>A level could not start for want of a life: seconds until the next comes back.</summary>
         public Signal<float> ApplyOutOfLives = new();
         /// <summary>Send the values of a developer tuning page, by its name (Outgoing.TuningSliders).</summary>
