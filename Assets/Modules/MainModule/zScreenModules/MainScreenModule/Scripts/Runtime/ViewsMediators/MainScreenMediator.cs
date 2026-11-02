@@ -33,6 +33,9 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
             _view.NavTabClicked += OnNavTabClicked;
             _view.ProfileIconClicked += OnProfileIconClicked;
             _view.LivesPlusClicked += OnLivesPlusClicked;
+            _view.QuestsClicked += OnQuestsClicked;
+            _view.LoginRewardsClicked += OnLoginRewardsClicked;
+            _signals.Incoming.ApplyEvents.AddListener(_view.ApplyEvents);
             _view.ShopBuyClicked += OnShopBuyClicked;
             _signals.Incoming.ApplyNextLevel.AddListener(_view.ApplyNextLevel);
             _signals.Incoming.ApplyLanguage.AddListener(_view.ApplyLanguage);
@@ -45,6 +48,7 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
             _signals.Outgoing.ProfileIconRequested.Dispatch();
             _signals.Outgoing.ShopPricesRequested.Dispatch();
             _signals.Outgoing.ShopSoldOutRequested.Dispatch();
+            _signals.Outgoing.EventsRequested.Dispatch();
         }
 
         private void OnScreenHidden(IScreenBody screen)
@@ -55,6 +59,9 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
             _view.NavTabClicked -= OnNavTabClicked;
             _view.ProfileIconClicked -= OnProfileIconClicked;
             _view.LivesPlusClicked -= OnLivesPlusClicked;
+            _view.QuestsClicked -= OnQuestsClicked;
+            _view.LoginRewardsClicked -= OnLoginRewardsClicked;
+            _signals.Incoming.ApplyEvents.RemoveListener(_view.ApplyEvents);
             _view.ShopBuyClicked -= OnShopBuyClicked;
             _signals.Incoming.ApplyNextLevel.RemoveListener(_view.ApplyNextLevel);
             _signals.Incoming.ApplyLanguage.RemoveListener(_view.ApplyLanguage);
@@ -93,6 +100,16 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
         private void OnHomeClicked()
         {
             if (_view.Data.HasState(ScreenState.AvailableToSendSignal)) _signals.Outgoing.HomeClicked.Dispatch();
+        }
+
+        private void OnQuestsClicked()
+        {
+            if (_view.Data.HasState(ScreenState.AvailableToSendSignal)) _signals.Outgoing.QuestsClicked.Dispatch();
+        }
+
+        private void OnLoginRewardsClicked()
+        {
+            if (_view.Data.HasState(ScreenState.AvailableToSendSignal)) _signals.Outgoing.LoginRewardsClicked.Dispatch();
         }
 
         private void OnLivesPlusClicked()

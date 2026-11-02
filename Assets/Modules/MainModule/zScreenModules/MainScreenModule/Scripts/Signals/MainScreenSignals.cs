@@ -28,6 +28,8 @@ namespace Modules.MainModule.MainScreenModule.Signals
         public Signal<IReadOnlyDictionary<string, string>> ApplyShopPrices = new();
         /// <summary>The products sold out today, by product id: their panels wait until tomorrow.</summary>
         public Signal<IReadOnlyList<string>> ApplyShopSoldOut = new();
+        /// <summary>The daily events: the dots on the quests and rewards buttons, and the weekend badge.</summary>
+        public Signal<Modules.GameplayModule.Shared.Data.ValueObjects.EventsRVO> ApplyEvents = new();
     }
 
     public class MainScreenSignalsOutgoing
@@ -53,5 +55,11 @@ namespace Modules.MainModule.MainScreenModule.Signals
         public Signal ShopSoldOutRequested = new();
         /// <summary>A priced shop panel was pressed: the product id to buy.</summary>
         public Signal<string> ShopBuyClicked = new();
+        /// <summary>The daily quests button was pressed.</summary>
+        public Signal QuestsClicked = new();
+        /// <summary>The daily rewards button was pressed.</summary>
+        public Signal LoginRewardsClicked = new();
+        /// <summary>The screen opened and wants the daily events.</summary>
+        public Signal EventsRequested = new();
     }
 }

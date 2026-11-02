@@ -86,21 +86,21 @@ MonoBehaviour:
   - Key: gameplay.ad_double_reward
     Translations:
     - Code: en
-      Text: "Ad  x{0}"
+      Text: Ad  x{0}
     - Code: tr
-      Text: "Reklam  x{0}"
+      Text: Reklam  x{0}
   - Key: gameplay.ad_extra_time
     Translations:
     - Code: en
-      Text: "Ad  +{0}s"
+      Text: Ad  +{0}s
     - Code: tr
-      Text: "Reklam  +{0}sn"
+      Text: Reklam  +{0}sn
   - Key: gameplay.booster_ad
     Translations:
     - Code: en
-      Text: "AD"
+      Text: AD
     - Code: tr
-      Text: "Reklam"
+      Text: Reklam
   - Key: gameplay.undo
     Translations:
     - Code: en
@@ -402,66 +402,127 @@ MonoBehaviour:
   - Key: gameplay.booster_hint.ufo_frozen
     Translations:
     - Code: en
-      Text: "A frozen jelly or door still needs this colour. Pick another one."
+      Text: A frozen jelly or door still needs this colour. Pick another one.
     - Code: tr
-      Text: "Donmu\u015F bir j\u00F6le ya da kap\u0131 bu renge h\u00E2l\u00E2 ihtiya\u00E7 duyuyor. Ba\u015Fka bir renk se\u00E7."
+      Text: "Donmu\u015F bir j\xF6le ya da kap\u0131 bu renge h\xE2l\xE2 ihtiya\xE7
+        duyuyor. Ba\u015Fka bir renk se\xE7."
   - Key: gameplay.difficulty.hard
     Translations:
     - Code: en
-      Text: "Hard"
+      Text: Hard
     - Code: tr
-      Text: "Zor"
+      Text: Zor
   - Key: gameplay.difficulty.super_hard
     Translations:
     - Code: en
-      Text: "Super Hard"
+      Text: Super Hard
     - Code: tr
-      Text: "\u00C7ok Zor"
+      Text: "\xC7ok Zor"
   - Key: notification.lives_full.title
     Translations:
     - Code: en
-      Text: "Lives refilled!"
+      Text: Lives refilled!
     - Code: tr
       Text: "Canlar\u0131n doldu!"
   - Key: notification.lives_full.text
     Translations:
     - Code: en
-      Text: "Your lives are full. Time to fuse some jellies!"
+      Text: Your lives are full. Time to fuse some jellies!
     - Code: tr
-      Text: "Canlar\u0131n tamamen doldu. J\u00F6leleri birle\u015Ftirme zaman\u0131!"
+      Text: "Canlar\u0131n tamamen doldu. J\xF6leleri birle\u015Ftirme zaman\u0131!"
   - Key: notification.come_back_soon.title
     Translations:
     - Code: en
-      Text: "The jellies miss you"
+      Text: The jellies miss you
     - Code: tr
-      Text: "J\u00F6leler seni \u00F6zledi"
+      Text: "J\xF6leler seni \xF6zledi"
   - Key: notification.come_back_soon.text
     Translations:
     - Code: en
-      Text: "A new level is waiting. Come back and play!"
+      Text: A new level is waiting. Come back and play!
     - Code: tr
-      Text: "Yeni bir b\u00F6l\u00FCm seni bekliyor. Gel ve oyna!"
+      Text: "Yeni bir b\xF6l\xFCm seni bekliyor. Gel ve oyna!"
   - Key: notification.come_back_later.title
     Translations:
     - Code: en
-      Text: "Still there?"
+      Text: Still there?
     - Code: tr
-      Text: "H\u00E2l\u00E2 orada m\u0131s\u0131n?"
+      Text: "H\xE2l\xE2 orada m\u0131s\u0131n?"
   - Key: notification.come_back_later.text
     Translations:
     - Code: en
-      Text: "Your jellies are getting bored. Jump back in!"
+      Text: Your jellies are getting bored. Jump back in!
     - Code: tr
-      Text: "J\u00F6lelerin s\u0131k\u0131lmaya ba\u015Flad\u0131. Hemen geri d\u00F6n!"
+      Text: "J\xF6lelerin s\u0131k\u0131lmaya ba\u015Flad\u0131. Hemen geri d\xF6n!"
   - Key: main.shop.soon
     Translations:
     - Code: en
       Text: Coming soon
     - Code: tr
-      Text: "Yakında"
+      Text: "Yak\u0131nda"
   - Key: main.shop.tomorrow
     Translations:
     - Code: en
       Text: Tomorrow
     - Code: tr
-      Text: "Yarın"
+      Text: "Yar\u0131n"
+  - Key: quests.title
+    Translations:
+    - Code: en
+      Text: Daily Quests
+    - Code: tr
+      Text: "G\xFCnl\xFCk G\xF6revler"
+  - Key: quests.complete_levels
+    Translations:
+    - Code: en
+      Text: Complete {0} levels
+    - Code: tr
+      Text: '{0} seviye tamamla'
+  - Key: quests.use_booster
+    Translations:
+    - Code: en
+      Text: Use {0} boosters
+    - Code: tr
+      Text: "{0} g\xFC\xE7lendirici kullan"
+  - Key: quests.merge_pieces
+    Translations:
+    - Code: en
+      Text: Merge {0} jellies
+    - Code: tr
+      Text: "{0} j\xF6le birle\u015Ftir"
+  - Key: quests.claim
+    Translations:
+    - Code: en
+      Text: Claim
+    - Code: tr
+      Text: Al
+  - Key: quests.resets_in
+    Translations:
+    - Code: en
+      Text: New quests in {0}
+    - Code: tr
+      Text: "Yeni g\xF6revler: {0}"
+  - Key: login.title
+    Translations:
+    - Code: en
+      Text: Daily Rewards
+    - Code: tr
+      Text: "G\xFCnl\xFCk \xD6d\xFCller"
+  - Key: login.day
+    Translations:
+    - Code: en
+      Text: Day {0}
+    - Code: tr
+      Text: "{0}. G\xFCn"
+  - Key: login.claim
+    Translations:
+    - Code: en
+      Text: Claim
+    - Code: tr
+      Text: Al
+  - Key: login.come_back
+    Translations:
+    - Code: en
+      Text: Come back tomorrow
+    - Code: tr
+      Text: "Yar\u0131n tekrar gel"

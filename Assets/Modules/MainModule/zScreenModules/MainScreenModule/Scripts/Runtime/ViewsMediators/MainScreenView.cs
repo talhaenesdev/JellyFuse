@@ -56,6 +56,14 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
         [SerializeField] private TMP_Text _lives;
         [Tooltip("The + by the lives: opens the purchase popup on lives.")]
         [SerializeField] private Button _livesPlusButton;
+        [Header("Daily events")]
+        [SerializeField] private Button _questsButton;
+        [SerializeField] private GameObject _questsDot;
+        [SerializeField] private Button _loginRewardsButton;
+        [SerializeField] private GameObject _loginRewardsDot;
+        [Tooltip("Shown on bonus days, with the multiplier.")]
+        [SerializeField] private GameObject _weekendBadge;
+        [SerializeField] private TMP_Text _weekendMultiplier;
         [Header("Profile")]
         [SerializeField] private Button _profileButton;
         [SerializeField] private ProfileAvatar _profileAvatar;
@@ -80,6 +88,8 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
         public Action<int> NavTabClicked;
         public Action ProfileIconClicked;
         public Action LivesPlusClicked;
+        public Action QuestsClicked;
+        public Action LoginRewardsClicked;
         /// <summary>A shop buy panel with a price was pressed: its product id.</summary>
         public Action<string> ShopBuyClicked;
 
@@ -104,6 +114,8 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
             _homeButton.onClick.AddListener(OnHomeClicked);
             _profileButton.onClick.AddListener(OnProfileIconClicked);
             if (_livesPlusButton != null) _livesPlusButton.onClick.AddListener(OnLivesPlusClicked);
+            if (_questsButton != null) _questsButton.onClick.AddListener(OnQuestsClicked);
+            if (_loginRewardsButton != null) _loginRewardsButton.onClick.AddListener(OnLoginRewardsClicked);
             for (int i = 0; i < _tabActions.Count; i++) _navTabs[i].onClick.AddListener(_tabActions[i]);
             for (int i = 0; i < _shopActions.Count; i++) if (_shopButtons[i] != null) _shopButtons[i].onClick.AddListener(_shopActions[i]);
         }
@@ -116,6 +128,8 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
             _homeButton.onClick.RemoveListener(OnHomeClicked);
             _profileButton.onClick.RemoveListener(OnProfileIconClicked);
             if (_livesPlusButton != null) _livesPlusButton.onClick.RemoveListener(OnLivesPlusClicked);
+            if (_questsButton != null) _questsButton.onClick.RemoveListener(OnQuestsClicked);
+            if (_loginRewardsButton != null) _loginRewardsButton.onClick.RemoveListener(OnLoginRewardsClicked);
             for (int i = 0; i < _tabActions.Count; i++) _navTabs[i].onClick.RemoveListener(_tabActions[i]);
             for (int i = 0; i < _shopActions.Count; i++) if (_shopButtons[i] != null) _shopButtons[i].onClick.RemoveListener(_shopActions[i]);
             KillNavigationTweens();
@@ -126,6 +140,8 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
         private void OnHomeClicked() => HomeClicked?.Invoke();
         private void OnProfileIconClicked() => ProfileIconClicked?.Invoke();
         private void OnLivesPlusClicked() => LivesPlusClicked?.Invoke();
+        private void OnQuestsClicked() => QuestsClicked?.Invoke();
+        private void OnLoginRewardsClicked() => LoginRewardsClicked?.Invoke();
         private readonly List<UnityEngine.Events.UnityAction> _shopActions = new();
         private Button[] _shopButtons;
         private IReadOnlyDictionary<string, string> _shopPrices;
@@ -467,6 +483,14 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
         }
 
         public void ApplyLives(Modules.GameplayModule.Shared.Data.ValueObjects.LivesStateRVO state) { if (_lives != null) _lives.text = $"{state.Lives}/{state.MaxLives}"; }
+
+        public void ApplyEvents(Modules.GameplayModule.Shared.Data.ValueObjects.EventsRVO events)
+        {
+            if (_questsDot != null) _questsDot.SetActive(events.QuestClaimable);
+            if (_loginRewardsDot != null) _loginRewardsDot.SetActive(events.LoginClaimable);
+            if (_weekendBadge != null) _weekendBadge.SetActive(events.WeekendMultiplier > 1);
+            if (_weekendMultiplier != null) _weekendMultiplier.text = "x" + events.WeekendMultiplier;
+        }
         public void ApplyProfileIcon(ProfileIconVO icon)
         {
             if (_profileAvatar == null || icon == null) return;
