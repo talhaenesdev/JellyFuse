@@ -30,6 +30,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             public TMP_Text Badge;
             // Beside the price only: says the number is coins, not uses left.
             public Image PriceCoin;
+            // At the corner once none are left: the button opens the offer for more.
+            public Image AddBadge;
             public UnityEngine.Events.UnityAction Clicked;
             public BoosterStateRVO State;
         }
@@ -95,6 +97,18 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                     coin.gameObject.SetActive(false);
                     entry.PriceCoin = coin;
                 }
+                if (_boosterAddBadge != null)
+                {
+                    var add = new GameObject("Img_AddBadge", typeof(RectTransform)).AddComponent<Image>();
+                    add.rectTransform.SetParent(button.transform, false);
+                    add.rectTransform.anchorMin = add.rectTransform.anchorMax = new Vector2(1, 0);
+                    add.rectTransform.pivot = new Vector2(.5f, .5f);
+                    add.rectTransform.anchoredPosition = new Vector2(-14, 14);
+                    add.rectTransform.sizeDelta = new Vector2(46, 46);
+                    add.sprite = _boosterAddBadge; add.preserveAspect = true; add.raycastTarget = false;
+                    add.gameObject.SetActive(false);
+                    entry.AddBadge = add;
+                }
                 int index = _boosterButtons.Count;
                 entry.Clicked = () => OnBoosterClicked(index);
                 _boosterButtons.Add(entry);
@@ -122,7 +136,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                 entry.Badge.text = !entry.State.Unlocked ? LF("gameplay.booster_locked", "Lv {0}", entry.State.UnlockLevel)
                     // An amount owned reads "x3"; with none left a "+" says the button opens the offer for more.
                     : entry.State.Count > 0 ? "x" + entry.State.Count
-                    : "<color=#7CFF4F>+</color>";
+                    : entry.AddBadge != null ? "" : "<color=#7CFF4F>+</color>";
+                if (entry.AddBadge != null) entry.AddBadge.gameObject.SetActive(entry.State.Unlocked && entry.State.Count <= 0);
                 if (entry.PriceCoin != null) entry.PriceCoin.gameObject.SetActive(false);
             }
             if (_boosterArmed && !ArmedStillUsable()) Disarm();

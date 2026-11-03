@@ -42,6 +42,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         [SerializeField] private Button _settings;
         [Tooltip("The row of boosters under the map; the map keeps the side gap from its top.")]
         [SerializeField] private RectTransform _boosters;
+        [Tooltip("Shown at a booster's corner once none are left: the button opens the offer for more. Empty writes a green +.")]
+        [SerializeField] private Sprite _boosterAddBadge;
         [Tooltip("The bar behind the HUD at the top; a developer switch shows or hides it.")]
         [SerializeField] private GameObject _topBar;
         [Tooltip("The bar behind the boosters at the bottom; a developer switch shows or hides it.")]
