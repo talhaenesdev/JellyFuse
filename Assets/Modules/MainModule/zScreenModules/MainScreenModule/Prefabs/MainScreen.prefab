@@ -3690,6 +3690,8 @@ GameObject:
   - component: {fileID: 3474078278759544800}
   - component: {fileID: 2522218067247892787}
   - component: {fileID: 858269816590576307}
+  - component: {fileID: 8804704494458897717}
+  - component: {fileID: 6232682402425310168}
   m_Layer: 5
   m_Name: Btn_DailyQuests
   m_TagString: Untagged
@@ -3799,6 +3801,55 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &8804704494458897717
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4668075496397837148}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b47118d59611b764eb1c3be42bd8a2e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.UiWidgets::Modules.UiWidgetsModule.Entities.UiParticleEmitter
+  _sprites:
+  - {fileID: 21300000, guid: 0fade88e1b6e85343b290722db190a07, type: 3}
+  _colors:
+  - {r: 0.35, g: 0.9, b: 1, a: 1}
+  - {r: 1, g: 0.86, b: 0.3, a: 1}
+  _size: {x: 60, y: 95}
+  _rate: 3
+  _onlyWhile: {fileID: 2192412265827009842}
+  _lifetime: {x: 1.1, y: 1.8}
+  _rise: 90
+  _margin: 12
+  _burstOnClick: 1
+  _burstCount: 14
+  _burstSpeed: 320
+  _burstSprites:
+  - {fileID: -6694549606047073185, guid: 948d3ff23ab3d98419fa76d40a030e7e, type: 3}
+  - {fileID: -4399165778089466187, guid: 948d3ff23ab3d98419fa76d40a030e7e, type: 3}
+  - {fileID: -5967520643553567312, guid: 948d3ff23ab3d98419fa76d40a030e7e, type: 3}
+  - {fileID: 3000736305413382441, guid: 948d3ff23ab3d98419fa76d40a030e7e, type: 3}
+  _ring: {fileID: 21300000, guid: 287c23cc80187c7448534d1fb499865d, type: 3}
+  _ringScale: 1.6
+--- !u!114 &6232682402425310168
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4668075496397837148}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7e778b2694b36f4a9e82a7a2f00412c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.UiWidgets::Modules.UiWidgetsModule.Entities.AttentionAnimator
+  _onlyWhile: {fileID: 2192412265827009842}
+  _rest: 2.2
+  _hop: 14
+  _wiggle: 9
 --- !u!1 &4904037523095323909
 GameObject:
   m_ObjectHideFlags: 0
@@ -4023,6 +4074,7 @@ GameObject:
   - component: {fileID: 2512981909695866466}
   - component: {fileID: 7202440429925510490}
   - component: {fileID: 2861680315727073867}
+  - component: {fileID: 4212772014765478317}
   m_Layer: 0
   m_Name: Img_Plus
   m_TagString: Untagged
@@ -4131,6 +4183,37 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &4212772014765478317
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5060807967848698187}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b47118d59611b764eb1c3be42bd8a2e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.UiWidgets::Modules.UiWidgetsModule.Entities.UiParticleEmitter
+  _sprites:
+  - {fileID: 21300000, guid: 0fade88e1b6e85343b290722db190a07, type: 3}
+  _colors:
+  - {r: 0.6, g: 1, b: 0.35, a: 1}
+  - {r: 1, g: 0.86, b: 0.3, a: 1}
+  _size: {x: 50, y: 75}
+  _rate: 0
+  _onlyWhile: {fileID: 0}
+  _lifetime: {x: 1.1, y: 1.8}
+  _rise: 90
+  _margin: 12
+  _burstOnClick: 1
+  _burstCount: 10
+  _burstSpeed: 320
+  _burstSprites:
+  - {fileID: 21300000, guid: 0fade88e1b6e85343b290722db190a07, type: 3}
+  - {fileID: 21300000, guid: 154cdf74fe292fa45b2e59b2eeaca076, type: 3}
+  _ring: {fileID: 21300000, guid: 287c23cc80187c7448534d1fb499865d, type: 3}
+  _ringScale: 1.6
 --- !u!1 &5141964767410311235
 GameObject:
   m_ObjectHideFlags: 0
@@ -7545,6 +7628,8 @@ GameObject:
   - component: {fileID: 628545872270634166}
   - component: {fileID: 103604316033562183}
   - component: {fileID: 6251118895563519734}
+  - component: {fileID: 1576310754671148406}
+  - component: {fileID: 3236590762300959894}
   m_Layer: 5
   m_Name: Btn_Wheel
   m_TagString: Untagged
@@ -7654,6 +7739,55 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1576310754671148406
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8397122639355704505}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b47118d59611b764eb1c3be42bd8a2e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.UiWidgets::Modules.UiWidgetsModule.Entities.UiParticleEmitter
+  _sprites:
+  - {fileID: 21300000, guid: 0fade88e1b6e85343b290722db190a07, type: 3}
+  _colors:
+  - {r: 1, g: 0.86, b: 0.3, a: 1}
+  - {r: 1, g: 0.86, b: 0.3, a: 1}
+  _size: {x: 60, y: 95}
+  _rate: 3
+  _onlyWhile: {fileID: 227099417560714522}
+  _lifetime: {x: 1.1, y: 1.8}
+  _rise: 90
+  _margin: 12
+  _burstOnClick: 1
+  _burstCount: 14
+  _burstSpeed: 320
+  _burstSprites:
+  - {fileID: -6694549606047073185, guid: 948d3ff23ab3d98419fa76d40a030e7e, type: 3}
+  - {fileID: -4399165778089466187, guid: 948d3ff23ab3d98419fa76d40a030e7e, type: 3}
+  - {fileID: -5967520643553567312, guid: 948d3ff23ab3d98419fa76d40a030e7e, type: 3}
+  - {fileID: 3000736305413382441, guid: 948d3ff23ab3d98419fa76d40a030e7e, type: 3}
+  _ring: {fileID: 21300000, guid: 287c23cc80187c7448534d1fb499865d, type: 3}
+  _ringScale: 1.6
+--- !u!114 &3236590762300959894
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8397122639355704505}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7e778b2694b36f4a9e82a7a2f00412c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.UiWidgets::Modules.UiWidgetsModule.Entities.AttentionAnimator
+  _onlyWhile: {fileID: 227099417560714522}
+  _rest: 2.2
+  _hop: 14
+  _wiggle: 9
 --- !u!1 &8462931953656801964
 GameObject:
   m_ObjectHideFlags: 0
@@ -8259,6 +8393,8 @@ GameObject:
   - component: {fileID: 1157852416509700675}
   - component: {fileID: 2897740979077239654}
   - component: {fileID: 5788659093721525245}
+  - component: {fileID: 931503685831645871}
+  - component: {fileID: 2149721952817134992}
   m_Layer: 5
   m_Name: Btn_LoginRewards
   m_TagString: Untagged
@@ -8368,6 +8504,55 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &931503685831645871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9106407788431976968}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b47118d59611b764eb1c3be42bd8a2e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.UiWidgets::Modules.UiWidgetsModule.Entities.UiParticleEmitter
+  _sprites:
+  - {fileID: 21300000, guid: 0fade88e1b6e85343b290722db190a07, type: 3}
+  _colors:
+  - {r: 1, g: 0.45, b: 0.75, a: 1}
+  - {r: 1, g: 0.86, b: 0.3, a: 1}
+  _size: {x: 60, y: 95}
+  _rate: 3
+  _onlyWhile: {fileID: 5186447448930580025}
+  _lifetime: {x: 1.1, y: 1.8}
+  _rise: 90
+  _margin: 12
+  _burstOnClick: 1
+  _burstCount: 14
+  _burstSpeed: 320
+  _burstSprites:
+  - {fileID: -6694549606047073185, guid: 948d3ff23ab3d98419fa76d40a030e7e, type: 3}
+  - {fileID: -4399165778089466187, guid: 948d3ff23ab3d98419fa76d40a030e7e, type: 3}
+  - {fileID: -5967520643553567312, guid: 948d3ff23ab3d98419fa76d40a030e7e, type: 3}
+  - {fileID: 3000736305413382441, guid: 948d3ff23ab3d98419fa76d40a030e7e, type: 3}
+  _ring: {fileID: 21300000, guid: 287c23cc80187c7448534d1fb499865d, type: 3}
+  _ringScale: 1.6
+--- !u!114 &2149721952817134992
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9106407788431976968}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7e778b2694b36f4a9e82a7a2f00412c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.UiWidgets::Modules.UiWidgetsModule.Entities.AttentionAnimator
+  _onlyWhile: {fileID: 5186447448930580025}
+  _rest: 2.2
+  _hop: 14
+  _wiggle: 9
 --- !u!1 &9204721974724039745
 GameObject:
   m_ObjectHideFlags: 0
@@ -8780,7 +8965,13 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8309862548481309507, guid: a5b08d7416530184db264c68eb75a4a6, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7612812403937092975}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3796406961657735661, guid: a5b08d7416530184db264c68eb75a4a6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6877991077429121551}
+    - targetCorrespondingSourceObject: {fileID: 3796406961657735661, guid: a5b08d7416530184db264c68eb75a4a6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1633686050746646351}
   m_SourcePrefab: {fileID: 100100000, guid: a5b08d7416530184db264c68eb75a4a6, type: 3}
 --- !u!114 &796339290240238670 stripped
 MonoBehaviour:
@@ -8793,12 +8984,71 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+--- !u!1 &953551642052339655 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3796406961657735661, guid: a5b08d7416530184db264c68eb75a4a6, type: 3}
+  m_PrefabInstance: {fileID: 4149009527895281194}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6877991077429121551
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 953551642052339655}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b47118d59611b764eb1c3be42bd8a2e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.UiWidgets::Modules.UiWidgetsModule.Entities.UiParticleEmitter
+  _sprites:
+  - {fileID: 21300000, guid: 0fade88e1b6e85343b290722db190a07, type: 3}
+  - {fileID: 21300000, guid: 154cdf74fe292fa45b2e59b2eeaca076, type: 3}
+  _colors:
+  - {r: 1, g: 0.86, b: 0.3, a: 1}
+  - {r: 1, g: 0.45, b: 0.75, a: 1}
+  - {r: 0.35, g: 0.9, b: 1, a: 1}
+  - {r: 0.6, g: 1, b: 0.35, a: 1}
+  - {r: 0.75, g: 0.5, b: 1, a: 1}
+  _size: {x: 60, y: 95}
+  _rate: 4
+  _onlyWhile: {fileID: 0}
+  _lifetime: {x: 1.1, y: 1.8}
+  _rise: 90
+  _margin: 12
+  _burstOnClick: 1
+  _burstCount: 22
+  _burstSpeed: 420
+  _burstSprites:
+  - {fileID: -6694549606047073185, guid: 948d3ff23ab3d98419fa76d40a030e7e, type: 3}
+  - {fileID: -4399165778089466187, guid: 948d3ff23ab3d98419fa76d40a030e7e, type: 3}
+  - {fileID: -5967520643553567312, guid: 948d3ff23ab3d98419fa76d40a030e7e, type: 3}
+  - {fileID: 3000736305413382441, guid: 948d3ff23ab3d98419fa76d40a030e7e, type: 3}
+  _ring: {fileID: 21300000, guid: 287c23cc80187c7448534d1fb499865d, type: 3}
+  _ringScale: 1.6
+--- !u!114 &1633686050746646351
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 953551642052339655}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e80493cd326a62d4aa0af22d917413d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.UiWidgets::Modules.UiWidgetsModule.Entities.ShineSweep
+  _streak: {fileID: 21300000, guid: af71362fedb7b2a43a87f941161b93db, type: 3}
+  _color: {r: 1, g: 1, b: 1, a: 0.55}
+  _rest: 3
+  _sweepSeconds: 0.55
+  _inset: {x: 14, y: 10}
 --- !u!114 &2749315865249250295 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2284369651887388125, guid: a5b08d7416530184db264c68eb75a4a6, type: 3}
   m_PrefabInstance: {fileID: 4149009527895281194}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 953551642052339655}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
