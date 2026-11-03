@@ -5,6 +5,7 @@ using Modules.HapticModule.Enums;
 using Modules.HapticModule.Services;
 using Modules.GameplayModule.Signals;
 using FlowIoC.BaseModule.Contexts;
+using FlowIoC.BaseModule.Controller.Commands;
 using Modules.GameplayModule.Controllers;
 using Modules.GameplayModule.Enums;
 using Modules.GameplayModule.Models;
@@ -248,6 +249,24 @@ namespace Modules.GameplayModule.RootsContexts
                 .ToSequence<GrantBoosterAdCommand>()
                 .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
                 .ToSequence<AnnounceBoostersCommand>();
+            CommandBinder.Bind(_signals.Incoming.OpenBoosterOffer).ToSequence<OpenBoosterOfferCommand>();
+            CommandBinder.Bind(_signals.Incoming.BuyOfferedBooster)
+                .ToSequence<BuyOfferedBoosterCommand>()
+                .ToSequence<IAudioService.Commands.Play>(AudioCue.Coin)
+                .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
+                .ToSequence<AnnounceBoostersCommand>()
+                .ToSequence<SignalDispatchCommand>(_signals.Outgoing.BoosterOfferFinished);
+            CommandBinder.Bind(_signals.Incoming.WatchAdForOfferedBooster)
+                .ToSequence<CheckOfferedBoosterAdCommand>()
+                .ToSequence<IAdsService.Commands.ShowRewarded>()
+                .ToSequence<GrantOfferedBoosterAdCommand>()
+                .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
+                .ToSequence<AnnounceBoostersCommand>()
+                .ToSequence<SignalDispatchCommand>(_signals.Outgoing.BoosterOfferFinished);
+            CommandBinder.Bind(_signals.Incoming.PurchaseClosed)
+                .ToSequence<CloseBoosterOfferCommand>()
+                .ToSequence<ResumePuzzleClockCommand>()
+                .ToSequence<StartPuzzleClockCommand>();
             CommandBinder.Bind(_signals.Incoming.ResetLives)
                 .ToSequence<ResetLivesCommand>()
                 .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)

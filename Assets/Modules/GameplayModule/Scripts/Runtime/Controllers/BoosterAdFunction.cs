@@ -20,5 +20,13 @@ namespace Modules.GameplayModule.Controllers
                 && model.Status == PuzzleStatus.Playing && model.LevelIndex + 1 >= booster.UnlockLevel
                 && progress.Booster(type).Count <= 0 && progress.FreeBoosterAdDay != ShopDayFunction.Today();
         }
+
+        /// <summary>A watched ad: the booster gets CD_AdRewards' free uses, and today's free booster is taken.</summary>
+        public static void Grant(ISharedDataModel shared, BoosterType type)
+        {
+            var progress = shared.GetScriptable<SD_JellyProgress>();
+            progress.Booster(type).Count += shared.GetScriptable<CD_AdRewards>().DailyFreeBoosters;
+            progress.FreeBoosterAdDay = ShopDayFunction.Today();
+        }
     }
 }

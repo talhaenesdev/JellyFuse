@@ -24,7 +24,6 @@ namespace Modules.GameplayModule.Controllers
             var boosters = _shared.GetScriptable<CD_Boosters>();
             if (boosters == null) return;
             var progress = _shared.GetScriptable<SD_JellyProgress>();
-            int coins = progress != null ? progress.Coins : 0;
             var states = new List<BoosterStateRVO>();
             foreach (var booster in boosters.Boosters)
             {
@@ -37,9 +36,11 @@ namespace Modules.GameplayModule.Controllers
                     Type = booster.Type, Icon = booster.Icon, Unlocked = unlocked, UnlockLevel = booster.UnlockLevel,
                     Count = count, Price = booster.CoinPrice,
                     // A freeze does not stack: while the clock is frozen, Freeze Time waits until it runs again.
-                    Usable = unlocked && progress != null && (count > 0 || coins >= booster.CoinPrice || freeByAd)
+                    // With no use left the button still works: it opens the offer for one more.
+                    Usable = unlocked && progress != null
                         && !(booster.Type == BoosterType.FreezeTime && _model.ClockFreezeSeconds > 0),
                     FreeByAd = freeByAd,
+                    OnOffer = unlocked && count <= 0,
                 });
             }
             _signals.Outgoing.BoostersChanged.Dispatch(states);

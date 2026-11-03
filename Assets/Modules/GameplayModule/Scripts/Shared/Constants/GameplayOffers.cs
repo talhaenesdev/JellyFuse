@@ -4,5 +4,7 @@ namespace Modules.GameplayModule.Shared.Constants
     public static class GameplayOffers
     {
         public const string LIVES = "lives";
+        /// <summary>One more use of the booster the player ran out of; which one is Gameplay's to remember.</summary>
+        public const string BOOSTER = "booster";
     }
 }

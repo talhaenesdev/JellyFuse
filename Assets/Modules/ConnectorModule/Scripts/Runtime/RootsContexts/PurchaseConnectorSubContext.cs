@@ -32,6 +32,9 @@ namespace Modules.ConnectorModule.RootsContexts
             _gameplaySignals.Outgoing.LivesOfferOpened.Connect(_purchaseSignals.Incoming.Open, GROUP);
             _gameplaySignals.Outgoing.LivesOfferChanged.Connect(_purchaseSignals.Incoming.ApplyOffer, GROUP);
             _gameplaySignals.Outgoing.LivesOfferFinished.Connect(_purchaseSignals.Incoming.Close, GROUP);
+            // One more use of a booster, sold by Gameplay.
+            _gameplaySignals.Outgoing.BoosterOfferOpened.Connect(_purchaseSignals.Incoming.Open, GROUP);
+            _gameplaySignals.Outgoing.BoosterOfferFinished.Connect(_purchaseSignals.Incoming.Close, GROUP);
         }
 
         private void OutgoingSignals()
@@ -39,6 +42,9 @@ namespace Modules.ConnectorModule.RootsContexts
             _purchaseSignals.Outgoing.Bought(GameplayOffers.LIVES).Connect(_gameplaySignals.Incoming.BuyLives, GROUP);
             _purchaseSignals.Outgoing.Watched(GameplayOffers.LIVES).Connect(_gameplaySignals.Incoming.WatchAdForLives, GROUP);
             _purchaseSignals.Outgoing.RefreshRequested(GameplayOffers.LIVES).Connect(_gameplaySignals.Incoming.RefreshLivesOffer, GROUP);
+            _purchaseSignals.Outgoing.Bought(GameplayOffers.BOOSTER).Connect(_gameplaySignals.Incoming.BuyOfferedBooster, GROUP);
+            _purchaseSignals.Outgoing.Watched(GameplayOffers.BOOSTER).Connect(_gameplaySignals.Incoming.WatchAdForOfferedBooster, GROUP);
+            _purchaseSignals.Outgoing.Closed.Connect(_gameplaySignals.Incoming.PurchaseClosed, GROUP);
         }
 
         public override void DestroyContext()

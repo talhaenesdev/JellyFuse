@@ -68,6 +68,7 @@ namespace Modules.GameplayModule.Models
         public bool IsDragging => _dragBefore != null;
         public bool IsTicking { get; set; }
         public bool IsHooked { get; set; }
+        public BoosterType? OfferedBooster { get; set; }
         public int LevelIndex { get; set; } = -1;
         public bool WinPaid { get; set; }
         public bool LifeTaken { get; set; }

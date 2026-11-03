@@ -27,6 +27,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         public event Action ExtraTimeClicked;
         /// <summary>A booster with no use left was pressed while today's free booster is offered for an ad.</summary>
         public event Action<BoosterType> BoosterAdClicked;
+        public event Action<BoosterType> BoosterOfferClicked;
 
         private AdOffersRVO _adOffers = AdOffersRVO.None;
 

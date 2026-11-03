@@ -11,6 +11,8 @@ namespace Modules.GameplayModule.Models
         bool IsDragging { get; }
         bool IsTicking { get; set; }
         bool IsHooked { get; set; }
+        /// <summary>The booster the purchase popup offers while it shows one; null otherwise. Its clock waits until the popup closes.</summary>
+        BoosterType? OfferedBooster { get; set; }
         /// <summary>Position in CD_JellyLevels of the level being played; -1 until the first start.</summary>
         int LevelIndex { get; set; }
         /// <summary>The pull reach of a door with none of its own (CD_JellyLevels.DefaultPullReach), read at every drag so a change applies at once.</summary>

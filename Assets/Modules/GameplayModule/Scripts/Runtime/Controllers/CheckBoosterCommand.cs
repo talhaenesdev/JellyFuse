@@ -10,7 +10,7 @@ using Modules.GameplayModule.Signals;
 namespace Modules.GameplayModule.Controllers
 {
     /// <summary>
-    /// Lets a booster through only while a level is played, the booster is open, and a use is left or can be bought.
+    /// Lets a booster through only while a level is played, the booster is open, and a use is left; a booster with none opens its offer instead.
     /// Freeze Time also waits for the clock to run again: a freeze does not stack.
     /// </summary>
     internal class CheckBoosterCommand : Command
@@ -25,7 +25,7 @@ namespace Modules.GameplayModule.Controllers
             var progress = _shared.GetScriptable<SD_JellyProgress>();
             bool usable = booster != null && booster.Enabled && progress != null && _model.Status == PuzzleStatus.Playing
                 && _model.LevelIndex + 1 >= booster.UnlockLevel
-                && (progress.Booster(_type).Count > 0 || progress.Coins >= booster.CoinPrice)
+                && progress.Booster(_type).Count > 0
                 && !(_type == BoosterType.FreezeTime && _model.ClockFreezeSeconds > 0);
             if (usable) return;
             Retain();

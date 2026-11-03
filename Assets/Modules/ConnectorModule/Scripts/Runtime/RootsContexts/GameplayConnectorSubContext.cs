@@ -31,6 +31,7 @@ namespace Modules.ConnectorModule.RootsContexts
             _screenSignals.Outgoing.DoubleRewardClicked.Connect(_gameplaySignals.Incoming.WatchAdForDoubleReward, GROUP);
             _screenSignals.Outgoing.ExtraTimeClicked.Connect(_gameplaySignals.Incoming.WatchAdForTime, GROUP);
             _screenSignals.Outgoing.BoosterAdClicked.Connect(_gameplaySignals.Incoming.WatchAdForBooster, GROUP);
+            _screenSignals.Outgoing.BoosterOfferClicked.Connect(_gameplaySignals.Incoming.OpenBoosterOffer, GROUP);
 #if UNITY_EDITOR
             _screenSignals.Outgoing.ForceResult.Connect(_gameplaySignals.Incoming.ForceResult, GROUP);
 #endif

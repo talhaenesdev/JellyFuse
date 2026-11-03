@@ -79,6 +79,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.Signals
         public Signal ExtraTimeClicked = new();
         /// <summary>A booster with no use left was pressed while today's free one is offered: its free use for an ad.</summary>
         public Signal<BoosterType> BoosterAdClicked = new();
+        /// <summary>A booster with no use left was pressed: its offer should open.</summary>
+        public Signal<BoosterType> BoosterOfferClicked = new();
         /// <summary>The level label was tapped three times quickly: the developer panel opens.</summary>
         public Signal DevToolsRequested = new();
         /// <summary>A developer tuning page's values: the page's name and its sliders.</summary>

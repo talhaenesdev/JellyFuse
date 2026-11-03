@@ -48,6 +48,14 @@ namespace Modules.GameplayModule.Signals
         public Signal<BoosterType> WatchAdForBooster = new();
         /// <summary>Buy lives with coins.</summary>
         public Signal BuyLives = new();
+        /// <summary>A booster with no use left was pressed: the purchase popup offers one more.</summary>
+        public Signal<BoosterType> OpenBoosterOffer = new();
+        /// <summary>Buy on the booster offer.</summary>
+        public Signal BuyOfferedBooster = new();
+        /// <summary>Watch ad on the booster offer.</summary>
+        public Signal WatchAdForOfferedBooster = new();
+        /// <summary>The purchase popup closed, whatever it showed; the level's clock runs again if it showed a booster.</summary>
+        public Signal PurchaseClosed = new();
         /// <summary>A product was paid for with real money: its store id. What it gives is in CD_ShopProducts.</summary>
         public Signal<string> GrantShopProduct = new();
         /// <summary>Announce which once-a-day shop products are sold out today.</summary>
@@ -94,6 +102,9 @@ namespace Modules.GameplayModule.Signals
         public Signal<PurchaseOfferVO> LivesOfferChanged = new();
         /// <summary>The lives offer did its job - a life bought for a level that waited - and can close.</summary>
         public Signal LivesOfferFinished = new();
+        public Signal<PurchaseOfferVO> BoosterOfferOpened = new();
+        /// <summary>The booster offer is done - bought or watched: the popup closes.</summary>
+        public Signal BoosterOfferFinished = new();
         /// <summary>What the level's tutorial shows now; JellyTutorialRVO.None when there is none, or it is over.</summary>
         public Signal<JellyTutorialRVO> TutorialChanged = new();
         /// <summary>Something new the player should be told about - a booster that just opened: its info page's key.</summary>

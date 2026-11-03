@@ -41,6 +41,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             _view.DoubleRewardClicked += OnDoubleRewardClicked;
             _view.ExtraTimeClicked += OnExtraTimeClicked;
             _view.BoosterAdClicked += OnBoosterAdClicked;
+            _view.BoosterOfferClicked += OnBoosterOfferClicked;
             _signals.Incoming.ApplyAdOffers.AddListener(_view.ApplyAdOffers);
             _signals.Incoming.SendTuningSliders.AddListener(OnSendTuningSliders);
             _signals.Incoming.SetTuned.AddListener(_view.SetTuned);
@@ -84,6 +85,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             _view.DoubleRewardClicked -= OnDoubleRewardClicked;
             _view.ExtraTimeClicked -= OnExtraTimeClicked;
             _view.BoosterAdClicked -= OnBoosterAdClicked;
+            _view.BoosterOfferClicked -= OnBoosterOfferClicked;
             _signals.Incoming.ApplyAdOffers.RemoveListener(_view.ApplyAdOffers);
             _signals.Incoming.SendTuningSliders.RemoveListener(OnSendTuningSliders);
             _signals.Incoming.SetTuned.RemoveListener(_view.SetTuned);
@@ -156,6 +158,10 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         private void OnExtraTimeClicked()
         {
             if (_view.Data.HasState(ScreenState.AvailableToSendSignal)) _signals.Outgoing.ExtraTimeClicked.Dispatch();
+        }
+        private void OnBoosterOfferClicked(BoosterType type)
+        {
+            if (_view.Data.HasState(ScreenState.AvailableToSendSignal)) _signals.Outgoing.BoosterOfferClicked.Dispatch(type);
         }
         private void OnBoosterAdClicked(BoosterType type)
         {

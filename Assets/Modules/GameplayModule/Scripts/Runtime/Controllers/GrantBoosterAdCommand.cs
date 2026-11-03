@@ -12,11 +12,6 @@ namespace Modules.GameplayModule.Controllers
         [Inject] private ISharedDataModel _shared { get; set; }
         [SignalParam] private BoosterType _type { get; set; }
 
-        public override void Execute()
-        {
-            var progress = _shared.GetScriptable<SD_JellyProgress>();
-            progress.Booster(_type).Count += _shared.GetScriptable<CD_AdRewards>().DailyFreeBoosters;
-            progress.FreeBoosterAdDay = ShopDayFunction.Today();
-        }
+        public override void Execute() => BoosterAdFunction.Grant(_shared, _type);
     }
 }

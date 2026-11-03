@@ -160,7 +160,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             // In a lesson only the booster taught is taken, and once armed it cannot be let go.
             if (_lesson && state.Type != _lessonType) return;
             if (_boosterArmed && _armedType == state.Type) { if (!_lesson) Disarm(); return; }
-            if (state.FreeByAd && !_lesson) { Disarm(); BoosterAdClicked?.Invoke(state.Type); return; }
+            if (state.OnOffer && !_lesson) { Disarm(); BoosterOfferClicked?.Invoke(state.Type); return; }
             if (!state.Usable) return;
             Disarm();
             if (state.Type == BoosterType.FreezeTime) { EndBoosterLesson(); BoosterChosen?.Invoke(state.Type, 0); ShowHint(state.Type, 2); return; }
