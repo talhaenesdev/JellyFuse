@@ -55,6 +55,8 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
         [SerializeField] private KeyedText[] _shopTexts;
         [Tooltip("Leaves the shop for Home, as the Home tab does.")]
         [SerializeField] private Button _shopCloseButton;
+        [Tooltip("The + by the coins: opens the Shop tab, as the tab does.")]
+        [SerializeField] private Button _coinsPlusButton;
         [SerializeField] private TMP_Text _coins;
         [Tooltip("The lives the player holds, as lives/max.")]
         [SerializeField] private TMP_Text _lives;
@@ -128,6 +130,7 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
             for (int i = 0; i < _tabActions.Count; i++) _navTabs[i].onClick.AddListener(_tabActions[i]);
             for (int i = 0; i < _shopActions.Count; i++) if (_shopButtons[i] != null) _shopButtons[i].onClick.AddListener(_shopActions[i]);
             if (_shopCloseButton != null) _shopCloseButton.onClick.AddListener(OnShopCloseClicked);
+            if (_coinsPlusButton != null) _coinsPlusButton.onClick.AddListener(OnCoinsPlusClicked);
         }
 
         private void OnDisable()
@@ -144,6 +147,7 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
             for (int i = 0; i < _tabActions.Count; i++) _navTabs[i].onClick.RemoveListener(_tabActions[i]);
             for (int i = 0; i < _shopActions.Count; i++) if (_shopButtons[i] != null) _shopButtons[i].onClick.RemoveListener(_shopActions[i]);
             if (_shopCloseButton != null) _shopCloseButton.onClick.RemoveListener(OnShopCloseClicked);
+            if (_coinsPlusButton != null) _coinsPlusButton.onClick.RemoveListener(OnCoinsPlusClicked);
             KillNavigationTweens();
         }
 
@@ -157,6 +161,8 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
         private void OnWheelClicked() => WheelClicked?.Invoke();
         // The close button is a second way to the Home tab, so it takes the tab's own path.
         private void OnShopCloseClicked() => OnTabClicked(_homeTab);
+        // The shop is the first tab; the coins' + is a second way to it.
+        private void OnCoinsPlusClicked() => OnTabClicked(0);
 
         [Serializable]
         private struct KeyedText
