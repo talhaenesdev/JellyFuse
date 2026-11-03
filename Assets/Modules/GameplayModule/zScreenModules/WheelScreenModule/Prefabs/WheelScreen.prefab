@@ -1020,6 +1020,7 @@ GameObject:
   - component: {fileID: 1316089771713847022}
   - component: {fileID: 8541392889545720381}
   - component: {fileID: 8073852810876797199}
+  - component: {fileID: 7157312620803070148}
   m_Layer: 0
   m_Name: WheelScreen
   m_TagString: Untagged
@@ -1103,6 +1104,25 @@ MonoBehaviour:
   _adSpinLabel: {fileID: 8127472869508108193}
   _burst: {fileID: 6380880601179986244}
   _result: {fileID: 6206953225048107352}
+  _flyer: {fileID: 7157312620803070148}
+--- !u!114 &7157312620803070148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3325378355096459304}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11f68942fb7dc1f4a8339eec9230d494, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.UiWidgets::Modules.UiWidgetsModule.Entities.RewardFlyer
+  _layer: {fileID: 0}
+  _coinTarget: {x: 0.03, y: 0.898}
+  _pieceSize: {x: 64, y: 64}
+  _burstRadius: 90
+  _flySeconds: 0.7
+  _riseDistance: 260
 --- !u!1 &3830703327762251600
 GameObject:
   m_ObjectHideFlags: 0

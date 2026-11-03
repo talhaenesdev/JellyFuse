@@ -21,9 +21,7 @@ namespace Modules.GameplayModule.Shared.Data.ValueObjects
         public long QuestsResetAt;
         /// <summary>The prize wheel's slices clockwise from the top.</summary>
         public IReadOnlyList<WheelSliceCVO> Wheel = new List<WheelSliceCVO>();
-        /// <summary>Today's free spin is still to take.</summary>
-        public bool WheelFreeSpin;
-        /// <summary>Spins an ad may still buy today.</summary>
-        public int WheelAdSpinsLeft;
+        /// <summary>Spins the player can take now: today's free one while it is left, and those ads gave. 0: an ad gives one.</summary>
+        public int WheelSpins;
     }
 }

@@ -34,10 +34,8 @@ namespace Modules.GameplayModule.Shared.Data.UnityObjects
         public List<QuestCVO> QuestPool = new();
 
         [Header("Prize wheel")]
-        [Tooltip("The wheel's slices clockwise from the top, as many as the wheel's art has; one free spin a day lands on one of them.")]
+        [Tooltip("The wheel's slices clockwise from the top, as many as the wheel's art has; a spin - one free a day, one more for each ad watched - lands on one of them.")]
         public List<WheelSliceCVO> Wheel = new();
-        [Tooltip("Spins a day the player may buy with a rewarded ad after the free one; 0 offers none.")]
-        [Min(0)] public int WheelAdSpinsPerDay = 3;
 
         public bool IsWeekend(DateTime localDay) => WeekendMultiplier > 1 && WeekendDays.Contains(localDay.DayOfWeek);
 

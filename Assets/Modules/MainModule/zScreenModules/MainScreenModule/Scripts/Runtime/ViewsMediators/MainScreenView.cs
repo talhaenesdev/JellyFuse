@@ -66,7 +66,7 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
         [SerializeField] private Button _loginRewardsButton;
         [SerializeField] private GameObject _loginRewardsDot;
         [SerializeField] private Button _wheelButton;
-        [Tooltip("Shown while today's free spin is left.")]
+        [Tooltip("Shown while a spin is there to take.")]
         [SerializeField] private GameObject _wheelDot;
         [Tooltip("Shown on bonus days, with the multiplier.")]
         [SerializeField] private GameObject _weekendBadge;
@@ -512,7 +512,7 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
         {
             if (_questsDot != null) _questsDot.SetActive(events.QuestClaimable);
             if (_loginRewardsDot != null) _loginRewardsDot.SetActive(events.LoginClaimable);
-            if (_wheelDot != null) _wheelDot.SetActive(events.WheelFreeSpin);
+            if (_wheelDot != null) _wheelDot.SetActive(events.WheelSpins > 0);
             if (_weekendBadge != null) _weekendBadge.SetActive(events.WeekendMultiplier > 1);
             if (_weekendMultiplier != null) _weekendMultiplier.text = "x" + events.WeekendMultiplier;
         }

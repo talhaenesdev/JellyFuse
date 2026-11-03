@@ -4,6 +4,8 @@ using FlowIoC.BaseModule.Injectable.Components;
 using FlowIoC.ScreenModule.ViewsMediators.Screen;
 using Modules.GameplayModule.DailyQuestsScreenModule.Entities;
 using Modules.GameplayModule.Shared.Data.ValueObjects;
+using Modules.GameplayModule.Shared.Enums;
+using Modules.UiWidgetsModule.Entities;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -23,11 +25,18 @@ namespace Modules.GameplayModule.DailyQuestsScreenModule.ViewsMediators
         [SerializeField] private Button _backdropButton;
         [Tooltip("The first row, laid out in the prefab; one more is copied from it for each quest past the first.")]
         [SerializeField] private QuestRowWidget _rowTemplate;
+        [Tooltip("Plays a claimed reward flying off its row: coins to the counter, the rest upwards.")]
+        [SerializeField] private RewardFlyer _flyer;
+        [SerializeField] private Sprite _coinIcon;
+        [Tooltip("The booster icons in BoosterType order: Rocket, Freeze Time, Ufo.")]
+        [SerializeField] private Sprite[] _boosterIcons;
 
         public Action CloseClicked;
         public Action<int> ClaimClicked;
 
         private readonly List<QuestRowWidget> _rows = new();
+        // What each row showed last, so a quest that has just been claimed is seen flying off.
+        private readonly List<(QuestType Type, bool Claimed)> _shown = new();
         private Func<string, string> _localize;
         private long _resetAt;
         private int _shownSeconds = -1;
@@ -76,7 +85,11 @@ namespace Modules.GameplayModule.DailyQuestsScreenModule.ViewsMediators
                 int index = i;
                 _rows[i].Claimed = () => ClaimClicked?.Invoke(index);
                 _rows[i].Show(quests[i], L);
+                bool justClaimed = quests[i].Claimed && i < _shown.Count && _shown[i].Type == quests[i].Type && !_shown[i].Claimed;
+                if (justClaimed && _flyer != null) FlyReward(quests[i].Reward, _rows[i].RewardAnchor);
             }
+            _shown.Clear();
+            foreach (var quest in quests) _shown.Add((quest.Type, quest.Claimed));
             _resetAt = events.QuestsResetAt;
             _shownSeconds = -1;
             RefreshTimer();
@@ -93,6 +106,14 @@ namespace Modules.GameplayModule.DailyQuestsScreenModule.ViewsMediators
             _shownSeconds = seconds;
             var time = TimeSpan.FromSeconds(seconds);
             _timer.text = string.Format(L("quests.resets_in", "New quests in {0}"), $"{(int)time.TotalHours:00}:{time.Minutes:00}:{time.Seconds:00}");
+        }
+
+        private void FlyReward(RewardCVO reward, RectTransform from)
+        {
+            int booster = (int)reward.Booster;
+            bool coins = reward.Coins > 0;
+            var icon = coins || _boosterIcons == null || booster >= _boosterIcons.Length ? _coinIcon : _boosterIcons[booster];
+            _flyer.Fly(icon, from, coins, Mathf.Clamp(reward.Coins / 10, 4, 12));
         }
 
         private string L(string key, string fallback)

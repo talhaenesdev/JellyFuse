@@ -8,7 +8,7 @@ namespace Modules.ConnectorModule.RootsContexts
 {
     /// <summary>
     /// The prize wheel popup: the main menu's wheel button opens it, Gameplay's daily events fill it and Gameplay's
-    /// spin turns it, and its spin buttons ask Gameplay for a spin - the free one, or one for an ad.
+    /// spin turns it, and its buttons ask Gameplay for a spin, or for an ad that gives one.
     /// </summary>
     public class WheelConnectorSubContext : Context
     {
@@ -38,7 +38,7 @@ namespace Modules.ConnectorModule.RootsContexts
         {
             _wheelSignals.Outgoing.EventsRequested.Connect(_gameplaySignals.Incoming.RequestEvents, GROUP);
             _wheelSignals.Outgoing.SpinClicked.Connect(_gameplaySignals.Incoming.SpinWheel, GROUP);
-            _wheelSignals.Outgoing.AdSpinClicked.Connect(_gameplaySignals.Incoming.SpinWheelForAd, GROUP);
+            _wheelSignals.Outgoing.AdSpinClicked.Connect(_gameplaySignals.Incoming.WatchAdForWheelSpin, GROUP);
         }
 
         public override void DestroyContext()

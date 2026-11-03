@@ -26,16 +26,12 @@ namespace Modules.GameplayModule.Controllers
             {
                 progress.WheelDay = today;
                 progress.WheelFreeTaken = false;
-                progress.WheelAdSpins = 0;
             }
         }
 
-        public static bool WheelFreeSpin(SD_JellyProgress progress, CD_Events config) =>
-            progress != null && config != null && config.Wheel.Count > 0 && !progress.WheelFreeTaken;
-
-        public static int WheelAdSpinsLeft(SD_JellyProgress progress, CD_Events config) =>
-            progress == null || config == null || config.Wheel.Count == 0 || !progress.WheelFreeTaken ? 0
-                : Mathf.Max(0, config.WheelAdSpinsPerDay - progress.WheelAdSpins);
+        /// <summary>Spins of the prize wheel the player can take now: today's free one while it is left, and those ads gave.</summary>
+        public static int WheelSpins(SD_JellyProgress progress, CD_Events config) =>
+            progress == null || config == null || config.Wheel.Count == 0 ? 0 : (progress.WheelFreeTaken ? 0 : 1) + progress.WheelSpins;
 
         /// <summary>Picks a slice by the slices' weights, gives its reward, and returns where it is on the wheel.</summary>
         public static int SpinWheel(SD_JellyProgress progress, CD_Events config)
@@ -95,8 +91,7 @@ namespace Modules.GameplayModule.Controllers
                 QuestClaimable = quests.Exists(q => q.IsClaimable),
                 QuestsResetAt = new DateTimeOffset(DateTime.Now.Date.AddDays(1)).ToUnixTimeSeconds(),
                 Wheel = config.Wheel,
-                WheelFreeSpin = WheelFreeSpin(progress, config),
-                WheelAdSpinsLeft = WheelAdSpinsLeft(progress, config),
+                WheelSpins = WheelSpins(progress, config),
             };
         }
 

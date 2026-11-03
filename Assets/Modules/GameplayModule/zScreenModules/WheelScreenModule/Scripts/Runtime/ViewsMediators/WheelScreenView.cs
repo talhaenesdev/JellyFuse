@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using FlowIoC.BaseModule.Injectable.Components;
 using FlowIoC.ScreenModule.ViewsMediators.Screen;
 using Modules.GameplayModule.Shared.Data.ValueObjects;
+using Modules.UiWidgetsModule.Entities;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,8 +12,8 @@ using UnityEngine.UI;
 namespace Modules.GameplayModule.WheelScreenModule.ViewsMediators
 {
     /// <summary>
-    /// The daily prize wheel: a disc of slices that turns to the slice Gameplay picked, a free spin button while
-    /// today's is left, then a button that spins again for an ad. Each slice's reward - an icon and an amount - is
+    /// The daily prize wheel: a disc of slices that turns to the slice Gameplay picked, a spin button while a spin is
+    /// held - today's free one, or one an ad gave - and otherwise a button that watches an ad for one more. Each slice's reward - an icon and an amount - is
     /// laid on the disc from Slice Template, so the slices follow CD_Events and the art carries none.
     /// </summary>
     [RequireComponent(typeof(ViewInjector))]
@@ -50,6 +51,8 @@ namespace Modules.GameplayModule.WheelScreenModule.ViewsMediators
         [SerializeField] private GameObject _burst;
         [Tooltip("What the last spin gave, under the wheel.")]
         [SerializeField] private TMP_Text _result;
+        [Tooltip("Plays the reward won flying off the wheel: coins to the counter, the rest upwards.")]
+        [SerializeField] private RewardFlyer _flyer;
 
         public Action CloseClicked;
         public Action SpinClicked;
@@ -135,7 +138,11 @@ namespace Modules.GameplayModule.WheelScreenModule.ViewsMediators
             _disc.localEulerAngles = new Vector3(0, 0, to);
             _spin = null;
             if (_burst != null) _burst.SetActive(true);
-            if (_result != null) _result.text = string.Format(L("wheel.won", "You won {0}!"), RewardText(_events.Wheel[slice].Reward, true));
+            var reward = _events.Wheel[slice].Reward;
+            if (_result != null) _result.text = string.Format(L("wheel.won", "You won {0}!"), RewardText(reward, true));
+            if (_flyer != null && slice < _slices.Count)
+                _flyer.Fly(RewardIcon(reward), (RectTransform)_slices[slice].GetComponentInChildren<Image>(true).transform,
+                    reward.Coins > 0, Mathf.Clamp(reward.Coins / 25, 4, 12));
             DrawButtons();
         }
 
@@ -166,16 +173,14 @@ namespace Modules.GameplayModule.WheelScreenModule.ViewsMediators
 
         private void DrawButtons()
         {
-            bool free = _events.WheelFreeSpin;
-            _spinButton.gameObject.SetActive(free);
-            _spinButton.interactable = free && !Spinning;
-            if (_spinLabel != null) _spinLabel.text = L("wheel.spin", "Spin");
-            _adSpinButton.gameObject.SetActive(!free);
-            _adSpinButton.interactable = !free && _events.WheelAdSpinsLeft > 0 && !Spinning;
-            if (_adSpinLabel != null)
-                _adSpinLabel.text = _events.WheelAdSpinsLeft > 0
-                    ? string.Format(L("wheel.ad_spin", "Spin again ({0})"), _events.WheelAdSpinsLeft)
-                    : L("wheel.come_back", "Come back tomorrow");
+            bool held = _events.WheelSpins > 0;
+            _spinButton.gameObject.SetActive(held);
+            _spinButton.interactable = held && !Spinning;
+            if (_spinLabel != null)
+                _spinLabel.text = _events.WheelSpins > 1 ? string.Format(L("wheel.spin_many", "Spin ({0})"), _events.WheelSpins) : L("wheel.spin", "Spin");
+            _adSpinButton.gameObject.SetActive(!held);
+            _adSpinButton.interactable = !held && !Spinning;
+            if (_adSpinLabel != null) _adSpinLabel.text = L("wheel.ad_spin", "+1 Spin");
             _closeButton.interactable = !Spinning;
         }
 

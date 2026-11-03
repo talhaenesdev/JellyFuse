@@ -66,11 +66,11 @@ namespace Modules.GameplayModule.Signals
         public Signal ClaimLoginReward = new();
         /// <summary>Take the reward of today's quest at this position.</summary>
         public Signal<int> ClaimQuest = new();
-        /// <summary>Today's free spin of the prize wheel.</summary>
+        /// <summary>A spin of the prize wheel: today's free one, else one an ad gave.</summary>
         public Signal SpinWheel = new();
-        /// <summary>One more spin of the prize wheel, for a rewarded ad.</summary>
-        public Signal SpinWheelForAd = new();
-        /// <summary>Today's prize wheel spins come back, as on a new day; for the developer panel.</summary>
+        /// <summary>A rewarded ad for one more spin of the prize wheel, held until the player spins.</summary>
+        public Signal WatchAdForWheelSpin = new();
+        /// <summary>Today's free spin of the prize wheel comes back, as on a new day; for the developer panel.</summary>
         public Signal ResetWheel = new();
 #if UNITY_EDITOR
         /// <summary>Editor-only cheat: end this level as won or lost at once.</summary>

@@ -25,6 +25,8 @@ namespace Modules.GameplayModule.DailyQuestsScreenModule.Entities
         [SerializeField] private TMP_Text _claimLabel;
 
         public Action Claimed;
+        /// <summary>Where the reward is shown, for it to fly from when taken.</summary>
+        public RectTransform RewardAnchor => (RectTransform)_reward.transform;
 
         private void OnEnable() => _claimButton.onClick.AddListener(OnClaimClicked);
         private void OnDisable() => _claimButton.onClick.RemoveListener(OnClaimClicked);

@@ -22,9 +22,9 @@ namespace Modules.GameplayModule.WheelScreenModule.Signals
     {
         /// <summary>The screen opened and wants the events brought up to date.</summary>
         public Signal EventsRequested = new();
-        /// <summary>The free spin was asked for.</summary>
+        /// <summary>A spin was asked for: the free one, else one an ad gave.</summary>
         public Signal SpinClicked = new();
-        /// <summary>A spin for an ad was asked for.</summary>
+        /// <summary>An ad was asked for, to get one more spin.</summary>
         public Signal AdSpinClicked = new();
         public Signal Closed = new();
     }

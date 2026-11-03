@@ -174,13 +174,11 @@ namespace Modules.GameplayModule.RootsContexts
                 .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
                 .ToSequence<AnnounceBoostersCommand>()
                 .ToSequence<AnnounceEventsCommand>();
-            CommandBinder.Bind(_signals.Incoming.SpinWheelForAd)
+            CommandBinder.Bind(_signals.Incoming.WatchAdForWheelSpin)
                 .ToSequence<RefreshEventsCommand>()
-                .ToSequence<CheckWheelAdSpinCommand>()
                 .ToSequence<IAdsService.Commands.ShowRewarded>()
-                .ToSequence<SpinWheelForAdCommand>()
+                .ToSequence<GrantWheelSpinCommand>()
                 .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
-                .ToSequence<AnnounceBoostersCommand>()
                 .ToSequence<AnnounceEventsCommand>();
             CommandBinder.Bind(_signals.Incoming.ResetWheel)
                 .ToSequence<RefreshEventsCommand>()

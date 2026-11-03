@@ -43,8 +43,8 @@ namespace Modules.GameplayModule.Shared.Data.UnityObjects
         public int WheelDay = -1;
         [Tooltip("Whether today's free spin of the prize wheel is taken.")]
         public bool WheelFreeTaken;
-        [Tooltip("Spins bought with an ad today.")]
-        [Min(0)] public int WheelAdSpins;
+        [Tooltip("Spins of the prize wheel ads gave and the player has not taken yet.")]
+        [Min(0)] public int WheelSpins;
 
         /// <summary>The player's entry for a booster, made when it has none yet.</summary>
         public BoosterSVO Booster(BoosterType type)

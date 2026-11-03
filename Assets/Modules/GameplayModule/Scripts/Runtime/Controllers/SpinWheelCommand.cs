@@ -6,7 +6,10 @@ using Modules.GameplayModule.Signals;
 
 namespace Modules.GameplayModule.Controllers
 {
-    /// <summary>Takes today's free spin of the prize wheel and gives what it lands on. Taken already, and the sequence stops.</summary>
+    /// <summary>
+    /// Spins the prize wheel with today's free spin, or with a spin an ad gave once that is taken, and gives what it
+    /// lands on. No spin held, and the sequence stops.
+    /// </summary>
     internal class SpinWheelCommand : Command
     {
         [Inject] private ISharedDataModel _shared { get; set; }
@@ -16,13 +19,14 @@ namespace Modules.GameplayModule.Controllers
         {
             var progress = _shared.GetScriptable<SD_JellyProgress>();
             var config = _shared.GetScriptable<CD_Events>();
-            if (!EventsFunction.WheelFreeSpin(progress, config))
+            if (EventsFunction.WheelSpins(progress, config) <= 0)
             {
                 Retain();
                 Stop();
                 return;
             }
-            progress.WheelFreeTaken = true;
+            if (!progress.WheelFreeTaken) progress.WheelFreeTaken = true;
+            else progress.WheelSpins--;
             int slice = EventsFunction.SpinWheel(progress, config);
             _signals.Outgoing.WheelSpun.Dispatch(slice);
             _signals.Outgoing.CoinsChanged.Dispatch(progress.Coins);
