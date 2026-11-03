@@ -120,17 +120,10 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                 if (entry.State == null) continue;
                 if (entry.State.Icon != null) entry.Icon.sprite = entry.State.Icon;
                 entry.Badge.text = !entry.State.Unlocked ? LF("gameplay.booster_locked", "Lv {0}", entry.State.UnlockLevel)
-                    // An amount owned reads "x3"; a price is gold, so the two are never confused.
+                    // An amount owned reads "x3"; with none left a "+" says the button opens the offer for more.
                     : entry.State.Count > 0 ? "x" + entry.State.Count
-                    // Today's free use for an ad comes before the price.
-                    : entry.State.FreeByAd ? L("gameplay.booster_ad", "AD")
-                    : "<color=#FFD23F>" + entry.State.Price + "</color>";
-                bool priced = entry.State.Unlocked && entry.State.Count <= 0 && !entry.State.FreeByAd;
-                if (entry.PriceCoin != null)
-                {
-                    entry.PriceCoin.gameObject.SetActive(priced);
-                    if (priced) entry.PriceCoin.rectTransform.anchoredPosition = new Vector2(-entry.Badge.GetPreferredValues(entry.Badge.text).x - 2, 4);
-                }
+                    : "<color=#7CFF4F>+</color>";
+                if (entry.PriceCoin != null) entry.PriceCoin.gameObject.SetActive(false);
             }
             if (_boosterArmed && !ArmedStillUsable()) Disarm();
             if (_lesson && !LessonButton(out _)) EndBoosterLesson();
