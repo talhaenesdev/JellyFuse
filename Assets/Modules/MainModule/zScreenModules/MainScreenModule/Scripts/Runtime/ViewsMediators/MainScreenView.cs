@@ -51,6 +51,10 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
         [SerializeField] private RectTransform _navBar;
         [Tooltip("Room kept above the nav bar and below the top bar, in the content's units.")]
         [Min(0)] [SerializeField] private float _shopGap = 12;
+        [Tooltip("The shop's fixed texts - title, product names, the daily offer - each read from its key; the prefab's text is the English.")]
+        [SerializeField] private KeyedText[] _shopTexts;
+        [Tooltip("Leaves the shop for Home, as the Home tab does.")]
+        [SerializeField] private Button _shopCloseButton;
         [SerializeField] private TMP_Text _coins;
         [Tooltip("The lives the player holds, as lives/max.")]
         [SerializeField] private TMP_Text _lives;
@@ -118,6 +122,7 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
             if (_loginRewardsButton != null) _loginRewardsButton.onClick.AddListener(OnLoginRewardsClicked);
             for (int i = 0; i < _tabActions.Count; i++) _navTabs[i].onClick.AddListener(_tabActions[i]);
             for (int i = 0; i < _shopActions.Count; i++) if (_shopButtons[i] != null) _shopButtons[i].onClick.AddListener(_shopActions[i]);
+            if (_shopCloseButton != null) _shopCloseButton.onClick.AddListener(OnShopCloseClicked);
         }
 
         private void OnDisable()
@@ -132,6 +137,7 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
             if (_loginRewardsButton != null) _loginRewardsButton.onClick.RemoveListener(OnLoginRewardsClicked);
             for (int i = 0; i < _tabActions.Count; i++) _navTabs[i].onClick.RemoveListener(_tabActions[i]);
             for (int i = 0; i < _shopActions.Count; i++) if (_shopButtons[i] != null) _shopButtons[i].onClick.RemoveListener(_shopActions[i]);
+            if (_shopCloseButton != null) _shopCloseButton.onClick.RemoveListener(OnShopCloseClicked);
             KillNavigationTweens();
         }
 
@@ -142,6 +148,15 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
         private void OnLivesPlusClicked() => LivesPlusClicked?.Invoke();
         private void OnQuestsClicked() => QuestsClicked?.Invoke();
         private void OnLoginRewardsClicked() => LoginRewardsClicked?.Invoke();
+        // The close button is a second way to the Home tab, so it takes the tab's own path.
+        private void OnShopCloseClicked() => OnTabClicked(_homeTab);
+
+        [Serializable]
+        private struct KeyedText
+        {
+            public TMP_Text Label;
+            public string Key;
+        }
         private readonly List<UnityEngine.Events.UnityAction> _shopActions = new();
         private Button[] _shopButtons;
         private IReadOnlyDictionary<string, string> _shopPrices;
@@ -190,6 +205,8 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
             Keyed(_homeLabel, "main.home");
             if (_shopPriceLabels != null)
                 foreach (TMP_Text price in _shopPriceLabels) Keyed(price, "main.shop.soon", "Coming soon");
+            if (_shopTexts != null)
+                foreach (KeyedText text in _shopTexts) Keyed(text.Label, text.Key);
             if (_shopBuyPanels != null)
             {
                 _shopButtons = new Button[_shopBuyPanels.Length];
