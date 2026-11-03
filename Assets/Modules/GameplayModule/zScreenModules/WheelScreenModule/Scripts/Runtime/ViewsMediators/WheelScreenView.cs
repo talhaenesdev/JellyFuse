@@ -177,7 +177,7 @@ namespace Modules.GameplayModule.WheelScreenModule.ViewsMediators
             _spinButton.gameObject.SetActive(held);
             _spinButton.interactable = held && !Spinning;
             if (_spinLabel != null)
-                _spinLabel.text = _events.WheelSpins > 1 ? string.Format(L("wheel.spin_many", "Spin ({0})"), _events.WheelSpins) : L("wheel.spin", "Spin");
+                _spinLabel.text = _events.WheelSpins > 0 ? string.Format(L("wheel.spin_many", "Spin ({0})"), _events.WheelSpins) : L("wheel.spin", "Spin");
             _adSpinButton.gameObject.SetActive(!held);
             _adSpinButton.interactable = !held && !Spinning;
             if (_adSpinLabel != null) _adSpinLabel.text = L("wheel.ad_spin", "+1 Spin");

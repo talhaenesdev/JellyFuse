@@ -254,7 +254,7 @@ namespace Modules.GameplayModule.SlotScreenModule.ViewsMediators
             _spinButton.gameObject.SetActive(held);
             _spinButton.interactable = held && !Spinning;
             if (_spinLabel != null)
-                _spinLabel.text = _events.SlotSpins > 1 ? string.Format(L("slot.spin_many", "Spin ({0})"), _events.SlotSpins) : L("slot.spin", "Spin");
+                _spinLabel.text = _events.SlotSpins > 0 ? string.Format(L("slot.spin_many", "Spin ({0})"), _events.SlotSpins) : L("slot.spin", "Spin");
             _adSpinButton.gameObject.SetActive(!held);
             _adSpinButton.interactable = !held && !Spinning;
             if (_adSpinLabel != null) _adSpinLabel.text = L("slot.ad_spin", "+1 Spin");

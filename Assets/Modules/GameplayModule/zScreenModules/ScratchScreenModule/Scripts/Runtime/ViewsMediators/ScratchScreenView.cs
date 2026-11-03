@@ -234,7 +234,7 @@ namespace Modules.GameplayModule.ScratchScreenModule.ViewsMediators
             bool held = _events.ScratchCards > 0;
             _cardButton.gameObject.SetActive(!scratching && held);
             if (_cardLabel != null)
-                _cardLabel.text = _events.ScratchCards > 1 ? string.Format(L("scratch.card_many", "New Card ({0})"), _events.ScratchCards) : L("scratch.card", "New Card");
+                _cardLabel.text = _events.ScratchCards > 0 ? string.Format(L("scratch.card_many", "New Card ({0})"), _events.ScratchCards) : L("scratch.card", "New Card");
             _adCardButton.gameObject.SetActive(!scratching && !held);
             if (_adCardLabel != null) _adCardLabel.text = L("scratch.ad_card", "+1 Card");
             _openAllButton.gameObject.SetActive(scratching);

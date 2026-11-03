@@ -526,15 +526,24 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
             if (IsPriced(index)) ShopBuyClicked?.Invoke(_shopProductIds[index]);
         }
 
+        /// <summary>A daily game's dot: shown while plays are held, with how many on it.</summary>
+        private static void ShowPlays(GameObject dot, int plays)
+        {
+            if (dot == null) return;
+            dot.SetActive(plays > 0);
+            var count = dot.GetComponentInChildren<TMP_Text>(true);
+            if (count != null) count.text = plays.ToString();
+        }
+
         public void ApplyLives(Modules.GameplayModule.Shared.Data.ValueObjects.LivesStateRVO state) { if (_lives != null) _lives.text = $"{state.Lives}/{state.MaxLives}"; }
 
         public void ApplyEvents(Modules.GameplayModule.Shared.Data.ValueObjects.EventsRVO events)
         {
             if (_questsDot != null) _questsDot.SetActive(events.QuestClaimable);
             if (_loginRewardsDot != null) _loginRewardsDot.SetActive(events.LoginClaimable);
-            if (_wheelDot != null) _wheelDot.SetActive(events.WheelSpins > 0);
-            if (_slotDot != null) _slotDot.SetActive(events.SlotSpins > 0);
-            if (_scratchDot != null) _scratchDot.SetActive(events.ScratchCards > 0);
+            ShowPlays(_wheelDot, events.WheelSpins);
+            ShowPlays(_slotDot, events.SlotSpins);
+            ShowPlays(_scratchDot, events.ScratchCards);
             if (_weekendBadge != null) _weekendBadge.SetActive(events.WeekendMultiplier > 1);
             if (_weekendMultiplier != null) _weekendMultiplier.text = "x" + events.WeekendMultiplier;
         }
