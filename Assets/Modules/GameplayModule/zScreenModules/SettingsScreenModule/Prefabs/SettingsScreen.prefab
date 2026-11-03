@@ -75,6 +75,81 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 0.6
+--- !u!1 &276614905237266325
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8730984312507004298}
+  - component: {fileID: 54624167577302430}
+  - component: {fileID: 3774443181553280944}
+  m_Layer: 5
+  m_Name: Img_SettingsPanelTheme
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &8730984312507004298
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 276614905237266325}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5060918100295177338}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 78.5}
+  m_SizeDelta: {x: 112, y: 417}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &54624167577302430
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 276614905237266325}
+  m_CullTransparentMesh: 1
+--- !u!114 &3774443181553280944
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 276614905237266325}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: c20af739d3f64543a3f191a93a7c20e6, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &317794601241208206
 GameObject:
   m_ObjectHideFlags: 0
@@ -581,7 +656,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 224de6ff71ac98e47a7fae571acf625f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 5d3392dd3ab40054aa0cadb63d0dae04, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -656,7 +731,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 2d87f54ef02aeb344924837317c20acf, type: 3}
+  m_Sprite: {fileID: 21300000, guid: cb51cb96539c1134a8c6fe7e968d987e, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -741,81 +816,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 0.6
---- !u!1 &3200300884640076646
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8680935085305581125}
-  - component: {fileID: 1140394890710782371}
-  - component: {fileID: 5996752927007472711}
-  m_Layer: 5
-  m_Name: Img_SettingsPanelTheme
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &8680935085305581125
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3200300884640076646}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 5060918100295177338}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 78.5}
-  m_SizeDelta: {x: 112, y: 417}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &1140394890710782371
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3200300884640076646}
-  m_CullTransparentMesh: 1
---- !u!114 &5996752927007472711
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3200300884640076646}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 0
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: c20af739d3f64543a3f191a93a7c20e6, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &3798778113569161880
 GameObject:
   m_ObjectHideFlags: 0
@@ -1644,7 +1644,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 55c6ffcfb36f5594f9998d33b1ac4d48, type: 3}
+  m_Sprite: {fileID: 21300000, guid: df1421d452eeede4cb44668bb4b3f83d, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -1685,7 +1685,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 8680935085305581125}
+  - {fileID: 8730984312507004298}
   - {fileID: 6783151067375894943}
   - {fileID: 6138495486728526192}
   - {fileID: 8061527295714990073}
@@ -2089,7 +2089,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: a9e98e6ad039b0740b2131ff461c5ff6, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f5e071ba5def9304dbf29ab59d2c81f2, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -2200,7 +2200,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 10dac88010855da46bfa49d1083bf199, type: 3}
+  m_Sprite: {fileID: 21300000, guid: ad136c53d06725c4d856f367fde04126, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -2480,26 +2480,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5060918100295177338}
     m_Modifications:
-    - target: {fileID: 608714163343308521, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: b3aa6891a10dcd4449b8a83472770d3d, type: 3}
-    - target: {fileID: 608714163343308521, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
-      propertyPath: m_Color.b
-      value: 0.24705882
-      objectReference: {fileID: 0}
-    - target: {fileID: 608714163343308521, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
-      propertyPath: m_Color.g
-      value: 0.8235294
-      objectReference: {fileID: 0}
-    - target: {fileID: 608714163343308521, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
-      propertyPath: m_Color.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 608714163343308521, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
-      propertyPath: m_PixelsPerUnitMultiplier
-      value: 0.6
-      objectReference: {fileID: 0}
     - target: {fileID: 673543663830207548, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
       propertyPath: m_fontAsset
       value: 
@@ -2604,26 +2584,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4360350532806729781, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: b3aa6891a10dcd4449b8a83472770d3d, type: 3}
-    - target: {fileID: 4360350532806729781, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
-      propertyPath: m_Color.b
-      value: 0.61960787
-      objectReference: {fileID: 0}
-    - target: {fileID: 4360350532806729781, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
-      propertyPath: m_Color.g
-      value: 0.07450981
-      objectReference: {fileID: 0}
-    - target: {fileID: 4360350532806729781, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
-      propertyPath: m_Color.r
-      value: 0.2901961
-      objectReference: {fileID: 0}
-    - target: {fileID: 4360350532806729781, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
-      propertyPath: m_PixelsPerUnitMultiplier
-      value: 0.6
-      objectReference: {fileID: 0}
     - target: {fileID: 6360429335775050623, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
       propertyPath: m_fontAsset
       value: 
@@ -2648,14 +2608,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Btn_Haptics
       objectReference: {fileID: 0}
-    - target: {fileID: 7064180079159358426, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
-      propertyPath: _onSprite
-      value: 
-      objectReference: {fileID: 21300000, guid: ffb586ab5260f034fb4bcc54b9fb929b, type: 3}
-    - target: {fileID: 7064180079159358426, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
-      propertyPath: _offSprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 7b76e5f85e927ee438f2348d785772c1, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2685,26 +2637,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5060918100295177338}
     m_Modifications:
-    - target: {fileID: 608714163343308521, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: b3aa6891a10dcd4449b8a83472770d3d, type: 3}
-    - target: {fileID: 608714163343308521, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
-      propertyPath: m_Color.b
-      value: 0.24705882
-      objectReference: {fileID: 0}
-    - target: {fileID: 608714163343308521, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
-      propertyPath: m_Color.g
-      value: 0.8235294
-      objectReference: {fileID: 0}
-    - target: {fileID: 608714163343308521, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
-      propertyPath: m_Color.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 608714163343308521, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
-      propertyPath: m_PixelsPerUnitMultiplier
-      value: 0.6
-      objectReference: {fileID: 0}
     - target: {fileID: 673543663830207548, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
       propertyPath: m_fontAsset
       value: 
@@ -2809,26 +2741,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4360350532806729781, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: b3aa6891a10dcd4449b8a83472770d3d, type: 3}
-    - target: {fileID: 4360350532806729781, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
-      propertyPath: m_Color.b
-      value: 0.61960787
-      objectReference: {fileID: 0}
-    - target: {fileID: 4360350532806729781, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
-      propertyPath: m_Color.g
-      value: 0.07450981
-      objectReference: {fileID: 0}
-    - target: {fileID: 4360350532806729781, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
-      propertyPath: m_Color.r
-      value: 0.2901961
-      objectReference: {fileID: 0}
-    - target: {fileID: 4360350532806729781, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
-      propertyPath: m_PixelsPerUnitMultiplier
-      value: 0.6
-      objectReference: {fileID: 0}
     - target: {fileID: 6360429335775050623, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
       propertyPath: m_fontAsset
       value: 
@@ -2853,14 +2765,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Btn_Sounds
       objectReference: {fileID: 0}
-    - target: {fileID: 7064180079159358426, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
-      propertyPath: _onSprite
-      value: 
-      objectReference: {fileID: 21300000, guid: ffb586ab5260f034fb4bcc54b9fb929b, type: 3}
-    - target: {fileID: 7064180079159358426, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
-      propertyPath: _offSprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 7b76e5f85e927ee438f2348d785772c1, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2890,26 +2794,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5060918100295177338}
     m_Modifications:
-    - target: {fileID: 608714163343308521, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: b3aa6891a10dcd4449b8a83472770d3d, type: 3}
-    - target: {fileID: 608714163343308521, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
-      propertyPath: m_Color.b
-      value: 0.24705882
-      objectReference: {fileID: 0}
-    - target: {fileID: 608714163343308521, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
-      propertyPath: m_Color.g
-      value: 0.8235294
-      objectReference: {fileID: 0}
-    - target: {fileID: 608714163343308521, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
-      propertyPath: m_Color.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 608714163343308521, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
-      propertyPath: m_PixelsPerUnitMultiplier
-      value: 0.6
-      objectReference: {fileID: 0}
     - target: {fileID: 673543663830207548, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
       propertyPath: m_fontAsset
       value: 
@@ -3014,26 +2898,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4360350532806729781, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: b3aa6891a10dcd4449b8a83472770d3d, type: 3}
-    - target: {fileID: 4360350532806729781, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
-      propertyPath: m_Color.b
-      value: 0.61960787
-      objectReference: {fileID: 0}
-    - target: {fileID: 4360350532806729781, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
-      propertyPath: m_Color.g
-      value: 0.07450981
-      objectReference: {fileID: 0}
-    - target: {fileID: 4360350532806729781, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
-      propertyPath: m_Color.r
-      value: 0.2901961
-      objectReference: {fileID: 0}
-    - target: {fileID: 4360350532806729781, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
-      propertyPath: m_PixelsPerUnitMultiplier
-      value: 0.6
-      objectReference: {fileID: 0}
     - target: {fileID: 6360429335775050623, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
       propertyPath: m_fontAsset
       value: 
@@ -3058,14 +2922,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Btn_Notifications
       objectReference: {fileID: 0}
-    - target: {fileID: 7064180079159358426, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
-      propertyPath: _onSprite
-      value: 
-      objectReference: {fileID: 21300000, guid: ffb586ab5260f034fb4bcc54b9fb929b, type: 3}
-    - target: {fileID: 7064180079159358426, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
-      propertyPath: _offSprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 7b76e5f85e927ee438f2348d785772c1, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3095,26 +2951,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5060918100295177338}
     m_Modifications:
-    - target: {fileID: 608714163343308521, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: b3aa6891a10dcd4449b8a83472770d3d, type: 3}
-    - target: {fileID: 608714163343308521, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
-      propertyPath: m_Color.b
-      value: 0.24705882
-      objectReference: {fileID: 0}
-    - target: {fileID: 608714163343308521, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
-      propertyPath: m_Color.g
-      value: 0.8235294
-      objectReference: {fileID: 0}
-    - target: {fileID: 608714163343308521, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
-      propertyPath: m_Color.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 608714163343308521, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
-      propertyPath: m_PixelsPerUnitMultiplier
-      value: 0.6
-      objectReference: {fileID: 0}
     - target: {fileID: 673543663830207548, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
       propertyPath: m_fontAsset
       value: 
@@ -3219,26 +3055,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4360350532806729781, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: b3aa6891a10dcd4449b8a83472770d3d, type: 3}
-    - target: {fileID: 4360350532806729781, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
-      propertyPath: m_Color.b
-      value: 0.61960787
-      objectReference: {fileID: 0}
-    - target: {fileID: 4360350532806729781, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
-      propertyPath: m_Color.g
-      value: 0.07450981
-      objectReference: {fileID: 0}
-    - target: {fileID: 4360350532806729781, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
-      propertyPath: m_Color.r
-      value: 0.2901961
-      objectReference: {fileID: 0}
-    - target: {fileID: 4360350532806729781, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
-      propertyPath: m_PixelsPerUnitMultiplier
-      value: 0.6
-      objectReference: {fileID: 0}
     - target: {fileID: 6360429335775050623, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
       propertyPath: m_fontAsset
       value: 
@@ -3263,14 +3079,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Btn_Music
       objectReference: {fileID: 0}
-    - target: {fileID: 7064180079159358426, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
-      propertyPath: _onSprite
-      value: 
-      objectReference: {fileID: 21300000, guid: ffb586ab5260f034fb4bcc54b9fb929b, type: 3}
-    - target: {fileID: 7064180079159358426, guid: 638c433e9958b0d4298d6e2d656f691b, type: 3}
-      propertyPath: _offSprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 7b76e5f85e927ee438f2348d785772c1, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

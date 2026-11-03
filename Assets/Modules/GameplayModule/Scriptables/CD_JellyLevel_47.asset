@@ -17,6 +17,7 @@ MonoBehaviour:
   Width: 9
   Height: 10
   Seconds: 115
+  Difficulty: 0
   OwnCoinReward: -1
   FreeArrowAfterFusion: 0
   ExtraColours: []
@@ -125,8 +126,8 @@ MonoBehaviour:
   - Name: Jelly 12
     Colour: 1
     Cells:
-    - {x: 3, y: 8}
     - {x: 3, y: 7}
+    - {x: 4, y: 7}
     Frozen: 1
     ThawAfter: 2
     ArrowBlock: 0
@@ -296,4 +297,5 @@ MonoBehaviour:
       ThawAfter: 3
       ArrowBlock: 0
       ArrowAxis: 0
+  Tutorial: []
   Targets: []
