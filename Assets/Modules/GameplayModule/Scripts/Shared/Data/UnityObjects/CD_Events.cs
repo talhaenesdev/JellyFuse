@@ -37,6 +37,23 @@ namespace Modules.GameplayModule.Shared.Data.UnityObjects
         [Tooltip("The wheel's slices clockwise from the top, as many as the wheel's art has; a spin - one free a day, one more for each ad watched - lands on one of them.")]
         public List<WheelSliceCVO> Wheel = new();
 
+        [Header("Slot machine")]
+        [Tooltip("The reels' symbols, in the order of the slot screen's symbol art; a spin - one free a day, one more for each ad watched - stops on three of them.")]
+        public List<SlotSymbolCVO> SlotSymbols = new();
+        [Tooltip("How likely two alike are, against the symbols' weights and the miss's.")]
+        [Min(0)] public float SlotPairWeight = 3;
+        public RewardCVO SlotPairReward = new() { Coins = 20 };
+        [Tooltip("How likely no two alike are, against the symbols' weights and the pair's.")]
+        [Min(0)] public float SlotMissWeight = 4;
+        public RewardCVO SlotMissReward = new() { Coins = 5 };
+
+        [Header("Scratch card")]
+        [Tooltip("The card's prizes, in the order of the scratch screen's prize art; three alike under the nine cells win it.")]
+        public List<ScratchPrizeCVO> ScratchPrizes = new();
+        [Tooltip("How likely a card wins nothing, against the prizes' weights.")]
+        [Min(0)] public float ScratchMissWeight = 3;
+        public RewardCVO ScratchMissReward = new() { Coins = 10 };
+
         public bool IsWeekend(DateTime localDay) => WeekendMultiplier > 1 && WeekendDays.Contains(localDay.DayOfWeek);
 
         /// <summary>The tier a streak reaches: 0 for none, 1 for the first.</summary>

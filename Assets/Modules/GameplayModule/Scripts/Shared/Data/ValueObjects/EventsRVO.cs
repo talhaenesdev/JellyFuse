@@ -23,5 +23,9 @@ namespace Modules.GameplayModule.Shared.Data.ValueObjects
         public IReadOnlyList<WheelSliceCVO> Wheel = new List<WheelSliceCVO>();
         /// <summary>Spins the player can take now: today's free one while it is left, and those ads gave. 0: an ad gives one.</summary>
         public int WheelSpins;
+        /// <summary>Slot machine spins the player can take now; 0: an ad gives one.</summary>
+        public int SlotSpins;
+        /// <summary>Scratch cards the player can take now; 0: an ad gives one.</summary>
+        public int ScratchCards;
     }
 }

@@ -180,6 +180,30 @@ namespace Modules.GameplayModule.RootsContexts
                 .ToSequence<GrantWheelSpinCommand>()
                 .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
                 .ToSequence<AnnounceEventsCommand>();
+            CommandBinder.Bind(_signals.Incoming.SpinSlot)
+                .ToSequence<RefreshEventsCommand>()
+                .ToSequence<SpinSlotCommand>()
+                .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
+                .ToSequence<AnnounceBoostersCommand>()
+                .ToSequence<AnnounceEventsCommand>();
+            CommandBinder.Bind(_signals.Incoming.WatchAdForSlotSpin)
+                .ToSequence<RefreshEventsCommand>()
+                .ToSequence<IAdsService.Commands.ShowRewarded>()
+                .ToSequence<GrantSlotSpinCommand>()
+                .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
+                .ToSequence<AnnounceEventsCommand>();
+            CommandBinder.Bind(_signals.Incoming.DealScratchCard)
+                .ToSequence<RefreshEventsCommand>()
+                .ToSequence<DealScratchCardCommand>()
+                .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
+                .ToSequence<AnnounceBoostersCommand>()
+                .ToSequence<AnnounceEventsCommand>();
+            CommandBinder.Bind(_signals.Incoming.WatchAdForScratchCard)
+                .ToSequence<RefreshEventsCommand>()
+                .ToSequence<IAdsService.Commands.ShowRewarded>()
+                .ToSequence<GrantScratchCardCommand>()
+                .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
+                .ToSequence<AnnounceEventsCommand>();
             CommandBinder.Bind(_signals.Incoming.ResetWheel)
                 .ToSequence<RefreshEventsCommand>()
                 .ToSequence<ResetWheelCommand>()

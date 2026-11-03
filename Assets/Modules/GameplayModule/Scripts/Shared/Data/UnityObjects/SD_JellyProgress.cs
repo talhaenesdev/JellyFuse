@@ -39,12 +39,20 @@ namespace Modules.GameplayModule.Shared.Data.UnityObjects
         /// <summary>The local day Quests were picked for; -1 never.</summary>
         public int QuestDay = -1;
         public List<QuestSVO> Quests = new();
-        /// <summary>The local day the wheel's spins below count for; -1 never.</summary>
+        /// <summary>The local day the free spins and the free card below count for; -1 never.</summary>
         public int WheelDay = -1;
         [Tooltip("Whether today's free spin of the prize wheel is taken.")]
         public bool WheelFreeTaken;
         [Tooltip("Spins of the prize wheel ads gave and the player has not taken yet.")]
         [Min(0)] public int WheelSpins;
+        [Tooltip("Whether today's free spin of the slot machine is taken.")]
+        public bool SlotFreeTaken;
+        [Tooltip("Spins of the slot machine ads gave and the player has not taken yet.")]
+        [Min(0)] public int SlotSpins;
+        [Tooltip("Whether today's free scratch card is taken.")]
+        public bool ScratchFreeTaken;
+        [Tooltip("Scratch cards ads gave and the player has not taken yet.")]
+        [Min(0)] public int ScratchCards;
 
         /// <summary>The player's entry for a booster, made when it has none yet.</summary>
         public BoosterSVO Booster(BoosterType type)

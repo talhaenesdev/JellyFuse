@@ -80,7 +80,7 @@ namespace Modules.DevToolsModule.DevToolsScreenModule.ViewsMediators
             if (_nextLabel != null) _nextLabel.text = L("devtools.next", "Next");
             if (_resetBoostersLabel != null) _resetBoostersLabel.text = L("devtools.reset_boosters", "Reset Boosters");
             if (_refillLivesLabel != null) _refillLivesLabel.text = L("devtools.refill_lives", "Refill Lives");
-            if (_resetWheelLabel != null) _resetWheelLabel.text = L("devtools.reset_wheel", "Reset Wheel");
+            if (_resetWheelLabel != null) _resetWheelLabel.text = L("devtools.reset_wheel", "Reset Daily Games");
             if (_resetPlayerLabel != null) _resetPlayerLabel.text = L("devtools.reset_player", "Reset Player");
             if (_gameTogglesLabel != null) _gameTogglesLabel.text = L("devtools.game_toggles", "Gameplay Settings");
             if (_displayTogglesLabel != null) _displayTogglesLabel.text = L("devtools.display_toggles", "Display Settings");

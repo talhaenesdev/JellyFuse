@@ -26,6 +26,8 @@ namespace Modules.GameplayModule.Controllers
             {
                 progress.WheelDay = today;
                 progress.WheelFreeTaken = false;
+                progress.SlotFreeTaken = false;
+                progress.ScratchFreeTaken = false;
             }
         }
 
@@ -47,6 +49,108 @@ namespace Modules.GameplayModule.Controllers
             }
             Grant(progress, config.Wheel[picked].Reward);
             return picked;
+        }
+
+        /// <summary>Spins of the slot machine the player can take now: today's free one while it is left, and those ads gave.</summary>
+        public static int SlotSpins(SD_JellyProgress progress, CD_Events config) =>
+            progress == null || config == null || config.SlotSymbols.Count < 2 ? 0 : (progress.SlotFreeTaken ? 0 : 1) + progress.SlotSpins;
+
+        /// <summary>Scratch cards the player can take now: today's free one while it is left, and those ads gave.</summary>
+        public static int ScratchCards(SD_JellyProgress progress, CD_Events config) =>
+            progress == null || config == null || config.ScratchPrizes.Count < 2 ? 0 : (progress.ScratchFreeTaken ? 0 : 1) + progress.ScratchCards;
+
+        /// <summary>
+        /// Rolls the slot machine's outcome by the weights - three of a symbol, a pair, or a miss - lays reels that show
+        /// it, and gives what it pays.
+        /// </summary>
+        public static SlotResultRVO SpinSlot(SD_JellyProgress progress, CD_Events config)
+        {
+            var symbols = config.SlotSymbols;
+            int count = symbols.Count;
+            float total = config.SlotPairWeight + config.SlotMissWeight;
+            foreach (var symbol in symbols) total += symbol.Weight;
+            float roll = UnityEngine.Random.value * total;
+            var result = new SlotResultRVO();
+            int triple = -1;
+            for (int i = 0; i < count; i++)
+            {
+                roll -= symbols[i].Weight;
+                if (roll < 0 && symbols[i].Weight > 0) { triple = i; break; }
+            }
+            if (triple >= 0)
+            {
+                result.Reels = new[] { triple, triple, triple };
+                result.Reward = symbols[triple].Reward;
+                result.Jackpot = true;
+            }
+            else if (roll - config.SlotPairWeight < 0 && config.SlotPairWeight > 0)
+            {
+                int pair = UnityEngine.Random.Range(0, count);
+                int odd = (pair + UnityEngine.Random.Range(1, count)) % count;
+                int oddReel = UnityEngine.Random.Range(0, 3);
+                for (int i = 0; i < 3; i++) result.Reels[i] = i == oddReel ? odd : pair;
+                result.Reward = config.SlotPairReward;
+            }
+            else
+            {
+                // No two alike: three different symbols, which needs at least three; two symbols can only pair.
+                var pool = new List<int>();
+                for (int i = 0; i < count; i++) pool.Add(i);
+                for (int i = 0; i < 3; i++)
+                {
+                    if (pool.Count == 0) { result.Reels[i] = result.Reels[0]; continue; }
+                    int at = UnityEngine.Random.Range(0, pool.Count);
+                    result.Reels[i] = pool[at];
+                    pool.RemoveAt(at);
+                }
+                result.Reward = config.SlotMissReward;
+            }
+            Grant(progress, result.Reward);
+            return result;
+        }
+
+        /// <summary>
+        /// Picks a scratch card's prize by the weights - or none - lays nine cells that show three of it and no other
+        /// three alike, and gives what it pays.
+        /// </summary>
+        public static ScratchCardRVO DealScratch(SD_JellyProgress progress, CD_Events config)
+        {
+            var prizes = config.ScratchPrizes;
+            float total = config.ScratchMissWeight;
+            foreach (var prize in prizes) total += prize.Weight;
+            float roll = UnityEngine.Random.value * total;
+            int won = -1;
+            for (int i = 0; i < prizes.Count; i++)
+            {
+                roll -= prizes[i].Weight;
+                if (roll < 0 && prizes[i].Weight > 0) { won = i; break; }
+            }
+            var cells = new List<int>();
+            if (won >= 0) { cells.Add(won); cells.Add(won); cells.Add(won); }
+            // The other cells: any prize but the one won, at most twice each, and empty cells once those run out.
+            var others = new List<int>();
+            for (int i = 0; i < prizes.Count; i++)
+                if (i != won) { others.Add(i); others.Add(i); }
+            while (cells.Count < 9)
+            {
+                if (others.Count == 0) { cells.Add(-1); continue; }
+                int at = UnityEngine.Random.Range(0, others.Count);
+                cells.Add(others[at]);
+                others.RemoveAt(at);
+            }
+            for (int i = cells.Count - 1; i > 0; i--)
+            {
+                int j = UnityEngine.Random.Range(0, i + 1);
+                (cells[i], cells[j]) = (cells[j], cells[i]);
+            }
+            var card = new ScratchCardRVO
+            {
+                Cells = cells.ToArray(),
+                WonPrize = won,
+                Reward = won >= 0 ? prizes[won].Reward : config.ScratchMissReward,
+            };
+            Grant(progress, card.Reward);
+            return card;
         }
 
         public static bool LoginClaimable(SD_JellyProgress progress, CD_Events config) =>
@@ -92,6 +196,8 @@ namespace Modules.GameplayModule.Controllers
                 QuestsResetAt = new DateTimeOffset(DateTime.Now.Date.AddDays(1)).ToUnixTimeSeconds(),
                 Wheel = config.Wheel,
                 WheelSpins = WheelSpins(progress, config),
+                SlotSpins = SlotSpins(progress, config),
+                ScratchCards = ScratchCards(progress, config),
             };
         }
 

@@ -117,3 +117,70 @@ MonoBehaviour:
       Booster: 0
       BoosterCount: 0
     Weight: 0.3
+  SlotSymbols:
+  - Reward:
+      Coins: 50
+      Booster: 0
+      BoosterCount: 0
+    Weight: 1.5
+  - Reward:
+      Coins: 100
+      Booster: 0
+      BoosterCount: 0
+    Weight: 1
+  - Reward:
+      Coins: 0
+      Booster: 0
+      BoosterCount: 1
+    Weight: 0.6
+  - Reward:
+      Coins: 0
+      Booster: 1
+      BoosterCount: 1
+    Weight: 0.6
+  - Reward:
+      Coins: 500
+      Booster: 0
+      BoosterCount: 0
+    Weight: 0.15
+  - Reward:
+      Coins: 300
+      Booster: 0
+      BoosterCount: 0
+    Weight: 0.25
+  SlotPairWeight: 5
+  SlotPairReward:
+    Coins: 20
+    Booster: 0
+    BoosterCount: 0
+  SlotMissWeight: 6
+  SlotMissReward:
+    Coins: 5
+    Booster: 0
+    BoosterCount: 0
+  ScratchPrizes:
+  - Reward:
+      Coins: 50
+      Booster: 0
+      BoosterCount: 0
+    Weight: 3
+  - Reward:
+      Coins: 250
+      Booster: 0
+      BoosterCount: 0
+    Weight: 0.6
+  - Reward:
+      Coins: 0
+      Booster: 2
+      BoosterCount: 1
+    Weight: 1
+  - Reward:
+      Coins: 0
+      Booster: 0
+      BoosterCount: 1
+    Weight: 1
+  ScratchMissWeight: 3
+  ScratchMissReward:
+    Coins: 10
+    Booster: 0
+    BoosterCount: 0

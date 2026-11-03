@@ -5,7 +5,7 @@ using Modules.GameplayModule.Shared.Data.UnityObjects;
 
 namespace Modules.GameplayModule.Controllers
 {
-    /// <summary>Gives today's free spin of the prize wheel back, as on a new day. For the developer panel.</summary>
+    /// <summary>Gives today's free spin of the prize wheel and the slot machine, and today's free scratch card, back, as on a new day. For the developer panel.</summary>
     internal class ResetWheelCommand : Command
     {
         [Inject] private ISharedDataModel _shared { get; set; }
@@ -14,6 +14,8 @@ namespace Modules.GameplayModule.Controllers
         {
             var progress = _shared.GetScriptable<SD_JellyProgress>();
             progress.WheelFreeTaken = false;
+            progress.SlotFreeTaken = false;
+            progress.ScratchFreeTaken = false;
         }
     }
 }

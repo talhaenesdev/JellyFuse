@@ -70,7 +70,15 @@ namespace Modules.GameplayModule.Signals
         public Signal SpinWheel = new();
         /// <summary>A rewarded ad for one more spin of the prize wheel, held until the player spins.</summary>
         public Signal WatchAdForWheelSpin = new();
-        /// <summary>Today's free spin of the prize wheel comes back, as on a new day; for the developer panel.</summary>
+        /// <summary>A spin of the slot machine: today's free one, else one an ad gave.</summary>
+        public Signal SpinSlot = new();
+        /// <summary>A rewarded ad for one more spin of the slot machine, held until the player spins.</summary>
+        public Signal WatchAdForSlotSpin = new();
+        /// <summary>A scratch card: today's free one, else one an ad gave.</summary>
+        public Signal DealScratchCard = new();
+        /// <summary>A rewarded ad for one more scratch card, held until the player takes it.</summary>
+        public Signal WatchAdForScratchCard = new();
+        /// <summary>Today's free wheel spin, slot spin and scratch card come back, as on a new day; for the developer panel.</summary>
         public Signal ResetWheel = new();
 #if UNITY_EDITOR
         /// <summary>Editor-only cheat: end this level as won or lost at once.</summary>
@@ -121,5 +129,9 @@ namespace Modules.GameplayModule.Signals
         public Signal<EventsRVO> EventsChanged = new();
         /// <summary>The prize wheel was spun and its reward given: the slice it landed on, clockwise from the top.</summary>
         public Signal<int> WheelSpun = new();
+        /// <summary>The slot machine was spun and its reward given: where each reel stops and what it paid.</summary>
+        public Signal<SlotResultRVO> SlotSpun = new();
+        /// <summary>A scratch card was dealt and its reward given: what lies under its cells.</summary>
+        public Signal<ScratchCardRVO> ScratchCardDealt = new();
     }
 }
