@@ -66,6 +66,10 @@ namespace Modules.GameplayModule.Signals
         public Signal ClaimLoginReward = new();
         /// <summary>Take the reward of today's quest at this position.</summary>
         public Signal<int> ClaimQuest = new();
+        /// <summary>Today's free spin of the prize wheel.</summary>
+        public Signal SpinWheel = new();
+        /// <summary>One more spin of the prize wheel, for a rewarded ad.</summary>
+        public Signal SpinWheelForAd = new();
 #if UNITY_EDITOR
         /// <summary>Editor-only cheat: end this level as won or lost at once.</summary>
         public Signal<PuzzleStatus> ForceResult = new();
@@ -113,5 +117,7 @@ namespace Modules.GameplayModule.Signals
         public Signal<AdOffersRVO> AdOffersChanged = new();
         /// <summary>The daily events: weekend bonus, win streak, login days and today's quests.</summary>
         public Signal<EventsRVO> EventsChanged = new();
+        /// <summary>The prize wheel was spun and its reward given: the slice it landed on, clockwise from the top.</summary>
+        public Signal<int> WheelSpun = new();
     }
 }

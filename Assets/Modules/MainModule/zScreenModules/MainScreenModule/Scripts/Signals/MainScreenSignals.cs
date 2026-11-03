@@ -59,6 +59,8 @@ namespace Modules.MainModule.MainScreenModule.Signals
         public Signal QuestsClicked = new();
         /// <summary>The daily rewards button was pressed.</summary>
         public Signal LoginRewardsClicked = new();
+        /// <summary>The prize wheel button was pressed.</summary>
+        public Signal WheelClicked = new();
         /// <summary>The screen opened and wants the daily events.</summary>
         public Signal EventsRequested = new();
     }

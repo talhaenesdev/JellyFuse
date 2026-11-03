@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Modules.GameplayModule.Shared.Data.ValueObjects
 {
-    /// <summary>How the daily events stand now: the weekend bonus, the win streak, the login days and today's quests.</summary>
+    /// <summary>How the daily events stand now: the weekend bonus, the win streak, the login days, today's quests and the prize wheel.</summary>
     public sealed class EventsRVO
     {
         /// <summary>What a win's coins are multiplied by today; 1 when it is no bonus day.</summary>
@@ -19,5 +19,11 @@ namespace Modules.GameplayModule.Shared.Data.ValueObjects
         public bool QuestClaimable;
         /// <summary>When today's quests are replaced, in Unix seconds: the player's next midnight.</summary>
         public long QuestsResetAt;
+        /// <summary>The prize wheel's slices clockwise from the top.</summary>
+        public IReadOnlyList<WheelSliceCVO> Wheel = new List<WheelSliceCVO>();
+        /// <summary>Today's free spin is still to take.</summary>
+        public bool WheelFreeSpin;
+        /// <summary>Spins an ad may still buy today.</summary>
+        public int WheelAdSpinsLeft;
     }
 }

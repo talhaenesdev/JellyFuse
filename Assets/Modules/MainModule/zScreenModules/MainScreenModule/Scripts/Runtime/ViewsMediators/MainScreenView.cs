@@ -65,6 +65,9 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
         [SerializeField] private GameObject _questsDot;
         [SerializeField] private Button _loginRewardsButton;
         [SerializeField] private GameObject _loginRewardsDot;
+        [SerializeField] private Button _wheelButton;
+        [Tooltip("Shown while today's free spin is left.")]
+        [SerializeField] private GameObject _wheelDot;
         [Tooltip("Shown on bonus days, with the multiplier.")]
         [SerializeField] private GameObject _weekendBadge;
         [SerializeField] private TMP_Text _weekendMultiplier;
@@ -94,6 +97,7 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
         public Action LivesPlusClicked;
         public Action QuestsClicked;
         public Action LoginRewardsClicked;
+        public Action WheelClicked;
         /// <summary>A shop buy panel with a price was pressed: its product id.</summary>
         public Action<string> ShopBuyClicked;
 
@@ -120,6 +124,7 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
             if (_livesPlusButton != null) _livesPlusButton.onClick.AddListener(OnLivesPlusClicked);
             if (_questsButton != null) _questsButton.onClick.AddListener(OnQuestsClicked);
             if (_loginRewardsButton != null) _loginRewardsButton.onClick.AddListener(OnLoginRewardsClicked);
+            if (_wheelButton != null) _wheelButton.onClick.AddListener(OnWheelClicked);
             for (int i = 0; i < _tabActions.Count; i++) _navTabs[i].onClick.AddListener(_tabActions[i]);
             for (int i = 0; i < _shopActions.Count; i++) if (_shopButtons[i] != null) _shopButtons[i].onClick.AddListener(_shopActions[i]);
             if (_shopCloseButton != null) _shopCloseButton.onClick.AddListener(OnShopCloseClicked);
@@ -135,6 +140,7 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
             if (_livesPlusButton != null) _livesPlusButton.onClick.RemoveListener(OnLivesPlusClicked);
             if (_questsButton != null) _questsButton.onClick.RemoveListener(OnQuestsClicked);
             if (_loginRewardsButton != null) _loginRewardsButton.onClick.RemoveListener(OnLoginRewardsClicked);
+            if (_wheelButton != null) _wheelButton.onClick.RemoveListener(OnWheelClicked);
             for (int i = 0; i < _tabActions.Count; i++) _navTabs[i].onClick.RemoveListener(_tabActions[i]);
             for (int i = 0; i < _shopActions.Count; i++) if (_shopButtons[i] != null) _shopButtons[i].onClick.RemoveListener(_shopActions[i]);
             if (_shopCloseButton != null) _shopCloseButton.onClick.RemoveListener(OnShopCloseClicked);
@@ -148,6 +154,7 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
         private void OnLivesPlusClicked() => LivesPlusClicked?.Invoke();
         private void OnQuestsClicked() => QuestsClicked?.Invoke();
         private void OnLoginRewardsClicked() => LoginRewardsClicked?.Invoke();
+        private void OnWheelClicked() => WheelClicked?.Invoke();
         // The close button is a second way to the Home tab, so it takes the tab's own path.
         private void OnShopCloseClicked() => OnTabClicked(_homeTab);
 
@@ -505,6 +512,7 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
         {
             if (_questsDot != null) _questsDot.SetActive(events.QuestClaimable);
             if (_loginRewardsDot != null) _loginRewardsDot.SetActive(events.LoginClaimable);
+            if (_wheelDot != null) _wheelDot.SetActive(events.WheelFreeSpin);
             if (_weekendBadge != null) _weekendBadge.SetActive(events.WeekendMultiplier > 1);
             if (_weekendMultiplier != null) _weekendMultiplier.text = "x" + events.WeekendMultiplier;
         }

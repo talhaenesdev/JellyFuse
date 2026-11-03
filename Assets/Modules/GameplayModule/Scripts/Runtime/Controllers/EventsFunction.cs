@@ -22,6 +22,35 @@ namespace Modules.GameplayModule.Controllers
             bool missedDay = progress.LoginRewardDay >= 0 && progress.LoginRewardDay < today - 1;
             bool runDone = progress.LoginRewardsTaken >= config.LoginRewards.Count && progress.LoginRewardDay < today;
             if (missedDay || runDone) progress.LoginRewardsTaken = 0;
+            if (progress.WheelDay != today)
+            {
+                progress.WheelDay = today;
+                progress.WheelFreeTaken = false;
+                progress.WheelAdSpins = 0;
+            }
+        }
+
+        public static bool WheelFreeSpin(SD_JellyProgress progress, CD_Events config) =>
+            progress != null && config != null && config.Wheel.Count > 0 && !progress.WheelFreeTaken;
+
+        public static int WheelAdSpinsLeft(SD_JellyProgress progress, CD_Events config) =>
+            progress == null || config == null || config.Wheel.Count == 0 || !progress.WheelFreeTaken ? 0
+                : Mathf.Max(0, config.WheelAdSpinsPerDay - progress.WheelAdSpins);
+
+        /// <summary>Picks a slice by the slices' weights, gives its reward, and returns where it is on the wheel.</summary>
+        public static int SpinWheel(SD_JellyProgress progress, CD_Events config)
+        {
+            float total = 0;
+            foreach (var slice in config.Wheel) total += slice.Weight;
+            float roll = UnityEngine.Random.value * total;
+            int picked = config.Wheel.Count - 1;
+            for (int i = 0; i < config.Wheel.Count; i++)
+            {
+                roll -= config.Wheel[i].Weight;
+                if (roll < 0 && config.Wheel[i].Weight > 0) { picked = i; break; }
+            }
+            Grant(progress, config.Wheel[picked].Reward);
+            return picked;
         }
 
         public static bool LoginClaimable(SD_JellyProgress progress, CD_Events config) =>
@@ -65,6 +94,9 @@ namespace Modules.GameplayModule.Controllers
                 Quests = quests,
                 QuestClaimable = quests.Exists(q => q.IsClaimable),
                 QuestsResetAt = new DateTimeOffset(DateTime.Now.Date.AddDays(1)).ToUnixTimeSeconds(),
+                Wheel = config.Wheel,
+                WheelFreeSpin = WheelFreeSpin(progress, config),
+                WheelAdSpinsLeft = WheelAdSpinsLeft(progress, config),
             };
         }
 

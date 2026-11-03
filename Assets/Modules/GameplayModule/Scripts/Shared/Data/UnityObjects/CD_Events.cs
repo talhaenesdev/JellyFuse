@@ -6,8 +6,8 @@ using UnityEngine;
 namespace Modules.GameplayModule.Shared.Data.UnityObjects
 {
     /// <summary>
-    /// The daily events: the weekend coin bonus, the win streak's tiers, the seven login rewards and the
-    /// quests a day picks from. Filed in GameplaySystemRoot's Shared Scriptables.
+    /// The daily events: the weekend coin bonus, the win streak's tiers, the seven login rewards, the
+    /// quests a day picks from and the prize wheel. Filed in GameplaySystemRoot's Shared Scriptables.
     /// </summary>
     [CreateAssetMenu(fileName = "CD_Events", menuName = "Jelly Fuse/Events")]
     public sealed class CD_Events : ScriptableObject
@@ -32,6 +32,12 @@ namespace Modules.GameplayModule.Shared.Data.UnityObjects
         [Tooltip("How many quests a day gives, picked from Quest Pool with no type twice.")]
         [Min(1)] public int QuestsPerDay = 3;
         public List<QuestCVO> QuestPool = new();
+
+        [Header("Prize wheel")]
+        [Tooltip("The wheel's slices clockwise from the top, as many as the wheel's art has; one free spin a day lands on one of them.")]
+        public List<WheelSliceCVO> Wheel = new();
+        [Tooltip("Spins a day the player may buy with a rewarded ad after the free one; 0 offers none.")]
+        [Min(0)] public int WheelAdSpinsPerDay = 3;
 
         public bool IsWeekend(DateTime localDay) => WeekendMultiplier > 1 && WeekendDays.Contains(localDay.DayOfWeek);
 

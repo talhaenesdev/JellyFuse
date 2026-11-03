@@ -35,6 +35,7 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
             _view.LivesPlusClicked += OnLivesPlusClicked;
             _view.QuestsClicked += OnQuestsClicked;
             _view.LoginRewardsClicked += OnLoginRewardsClicked;
+            _view.WheelClicked += OnWheelClicked;
             _signals.Incoming.ApplyEvents.AddListener(_view.ApplyEvents);
             _view.ShopBuyClicked += OnShopBuyClicked;
             _signals.Incoming.ApplyNextLevel.AddListener(_view.ApplyNextLevel);
@@ -61,6 +62,7 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
             _view.LivesPlusClicked -= OnLivesPlusClicked;
             _view.QuestsClicked -= OnQuestsClicked;
             _view.LoginRewardsClicked -= OnLoginRewardsClicked;
+            _view.WheelClicked -= OnWheelClicked;
             _signals.Incoming.ApplyEvents.RemoveListener(_view.ApplyEvents);
             _view.ShopBuyClicked -= OnShopBuyClicked;
             _signals.Incoming.ApplyNextLevel.RemoveListener(_view.ApplyNextLevel);
@@ -110,6 +112,11 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
         private void OnLoginRewardsClicked()
         {
             if (_view.Data.HasState(ScreenState.AvailableToSendSignal)) _signals.Outgoing.LoginRewardsClicked.Dispatch();
+        }
+
+        private void OnWheelClicked()
+        {
+            if (_view.Data.HasState(ScreenState.AvailableToSendSignal)) _signals.Outgoing.WheelClicked.Dispatch();
         }
 
         private void OnLivesPlusClicked()
