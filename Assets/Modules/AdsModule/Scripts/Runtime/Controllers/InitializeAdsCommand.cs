@@ -12,7 +12,7 @@ namespace Modules.AdsModule.Controllers
 
         public override void Execute()
         {
-            if (_model.Config != null) _ads.Initialize(_model.Config.AndroidAppKey, _model.Config.AndroidRewardedAdUnitId);
+            if (_model.Config != null) _ads.Initialize(_model.Config.AppKey, _model.Config.RewardedAdUnitId);
         }
     }
 }
