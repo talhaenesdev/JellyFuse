@@ -70,6 +70,8 @@ namespace Modules.GameplayModule.Signals
         public Signal SpinWheel = new();
         /// <summary>One more spin of the prize wheel, for a rewarded ad.</summary>
         public Signal SpinWheelForAd = new();
+        /// <summary>Today's prize wheel spins come back, as on a new day; for the developer panel.</summary>
+        public Signal ResetWheel = new();
 #if UNITY_EDITOR
         /// <summary>Editor-only cheat: end this level as won or lost at once.</summary>
         public Signal<PuzzleStatus> ForceResult = new();

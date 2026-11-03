@@ -26,7 +26,9 @@ namespace Modules.DevToolsModule.DevToolsScreenModule.ViewsMediators
         [SerializeField] private Button _resetBoostersButton;
         [SerializeField] private TMP_Text _resetBoostersLabel;
         [SerializeField] private Button _refillLivesButton;
+        [SerializeField] private Button _resetWheelButton;
         [SerializeField] private TMP_Text _refillLivesLabel;
+        [SerializeField] private TMP_Text _resetWheelLabel;
         [SerializeField] private Button _resetPlayerButton;
         [SerializeField] private TMP_Text _resetPlayerLabel;
         [Tooltip("Where the rows go, top to bottom.")]
@@ -52,6 +54,7 @@ namespace Modules.DevToolsModule.DevToolsScreenModule.ViewsMediators
         public Action<int> SkipLevelClicked;
         public Action ResetBoostersClicked;
         public Action RefillLivesClicked;
+        public Action ResetWheelClicked;
         public Action ResetPlayerClicked;
         /// <summary>A switch was asked to change: its key and the value asked for.</summary>
         public Action<string, bool> ToggleRequested;
@@ -77,6 +80,7 @@ namespace Modules.DevToolsModule.DevToolsScreenModule.ViewsMediators
             if (_nextLabel != null) _nextLabel.text = L("devtools.next", "Next");
             if (_resetBoostersLabel != null) _resetBoostersLabel.text = L("devtools.reset_boosters", "Reset Boosters");
             if (_refillLivesLabel != null) _refillLivesLabel.text = L("devtools.refill_lives", "Refill Lives");
+            if (_resetWheelLabel != null) _resetWheelLabel.text = L("devtools.reset_wheel", "Reset Wheel");
             if (_resetPlayerLabel != null) _resetPlayerLabel.text = L("devtools.reset_player", "Reset Player");
             if (_gameTogglesLabel != null) _gameTogglesLabel.text = L("devtools.game_toggles", "Gameplay Settings");
             if (_displayTogglesLabel != null) _displayTogglesLabel.text = L("devtools.display_toggles", "Display Settings");
@@ -99,6 +103,7 @@ namespace Modules.DevToolsModule.DevToolsScreenModule.ViewsMediators
             _nextLevelButton.onClick.AddListener(OnNextClicked);
             if (_resetBoostersButton != null) _resetBoostersButton.onClick.AddListener(OnResetBoostersClicked);
             if (_refillLivesButton != null) _refillLivesButton.onClick.AddListener(OnRefillLivesClicked);
+            if (_resetWheelButton != null) _resetWheelButton.onClick.AddListener(OnResetWheelClicked);
             if (_resetPlayerButton != null) _resetPlayerButton.onClick.AddListener(OnResetPlayerClicked);
             WireSliders(true);
             if (_gameTogglesButton != null) _gameTogglesButton.onClick.AddListener(OpenGameToggles);
@@ -113,6 +118,7 @@ namespace Modules.DevToolsModule.DevToolsScreenModule.ViewsMediators
             _nextLevelButton.onClick.RemoveListener(OnNextClicked);
             if (_resetBoostersButton != null) _resetBoostersButton.onClick.RemoveListener(OnResetBoostersClicked);
             if (_refillLivesButton != null) _refillLivesButton.onClick.RemoveListener(OnRefillLivesClicked);
+            if (_resetWheelButton != null) _resetWheelButton.onClick.RemoveListener(OnResetWheelClicked);
             if (_resetPlayerButton != null) _resetPlayerButton.onClick.RemoveListener(OnResetPlayerClicked);
             WireSliders(false);
             if (_gameTogglesButton != null) _gameTogglesButton.onClick.RemoveListener(OpenGameToggles);
@@ -189,6 +195,7 @@ namespace Modules.DevToolsModule.DevToolsScreenModule.ViewsMediators
         private void OnNextClicked() => SkipLevelClicked?.Invoke(1);
         private void OnResetBoostersClicked() => ResetBoostersClicked?.Invoke();
         private void OnRefillLivesClicked() => RefillLivesClicked?.Invoke();
+        private void OnResetWheelClicked() => ResetWheelClicked?.Invoke();
         private void OnResetPlayerClicked() => ResetPlayerClicked?.Invoke();
 
         protected override void PlayShowAnimation() => ShowCompleted?.Invoke(this);

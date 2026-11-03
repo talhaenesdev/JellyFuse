@@ -182,6 +182,11 @@ namespace Modules.GameplayModule.RootsContexts
                 .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
                 .ToSequence<AnnounceBoostersCommand>()
                 .ToSequence<AnnounceEventsCommand>();
+            CommandBinder.Bind(_signals.Incoming.ResetWheel)
+                .ToSequence<RefreshEventsCommand>()
+                .ToSequence<ResetWheelCommand>()
+                .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
+                .ToSequence<AnnounceEventsCommand>();
             CommandBinder.Bind(_signals.Incoming.ResetBoosters)
                 .ToSequence<ResetBoostersCommand>()
                 .ToSequence<GrantBoostersCommand>()

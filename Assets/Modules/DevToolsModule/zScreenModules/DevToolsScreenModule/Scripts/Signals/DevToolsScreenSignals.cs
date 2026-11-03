@@ -27,6 +27,8 @@ namespace Modules.DevToolsModule.DevToolsScreenModule.Signals
         public Signal ResetBoostersRequested = new();
         /// <summary>Refill Lives was pressed: the player's lives go back to full.</summary>
         public Signal RefillLivesRequested = new();
+        /// <summary>Reset Wheel was pressed: today's prize wheel spins come back.</summary>
+        public Signal ResetWheelRequested = new();
         /// <summary>Reset Player was pressed: every saved thing goes back to a new player's, and the game closes.</summary>
         public Signal ResetPlayerRequested = new();
         /// <summary>A tuning page opened, by name: whoever owns its values should send them (Incoming.ShowSliders).</summary>

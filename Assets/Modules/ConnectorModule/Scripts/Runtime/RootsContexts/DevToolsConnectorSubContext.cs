@@ -51,6 +51,7 @@ namespace Modules.ConnectorModule.RootsContexts
             _devToolsSignals.Outgoing.SkipLevelRequested.Connect(_gameplaySignals.Incoming.SkipLevel, GROUP);
             _devToolsSignals.Outgoing.ResetBoostersRequested.Connect(_gameplaySignals.Incoming.ResetBoosters, GROUP);
             _devToolsSignals.Outgoing.RefillLivesRequested.Connect(_gameplaySignals.Incoming.ResetLives, GROUP);
+            _devToolsSignals.Outgoing.ResetWheelRequested.Connect(_gameplaySignals.Incoming.ResetWheel, GROUP);
             _devToolsSignals.Outgoing.ResetPlayerRequested.Connect(_mainSignals.Incoming.ResetPlayer, GROUP);
             _devToolsSignals.Outgoing.SlidersRequested.Connect(_gameplayScreenSignals.Incoming.SendTuningSliders, GROUP);
             _devToolsSignals.Outgoing.SliderChanged.Connect(_gameplayScreenSignals.Incoming.SetTuned, GROUP);

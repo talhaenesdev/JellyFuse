@@ -32,6 +32,7 @@ namespace Modules.DevToolsModule.DevToolsScreenModule.ViewsMediators
             _view.SkipLevelClicked += OnSkipLevel;
             _view.ResetBoostersClicked += OnResetBoosters;
             _view.RefillLivesClicked += OnRefillLives;
+            _view.ResetWheelClicked += OnResetWheel;
             _view.ResetPlayerClicked += OnResetPlayer;
             _view.SlidersOpened += OnSlidersOpened;
             _view.SliderChanged += OnSliderChanged;
@@ -49,6 +50,7 @@ namespace Modules.DevToolsModule.DevToolsScreenModule.ViewsMediators
             _view.SkipLevelClicked -= OnSkipLevel;
             _view.ResetBoostersClicked -= OnResetBoosters;
             _view.RefillLivesClicked -= OnRefillLives;
+            _view.ResetWheelClicked -= OnResetWheel;
             _view.ResetPlayerClicked -= OnResetPlayer;
             _view.SlidersOpened -= OnSlidersOpened;
             _view.SliderChanged -= OnSliderChanged;
@@ -89,6 +91,11 @@ namespace Modules.DevToolsModule.DevToolsScreenModule.ViewsMediators
         private void OnRefillLives()
         {
             if (_view.Data.HasState(ScreenState.AvailableToSendSignal)) _signals.Outgoing.RefillLivesRequested.Dispatch();
+        }
+
+        private void OnResetWheel()
+        {
+            if (_view.Data.HasState(ScreenState.AvailableToSendSignal)) _signals.Outgoing.ResetWheelRequested.Dispatch();
         }
 
         private void OnResetBoosters()
