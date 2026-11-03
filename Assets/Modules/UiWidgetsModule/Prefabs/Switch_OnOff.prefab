@@ -65,9 +65,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: ffb586ab5260f034fb4bcc54b9fb929b, type: 3}
-  m_Type: 1
-  m_PreserveAspect: 0
+  m_Sprite: {fileID: 21300000, guid: 6b464ab4f6a9e0a4d96069e472ef2cd7, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -306,8 +306,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Modules.UiWidgets::Modules.UiWidgetsModule.Entities.SlideSwitch
   _knob: {fileID: 1620076734429035458}
   _knobImage: {fileID: 608714163343308521}
-  _onSprite: {fileID: 21300000, guid: ffb586ab5260f034fb4bcc54b9fb929b, type: 3}
-  _offSprite: {fileID: 21300000, guid: 7b76e5f85e927ee438f2348d785772c1, type: 3}
+  _onSprite: {fileID: 21300000, guid: 6b464ab4f6a9e0a4d96069e472ef2cd7, type: 3}
+  _offSprite: {fileID: 21300000, guid: b0a03f1bc16a6054d8b1f3ddaa9b897b, type: 3}
   _offLabel: {fileID: 673543663830207548}
   _onLabel: {fileID: 6360429335775050623}
   _activeText: {r: 1, g: 1, b: 1, a: 1}
@@ -516,7 +516,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 805f9f63b7ec0fd4998cb6c51a56b6be, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 88077b1f08ad3634ca59b88686101e4c, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -525,4 +525,4 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 2
+  m_PixelsPerUnitMultiplier: 10
