@@ -28,6 +28,8 @@ namespace Modules.PurchaseModule.PurchaseScreenModule.ViewsMediators
         [SerializeField] private TMP_Text _info;
         [SerializeField] private Button _buyButton;
         [SerializeField] private TMP_Text _buyLabel;
+        [Tooltip("The coin after the price, under the buy label: says the price is paid in coins. Hidden for a free offer.")]
+        [SerializeField] private RectTransform _buyCoin;
         [Tooltip("Shows an ad for the offer's reward; hidden for an offer with no watch text.")]
         [SerializeField] private Button _watchButton;
         [SerializeField] private TMP_Text _watchLabel;
@@ -92,6 +94,7 @@ namespace Modules.PurchaseModule.PurchaseScreenModule.ViewsMediators
             _amount.text = Offer.Amount;
             DrawInfo();
             _buyLabel.text = Format(L(Offer.BuyKey, Offer.Buy), Offer.Price.ToString());
+            PlaceBuyCoin();
             DrawButton(_buyButton, Offer.CanBuy);
             if (_watchButton == null) return;
             bool watch = !string.IsNullOrEmpty(Offer.Watch) || !string.IsNullOrEmpty(Offer.WatchKey);
@@ -99,6 +102,19 @@ namespace Modules.PurchaseModule.PurchaseScreenModule.ViewsMediators
             if (!watch) return;
             if (_watchLabel != null) _watchLabel.text = Format(L(Offer.WatchKey, Offer.Watch), Offer.WatchAmount.ToString());
             DrawButton(_watchButton, Offer.CanWatch);
+        }
+        /// <summary>Sets the coin just after the label's last character, the label's text moved left to make room.</summary>
+        private void PlaceBuyCoin()
+        {
+            if (_buyCoin == null) return;
+            bool coin = Offer.Price > 0;
+            _buyCoin.gameObject.SetActive(coin);
+            float room = coin ? _buyCoin.sizeDelta.x + 6 : 0;
+            _buyLabel.margin = new Vector4(0, 0, room, 0);
+            if (!coin) return;
+            _buyLabel.ForceMeshUpdate();
+            var bounds = _buyLabel.textBounds;
+            _buyCoin.anchoredPosition = new Vector2(bounds.max.x + 6 + _buyCoin.sizeDelta.x * .5f, bounds.center.y);
         }
         private void DrawButton(Button button, bool usable)
         {

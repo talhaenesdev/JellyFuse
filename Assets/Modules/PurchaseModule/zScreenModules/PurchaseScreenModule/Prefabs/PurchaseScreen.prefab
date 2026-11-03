@@ -152,6 +152,81 @@ MonoBehaviour:
   m_EffectColor: {r: 0.22745098, g: 0.047058824, b: 0.5411765, a: 0.78431374}
   m_EffectDistance: {x: 0, y: -6}
   m_UseGraphicAlpha: 1
+--- !u!1 &229276419543571794
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1271795627343554287}
+  - component: {fileID: 8431151936121460219}
+  - component: {fileID: 2613120369441792792}
+  m_Layer: 0
+  m_Name: Img_Coin
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1271795627343554287
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 229276419543571794}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5926569700887276976}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 40, y: 40}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &8431151936121460219
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 229276419543571794}
+  m_CullTransparentMesh: 1
+--- !u!114 &2613120369441792792
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 229276419543571794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 52e6c390b35d12045a6f114a87d38baa, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 1
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &2234821234932884728
 GameObject:
   m_ObjectHideFlags: 0
@@ -395,6 +470,7 @@ MonoBehaviour:
   _info: {fileID: 7997874547662858323}
   _buyButton: {fileID: 757065755487014772}
   _buyLabel: {fileID: 2858379626044502221}
+  _buyCoin: {fileID: 1271795627343554287}
   _watchButton: {fileID: 1365128493084123347}
   _watchLabel: {fileID: 9096453845787978767}
   _closeButton: {fileID: 2732825177203060483}
@@ -1469,6 +1545,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3099642905608329323, guid: 525fc936b5c9f96418df773a99a42a8c, type: 3}
       insertIndex: 5
       addedObject: {fileID: 5876152996419078966}
+    - targetCorrespondingSourceObject: {fileID: 4088710104332452931, guid: 525fc936b5c9f96418df773a99a42a8c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1271795627343554287}
     - targetCorrespondingSourceObject: {fileID: 5532646313422921638, guid: 525fc936b5c9f96418df773a99a42a8c, type: 3}
       insertIndex: 0
       addedObject: {fileID: 7340988409729477492}
@@ -1603,6 +1682,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Modules.UiWidgets::Modules.UiWidgetsModule.Entities.CurvedText
   _curvature: 5.14
   _rotateLetters: 1
+--- !u!224 &5926569700887276976 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 4088710104332452931, guid: 525fc936b5c9f96418df773a99a42a8c, type: 3}
+  m_PrefabInstance: {fileID: 7674524724431677939}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &7997874547662858323 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 324060254313038240, guid: 525fc936b5c9f96418df773a99a42a8c, type: 3}
