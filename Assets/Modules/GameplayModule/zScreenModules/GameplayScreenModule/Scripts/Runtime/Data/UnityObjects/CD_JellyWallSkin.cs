@@ -54,12 +54,6 @@ namespace Modules.GameplayModule.GameplayScreenModule.Data.UnityObjects
         [Range(.2f, 1.5f)] public float DoorThickness = .62f;
         [Tooltip("How far the door reaches past its cells at each end, in cells, so no wall shows at its ends.")]
         [Range(0, .5f)] public float DoorOverhang = .1f;
-        [Tooltip("On: a painted door is tinted with the jelly it waits for, so its picture is drawn in white. Off: drawn as painted.")]
-        public bool TintPaintedDoors;
-        [Tooltip("With Tint Painted Doors: how far the door's tint is lightened toward white, so the jelly drawn on it stands out.")]
-        [Range(0, 1)] public float PaintedDoorLighten = .3f;
-        [Tooltip("With Tint Painted Doors: how far the jelly drawn on the door is darkened, so it reads on a door of its own colour.")]
-        [Range(0, 1)] public float PaintedDoorIconDarken = .35f;
         [Tooltip("Doors in the top wall. An empty slot uses the generated door, tinted with the jelly it waits for.")]
         public Sprite[] DoorTop = new Sprite[4];
         public Sprite[] DoorBottom = new Sprite[4];

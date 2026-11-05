@@ -281,15 +281,9 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             // A door in the top wall stands behind the jellies, like the wall it sits in, so a jelly in
             // the row under it is drawn over its bottom edge; every other door is drawn over the board.
             bool behind = painted != null && gate.Side == JellySide.Top;
-            // A door painted in white takes its jelly's colour, and the jelly drawn on it a darker shade of it.
-            bool tinted = painted != null && Skin.TintPaintedDoors;
-            var doorColour = tinted ? Color.Lerp(colour, Color.white, Skin.PaintedDoorLighten) : Color.white;
-            if (tinted) colour = Color.Lerp(colour, Color.black, Skin.PaintedDoorIconDarken);
             var door = painted != null
                 ? Place(Take(behind ? _jellyLayer : _doorLayer), Role.Wall, centre + Skin.PieceOffset * _cell, cells * _cell, Color.white, 0, 0, -1, painted)
                 : Place(Take(_doorLayer), Role.Door, centre, cells * _cell - Vector2.one * _cell * .06f, Color.Lerp(colour, Look.BoardColour, .55f));
-            // Place draws a painted picture as it is; a tinted door takes its colour here.
-            if (tinted) door.BodyImage.color = doorColour;
             if (behind) door.SortY = 1e29f; // after the top wall and its corners, before every jelly
             if (stage != null) _doorFrames[index] = (centre, cells * _cell, _snapshot.DoorFrozen.Count > index && _snapshot.DoorFrozen[index] > 0);
             _boardItems.Add(door);
