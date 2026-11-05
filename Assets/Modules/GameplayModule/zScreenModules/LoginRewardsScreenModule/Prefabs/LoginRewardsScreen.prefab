@@ -699,6 +699,7 @@ GameObject:
   - component: {fileID: 2272992758453900398}
   - component: {fileID: 8374058125038212184}
   - component: {fileID: 8824861539719529109}
+  - component: {fileID: 8911651652742842940}
   m_Layer: 5
   m_Name: Btn_Backdrop
   m_TagString: Untagged
@@ -746,7 +747,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.101960786, g: 0.043137256, b: 0.22745098, a: 0.7058824}
+  m_Color: {r: 0.101960786, g: 0.043137256, b: 0.22745098, a: 0.9}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -807,6 +808,23 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &8911651652742842940
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5056869998580498254}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e153dedab31d4e4eb68ee8b75db3e6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.UiWidgets::Modules.UiWidgetsModule.Entities.ScreenBleed
+  _top: 1
+  _bottom: 1
+  _left: 1
+  _right: 1
+  _coverAspect: 0
 --- !u!1 &6073285965840861891
 GameObject:
   m_ObjectHideFlags: 0
