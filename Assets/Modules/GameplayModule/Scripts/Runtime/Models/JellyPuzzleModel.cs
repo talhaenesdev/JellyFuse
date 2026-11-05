@@ -364,7 +364,7 @@ namespace Modules.GameplayModule.Models
                 TrackGoodFuse(FindPiece(_dragId));
                 _moves = _dragBefore.Moves + 1;
                 Changed();
-                frames.Add(Snapshot());
+                if (RecordFrames) frames.Add(Snapshot());
             }
             var held = FindPiece(_dragId);
             if (released && Status == PuzzleStatus.Playing && held != null)
@@ -451,6 +451,8 @@ namespace Modules.GameplayModule.Models
         public int DefaultPullReach { get; set; } = 1;
         public int ReleaseFuseLookBack { get; set; }
         public bool PathFinding { get; set; } = true;
+        /// <summary>On: a drag returns a frame for every step it takes, for the board to walk. Off: only the last - for tools that play many drags and look at none.</summary>
+        public bool RecordFrames { get; set; } = true;
         public bool BiggestFuseFirst { get; set; } = true;
         /// <summary>
         /// The held jelly's cells at each step since the last spot of this drag where it would have fused
@@ -493,7 +495,7 @@ namespace Modules.GameplayModule.Models
                     for (int i = 0; i < reach; i++)
                     {
                         Shift(FindPiece(piece.Id), direction);
-                        frames.Add(Snapshot());
+                        if (RecordFrames) frames.Add(Snapshot());
                     }
                     return ExitThrough(FindPiece(piece.Id), direction);
                 }
