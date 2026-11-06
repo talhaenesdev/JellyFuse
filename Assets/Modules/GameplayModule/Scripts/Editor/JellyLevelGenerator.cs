@@ -143,12 +143,13 @@ namespace Modules.GameplayModule.Editor
                     door.Start = rng.Next(1, Mathf.Max(2, length - size));
                     if (door.Start + size > length - 1) continue;
                     if (sameSide.Any(o => door.Start < o.Start + o.Size + 1 && o.Start < door.Start + size + 1)) continue;
-                    // The floor in front of the door, and a cell either side of its mouth, stays clear of wall, so the
-                    // door never sits against a notch or a stub.
+                    // The floor in front of the door, and two cells either side of its mouth, stays clear of wall, so the
+                    // door never sits against a notch or a stub, nor one frame cell short of one - the rim's corners
+                    // there pile onto each other.
                     var inward = -JellyGateCVOStep(side);
                     var along = side is JellySide.Top or JellySide.Bottom ? Vector2Int.right : Vector2Int.up;
                     var cellsOf = level.DoorCells(door);
-                    var mouth = cellsOf.Select(c => c + inward).Concat(new[] { cellsOf.First() + inward - along, cellsOf.Last() + inward + along });
+                    var mouth = cellsOf.Select(c => c + inward).Concat(new[] { cellsOf.First() + inward - along, cellsOf.Last() + inward + along, cellsOf.First() + inward - along * 2, cellsOf.Last() + inward + along * 2 });
                     if (mouth.Any(walls.Contains)) continue;
                     placed = true;
                 }
