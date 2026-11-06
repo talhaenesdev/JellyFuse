@@ -36,6 +36,11 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                 nameof(CD_Feel.FuseShake), nameof(CD_Feel.FuseShakeTime),
                 "Panel.Duration", "Panel.StartScale", "Panel.SlideDistance", "Panel.FadeSeconds", "Panel.DimSeconds", "Panel.Delay",
                 "Look.FuseGlowBloomStrength", "Look.FuseGlowBloomSize", "Look.FuseGlowCornerScale", "Look.FuseGlowSeconds", "Look.FuseGlowBlinks",
+                "Look.PaintedWallTint.r", "Look.PaintedWallTint.g", "Look.PaintedWallTint.b",
+                "Look.PaintedTileTint.r", "Look.PaintedTileTint.g", "Look.PaintedTileTint.b",
+                "Look.PaintedTileAltTint.r", "Look.PaintedTileAltTint.g", "Look.PaintedTileAltTint.b",
+                "Look.GridCornerTint.r", "Look.GridCornerTint.g", "Look.GridCornerTint.b",
+                "Look.GridCornerLightTint.r", "Look.GridCornerLightTint.g", "Look.GridCornerLightTint.b",
             },
         };
         /// <summary>Fields that change how a picture is cut or meshed, or where the map sits: redrawn after them.</summary>
@@ -51,9 +56,16 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             foreach (var key in keys)
             {
                 if (!Resolve(key, out var target, out var field)) continue;
+                int channel = Channel(key);
+                if (channel >= 0)
+                {
+                    // A colour is offered as three sliders, one a channel, each 0 to 1.
+                    list.Add(new DevSliderVO { Key = key, Label = Nicify(field.Name) + " " + "RGB"[channel], Min = 0, Max = 1, Value = Read(target, field, key) });
+                    continue;
+                }
                 var range = field.GetCustomAttribute<RangeAttribute>();
                 bool whole = field.FieldType == typeof(int);
-                float value = whole ? (int)field.GetValue(target) : (float)field.GetValue(target);
+                float value = Read(target, field, key);
                 list.Add(new DevSliderVO { Key = key, Label = Nicify(field.Name), Min = range != null ? range.min : 0, Max = range != null ? range.max : Mathf.Max(1, value * 2), Value = value, Whole = whole });
             }
             return list;
@@ -62,7 +74,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         public void SetTuned(string key, float value)
         {
             if (!Resolve(key, out var target, out var field)) return;
-            Write(target, field, value);
+            Write(target, field, key, value);
             PlayerPrefs.SetFloat(PREFS + key, value);
             PlayerPrefs.Save();
             if (key.StartsWith("Hud.") || key.StartsWith("Look.") || REBUILD.Contains(key)) RefreshPresentation();
@@ -95,16 +107,34 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         private bool Resolve(string key, out object target, out FieldInfo field)
         {
             target = _presentation.Feel;
-            string name = key;
-            if (key.StartsWith("Hud.")) { target = _presentation.Hud; name = key.Substring(4); }
-            else if (key.StartsWith("Look.")) { target = _presentation.Look; name = key.Substring(5); }
-            else if (key.StartsWith("Panel.")) { target = _panelAnimation; name = key.Substring(6); }
+            string name = Channel(key) >= 0 ? key.Substring(0, key.Length - 2) : key;
+            if (key.StartsWith("Hud.")) { target = _presentation.Hud; name = name.Substring(4); }
+            else if (key.StartsWith("Look.")) { target = _presentation.Look; name = name.Substring(5); }
+            else if (key.StartsWith("Panel.")) { target = _panelAnimation; name = name.Substring(6); }
             field = target != null ? target.GetType().GetField(name) : null;
-            return field != null && (field.FieldType == typeof(float) || field.FieldType == typeof(int));
+            if (field == null) return false;
+            return Channel(key) >= 0 ? field.FieldType == typeof(Color) : field.FieldType == typeof(float) || field.FieldType == typeof(int);
         }
-        private static void Write(object target, FieldInfo field, float value)
+        /// <summary>Which colour channel a key ending ".r", ".g" or ".b" names (0-2); -1 for any other key.</summary>
+        private static int Channel(string key) =>
+            key.Length > 2 && key[key.Length - 2] == '.' ? "rgb".IndexOf(key[key.Length - 1]) : -1;
+        private static float Read(object target, FieldInfo field, string key)
         {
-            if (field.FieldType == typeof(int)) field.SetValue(target, Mathf.RoundToInt(value)); else field.SetValue(target, value);
+            int channel = Channel(key);
+            if (channel >= 0) return ((Color)field.GetValue(target))[channel];
+            return field.FieldType == typeof(int) ? (int)field.GetValue(target) : (float)field.GetValue(target);
+        }
+        private static void Write(object target, FieldInfo field, string key, float value)
+        {
+            int channel = Channel(key);
+            if (channel >= 0)
+            {
+                var colour = (Color)field.GetValue(target);
+                colour[channel] = value;
+                field.SetValue(target, colour);
+            }
+            else if (field.FieldType == typeof(int)) field.SetValue(target, Mathf.RoundToInt(value));
+            else field.SetValue(target, value);
         }
 
         private const string PREFS = "devtools.feel.";
@@ -120,7 +150,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                 foreach (var key in keys)
                 {
                     if (!PlayerPrefs.HasKey(PREFS + key) || !Resolve(key, out var target, out var field)) continue;
-                    Write(target, field, PlayerPrefs.GetFloat(PREFS + key));
+                    Write(target, field, key, PlayerPrefs.GetFloat(PREFS + key));
                 }
 #endif
         }
