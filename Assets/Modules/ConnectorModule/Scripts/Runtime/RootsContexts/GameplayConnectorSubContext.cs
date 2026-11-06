@@ -2,6 +2,7 @@ using FlowIoC.BaseModule.Connectors;
 using FlowIoC.BaseModule.Contexts;
 using Modules.GameplayModule.GameplayScreenModule.Signals;
 using Modules.GameplayModule.Signals;
+using Modules.MainModule.Signals;
 
 namespace Modules.ConnectorModule.RootsContexts
 {
@@ -10,16 +11,19 @@ namespace Modules.ConnectorModule.RootsContexts
         private const string GROUP = nameof(GameplayConnectorSubContext);
         private GameplaySignals _gameplaySignals;
         private GameplayScreenSignals _screenSignals;
+        private MainSignals _mainSignals;
         public override void Setup()
         {
             base.Setup();
             _gameplaySignals = InjectionBinderCrossContext.GetInstance<GameplaySignals>();
             _screenSignals = InjectionBinderCrossContext.GetInstance<GameplayScreenSignals>();
+            _mainSignals = InjectionBinderCrossContext.GetInstance<MainSignals>();
             IncomingSignals();
             OutgoingSignals();
         }
         private void IncomingSignals()
         {
+            _mainSignals.Outgoing.BootStarted.Connect(_gameplaySignals.Incoming.LoadRemoteLevels, GROUP);
             _screenSignals.Outgoing.Start.Connect(_gameplaySignals.Incoming.Start, GROUP);
             _screenSignals.Outgoing.Drag.Connect(_gameplaySignals.Incoming.Drag, GROUP);
             _screenSignals.Outgoing.Undo.Connect(_gameplaySignals.Incoming.Undo, GROUP);

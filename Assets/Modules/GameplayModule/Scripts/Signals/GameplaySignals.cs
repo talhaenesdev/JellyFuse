@@ -16,6 +16,8 @@ namespace Modules.GameplayModule.Signals
     public class GameplaySignalsIncoming
     {
         public Signal Start = new();
+        /// <summary>The boot has begun: fetch the level list published since this build, if there is one.</summary>
+        public Signal LoadRemoteLevels = new();
         public Signal<Vector2Int, Vector2Int, bool> Drag = new(hideCommandLog: true);
         public Signal Undo = new();
         public Signal Stop = new();

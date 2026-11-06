@@ -18,7 +18,7 @@ MonoBehaviour:
     Hash: 00000000000000000000000000000000
   m_DisableWriteTypeTree: 0
   m_OptimizeCatalogSize: 0
-  m_BuildRemoteCatalog: 0
+  m_BuildRemoteCatalog: 1
   m_CatalogRequestsTimeout: 0
   m_DisableCatalogUpdateOnStart: 0
   m_InternalIdNamingMode: 0
@@ -53,9 +53,9 @@ MonoBehaviour:
   m_CheckForContentUpdateRestrictionsOption: 0
   m_MonoScriptBundleCustomNaming: 
   m_RemoteCatalogBuildPath:
-    m_Id: 
+    m_Id: 3b03f4bea29ac3a469834fefc9098c6c
   m_RemoteCatalogLoadPath:
-    m_Id: 
+    m_Id: c4fab6b30bfa29647bf61dce077c1367
   m_ContentStateBuildPathProfileVariableName: 
   m_CustomContentStateBuildPath: 
   m_ContentStateBuildPath: 
@@ -72,6 +72,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1cd374daf99094d4ab89bf2d37ddb04e, type: 2}
   - {fileID: 11400000, guid: 5d9293d5433ddcc419d1274eef3260e9, type: 2}
   - {fileID: 11400000, guid: 29393c33a628daa4085b3ceda094a7c8, type: 2}
+  - {fileID: 11400000, guid: eb9f995d093e3ee41af464768df8db60, type: 2}
   - {fileID: 11400000, guid: 530506ee65182004a9ff04e7fb973035, type: 2}
   - {fileID: 11400000, guid: 13e3ce1af8768934d83ccf567c11e24a, type: 2}
   - {fileID: 11400000, guid: 3722334156852ae438baf3b796a1d576, type: 2}
@@ -96,7 +97,7 @@ MonoBehaviour:
       - m_Id: 7c71ba2941eadb34580a5b510563173a
         m_Value: '[UnityEngine.AddressableAssets.Addressables.BuildPath]/[BuildTarget]'
       - m_Id: c4fab6b30bfa29647bf61dce077c1367
-        m_Value: <undefined>
+        m_Value: https://<PROJECT_ID>.client-api.unity3dusercontent.com/client_api/v1/environments/production/buckets/<BUCKET_ID>/release_by_badge/latest/entry_by_path/content/?path=
       - m_Id: d9b6d1b98e1b92140806e4552b6b31f9
         m_Value: '{UnityEngine.AddressableAssets.Addressables.RuntimePath}/[BuildTarget]'
     m_ProfileEntryNames:

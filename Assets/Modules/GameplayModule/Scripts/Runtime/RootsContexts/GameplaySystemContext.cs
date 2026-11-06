@@ -62,6 +62,7 @@ namespace Modules.GameplayModule.RootsContexts
                 .ToSequence<AnnounceLivesCommand>()
                 .ToSequence<ScheduleNotificationsCommand>()
                 .ToSequence<AnnounceEventsCommand>();
+            CommandBinder.Bind(_signals.Incoming.LoadRemoteLevels).ToSequence<LoadRemoteLevelsCommand>();
             CommandBinder.Bind(_signals.Incoming.Drag)
                 .ToSequence<CapturePuzzleFeedbackCommand>()
                 .ToSequence<DragJellyCommand>()
