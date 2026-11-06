@@ -96,6 +96,8 @@ namespace Modules.GameplayModule.Signals
         public Signal<int, bool> LevelChanged = new();
         /// <summary>The coins the level just won paid.</summary>
         public Signal<int> CoinsEarned = new();
+        /// <summary>The leaderboard points the level just won scored, and whether they beat the level's best.</summary>
+        public Signal<int, bool> LevelScored = new();
         /// <summary>The coins the player now holds.</summary>
         public Signal<int> CoinsChanged = new();
         /// <summary>The once-a-day shop products already bought today, by product id.</summary>

@@ -32,6 +32,14 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             ShowCoins(coins);
         }
 
+        /// <summary>The leaderboard points the win scored; a new best for the level says so.</summary>
+        public void ApplyScore(int points, bool record)
+        {
+            if (_winScore == null) return;
+            _winScore.text = record ? LF("gameplay.score_record", "+{0} points - new best!", points) : LF("gameplay.score", "+{0} points", points);
+            _winScore.gameObject.SetActive(true);
+        }
+
         public void ApplyReward(int coins)
         {
             // More coins for a win already on show - an ad paid it again - add to what the panel reads, and fly at once.

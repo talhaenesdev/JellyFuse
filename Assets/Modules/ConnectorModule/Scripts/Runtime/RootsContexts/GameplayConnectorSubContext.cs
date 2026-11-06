@@ -46,6 +46,7 @@ namespace Modules.ConnectorModule.RootsContexts
             _gameplaySignals.Outgoing.TimeChanged.Connect(_screenSignals.Incoming.ApplyTime, GROUP);
             _gameplaySignals.Outgoing.LevelChanged.Connect(_screenSignals.Incoming.ApplyLevel, GROUP);
             _gameplaySignals.Outgoing.CoinsEarned.Connect(_screenSignals.Incoming.ApplyReward, GROUP);
+            _gameplaySignals.Outgoing.LevelScored.Connect(_screenSignals.Incoming.ApplyScore, GROUP);
             _gameplaySignals.Outgoing.CoinsChanged.Connect(_screenSignals.Incoming.ApplyCoins, GROUP);
             _gameplaySignals.Outgoing.BoostersChanged.Connect(_screenSignals.Incoming.ApplyBoosters, GROUP);
             _gameplaySignals.Outgoing.BoosterUsed.Connect(_screenSignals.Incoming.ApplyBoosterUsed, GROUP);

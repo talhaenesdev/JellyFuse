@@ -318,6 +318,7 @@ namespace Modules.GameplayModule.RootsContexts
             // Freeze Time could not be used while the clock was frozen; now it can again.
             CommandBinder.Bind(_internalSignals.ClockThawed).ToSequence<AnnounceBoostersCommand>();
             CommandBinder.Bind(_internalSignals.PayWin)
+                .ToSequence<SubmitLevelScoreCommand>()
                 .ToSequence<AddCoinsCommand>()
                 .ToSequence<IAudioService.Commands.Play>(AudioCue.Coin)
                 .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)

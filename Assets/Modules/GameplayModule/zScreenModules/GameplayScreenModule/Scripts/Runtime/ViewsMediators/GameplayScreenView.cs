@@ -56,6 +56,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         [SerializeField] private TMP_Text _winTitle;
         [SerializeField] private TMP_Text _winLevel;
         [SerializeField] private TMP_Text _winReward;
+        [Tooltip("The leaderboard points the win scored, under the coins. Hidden until the server answers.")]
+        [SerializeField] private TMP_Text _winScore;
         [SerializeField] private Button _nextButton;
         [SerializeField] private TMP_Text _nextLabel;
         [SerializeField] private Button _winClose;
@@ -348,6 +350,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             if (_pendingReward > 0 || _coinFlight != null) FinishCoinFlight();
             if (_panelDelay != null) { StopCoroutine(_panelDelay); _panelDelay = null; }
             EndOutOfLives();
+            if (_winScore != null) _winScore.gameObject.SetActive(false);
             if (_winPanel != null) { _winPanel.parent.gameObject.SetActive(false); _losePanel.parent.gameObject.SetActive(false); _retryPanel.parent.gameObject.SetActive(false); }
         }
         private void UpdatePanels()

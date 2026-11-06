@@ -59,6 +59,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             _signals.Incoming.ApplyClockFrozen.AddListener(_view.ApplyClockFrozen);
             _signals.Incoming.ApplyCoins.AddListener(_view.ApplyCoins);
             _signals.Incoming.ApplyReward.AddListener(_view.ApplyReward);
+            _signals.Incoming.ApplyScore.AddListener(_view.ApplyScore);
             _signals.Incoming.ApplyLanguage.AddListener(_view.ApplyLanguage);
 #if UNITY_EDITOR
             _view.SkipLevelPressed += OnSkipLevel;
@@ -103,6 +104,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             _signals.Incoming.ApplyClockFrozen.RemoveListener(_view.ApplyClockFrozen);
             _signals.Incoming.ApplyCoins.RemoveListener(_view.ApplyCoins);
             _signals.Incoming.ApplyReward.RemoveListener(_view.ApplyReward);
+            _signals.Incoming.ApplyScore.RemoveListener(_view.ApplyScore);
             _signals.Incoming.ApplyLanguage.RemoveListener(_view.ApplyLanguage);
 #if UNITY_EDITOR
             _view.SkipLevelPressed -= OnSkipLevel;
