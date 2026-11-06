@@ -192,6 +192,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.Data.UnityObjects
         public Color GridCornerLightTint = Color.white;
         [Tooltip("Colour of the walls - the frame round the board, the walls on it and the frame round each door.")]
         public Color PaintedWallTint = new Color(.996f, 1f, .102f);
+        [Tooltip("Colour of the doors and their gate leaves. The art is white and gray, so it takes this colour as given.")]
+        public Color PaintedDoorTint = new Color(0f, .559f, 1f);
 
         /// <summary>A palette colour's tint, read live so a change shows in Play Mode at once; gray for an unknown one.</summary>
         /// <summary>The whole-jelly picture for these cells in this colour, or null. Cells may sit anywhere on the board.</summary>

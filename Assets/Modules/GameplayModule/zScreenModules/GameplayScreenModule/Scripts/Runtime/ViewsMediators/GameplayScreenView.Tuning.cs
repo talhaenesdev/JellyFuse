@@ -41,11 +41,22 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             [PAGE_LOOK] = new[]
             {
                 "Look.PaintedWallTint.r", "Look.PaintedWallTint.g", "Look.PaintedWallTint.b",
+                "Look.PaintedDoorTint.r", "Look.PaintedDoorTint.g", "Look.PaintedDoorTint.b",
                 "Look.PaintedTileTint.r", "Look.PaintedTileTint.g", "Look.PaintedTileTint.b",
                 "Look.PaintedTileAltTint.r", "Look.PaintedTileAltTint.g", "Look.PaintedTileAltTint.b",
                 "Look.GridCornerTint.r", "Look.GridCornerTint.g", "Look.GridCornerTint.b",
                 "Look.GridCornerLightTint.r", "Look.GridCornerLightTint.g", "Look.GridCornerLightTint.b",
             },
+        };
+        /// <summary>The colours on the colour page, by field: the section each sits under and its name there.</summary>
+        private static readonly Dictionary<string, (string Group, string Label)> COLOUR_NAMES = new()
+        {
+            ["PaintedWallTint"] = ("Duvarlar", "Duvar"),
+            ["PaintedDoorTint"] = ("Kapılar", "Kapı"),
+            ["PaintedTileTint"] = ("Grid", "Karo A"),
+            ["PaintedTileAltTint"] = ("Grid", "Karo B"),
+            ["GridCornerTint"] = ("Grid", "Köşe"),
+            ["GridCornerLightTint"] = ("Grid", "Parlayan Köşe"),
         };
         /// <summary>Fields that change how a picture is cut or meshed, or where the map sits: redrawn after them.</summary>
         private static readonly HashSet<string> REBUILD = new()
@@ -64,7 +75,12 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                 if (channel >= 0)
                 {
                     // A colour is offered as three sliders, one a channel, each 0 to 1.
-                    list.Add(new DevSliderVO { Key = key, Label = Nicify(field.Name) + " " + "RGB"[channel], Min = 0, Max = 1, Value = Read(target, field, key) });
+                    COLOUR_NAMES.TryGetValue(field.Name, out var named);
+                    list.Add(new DevSliderVO
+                    {
+                        Key = key, Label = (named.Label ?? Nicify(field.Name)) + " " + "RGB"[channel], Group = named.Group,
+                        Min = 0, Max = 1, Value = Read(target, field, key),
+                    });
                     continue;
                 }
                 var range = field.GetCustomAttribute<RangeAttribute>();

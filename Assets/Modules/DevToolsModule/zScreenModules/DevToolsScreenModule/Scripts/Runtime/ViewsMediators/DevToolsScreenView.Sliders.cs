@@ -41,6 +41,8 @@ namespace Modules.DevToolsModule.DevToolsScreenModule.ViewsMediators
         private readonly Dictionary<string, (Slider Slider, TMP_Text Value, DevSliderVO Data)> _sliders = new();
         private bool _settingSliders;
         private string _pageName;
+        private int _rowCount;
+        private string _lastGroup;
         public const string PAGE_ANIMATION = "animation";
         public const string PAGE_LOOK = "look";
         private CanvasGroup _hideGroup;
@@ -82,6 +84,7 @@ namespace Modules.DevToolsModule.DevToolsScreenModule.ViewsMediators
                 for (int i = _list.childCount - 1; i >= 0; i--) Destroy(_list.GetChild(i).gameObject);
                 _sliders.Clear();
                 _list.sizeDelta = new Vector2(_list.sizeDelta.x, 0);
+                _rowCount = 0; _lastGroup = null;
                 _pageName = page;
             }
             foreach (var go in _mainPage) if (go != null) go.SetActive(false);
@@ -116,7 +119,7 @@ namespace Modules.DevToolsModule.DevToolsScreenModule.ViewsMediators
             }
             _settingSliders = false;
             _emptyHint.gameObject.SetActive(_sliders.Count == 0);
-            _list.sizeDelta = new Vector2(_list.sizeDelta.x, _sliders.Count * _sliderRowHeight);
+            _list.sizeDelta = new Vector2(_list.sizeDelta.x, _rowCount * _sliderRowHeight);
         }
 
         private static string Format(DevSliderVO data, float value) => data.Whole ? Mathf.RoundToInt(value).ToString() : value.ToString("0.###");
@@ -173,11 +176,24 @@ namespace Modules.DevToolsModule.DevToolsScreenModule.ViewsMediators
         private (Slider, TMP_Text, DevSliderVO) AddRow(DevSliderVO data)
         {
             var font = _title != null ? _title.font : TMP_Settings.defaultFontAsset;
+            if (!string.IsNullOrEmpty(data.Group) && data.Group != _lastGroup)
+            {
+                // A heading where the section changes: the sliders under it belong to one thing on screen.
+                var heading = Text("Txt_Group_" + data.Group, _list, font, 26, TextAlignmentOptions.BottomLeft);
+                heading.fontStyle = FontStyles.Bold;
+                heading.rectTransform.anchorMin = new Vector2(0, 1); heading.rectTransform.anchorMax = new Vector2(1, 1); heading.rectTransform.pivot = new Vector2(.5f, 1);
+                heading.rectTransform.sizeDelta = new Vector2(0, _sliderRowHeight);
+                heading.rectTransform.anchoredPosition = new Vector2(0, -_rowCount * _sliderRowHeight);
+                heading.text = L("devtools.group." + data.Group, data.Group);
+                _rowCount++;
+            }
+            _lastGroup = data.Group;
             var row = new GameObject("Row_" + data.Key, typeof(RectTransform)).GetComponent<RectTransform>();
             row.SetParent(_list, false);
             row.anchorMin = new Vector2(0, 1); row.anchorMax = new Vector2(1, 1); row.pivot = new Vector2(.5f, 1);
             row.sizeDelta = new Vector2(0, _sliderRowHeight);
-            row.anchoredPosition = new Vector2(0, -_sliders.Count * _sliderRowHeight);
+            row.anchoredPosition = new Vector2(0, -_rowCount * _sliderRowHeight);
+            _rowCount++;
 
             var label = Text("Txt_Label", row, font, 20, TextAlignmentOptions.Left);
             label.rectTransform.anchorMin = new Vector2(0, .5f); label.rectTransform.anchorMax = new Vector2(.75f, 1);

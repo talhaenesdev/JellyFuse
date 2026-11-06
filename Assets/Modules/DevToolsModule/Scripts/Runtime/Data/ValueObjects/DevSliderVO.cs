@@ -12,5 +12,7 @@ namespace Modules.DevToolsModule.Data.ValueObjects
         public float Min, Max, Value;
         /// <summary>Whole numbers only.</summary>
         public bool Whole;
+        /// <summary>The section the slider is listed under; a heading is drawn where it changes. Empty: none.</summary>
+        public string Group;
     }
 }
