@@ -74,12 +74,12 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                 int channel = Channel(key);
                 if (channel >= 0)
                 {
-                    // A colour is offered as three sliders, one a channel, each 0 to 1.
+                    // A colour is offered as three sliders, one a channel, each 0 to 255 in whole steps.
                     COLOUR_NAMES.TryGetValue(field.Name, out var named);
                     list.Add(new DevSliderVO
                     {
                         Key = key, Label = (named.Label ?? Nicify(field.Name)) + " " + "RGB"[channel], Group = named.Group,
-                        Min = 0, Max = 1, Value = Read(target, field, key),
+                        Min = 0, Max = 255, Value = Read(target, field, key), Whole = true,
                     });
                     continue;
                 }
@@ -141,7 +141,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         private static float Read(object target, FieldInfo field, string key)
         {
             int channel = Channel(key);
-            if (channel >= 0) return ((Color)field.GetValue(target))[channel];
+            if (channel >= 0) return Mathf.Round(((Color)field.GetValue(target))[channel] * 255);
             return field.FieldType == typeof(int) ? (int)field.GetValue(target) : (float)field.GetValue(target);
         }
         private static void Write(object target, FieldInfo field, string key, float value)
@@ -150,7 +150,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             if (channel >= 0)
             {
                 var colour = (Color)field.GetValue(target);
-                colour[channel] = value;
+                colour[channel] = Mathf.Clamp(value, 0, 255) / 255f;
                 field.SetValue(target, colour);
             }
             else if (field.FieldType == typeof(int)) field.SetValue(target, Mathf.RoundToInt(value));
