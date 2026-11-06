@@ -182,6 +182,16 @@ namespace Modules.GameplayModule.GameplayScreenModule.Data.UnityObjects
         public Color TileColour = new Color(.19f, .25f, .35f);
         public Color WallColour = new Color(.37f, .43f, .54f);
         public Color Background = new Color(.063f, .086f, .157f);
+        [Tooltip("Colour of the floor tile (Tile Sprite). The art is white and gray, so it takes this colour as given; the gray keeps its shading.")]
+        public Color PaintedTileTint = Color.white;
+        [Tooltip("Colour of the second floor tile of the checkerboard (Tile Sprite Alt).")]
+        public Color PaintedTileAltTint = Color.white;
+        [Tooltip("Colour of the grid corner pieces between the floor tiles.")]
+        public Color GridCornerTint = Color.white;
+        [Tooltip("Colour of a grid corner while it blinks after a fuse (Grid Corner Light Sprite).")]
+        public Color GridCornerLightTint = Color.white;
+        [Tooltip("Colour of the walls - the frame round the board, the walls on it and the frame round each door.")]
+        public Color PaintedWallTint = Color.white;
 
         /// <summary>A palette colour's tint, read live so a change shows in Play Mode at once; gray for an unknown one.</summary>
         /// <summary>The whole-jelly picture for these cells in this colour, or null. Cells may sit anywhere on the board.</summary>

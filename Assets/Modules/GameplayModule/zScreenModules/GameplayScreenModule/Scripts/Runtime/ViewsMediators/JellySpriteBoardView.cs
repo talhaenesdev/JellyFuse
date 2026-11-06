@@ -620,7 +620,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                 if (Contains(_level.Holes, cell) || Contains(_level.Walls, cell) || IsDoorCell(cell)) continue;
                 var tile = (x + y) % 2 == 1 && Look.TileSpriteAlt != null ? Look.TileSpriteAlt : Look.TileSprite;
                 _boardItems.Add(Place(Take(_boardLayer), Role.Tile, Position(cell), Vector2.one * _cell * Look.SpriteTileSize,
-                    tile != null ? Color.white : Look.TileColour, 0, 0, -1, tile));
+                    tile != null ? (tile == Look.TileSpriteAlt && tile != Look.TileSprite ? Look.PaintedTileAltTint : Look.PaintedTileTint) : Look.TileColour, 0, 0, -1, tile));
             }
             // At every corner of the floor tiles - between them, along the board's edge and at its corners - the grid's corner piece sits on the gap.
             _gridCorners.Clear();
@@ -632,7 +632,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                     if (!a && !b && !c && !d) continue;
                     bool edge = !(a && b && c && d);
                     var corner = Place(Take(edge ? _edgeCornerLayer : _boardLayer), Role.Tile, Position(new Vector2(x + .5f, y + .5f)), Vector2.one * _cell * Look.GridCornerSize,
-                        Color.white, 0, 0, -1, Look.GridCornerSprite);
+                        Look.GridCornerTint, 0, 0, -1, Look.GridCornerSprite);
                     _boardItems.Add(corner);
                     _gridCorners[new Vector2Int(x, y)] = corner;
                 }
@@ -681,6 +681,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             {
                 if (!_gridCorners.TryGetValue(key, out var item)) continue;
                 item.BodyImage.sprite = lit ? Look.GridCornerLightSprite : Look.GridCornerSprite;
+                item.BodyImage.color = lit ? Look.GridCornerLightTint : Look.GridCornerTint;
                 item.Root.localScale = Vector3.one * (lit ? Mathf.Lerp(1, Look.FuseGlowCornerScale, swell) : 1);
                 if (bright <= 0 || Look.FuseGlowBloomColour.a <= 0 || Look.FuseGlowBloomStrength <= 0 || Look.FuseGlowBloomSize <= 0) continue;
                 if (used == _blooms.Count)
