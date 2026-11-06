@@ -517,8 +517,9 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             // Measured against the item's own shape, so a picture of a whole jelly fits its cells too.
             float aspect = block ? body.rect.height / Mathf.Max(1, body.rect.width) * size.x / Mathf.Max(1, size.y) : 1;
             item.Body.anchorMin = new Vector2(0, 1 - aspect);
-            // A colour sprite is drawn as painted; everything else is a white shape tinted here.
-            item.BodyImage.color = custom != null ? Color.white : colour;
+            // A jelly's colour sprite is drawn as painted. A painted tile, wall or corner is white and gray
+            // art and takes the tint it was placed with; a generated shape is tinted with its colour too.
+            item.BodyImage.color = custom != null && role is not (Role.Tile or Role.Wall) ? Color.white : colour;
 
             if (block) depth = item.Depth = 0;
             item.SideImage.enabled = depth > 0;
