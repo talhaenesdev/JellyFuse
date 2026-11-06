@@ -202,8 +202,14 @@ namespace Modules.DevToolsModule.DevToolsScreenModule.ViewsMediators
                 if (!_settingSliders) SliderChanged?.Invoke(key, v);
             });
             var trigger = sliderGo.AddComponent<EventTrigger>();
-            AddTrigger(trigger, EventTriggerType.PointerDown, () => ShowPanelWhileDragging(false));
-            AddTrigger(trigger, EventTriggerType.PointerUp, () => ShowPanelWhileDragging(true));
+            // The held row stays in sight over the board, on a dark strip, so its value can be read while the rest is hidden.
+            var rowGroup = row.gameObject.AddComponent<CanvasGroup>();
+            var strip = row.gameObject.AddComponent<Image>();
+            strip.color = new Color(0, 0, 0, .7f);
+            strip.raycastTarget = false;
+            strip.enabled = false;
+            AddTrigger(trigger, EventTriggerType.PointerDown, () => { rowGroup.ignoreParentGroups = true; strip.enabled = true; ShowPanelWhileDragging(false); });
+            AddTrigger(trigger, EventTriggerType.PointerUp, () => { rowGroup.ignoreParentGroups = false; strip.enabled = false; ShowPanelWhileDragging(true); });
             return (slider, value, data);
         }
 
