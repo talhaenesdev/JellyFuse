@@ -18,6 +18,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
     {
         /// <summary>The tuning page names the developer panel asks for.</summary>
         public const string PAGE_ANIMATION = "animation";
+        public const string PAGE_LOOK = "look";
 
         /// <summary>
         /// The fields offered, page by page, in the order the page lists them. A key is the field's
@@ -36,6 +37,9 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                 nameof(CD_Feel.FuseShake), nameof(CD_Feel.FuseShakeTime),
                 "Panel.Duration", "Panel.StartScale", "Panel.SlideDistance", "Panel.FadeSeconds", "Panel.DimSeconds", "Panel.Delay",
                 "Look.FuseGlowBloomStrength", "Look.FuseGlowBloomSize", "Look.FuseGlowCornerScale", "Look.FuseGlowSeconds", "Look.FuseGlowBlinks",
+            },
+            [PAGE_LOOK] = new[]
+            {
                 "Look.PaintedWallTint.r", "Look.PaintedWallTint.g", "Look.PaintedWallTint.b",
                 "Look.PaintedTileTint.r", "Look.PaintedTileTint.g", "Look.PaintedTileTint.b",
                 "Look.PaintedTileAltTint.r", "Look.PaintedTileAltTint.g", "Look.PaintedTileAltTint.b",

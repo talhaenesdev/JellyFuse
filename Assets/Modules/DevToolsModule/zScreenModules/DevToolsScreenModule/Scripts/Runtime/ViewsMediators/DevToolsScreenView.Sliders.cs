@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Modules.DevToolsModule.Data.ValueObjects;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Modules.DevToolsModule.DevToolsScreenModule.ViewsMediators
@@ -17,6 +18,8 @@ namespace Modules.DevToolsModule.DevToolsScreenModule.ViewsMediators
         [Tooltip("Opens the animation tuning page.")]
         [SerializeField] private Button _slidersButton;
         [SerializeField] private TMP_Text _slidersLabel;
+        [Tooltip("Opens the look tuning page: the colours of the walls and the grid.")]
+        [SerializeField] private Button _lookButton;
         [Tooltip("What the main page shows, hidden while the tuning page is open.")]
         [SerializeField] private List<GameObject> _mainPage = new();
         [Tooltip("The area the tuning page fills.")]
@@ -39,17 +42,37 @@ namespace Modules.DevToolsModule.DevToolsScreenModule.ViewsMediators
         private bool _settingSliders;
         private string _pageName;
         public const string PAGE_ANIMATION = "animation";
+        public const string PAGE_LOOK = "look";
+        private CanvasGroup _hideGroup;
 
         private void WireSliders(bool on)
         {
             if (_slidersButton == null) return;
             if (on) _slidersButton.onClick.AddListener(OpenAnimation); else _slidersButton.onClick.RemoveListener(OpenAnimation);
+            if (_lookButton != null) { if (on) _lookButton.onClick.AddListener(OpenLook); else _lookButton.onClick.RemoveListener(OpenLook); }
+            if (!on) ShowPanelWhileDragging(true);
             if (_back != null) { if (on) _back.onClick.AddListener(CloseSliders); else _back.onClick.RemoveListener(CloseSliders); }
             if (_reset != null) { if (on) _reset.onClick.AddListener(OnResetSliders); else _reset.onClick.RemoveListener(OnResetSliders); }
             if (!on) CloseSliders();
         }
 
         private void OpenAnimation() => OpenSliders(PAGE_ANIMATION);
+        private void OpenLook() => OpenSliders(PAGE_LOOK);
+
+        /// <summary>
+        /// The whole panel goes see-through while a slider is held, so what it changes shows behind it,
+        /// and comes back when it is let go. It still takes the touch, so the drag carries on.
+        /// </summary>
+        private void ShowPanelWhileDragging(bool shown)
+        {
+            if (_hideGroup == null)
+            {
+                if (shown) return;
+                _hideGroup = GetComponent<CanvasGroup>();
+                if (_hideGroup == null) _hideGroup = gameObject.AddComponent<CanvasGroup>();
+            }
+            _hideGroup.alpha = shown ? 1 : 0;
+        }
         private void OpenSliders(string page)
         {
             BuildPage();
@@ -178,7 +201,17 @@ namespace Modules.DevToolsModule.DevToolsScreenModule.ViewsMediators
                 entry.Value.text = Format(entry.Data, v);
                 if (!_settingSliders) SliderChanged?.Invoke(key, v);
             });
+            var trigger = sliderGo.AddComponent<EventTrigger>();
+            AddTrigger(trigger, EventTriggerType.PointerDown, () => ShowPanelWhileDragging(false));
+            AddTrigger(trigger, EventTriggerType.PointerUp, () => ShowPanelWhileDragging(true));
             return (slider, value, data);
+        }
+
+        private static void AddTrigger(EventTrigger trigger, EventTriggerType type, Action action)
+        {
+            var entry = new EventTrigger.Entry { eventID = type };
+            entry.callback.AddListener(_ => action());
+            trigger.triggers.Add(entry);
         }
 
         private static TMP_Text Text(string name, Transform parent, TMP_FontAsset font, float size, TextAlignmentOptions align)
