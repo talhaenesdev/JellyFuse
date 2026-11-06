@@ -373,19 +373,12 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         {
             var screen = Skin != null && Skin.DoorPixels > 0 ? Skin.DoorScreen(side, size) : null;
             if (screen == null) return false;
-            float pitch = screen.Pitch;
-            // The first grid line inside the screen on each axis, and how many whole squares follow it.
-            float firstX = screen.GridOrigin.x + Mathf.Ceil((screen.Screen.xMin - screen.GridOrigin.x) / pitch) * pitch;
-            float firstY = screen.GridOrigin.y + Mathf.Ceil((screen.Screen.yMin - screen.GridOrigin.y) / pitch) * pitch;
-            int across = Mathf.FloorToInt((screen.Screen.xMax - firstX) / pitch + .01f), up = Mathf.FloorToInt((screen.Screen.yMax - firstY) / pitch + .01f);
             Span(stage.Cells, out float spanX, out float spanY);
-            int wide = Mathf.RoundToInt(spanX), tall = Mathf.RoundToInt(spanY);
-            if (wide > across || tall > up) return false;
             var min = stage.Cells[0];
             foreach (var c in stage.Cells) min = Vector2Int.Min(min, c);
-            // The squares nearest the middle of the screen that hold it.
-            int fromX = Mathf.RoundToInt((screen.Screen.center.x - firstX) / pitch - wide * .5f), fromY = Mathf.RoundToInt((screen.Screen.center.y - firstY) / pitch - tall * .5f);
-            fromX = Mathf.Clamp(fromX, 0, across - wide); fromY = Mathf.Clamp(fromY, 0, up - tall);
+            // The screen is plain: the jelly is centred on it, as big as the screen holds, up to ScreenMaxPitch grid squares a cell.
+            float pitch = Mathf.Min(screen.Screen.width * .88f / spanX, screen.Screen.height * .88f / spanY, screen.Pitch * Skin.ScreenMaxPitch);
+            var middle = screen.Screen.center;
             float scale = _cell / Skin.DoorPixels;
             var picture = painted.rect.size;
             var origin = centre + Skin.PieceOffset * _cell;
@@ -393,7 +386,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             foreach (var cell in stage.Cells)
             {
                 var local = cell - min;
-                var pixel = new Vector2(firstX + (fromX + local.x + .5f) * pitch, firstY + (fromY + local.y + .5f) * pitch);
+                var pixel = middle + new Vector2(local.x + .5f - spanX * .5f, local.y + .5f - spanY * .5f) * pitch;
                 var position = origin + (pixel - picture * .5f) * scale;
                 onScreen(Flat(layer, position, square, look != null ? look : Pick(Look.JellySprite, _sprites.Rounded), look != null ? Color.white : colour, depth));
             }

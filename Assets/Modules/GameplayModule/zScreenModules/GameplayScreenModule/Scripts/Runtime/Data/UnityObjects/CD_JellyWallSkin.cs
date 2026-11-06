@@ -68,6 +68,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.Data.UnityObjects
         public JellyDoorScreenCVO[] DoorRightScreen = new JellyDoorScreenCVO[4];
         [Tooltip("How much of a grid square a jelly cell on a door's screen fills.")]
         [Range(.5f, 1.2f)] public float ScreenCellFill = .9f;
+        [Tooltip("The largest a jelly's cell is drawn on a door's screen, in the screen's grid squares; a smaller screen shrinks it to fit.")]
+        [Range(1f, 3f)] public float ScreenMaxPitch = 1.6f;
         public Sprite[] DoorBottomIce = new Sprite[4];
         public Sprite[] DoorLeftIce = new Sprite[4];
         public Sprite[] DoorRightIce = new Sprite[4];
