@@ -15,6 +15,8 @@ namespace Modules.LeaderboardModule.Services
         private const string MODULE = "Leaderboard";
         private const string SUBMIT = "SubmitLevel";
         private const string BOARD = "GetBoard";
+        /// <summary>How long a call may take before the caller is told nothing came back; the server is never waited on for ever.</summary>
+        private static readonly TimeSpan TIMEOUT = TimeSpan.FromSeconds(8);
 
         private sealed class SubmitResult
         {
@@ -31,14 +33,14 @@ namespace Modules.LeaderboardModule.Services
             if (!SignedIn()) return null;
             try
             {
-                var result = await CloudCodeService.Instance.CallModuleEndpointAsync<SubmitResult>(MODULE, SUBMIT, new Dictionary<string, object>
+                var result = await WithTimeout(CloudCodeService.Instance.CallModuleEndpointAsync<SubmitResult>(MODULE, SUBMIT, new Dictionary<string, object>
                 {
                     { "level", level },
                     { "difficulty", difficulty },
                     { "secondsTotal", secondsTotal },
                     { "secondsLeft", secondsLeft },
                     { "extraTime", extraTime },
-                });
+                }));
                 if (result == null || !result.Accepted)
                 {
                     FlowLogger.Log($"LeaderboardService - level {level} not scored: {result?.Reason}");
@@ -58,17 +60,31 @@ namespace Modules.LeaderboardModule.Services
             if (!SignedIn()) return null;
             try
             {
-                return await CloudCodeService.Instance.CallModuleEndpointAsync<LeaderboardPageVO>(MODULE, BOARD, new Dictionary<string, object>
+                var page = await WithTimeout(CloudCodeService.Instance.CallModuleEndpointAsync<LeaderboardPageVO>(MODULE, BOARD, new Dictionary<string, object>
                 {
                     { "board", board == LeaderboardBoard.Weekly ? "weekly" : "all_time" },
                     { "limit", limit },
-                });
+                }));
+                if (page == null) FlowLogger.Log("LeaderboardService - the board did not come back in time.");
+                return page;
             }
             catch (Exception exception)
             {
                 FlowLogger.Log($"LeaderboardService - the board could not be read: {exception.Message}");
                 return null;
             }
+        }
+
+        /// <summary>The call's answer, or null when it takes longer than TIMEOUT; a late answer is dropped.</summary>
+        private static async Task<T> WithTimeout<T>(Task<T> call) where T : class
+        {
+            var finished = await Task.WhenAny(call, Task.Delay(TIMEOUT));
+            if (finished != call)
+            {
+                _ = call.ContinueWith(late => _ = late.Exception, TaskContinuationOptions.OnlyOnFaulted);
+                return null;
+            }
+            return await call;
         }
 
         private static bool SignedIn() =>
