@@ -37,6 +37,7 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
             _view.LoginRewardsClicked += OnLoginRewardsClicked;
             _view.WheelClicked += OnWheelClicked;
             _view.SlotClicked += OnSlotClicked;
+            _view.LeaderboardClicked += OnLeaderboardClicked;
             _view.ScratchClicked += OnScratchClicked;
             _signals.Incoming.ApplyEvents.AddListener(_view.ApplyEvents);
             _view.ShopBuyClicked += OnShopBuyClicked;
@@ -66,6 +67,7 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
             _view.LoginRewardsClicked -= OnLoginRewardsClicked;
             _view.WheelClicked -= OnWheelClicked;
             _view.SlotClicked -= OnSlotClicked;
+            _view.LeaderboardClicked -= OnLeaderboardClicked;
             _view.ScratchClicked -= OnScratchClicked;
             _signals.Incoming.ApplyEvents.RemoveListener(_view.ApplyEvents);
             _view.ShopBuyClicked -= OnShopBuyClicked;
@@ -121,6 +123,14 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
         private void OnWheelClicked()
         {
             if (_view.Data.HasState(ScreenState.AvailableToSendSignal)) _signals.Outgoing.WheelClicked.Dispatch();
+        }
+
+        // The leaderboard is a page of its own, like the events: the menu steps aside while it shows.
+        private void OnLeaderboardClicked()
+        {
+            if (!_view.Data.HasState(ScreenState.AvailableToSendSignal)) return;
+            _view.Hide();
+            _signals.Outgoing.LeaderboardClicked.Dispatch();
         }
 
         private void OnSlotClicked()

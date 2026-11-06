@@ -71,6 +71,7 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
         [Tooltip("Shown while a spin is there to take.")]
         [SerializeField] private GameObject _wheelDot;
         [SerializeField] private Button _slotButton;
+        [SerializeField] private Button _leaderboardButton;
         [Tooltip("Shown while a slot machine spin is held.")]
         [SerializeField] private GameObject _slotDot;
         [SerializeField] private Button _scratchButton;
@@ -107,6 +108,7 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
         public Action LoginRewardsClicked;
         public Action WheelClicked;
         public Action SlotClicked;
+        public Action LeaderboardClicked;
         public Action ScratchClicked;
         /// <summary>A shop buy panel with a price was pressed: its product id.</summary>
         public Action<string> ShopBuyClicked;
@@ -136,6 +138,7 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
             if (_loginRewardsButton != null) _loginRewardsButton.onClick.AddListener(OnLoginRewardsClicked);
             if (_wheelButton != null) _wheelButton.onClick.AddListener(OnWheelClicked);
             if (_slotButton != null) _slotButton.onClick.AddListener(OnSlotClicked);
+            if (_leaderboardButton != null) _leaderboardButton.onClick.AddListener(OnLeaderboardClicked);
             if (_scratchButton != null) _scratchButton.onClick.AddListener(OnScratchClicked);
             for (int i = 0; i < _tabActions.Count; i++) _navTabs[i].onClick.AddListener(_tabActions[i]);
             for (int i = 0; i < _shopActions.Count; i++) if (_shopButtons[i] != null) _shopButtons[i].onClick.AddListener(_shopActions[i]);
@@ -155,6 +158,7 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
             if (_loginRewardsButton != null) _loginRewardsButton.onClick.RemoveListener(OnLoginRewardsClicked);
             if (_wheelButton != null) _wheelButton.onClick.RemoveListener(OnWheelClicked);
             if (_slotButton != null) _slotButton.onClick.RemoveListener(OnSlotClicked);
+            if (_leaderboardButton != null) _leaderboardButton.onClick.RemoveListener(OnLeaderboardClicked);
             if (_scratchButton != null) _scratchButton.onClick.RemoveListener(OnScratchClicked);
             for (int i = 0; i < _tabActions.Count; i++) _navTabs[i].onClick.RemoveListener(_tabActions[i]);
             for (int i = 0; i < _shopActions.Count; i++) if (_shopButtons[i] != null) _shopButtons[i].onClick.RemoveListener(_shopActions[i]);
@@ -172,6 +176,7 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
         private void OnLoginRewardsClicked() => LoginRewardsClicked?.Invoke();
         private void OnWheelClicked() => WheelClicked?.Invoke();
         private void OnSlotClicked() => SlotClicked?.Invoke();
+        private void OnLeaderboardClicked() => LeaderboardClicked?.Invoke();
         private void OnScratchClicked() => ScratchClicked?.Invoke();
         // The close button is a second way to the Home tab, so it takes the tab's own path.
         private void OnShopCloseClicked() => OnTabClicked(_homeTab);
