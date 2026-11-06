@@ -241,7 +241,8 @@ namespace Modules.DevToolsModule.DevToolsScreenModule.ViewsMediators
             var text = new GameObject(name, typeof(RectTransform)).AddComponent<TextMeshProUGUI>();
             text.rectTransform.SetParent(parent, false);
             text.font = font; text.fontSize = size; text.alignment = align; text.raycastTarget = false;
-            text.textWrappingMode = TextWrappingModes.NoWrap; text.overflowMode = TextOverflowModes.Ellipsis;
+            // Overflow, not Ellipsis: a row's half is shorter than the font's line, and Ellipsis then hides the whole text.
+            text.textWrappingMode = TextWrappingModes.NoWrap; text.overflowMode = TextOverflowModes.Overflow;
             return text;
         }
     }
