@@ -284,6 +284,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             var door = painted != null
                 ? Place(Take(behind ? _jellyLayer : _doorLayer), Role.Wall, centre + Skin.PieceOffset * _cell, cells * _cell, Look.PaintedDoorTint, 0, 0, -1, painted)
                 : Place(Take(_doorLayer), Role.Door, centre, cells * _cell - Vector2.one * _cell * .06f, Color.Lerp(colour, Look.BoardColour, .55f));
+            if (painted != null) door.BodyImage.material = Skin.DoorTint;
             if (behind) door.SortY = 1e29f; // after the top wall and its corners, before every jelly
             if (stage != null) _doorFrames[index] = (centre, cells * _cell, _snapshot.DoorFrozen.Count > index && _snapshot.DoorFrozen[index] > 0);
             _boardItems.Add(door);

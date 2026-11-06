@@ -133,6 +133,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.Data.UnityObjects
         public List<JellyShapeIconCVO> ShapeIcons = new();
         [Tooltip("The material that redraws a shape picture in the jelly's colour (MT_UI_JellyTint). Empty: the picture is tinted the usual way.")]
         public Material IconTint;
+        [Tooltip("The material that turns the painted door and its gate leaves to the door colour, keeping their light and dark blues (MT_UI_DoorHueShift). Empty: the door is tinted the usual way.")]
+        public Material DoorTint;
         [Tooltip("Pixels from one cell of a shape picture to the next.")]
         [Min(1)] public float IconCellPixels = 19;
         [Tooltip("Size of one cell of the jelly drawn on a door, in board cells. The same on every door, whatever its size; a shape too big for its door is shrunk to fit.")]
