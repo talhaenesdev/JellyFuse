@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Modules.Gameplay.Shared::Modules.GameplayModule.Shared.Data.UnityObjects.CD_JellyLevel
   LevelName: Level 67
   Hint: 
-  Width: 8
-  Height: 11
-  Seconds: 140
+  Width: 9
+  Height: 9
+  Seconds: 105
   Difficulty: 0
   OwnCoinReward: -1
   FreeArrowAfterFusion: 0
@@ -24,53 +24,15 @@ MonoBehaviour:
   _nextColourId: 3
   Walls:
   - {x: 1, y: 1}
-  - {x: 2, y: 1}
-  - {x: 1, y: 9}
-  - {x: 1, y: 8}
+  - {x: 1, y: 2}
+  - {x: 7, y: 7}
   Holes: []
   Shapes:
   - Name: Jelly
     Colour: 104
     Cells:
-    - {x: 3, y: 8}
-    - {x: 3, y: 7}
-    - {x: 2, y: 7}
-    Frozen: 0
-    ThawAfter: 3
-    ArrowBlock: 0
-    ArrowAxis: 0
-  - Name: Jelly
-    Colour: 104
-    Cells:
-    - {x: 1, y: 4}
-    - {x: 1, y: 5}
-    - {x: 1, y: 6}
-    Frozen: 0
-    ThawAfter: 3
-    ArrowBlock: 0
-    ArrowAxis: 0
-  - Name: Jelly
-    Colour: 2
-    Cells:
-    - {x: 3, y: 3}
-    - {x: 3, y: 2}
-    Frozen: 0
-    ThawAfter: 3
-    ArrowBlock: 0
-    ArrowAxis: 0
-  - Name: Jelly
-    Colour: 2
-    Cells:
-    - {x: 6, y: 1}
-    - {x: 5, y: 1}
-    Frozen: 0
-    ThawAfter: 3
-    ArrowBlock: 0
-    ArrowAxis: 0
-  - Name: Jelly
-    Colour: 2
-    Cells:
-    - {x: 5, y: 5}
+    - {x: 3, y: 6}
+    - {x: 4, y: 6}
     - {x: 5, y: 6}
     Frozen: 0
     ThawAfter: 3
@@ -79,8 +41,43 @@ MonoBehaviour:
   - Name: Jelly
     Colour: 2
     Cells:
-    - {x: 5, y: 4}
-    - {x: 6, y: 4}
+    - {x: 2, y: 1}
+    - {x: 2, y: 2}
+    Frozen: 0
+    ThawAfter: 3
+    ArrowBlock: 0
+    ArrowAxis: 0
+  - Name: Jelly
+    Colour: 104
+    Cells:
+    - {x: 5, y: 1}
+    - {x: 4, y: 1}
+    Frozen: 0
+    ThawAfter: 3
+    ArrowBlock: 0
+    ArrowAxis: 0
+  - Name: Jelly
+    Colour: 106
+    Cells:
+    - {x: 3, y: 3}
+    - {x: 3, y: 2}
+    Frozen: 0
+    ThawAfter: 3
+    ArrowBlock: 0
+    ArrowAxis: 0
+  - Name: Jelly
+    Colour: 104
+    Cells:
+    - {x: 6, y: 6}
+    - {x: 6, y: 5}
+    Frozen: 0
+    ThawAfter: 3
+    ArrowBlock: 0
+    ArrowAxis: 0
+  - Name: Jelly
+    Colour: 2
+    Cells:
+    - {x: 5, y: 2}
     Frozen: 0
     ThawAfter: 3
     ArrowBlock: 0
@@ -89,40 +86,6 @@ MonoBehaviour:
     Colour: 2
     Cells:
     - {x: 4, y: 5}
-    - {x: 4, y: 4}
-    Frozen: 0
-    ThawAfter: 3
-    ArrowBlock: 0
-    ArrowAxis: 0
-  - Name: Jelly
-    Colour: 2
-    Cells:
-    - {x: 3, y: 4}
-    - {x: 2, y: 4}
-    Frozen: 1
-    ThawAfter: 2
-    ArrowBlock: 0
-    ArrowAxis: 0
-  - Name: Jelly
-    Colour: 2
-    Cells:
-    - {x: 6, y: 6}
-    Frozen: 0
-    ThawAfter: 3
-    ArrowBlock: 0
-    ArrowAxis: 0
-  - Name: Jelly
-    Colour: 2
-    Cells:
-    - {x: 4, y: 8}
-    Frozen: 0
-    ThawAfter: 3
-    ArrowBlock: 0
-    ArrowAxis: 0
-  - Name: Jelly
-    Colour: 2
-    Cells:
-    - {x: 2, y: 8}
     Frozen: 0
     ThawAfter: 3
     ArrowBlock: 0
@@ -130,29 +93,13 @@ MonoBehaviour:
   - Name: Jelly
     Colour: 104
     Cells:
-    - {x: 1, y: 2}
+    - {x: 6, y: 2}
     Frozen: 0
     ThawAfter: 3
     ArrowBlock: 0
     ArrowAxis: 0
   - Name: Jelly
-    Colour: 2
-    Cells:
-    - {x: 4, y: 6}
-    Frozen: 0
-    ThawAfter: 3
-    ArrowBlock: 0
-    ArrowAxis: 0
-  - Name: Jelly
-    Colour: 2
-    Cells:
-    - {x: 2, y: 9}
-    Frozen: 0
-    ThawAfter: 3
-    ArrowBlock: 0
-    ArrowAxis: 0
-  - Name: Jelly
-    Colour: 2
+    Colour: 104
     Cells:
     - {x: 2, y: 3}
     Frozen: 0
@@ -160,15 +107,15 @@ MonoBehaviour:
     ArrowBlock: 0
     ArrowAxis: 0
   - Name: Jelly
-    Colour: 2
+    Colour: 104
     Cells:
-    - {x: 3, y: 1}
+    - {x: 2, y: 5}
     Frozen: 0
     ThawAfter: 3
     ArrowBlock: 0
     ArrowAxis: 0
   - Name: Jelly
-    Colour: 104
+    Colour: 106
     Cells:
     - {x: 5, y: 3}
     Frozen: 0
@@ -176,33 +123,25 @@ MonoBehaviour:
     ArrowBlock: 0
     ArrowAxis: 0
   - Name: Jelly
-    Colour: 2
+    Colour: 104
     Cells:
-    - {x: 5, y: 7}
+    - {x: 3, y: 5}
     Frozen: 0
     ThawAfter: 3
     ArrowBlock: 0
     ArrowAxis: 0
   - Name: Jelly
-    Colour: 2
+    Colour: 104
     Cells:
-    - {x: 5, y: 8}
-    Frozen: 0
-    ThawAfter: 3
-    ArrowBlock: 0
-    ArrowAxis: 0
-  - Name: Jelly
-    Colour: 2
-    Cells:
-    - {x: 5, y: 9}
+    - {x: 3, y: 4}
     Frozen: 1
     ThawAfter: 3
     ArrowBlock: 0
     ArrowAxis: 0
   Doors:
   - Name: Door 1
-    Side: 2
-    Start: 5
+    Side: 1
+    Start: 3
     Size: 3
     FitToJelly: 0
     OwnPullReach: -1
@@ -212,20 +151,10 @@ MonoBehaviour:
     - Name: Jelly
       Colour: 2
       Cells:
+      - {x: 0, y: 3}
+      - {x: 0, y: 2}
       - {x: 0, y: 1}
-      - {x: 1, y: 1}
-      - {x: 1, y: 0}
-      Frozen: 0
-      ThawAfter: 3
-      ArrowBlock: 0
-      ArrowAxis: 0
-    - Name: Jelly
-      Colour: 2
-      Cells:
-      - {x: 1, y: 1}
       - {x: 0, y: 0}
-      - {x: 1, y: 0}
-      - {x: 2, y: 0}
       Frozen: 0
       ThawAfter: 3
       ArrowBlock: 0
@@ -233,16 +162,52 @@ MonoBehaviour:
     - Name: Jelly
       Colour: 104
       Cells:
+      - {x: 0, y: 0}
+      - {x: 1, y: 0}
+      Frozen: 0
+      ThawAfter: 3
+      ArrowBlock: 0
+      ArrowAxis: 0
+  - Name: Door 2
+    Side: 3
+    Start: 1
+    Size: 2
+    FitToJelly: 0
+    OwnPullReach: -1
+    Frozen: 0
+    ThawAfter: 3
+    Queue:
+    - Name: Jelly
+      Colour: 104
+      Cells:
       - {x: 1, y: 1}
       - {x: 0, y: 0}
       - {x: 1, y: 0}
-      - {x: 2, y: 0}
       Frozen: 0
       ThawAfter: 3
       ArrowBlock: 0
       ArrowAxis: 0
     - Name: Jelly
-      Colour: 2
+      Colour: 106
+      Cells:
+      - {x: 0, y: 1}
+      - {x: 0, y: 0}
+      - {x: 1, y: 0}
+      Frozen: 0
+      ThawAfter: 3
+      ArrowBlock: 0
+      ArrowAxis: 0
+  - Name: Door 3
+    Side: 0
+    Start: 3
+    Size: 3
+    FitToJelly: 0
+    OwnPullReach: -1
+    Frozen: 0
+    ThawAfter: 3
+    Queue:
+    - Name: Jelly
+      Colour: 104
       Cells:
       - {x: 2, y: 1}
       - {x: 0, y: 0}
@@ -252,52 +217,10 @@ MonoBehaviour:
       ThawAfter: 3
       ArrowBlock: 0
       ArrowAxis: 0
-  - Name: Door 2
-    Side: 1
-    Start: 2
-    Size: 3
-    FitToJelly: 0
-    OwnPullReach: -1
-    Frozen: 0
-    ThawAfter: 3
-    Queue:
-    - Name: Jelly
-      Colour: 2
-      Cells:
-      - {x: 0, y: 1}
-      - {x: 0, y: 0}
-      - {x: 1, y: 0}
-      - {x: 2, y: 0}
-      Frozen: 0
-      ThawAfter: 3
-      ArrowBlock: 0
-      ArrowAxis: 0
     - Name: Jelly
       Colour: 104
       Cells:
-      - {x: 0, y: 2}
       - {x: 0, y: 1}
-      - {x: 0, y: 0}
-      - {x: 1, y: 0}
-      Frozen: 0
-      ThawAfter: 3
-      ArrowBlock: 0
-      ArrowAxis: 0
-    - Name: Jelly
-      Colour: 2
-      Cells:
-      - {x: 0, y: 2}
-      - {x: 0, y: 1}
-      - {x: 0, y: 0}
-      Frozen: 0
-      ThawAfter: 3
-      ArrowBlock: 0
-      ArrowAxis: 0
-    - Name: Jelly
-      Colour: 2
-      Cells:
-      - {x: 0, y: 2}
-      - {x: 1, y: 2}
       - {x: 1, y: 1}
       - {x: 1, y: 0}
       Frozen: 0

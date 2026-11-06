@@ -40,17 +40,19 @@ namespace Modules.GameplayModule.Editor
         public bool SuperHard { get; set; }
 
         /// <summary>
-        /// The targets for a level number, in waves of five: every fifth level is Super Hard, the one after it eases
-        /// right off, and the three between climb back toward the middle. Each wave sits a little higher than the last.
+        /// The targets for a level number: every fiftieth level is Super Hard, every other tenth one Hard, and the rest
+        /// Normal, climbing slowly over each ten - so a hard level stands out, and the one after it is a rest.
         /// </summary>
         public static JellyLevelGenerator ForLevel(int number)
         {
-            int step = (number - 1) % 5;          // 0 eases off ... 4 is the Super Hard one
-            int lift = Mathf.Max(0, (number - 51) / 10);
-            return step == 4
-                ? new JellyLevelGenerator { MinMoves = 25, MinMaking = 5, SuperHard = true, SolveMs = 3500 }
-                : new JellyLevelGenerator { MinMoves = 12 + step * 2 + lift, MinMaking = step, SolveMs = 3500 };
+            int inTen = (number - 1) % 10;        // 0 rests after a hard one ... 9 is the hard one
+            int lift = Mathf.Max(0, (number - 51) / 25);
+            if (number % 50 == 0) return new JellyLevelGenerator { MinMoves = 25, MinMaking = 5, SuperHard = true, SolveMs = 3500 };
+            if (number % 10 == 0) return new JellyLevelGenerator { MinMoves = 18 + lift, MinMaking = 2, Hard = true, SolveMs = 3500 };
+            return new JellyLevelGenerator { MinMoves = 12 + inTen / 3 + lift, MinMaking = inTen / 4, SolveMs = 3500 };
         }
+        /// <summary>The draft is marked Hard instead of judged from its solution.</summary>
+        public bool Hard { get; set; }
         public int SolveMs { get; set; } = 3000;
         /// <summary>What the solver said of each draft tried.</summary>
         public List<string> Log { get; } = new();
@@ -59,10 +61,13 @@ namespace Modules.GameplayModule.Editor
         public Draft Make(int levelNumber, int seed, CD_JellyLevels list, int tries = 30)
         {
             var rng = new Random(seed);
-            for (int i = 0; i < tries; i++)
+            // A try is a draft the solver plays; boards turned down before that - a pocket, a door against a notch -
+            // are cheap and do not count, up to a bound.
+            for (int i = 0, built = 0; i < tries && built < tries * 60; built++)
             {
                 var level = Build(rng, levelNumber);
                 if (level == null || level.Validate().Count > 0) { UnityEngine.Object.DestroyImmediate(level); continue; }
+                i++;
                 var solver = new JellyLevelSolver { TimeLimitMs = SolveMs };
                 var result = solver.Solve(level, list);
                 Log.Add(result.ToString());
@@ -70,8 +75,7 @@ namespace Modules.GameplayModule.Editor
                 {
                     // A minute to read the board and three seconds a drag, as the hand-made levels run.
                     level.Seconds = Mathf.Clamp(Mathf.Round((60 + result.Moves * 3f) / 5) * 5, 75, 150);
-                    level.Difficulty = SuperHard ? LevelDifficulty.SuperHard
-                        : result.Making >= 6 || result.Moves >= 28 ? LevelDifficulty.Hard : LevelDifficulty.Normal;
+                    level.Difficulty = SuperHard ? LevelDifficulty.SuperHard : Hard ? LevelDifficulty.Hard : LevelDifficulty.Normal;
                     // A Super Hard level is given the time a hard one needs, not more.
                     if (SuperHard) level.Seconds = Mathf.Clamp(Mathf.Round((45 + result.Moves * 3f) / 5) * 5, 90, 150);
                     return new Draft { Level = level, Solve = result };
@@ -109,6 +113,10 @@ namespace Modules.GameplayModule.Editor
                     2 => new Vector2Int(1, rng.Next(2, H - 2)),
                     _ => new Vector2Int(W - 2, rng.Next(2, H - 2)),
                 };
+                // A stub stands clear of the other wall along the frame: a single floor cell left between two would
+                // be a slot the rim's art cannot turn into without its corners overlapping.
+                var along = side < 2 ? Vector2Int.right : Vector2Int.up;
+                if (walls.Contains(cell + along * 2) || walls.Contains(cell - along * 2)) continue;
                 walls.Add(cell);
             }
 
@@ -119,7 +127,7 @@ namespace Modules.GameplayModule.Editor
             var sides = new List<JellySide> { JellySide.Top, JellySide.Bottom, JellySide.Left, JellySide.Right }.OrderBy(_ => rng.Next()).ToList();
             var colours = COLOURS.OrderBy(_ => rng.Next()).Take(rng.Next(4, 7)).ToList();
             int floorCells = (W - 2) * (H - 2) - walls.Count;
-            int target = (int)(floorCells * ((SuperHard ? .52 : .42) + rng.NextDouble() * .12));
+            int target = (int)(floorCells * ((SuperHard ? .52 : Hard ? .44 : .36) + rng.NextDouble() * .12));
             int perDoor = Mathf.Max(6, target / doorCount);
             for (int d = 0; d < doorCount; d++)
             {
@@ -129,14 +137,22 @@ namespace Modules.GameplayModule.Editor
                 var door = new JellyDoorCVO { Name = "Door " + (d + 1), Side = side, Size = size };
                 // A second door on a side keeps away from the first.
                 var sameSide = level.Doors.Where(o => o.Side == side).ToList();
-                for (int attempt = 0; attempt < 20; attempt++)
+                bool placed = false;
+                for (int attempt = 0; attempt < 20 && !placed; attempt++)
                 {
                     door.Start = rng.Next(1, Mathf.Max(2, length - size));
                     if (door.Start + size > length - 1) continue;
                     if (sameSide.Any(o => door.Start < o.Start + o.Size + 1 && o.Start < door.Start + size + 1)) continue;
-                    if (level.DoorCells(door).Any(c => walls.Contains(c - JellyGateCVOStep(side)))) continue;
-                    break;
+                    // The floor in front of the door, and a cell either side of its mouth, stays clear of wall, so the
+                    // door never sits against a notch or a stub.
+                    var inward = -JellyGateCVOStep(side);
+                    var along = side is JellySide.Top or JellySide.Bottom ? Vector2Int.right : Vector2Int.up;
+                    var cellsOf = level.DoorCells(door);
+                    var mouth = cellsOf.Select(c => c + inward).Concat(new[] { cellsOf.First() + inward - along, cellsOf.Last() + inward + along });
+                    if (mouth.Any(walls.Contains)) continue;
+                    placed = true;
                 }
+                if (!placed) { UnityEngine.Object.DestroyImmediate(level); return null; }
                 int cells = 0;
                 while (cells < perDoor || door.Queue.Count < 2)
                 {
@@ -146,7 +162,8 @@ namespace Modules.GameplayModule.Editor
                     door.Queue.Add(new JellyShapeCVO { Name = "Jelly", Colour = colours[rng.Next(colours.Count)], Cells = shape.ToList() });
                     cells += shape.Length;
                 }
-                if (number >= 55 && d > 0 && rng.NextDouble() < .4)
+                // A frozen door belongs to the hard levels; a normal one gets it now and then.
+                if (number >= 55 && d > 0 && rng.NextDouble() < (Hard || SuperHard ? .45 : .15))
                 {
                     door.Frozen = true;
                     door.ThawAfter = rng.Next(2, 5);
@@ -156,6 +173,22 @@ namespace Modules.GameplayModule.Editor
             // The frame cells a door opens are not wall.
             var doorCells = new HashSet<Vector2Int>(level.Doors.SelectMany(level.DoorCells));
             level.Walls = walls.Where(c => !doorCells.Contains(c)).ToList();
+            // No floor cell closed in on three sides by wall or frame: such a pocket is where the rim's corner pieces
+            // pile onto each other.
+            for (int x = 1; x < W - 1; x++)
+            for (int y = 1; y < H - 1; y++)
+            {
+                var c = new Vector2Int(x, y);
+                if (walls.Contains(c)) continue;
+                int closed = 0;
+                foreach (var step in new[] { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right })
+                {
+                    var n = c + step;
+                    bool frame = n.x == 0 || n.y == 0 || n.x == W - 1 || n.y == H - 1;
+                    if (walls.Contains(n) || (frame && !doorCells.Contains(n))) closed++;
+                }
+                if (closed >= 3) { UnityEngine.Object.DestroyImmediate(level); return null; }
+            }
 
             // Every queued shape broken into jellies, mostly single cells, and scattered over the free floor.
             var free = new List<Vector2Int>();
@@ -186,14 +219,17 @@ namespace Modules.GameplayModule.Editor
                 if (!placed) { UnityEngine.Object.DestroyImmediate(level); return null; }
             }
 
-            // From level 53 on, a jelly or two is frozen; from 57 on, some move only one way.
-            if (number >= 53)
-                foreach (var shape in level.Shapes.OrderBy(_ => rng.Next()).Take(rng.Next(0, 3)))
+            // From level 53 on, a jelly or two is frozen; from 57 on, some move only one way. A normal level takes one
+            // of the two at most, so the hard ones are where they meet.
+            bool tough = Hard || SuperHard;
+            bool frozenJellies = number >= 53 && (tough || rng.NextDouble() < .5);
+            if (frozenJellies)
+                foreach (var shape in level.Shapes.OrderBy(_ => rng.Next()).Take(rng.Next(1, tough ? 3 : 2)))
                 {
                     shape.Frozen = true;
                     shape.ThawAfter = rng.Next(1, 4);
                 }
-            if (number >= 57 && rng.NextDouble() < .3)
+            if (number >= 57 && (tough ? rng.NextDouble() < .4 : !frozenJellies && rng.NextDouble() < .3))
                 foreach (var shape in level.Shapes.Where(s => !s.Frozen).OrderBy(_ => rng.Next()).Take(rng.Next(1, 4)))
                 {
                     shape.ArrowBlock = true;
