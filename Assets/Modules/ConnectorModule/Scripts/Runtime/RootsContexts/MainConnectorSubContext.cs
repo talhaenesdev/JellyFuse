@@ -63,6 +63,8 @@ namespace Modules.ConnectorModule.RootsContexts
             _profileSignals.Outgoing.ProfileSaved.Connect(_profileSelectionSignals.Incoming.ProfileSaved);
             _eventsScreenSignals.Outgoing.BackClicked.Connect(_mainScreenSignals.Incoming.OpenMainScreen);
             _leaderboardScreenSignals.Outgoing.BackClicked.Connect(_mainScreenSignals.Incoming.OpenMainScreen);
+            // A changed name or icon has reached the server: the board on show fetches it again.
+            _profileSignals.Outgoing.ProfilePublished.Connect(_leaderboardScreenSignals.Incoming.ReloadBoard);
         }
 
         private void OutgoingSignals()
@@ -85,6 +87,7 @@ namespace Modules.ConnectorModule.RootsContexts
             _mainScreenSignals.Outgoing.EventsClicked.Connect(_eventsScreenSignals.Incoming.OpenEventsScreen);
             _mainScreenSignals.Outgoing.LeaderboardClicked.Connect(_leaderboardScreenSignals.Incoming.OpenLeaderboardScreen);
             _profileSelectionSignals.Outgoing.SaveRequested.Connect(_profileSignals.Incoming.SaveProfile);
+            _leaderboardScreenSignals.Outgoing.EditProfileClicked.Connect(_profileSignals.Incoming.OpenSelection);
         }
 
         public override void DestroyContext()
@@ -107,6 +110,7 @@ namespace Modules.ConnectorModule.RootsContexts
             _profileSignals.Outgoing.ProfileSaved.Disconnect();
             _eventsScreenSignals.Outgoing.BackClicked.Disconnect();
             _leaderboardScreenSignals.Outgoing.BackClicked.Disconnect();
+            _profileSignals.Outgoing.ProfilePublished.Disconnect();
         }
 
         private void UnbindOutgoingSignals()
@@ -118,6 +122,7 @@ namespace Modules.ConnectorModule.RootsContexts
             _mainScreenSignals.Outgoing.EventsClicked.Disconnect();
             _mainScreenSignals.Outgoing.LeaderboardClicked.Disconnect();
             _profileSelectionSignals.Outgoing.SaveRequested.Disconnect();
+            _leaderboardScreenSignals.Outgoing.EditProfileClicked.Disconnect();
             // Its own group, so the gameplay screen keeps hearing about the lives.
             SignalConnector.DisconnectGroup(LIVES_GROUP);
         }

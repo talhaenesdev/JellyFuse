@@ -21,6 +21,8 @@ namespace Leaderboard
         public const string AllTime = "all_time";
         public const string Weekly = "weekly";
         private const string BestKey = "level_best";
+        private const string ProfileKey = "profile";
+        private const int MaxNameLength = 16;
 
         private const int MaxLevel = 5000;
         private const int MaxSeconds = 600;
@@ -71,6 +73,22 @@ namespace Leaderboard
             return new SubmitResult { Accepted = true, Points = points, Best = Math.Max(points, previous), Total = total, Record = record };
         }
 
+        /// <summary>
+        /// The name and icon the player picked in the game, kept in their public Cloud Save data so every board shows
+        /// them. The name is trimmed and cut to MaxNameLength; an empty one falls back to the Authentication name.
+        /// </summary>
+        [CloudCodeFunction("SetProfile")]
+        public async Task<ProfileResult> SetProfile(IExecutionContext context, IGameApiClient api, string name, string icon)
+        {
+            name = (name ?? string.Empty).Trim();
+            if (name.Length > MaxNameLength) name = name.Substring(0, MaxNameLength);
+            icon = (icon ?? string.Empty).Trim();
+            if (icon.Length > 64) icon = icon.Substring(0, 64);
+            await api.CloudSaveData.SetPublicItemAsync(context, context.ServiceToken, context.ProjectId, context.PlayerId,
+                new SetItemBody(ProfileKey, new PlayerProfile { Name = name, Icon = icon }));
+            return new ProfileResult { Saved = true, Name = name };
+        }
+
         /// <summary>The top of one board and the asking player's own row, names included.</summary>
         [CloudCodeFunction("GetBoard")]
         public async Task<BoardResult> GetBoard(IExecutionContext context, IGameApiClient api, string board, int limit)
@@ -91,7 +109,32 @@ namespace Leaderboard
             {
                 // No score on this board yet: the player has no row.
             }
+            var rows = new List<(BoardRow row, string playerId)>();
+            foreach (var entry in page.Data.Results)
+                rows.Add((result.Top[rows.Count], entry.PlayerId));
+            if (result.Me != null) rows.Add((result.Me, context.PlayerId));
+            await Task.WhenAll(rows.ConvertAll(item => ApplyProfile(context, api, item.row, item.playerId)));
             return result;
+        }
+
+        /// <summary>The player's picked name and icon over the row; a player who never picked one keeps their row as it is.</summary>
+        private static async Task ApplyProfile(IExecutionContext context, IGameApiClient api, BoardRow row, string playerId)
+        {
+            try
+            {
+                var response = await api.CloudSaveData.GetPublicItemsAsync(context, context.ServiceToken, context.ProjectId, playerId,
+                    new List<string> { ProfileKey });
+                var items = response.Data?.Results;
+                if (items == null || items.Count == 0 || items[0].Value == null) return;
+                var profile = JsonConvert.DeserializeObject<PlayerProfile>(items[0].Value.ToString());
+                if (profile == null) return;
+                if (!string.IsNullOrWhiteSpace(profile.Name)) row.Name = profile.Name;
+                row.Icon = profile.Icon ?? string.Empty;
+            }
+            catch (Exception)
+            {
+                // A profile that cannot be read leaves the row with its Authentication name.
+            }
         }
 
         private static async Task<Dictionary<string, int>> ReadBests(IExecutionContext context, IGameApiClient api)
@@ -122,6 +165,19 @@ namespace Leaderboard
         public string Name { get; set; } = string.Empty;
         public long Score { get; set; }
         public bool IsMe { get; set; }
+        public string Icon { get; set; } = string.Empty;
+    }
+
+    public class ProfileResult
+    {
+        public bool Saved { get; set; }
+        public string Name { get; set; } = string.Empty;
+    }
+
+    public class PlayerProfile
+    {
+        public string Name { get; set; } = string.Empty;
+        public string Icon { get; set; } = string.Empty;
     }
 
     public class BoardResult

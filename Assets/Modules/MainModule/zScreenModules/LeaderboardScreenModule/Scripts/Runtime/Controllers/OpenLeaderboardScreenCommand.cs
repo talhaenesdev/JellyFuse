@@ -1,12 +1,14 @@
 using System;
 using FlowIoC.BaseModule.Controller;
 using FlowIoC.BaseModule.Injectable.Attributes;
+using FlowIoC.BaseModule.SharedData;
 using FlowIoC.ConsoleModule;
 using FlowIoC.ScreenModule.Service;
 using Modules.LeaderboardModule.Enums;
 using Modules.LocalizationModule.Services;
 using Modules.MainModule.LeaderboardScreenModule.Models;
 using Modules.MainModule.LeaderboardScreenModule.ViewsMediators;
+using Modules.ProfileModule.Shared.Data.UnityObjects;
 
 namespace Modules.MainModule.LeaderboardScreenModule.Controllers
 {
@@ -16,6 +18,7 @@ namespace Modules.MainModule.LeaderboardScreenModule.Controllers
         [Inject] private IScreenService _screenService { get; set; }
         [Inject] private ILocalizationService _localization { get; set; }
         [Inject] private LeaderboardScreenModel _model { get; set; }
+        [Inject] private ISharedDataModel _shared { get; set; }
 
         public override async void Execute()
         {
@@ -31,6 +34,8 @@ namespace Modules.MainModule.LeaderboardScreenModule.Controllers
                     return;
                 }
                 screen.SetLocalizer(_localization.Get);
+                // The profile icons players pick; without the catalogue the rows go without pictures.
+                screen.SetIcons(_shared.GetScriptable<CD_ProfileIcons>());
                 screen.ShowLoading(LeaderboardBoard.AllTime);
                 Release();
             }

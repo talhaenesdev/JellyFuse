@@ -15,8 +15,14 @@ namespace Modules.LeaderboardModule.Services
         private const string MODULE = "Leaderboard";
         private const string SUBMIT = "SubmitLevel";
         private const string BOARD = "GetBoard";
+        private const string PROFILE = "SetProfile";
         /// <summary>How long a call may take before the caller is told nothing came back; the server is never waited on for ever.</summary>
         private static readonly TimeSpan TIMEOUT = TimeSpan.FromSeconds(8);
+        /// <summary>
+        /// A board reads every listed player's profile as well, and the module's first call after a quiet spell
+        /// starts it up cold, so it gets longer - and a second try, the first having woken the server.
+        /// </summary>
+        private static readonly TimeSpan BOARD_TIMEOUT = TimeSpan.FromSeconds(12);
 
         private sealed class SubmitResult
         {
@@ -26,6 +32,12 @@ namespace Modules.LeaderboardModule.Services
             public int Best { get; set; }
             public long Total { get; set; }
             public bool Record { get; set; }
+        }
+
+        private sealed class ProfileResult
+        {
+            public bool Saved { get; set; }
+            public string Name { get; set; }
         }
 
         public async Task<LevelScoreVO> SubmitLevelAsync(int level, int difficulty, int secondsTotal, int secondsLeft, bool extraTime)
@@ -60,11 +72,17 @@ namespace Modules.LeaderboardModule.Services
             if (!SignedIn()) return null;
             try
             {
-                var page = await WithTimeout(CloudCodeService.Instance.CallModuleEndpointAsync<LeaderboardPageVO>(MODULE, BOARD, new Dictionary<string, object>
+                var arguments = new Dictionary<string, object>
                 {
                     { "board", board == LeaderboardBoard.Weekly ? "weekly" : "all_time" },
                     { "limit", limit },
-                }));
+                };
+                var page = await WithTimeout(CloudCodeService.Instance.CallModuleEndpointAsync<LeaderboardPageVO>(MODULE, BOARD, arguments), BOARD_TIMEOUT);
+                if (page == null)
+                {
+                    FlowLogger.Log("LeaderboardService - the board was slow; asking once more.");
+                    page = await WithTimeout(CloudCodeService.Instance.CallModuleEndpointAsync<LeaderboardPageVO>(MODULE, BOARD, arguments), BOARD_TIMEOUT);
+                }
                 if (page == null) FlowLogger.Log("LeaderboardService - the board did not come back in time.");
                 return page;
             }
@@ -75,10 +93,31 @@ namespace Modules.LeaderboardModule.Services
             }
         }
 
-        /// <summary>The call's answer, or null when it takes longer than TIMEOUT; a late answer is dropped.</summary>
-        private static async Task<T> WithTimeout<T>(Task<T> call) where T : class
+        public async Task<bool> SetProfileAsync(string name, string iconId)
         {
-            var finished = await Task.WhenAny(call, Task.Delay(TIMEOUT));
+            if (!SignedIn()) return false;
+            try
+            {
+                var call = CloudCodeService.Instance.CallModuleEndpointAsync<ProfileResult>(MODULE, PROFILE, new Dictionary<string, object>
+                {
+                    { "name", name ?? string.Empty },
+                    { "icon", iconId ?? string.Empty },
+                });
+                bool sent = (await WithTimeout(call))?.Saved == true;
+                if (!sent) FlowLogger.Log("LeaderboardService - the profile did not reach the server in time.");
+                return sent;
+            }
+            catch (Exception exception)
+            {
+                FlowLogger.Log($"LeaderboardService - the profile could not be sent: {exception.Message}");
+                return false;
+            }
+        }
+
+        /// <summary>The call's answer, or null when it takes longer than TIMEOUT; a late answer is dropped.</summary>
+        private static async Task<T> WithTimeout<T>(Task<T> call, TimeSpan? timeout = null) where T : class
+        {
+            var finished = await Task.WhenAny(call, Task.Delay(timeout ?? TIMEOUT));
             if (finished != call)
             {
                 _ = call.ContinueWith(late => _ = late.Exception, TaskContinuationOptions.OnlyOnFaulted);

@@ -4,6 +4,8 @@ using FlowIoC.BaseModule.Injectable.Components;
 using FlowIoC.ScreenModule.ViewsMediators.Screen;
 using Modules.LeaderboardModule.Data.ValueObjects;
 using Modules.LeaderboardModule.Enums;
+using Modules.ProfileModule.Shared.Data.UnityObjects;
+using Modules.ProfileModule.Shared.Data.ValueObjects;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,6 +22,9 @@ namespace Modules.MainModule.LeaderboardScreenModule.ViewsMediators
         [SerializeField] private Button _backButton;
         [SerializeField] private Button _allTimeTab;
         [SerializeField] private Button _weeklyTab;
+        [Tooltip("The player's own row as a button: it opens the profile to change the name and icon.")]
+        [SerializeField] private Button _editProfileButton;
+        [SerializeField] private TMP_Text _editProfileLabel;
         [SerializeField] private TMP_Text _title;
         [SerializeField] private TMP_Text _allTimeLabel;
         [SerializeField] private TMP_Text _weeklyLabel;
@@ -43,16 +48,19 @@ namespace Modules.MainModule.LeaderboardScreenModule.ViewsMediators
 
         public Action BackClicked;
         public Action<LeaderboardBoard> TabClicked;
+        public Action EditProfileClicked;
 
         private readonly List<RectTransform> _rows = new();
         private Func<string, string> _localize;
         private LeaderboardBoard _board;
+        private CD_ProfileIcons _icons;
 
         private void OnEnable()
         {
             if (_backButton != null) _backButton.onClick.AddListener(OnBackClicked);
             if (_allTimeTab != null) _allTimeTab.onClick.AddListener(OnAllTimeClicked);
             if (_weeklyTab != null) _weeklyTab.onClick.AddListener(OnWeeklyClicked);
+            if (_editProfileButton != null) _editProfileButton.onClick.AddListener(OnEditProfileClicked);
         }
 
         private void OnDisable()
@@ -60,11 +68,16 @@ namespace Modules.MainModule.LeaderboardScreenModule.ViewsMediators
             if (_backButton != null) _backButton.onClick.RemoveListener(OnBackClicked);
             if (_allTimeTab != null) _allTimeTab.onClick.RemoveListener(OnAllTimeClicked);
             if (_weeklyTab != null) _weeklyTab.onClick.RemoveListener(OnWeeklyClicked);
+            if (_editProfileButton != null) _editProfileButton.onClick.RemoveListener(OnEditProfileClicked);
         }
 
         private void OnBackClicked() => BackClicked?.Invoke();
         private void OnAllTimeClicked() => TabClicked?.Invoke(LeaderboardBoard.AllTime);
         private void OnWeeklyClicked() => TabClicked?.Invoke(LeaderboardBoard.Weekly);
+        private void OnEditProfileClicked() => EditProfileClicked?.Invoke();
+
+        /// <summary>The catalogue a row's icon id is looked up in.</summary>
+        public void SetIcons(CD_ProfileIcons icons) => _icons = icons;
 
         public override void BeforeScreenActivation()
         {
@@ -79,6 +92,7 @@ namespace Modules.MainModule.LeaderboardScreenModule.ViewsMediators
             if (_title != null) _title.text = L("leaderboard.title", "LEADERBOARD");
             if (_allTimeLabel != null) _allTimeLabel.text = L("leaderboard.all_time", "All Time");
             if (_weeklyLabel != null) _weeklyLabel.text = L("leaderboard.weekly", "Weekly");
+            if (_editProfileLabel != null) _editProfileLabel.text = L("leaderboard.edit", "Edit");
         }
 
         /// <summary>The board's tab lit, its rows cleared and a line saying it is on its way.</summary>
@@ -135,6 +149,13 @@ namespace Modules.MainModule.LeaderboardScreenModule.ViewsMediators
             Set(row, "Txt_Rank", data.Rank.ToString());
             Set(row, "Txt_Name", string.IsNullOrEmpty(data.Name) ? L("leaderboard.player", "Player") : TrimName(data.Name));
             Set(row, "Txt_Score", data.Score.ToString("N0"));
+            var avatar = row.Find("Img_Avatar")?.GetComponent<Image>();
+            if (avatar != null)
+            {
+                var icon = Icon(data.Icon);
+                avatar.sprite = icon?.Sprite;
+                avatar.color = icon == null ? new Color(1, 1, 1, .35f) : icon.Sprite != null ? Color.white : icon.FallbackColor;
+            }
             var badge = row.Find("Img_Badge")?.GetComponent<Image>();
             if (badge != null && _badges.Length > 0)
             {
@@ -156,6 +177,15 @@ namespace Modules.MainModule.LeaderboardScreenModule.ViewsMediators
         {
             var text = row.Find(child)?.GetComponent<TMP_Text>();
             if (text != null) text.text = value;
+        }
+
+        /// <summary>The picked icon, or the catalogue's first for a player who never picked one.</summary>
+        private ProfileIconCVO Icon(string id)
+        {
+            if (_icons == null || _icons.Icons.Count == 0) return null;
+            foreach (var icon in _icons.Icons)
+                if (icon != null && icon.Id == id) return icon;
+            return _icons.Icons[0];
         }
 
         private bool IsPodium(RectTransform row) => Array.IndexOf(_podium, row) >= 0;

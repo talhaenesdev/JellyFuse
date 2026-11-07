@@ -9,5 +9,7 @@ namespace Modules.LeaderboardModule.Data.ValueObjects
         public long Score { get; set; }
         /// <summary>The row of the player asking.</summary>
         public bool IsMe { get; set; }
+        /// <summary>The profile icon the player picked, or empty when they never picked one.</summary>
+        public string Icon { get; set; } = string.Empty;
     }
 }

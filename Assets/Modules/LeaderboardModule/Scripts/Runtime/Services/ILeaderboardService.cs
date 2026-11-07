@@ -14,5 +14,7 @@ namespace Modules.LeaderboardModule.Services
         Task<LevelScoreVO> SubmitLevelAsync(int level, int difficulty, int secondsTotal, int secondsLeft, bool extraTime);
         /// <summary>The top <paramref name="limit"/> rows of a board and the player's own.</summary>
         Task<LeaderboardPageVO> GetBoardAsync(LeaderboardBoard board, int limit);
+        /// <summary>The name and icon every board shows for this player; false when it did not reach the server.</summary>
+        Task<bool> SetProfileAsync(string name, string iconId);
     }
 }

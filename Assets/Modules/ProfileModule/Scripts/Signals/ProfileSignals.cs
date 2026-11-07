@@ -24,5 +24,7 @@ namespace Modules.ProfileModule.Signals
         public Signal<ProfileFrameVO> FrameChanged = new();
         public Signal<ProfileSelectionRVO> SelectionRequested = new();
         public Signal<ProfileSelectionRVO> ProfileSaved = new();
+        /// <summary>The saved name and icon were sent on to the leaderboard (or could not be, offline).</summary>
+        public Signal ProfilePublished = new();
     }
 }

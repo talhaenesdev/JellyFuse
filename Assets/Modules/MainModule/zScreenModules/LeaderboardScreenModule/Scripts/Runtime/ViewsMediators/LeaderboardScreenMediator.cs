@@ -35,12 +35,19 @@ namespace Modules.MainModule.LeaderboardScreenModule.ViewsMediators
         {
             _view.BackClicked += OnBackClicked;
             _view.TabClicked += OnTabClicked;
+            _view.EditProfileClicked += OnEditProfileClicked;
         }
 
         private void OnScreenHidden(IScreenBody screen)
         {
             _view.BackClicked -= OnBackClicked;
             _view.TabClicked -= OnTabClicked;
+            _view.EditProfileClicked -= OnEditProfileClicked;
+        }
+
+        private void OnEditProfileClicked()
+        {
+            if (_view.Data.HasState(ScreenState.AvailableToSendSignal)) _signals.Outgoing.EditProfileClicked.Dispatch();
         }
 
         private void OnBackClicked()

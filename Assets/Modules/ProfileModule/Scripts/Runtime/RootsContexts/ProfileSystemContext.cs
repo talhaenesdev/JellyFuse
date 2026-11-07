@@ -1,5 +1,6 @@
 using Modules.ProfileModule.Signals;
 using FlowIoC.BaseModule.Contexts;
+using FlowIoC.BaseModule.Controller.Commands;
 using Modules.LocalSaveModule.Services;
 using Modules.ProfileModule.Controllers;
 using Modules.ProfileModule.Models;
@@ -41,7 +42,9 @@ namespace Modules.ProfileModule.RootsContexts
             CommandBinder.Bind(_signals.Incoming.OpenSelection).ToSequence<OpenProfileSelectionCommand>();
             CommandBinder.Bind(_signals.Incoming.SaveProfile)
                 .ToSequence<SaveProfileCommand>()
-                .ToSequence<ILocalSaveService.Commands.Save>("SD_PlayerProfile");
+                .ToSequence<ILocalSaveService.Commands.Save>("SD_PlayerProfile")
+                .ToSequence<PublishProfileCommand>()
+                .ToSequence<SignalDispatchCommand>(_signals.Outgoing.ProfilePublished);
         }
 
         public override void Setup()

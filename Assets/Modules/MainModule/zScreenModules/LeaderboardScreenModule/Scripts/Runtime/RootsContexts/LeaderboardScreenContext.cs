@@ -42,6 +42,7 @@ namespace Modules.MainModule.LeaderboardScreenModule.RootsContexts
             CommandBinder.Bind(_signals.Incoming.OpenLeaderboardScreen)
                 .ToSequence<OpenLeaderboardScreenCommand>()
                 .ToSequence<LoadLeaderboardBoardCommand>();
+            CommandBinder.Bind(_signals.Incoming.ReloadBoard).ToSequence<LoadLeaderboardBoardCommand>();
             CommandBinder.Bind(_internalSignals.TabClicked)
                 .ToSequence<SelectLeaderboardBoardCommand>()
                 .ToSequence<LoadLeaderboardBoardCommand>();

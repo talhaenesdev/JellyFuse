@@ -1,4 +1,5 @@
 using System;
+using FlowIoC.BaseModule.Attributes;
 using FlowIoC.BaseModule.Controller;
 using FlowIoC.BaseModule.Injectable.Attributes;
 using FlowIoC.ConsoleModule;
@@ -9,6 +10,8 @@ using Modules.MainModule.LeaderboardScreenModule.Signals;
 namespace Modules.MainModule.LeaderboardScreenModule.Controllers
 {
     /// <summary>Fetches the board the screen shows and announces it; offline, it announces that nothing came back.</summary>
+    // Two tries of up to 12 seconds each when the server is slow to wake.
+    [LongRetain(30)]
     internal sealed class LoadLeaderboardBoardCommand : Command
     {
         private const int ROWS = 50;

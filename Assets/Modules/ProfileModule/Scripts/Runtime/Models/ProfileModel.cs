@@ -29,7 +29,7 @@ namespace Modules.ProfileModule.Models
         {
             _icons.Clear();
             _frames.Clear();
-            var catalogue = _root.GetComponent<RootAdapter>().GetScriptable<CD_ProfileIcons>();
+            var catalogue = _shared.GetScriptable<CD_ProfileIcons>();   // filed as shared: the leaderboard draws these icons too
             var frameCatalogue = _root.GetComponent<RootAdapter>().GetScriptable<CD_ProfileFrames>();
             _profile = _shared.GetScriptable<SD_PlayerProfile>();
 

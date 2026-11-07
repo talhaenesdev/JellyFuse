@@ -146,6 +146,20 @@ namespace Modules.MainModule.LeaderboardScreenModule.Editor
 
                 var me = Row("Pnl_MyRow", root.transform, font, meArt, badges[3], starArt);
                 Anchor(me, new Vector2(.03f, .05f), new Vector2(.97f, .145f));
+                // The own row is the way to the profile: tapped, it opens the name and icon to change.
+                var edit = me.gameObject.AddComponent<Button>();
+                edit.targetGraphic = me.GetComponent<Image>();
+                var editTag = Ui("Img_EditTag", me, typeof(Image)).GetComponent<Image>();
+                editTag.sprite = tabOn;
+                editTag.type = Image.Type.Sliced;
+                editTag.raycastTarget = false;
+                var tagRect = editTag.rectTransform;
+                tagRect.anchorMin = tagRect.anchorMax = new Vector2(.5f, 1);
+                tagRect.pivot = new Vector2(.5f, .5f);
+                tagRect.anchoredPosition = new Vector2(0, 0);
+                tagRect.sizeDelta = new Vector2(220, 64);
+                var editLabel = Text("Txt_Edit", editTag.transform, font, "Edit", 30, DARK_TEXT);
+                Stretch(editLabel.rectTransform, 8, 8, 4, 4);
 
                 var serialized = new SerializedObject(view);
                 serialized.FindProperty("_backButton").objectReferenceValue = back.GetComponent<Button>();
@@ -159,6 +173,8 @@ namespace Modules.MainModule.LeaderboardScreenModule.Editor
                 serialized.FindProperty("_content").objectReferenceValue = contentRect;
                 serialized.FindProperty("_rowTemplate").objectReferenceValue = template;
                 serialized.FindProperty("_meRow").objectReferenceValue = me;
+                serialized.FindProperty("_editProfileButton").objectReferenceValue = edit;
+                serialized.FindProperty("_editProfileLabel").objectReferenceValue = editLabel;
                 serialized.FindProperty("_rowColour").colorValue = Color.white;
                 serialized.FindProperty("_myRowColour").colorValue = new Color(.7f, 1f, 1f, 1f);
                 serialized.FindProperty("_tabOnSprite").objectReferenceValue = tabOn;
@@ -217,7 +233,13 @@ namespace Modules.MainModule.LeaderboardScreenModule.Editor
                 mark.sprite = i == 0 ? crown : badges[i];
                 mark.preserveAspect = true;
                 mark.raycastTarget = false;
-                Anchor(mark.rectTransform, new Vector2(.25f, top - .02f), new Vector2(.75f, Mathf.Min(1f, top + (i == 0 ? .28f : .22f))));
+                Anchor(mark.rectTransform, new Vector2(.3f, top + .17f), new Vector2(.7f, Mathf.Min(1f, top + .35f)));
+
+                var avatar = Ui("Img_Avatar", slot, typeof(Image)).GetComponent<Image>();
+                avatar.preserveAspect = true;
+                avatar.raycastTarget = false;
+                Anchor(avatar.rectTransform, new Vector2(.22f, top - .03f), new Vector2(.78f, top + .2f));
+                avatar.transform.SetSiblingIndex(mark.transform.GetSiblingIndex());
                 if (i > 0)
                 {
                     var number = Text("Txt_Place", mark.transform, font, (i + 1).ToString(), 44, Color.white);
@@ -296,7 +318,12 @@ namespace Modules.MainModule.LeaderboardScreenModule.Editor
             var nameText = Text("Txt_Name", row.transform, font, "Player", 36, Color.white);
             nameText.rectTransform.anchorMin = Vector2.zero;
             nameText.rectTransform.anchorMax = Vector2.one;
-            nameText.rectTransform.offsetMin = new Vector2(126, 0);
+            var avatar = Ui("Img_Avatar", row.transform, typeof(Image)).GetComponent<Image>();
+            avatar.preserveAspect = true;
+            avatar.raycastTarget = false;
+            Side(avatar.rectTransform, 0, 116, 92, 12);
+
+            nameText.rectTransform.offsetMin = new Vector2(222, 0);
             nameText.rectTransform.offsetMax = new Vector2(-250, 0);
             nameText.alignment = TextAlignmentOptions.Left;
             nameText.overflowMode = TextOverflowModes.Ellipsis;
