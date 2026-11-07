@@ -84,6 +84,7 @@ namespace Modules.LeaderboardModule.Services
                     page = await WithTimeout(CloudCodeService.Instance.CallModuleEndpointAsync<LeaderboardPageVO>(MODULE, BOARD, arguments), BOARD_TIMEOUT);
                 }
                 if (page == null) FlowLogger.Log("LeaderboardService - the board did not come back in time.");
+                else FlowLogger.Log($"LeaderboardService - {board}: {page.Top.Count} rows, mine: {page.Me?.Name ?? "none"} {page.Me?.Tag ?? "-"} icon {page.Me?.Icon ?? "-"}");
                 return page;
             }
             catch (Exception exception)

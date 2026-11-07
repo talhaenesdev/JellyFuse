@@ -263,6 +263,10 @@ namespace Modules.MainModule.LeaderboardScreenModule.Editor
                 var score = Text("Txt_Score", slot, font, "0", 32, GOLD);
                 Anchor(score.rectTransform, new Vector2(.06f, top - .32f), new Vector2(.94f, top - .2f));
                 Outlined(score);
+
+                var tag = Text("Txt_Tag", slot, font, "#0000", 22, new Color(1, 1, 1, .8f));
+                Anchor(tag.rectTransform, new Vector2(.06f, top - .41f), new Vector2(.94f, top - .32f));
+                Outlined(tag);
                 slots[i] = slot;
             }
             return slots;
@@ -332,11 +336,20 @@ namespace Modules.MainModule.LeaderboardScreenModule.Editor
             frameImage.raycastTarget = false;
             Side(frameImage.rectTransform, 0, 108, 108, 4);
 
+            // The name on the upper part of the row, the player's number small under it.
+            nameText.rectTransform.anchorMin = new Vector2(0, .36f);
             nameText.rectTransform.offsetMin = new Vector2(222, 0);
-            nameText.rectTransform.offsetMax = new Vector2(-250, 0);
-            nameText.alignment = TextAlignmentOptions.Left;
+            nameText.rectTransform.offsetMax = new Vector2(-250, -6);
+            nameText.alignment = TextAlignmentOptions.BottomLeft;
             nameText.overflowMode = TextOverflowModes.Ellipsis;
             Outlined(nameText);
+            var tagText = Text("Txt_Tag", row.transform, font, "#0000", 22, new Color(1, 1, 1, .75f));
+            tagText.rectTransform.anchorMin = Vector2.zero;
+            tagText.rectTransform.anchorMax = new Vector2(1, .38f);
+            tagText.rectTransform.offsetMin = new Vector2(224, 8);
+            tagText.rectTransform.offsetMax = new Vector2(-250, 0);
+            tagText.alignment = TextAlignmentOptions.TopLeft;
+            Outlined(tagText);
 
             var starImage = Ui("Img_Star", row.transform, typeof(Image)).GetComponent<Image>();
             starImage.sprite = star;

@@ -103,11 +103,11 @@ namespace Leaderboard
             var result = new BoardResult();
             var page = await api.Leaderboards.GetLeaderboardScoresAsync(context, context.AccessToken, project, board, null, 0, limit);
             foreach (var entry in page.Data.Results)
-                result.Top.Add(new BoardRow { Rank = entry.Rank + 1, Name = entry.PlayerName, Score = (long)entry.Score, IsMe = entry.PlayerId == context.PlayerId });
+                result.Top.Add(new BoardRow { Rank = entry.Rank + 1, Name = entry.PlayerName, Tag = Tag(entry.PlayerName, entry.PlayerId), Score = (long)entry.Score, IsMe = entry.PlayerId == context.PlayerId });
             try
             {
                 var mine = await api.Leaderboards.GetLeaderboardPlayerScoreAsync(context, context.AccessToken, project, board, context.PlayerId, null);
-                result.Me = new BoardRow { Rank = mine.Data.Rank + 1, Name = mine.Data.PlayerName, Score = (long)mine.Data.Score, IsMe = true };
+                result.Me = new BoardRow { Rank = mine.Data.Rank + 1, Name = mine.Data.PlayerName, Tag = Tag(mine.Data.PlayerName, context.PlayerId), Score = (long)mine.Data.Score, IsMe = true };
             }
             catch (Exception)
             {
@@ -142,6 +142,17 @@ namespace Leaderboard
             }
         }
 
+        /// <summary>
+        /// What tells two players of one name apart: the number Authentication gives every name ("Name#1234" shows
+        /// "#1234"), or the start of the player id when the name carries none. Fixed for a player, whatever they rename to.
+        /// </summary>
+        private static string Tag(string authName, string playerId)
+        {
+            int hash = authName?.LastIndexOf('#') ?? -1;
+            if (hash >= 0 && hash < authName.Length - 1) return authName.Substring(hash);
+            return string.IsNullOrEmpty(playerId) ? string.Empty : "#" + playerId.Substring(0, Math.Min(6, playerId.Length)).ToUpperInvariant();
+        }
+
         private static async Task<Dictionary<string, int>> ReadBests(IExecutionContext context, IGameApiClient api)
         {
             var response = await api.CloudSaveData.GetProtectedItemsAsync(context, context.ServiceToken, context.ProjectId, context.PlayerId,
@@ -168,6 +179,7 @@ namespace Leaderboard
     {
         public int Rank { get; set; }
         public string Name { get; set; } = string.Empty;
+        public string Tag { get; set; } = string.Empty;
         public long Score { get; set; }
         public bool IsMe { get; set; }
         public string Icon { get; set; } = string.Empty;

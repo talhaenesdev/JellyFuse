@@ -6,6 +6,8 @@ namespace Modules.LeaderboardModule.Data.ValueObjects
         /// <summary>Counted from 1.</summary>
         public int Rank { get; set; }
         public string Name { get; set; } = string.Empty;
+        /// <summary>The player's fixed number, "#1234", under the name: two players may pick one name.</summary>
+        public string Tag { get; set; } = string.Empty;
         public long Score { get; set; }
         /// <summary>The row of the player asking.</summary>
         public bool IsMe { get; set; }

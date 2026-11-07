@@ -154,6 +154,7 @@ namespace Modules.MainModule.LeaderboardScreenModule.ViewsMediators
             Set(row, "Txt_Rank", data.Rank.ToString());
             Set(row, "Txt_Name", string.IsNullOrEmpty(data.Name) ? L("leaderboard.player", "Player") : TrimName(data.Name));
             Set(row, "Txt_Score", data.Score.ToString("N0"));
+            Set(row, "Txt_Tag", data.Tag ?? string.Empty);
             var avatar = row.Find("Img_Avatar")?.GetComponent<Image>();
             if (avatar != null)
             {
