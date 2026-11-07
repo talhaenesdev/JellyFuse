@@ -82,6 +82,8 @@ namespace Leaderboard
         {
             name = (name ?? string.Empty).Trim();
             if (name.Length > MaxNameLength) name = name.Substring(0, MaxNameLength);
+            // Every player sees this name: a rude one is stored as the plain fallback instead.
+            name = NameFilter.Clean(name);
             icon = (icon ?? string.Empty).Trim();
             if (icon.Length > 64) icon = icon.Substring(0, 64);
             frame = (frame ?? string.Empty).Trim();
