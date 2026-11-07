@@ -49,21 +49,38 @@ namespace Modules.AccountModule.Services
 
                 if (code != null && !AuthenticationService.Instance.SessionTokenExists)
                 {
-                    await AuthenticationService.Instance.SignInWithGooglePlayGamesAsync(code);
-                    FlowLogger.Log($"Signed in with Google Play Games as {AuthenticationService.Instance.PlayerId}.");
-                    return true;
+                    try
+                    {
+                        await AuthenticationService.Instance.SignInWithGooglePlayGamesAsync(code);
+                        FlowLogger.Log($"Signed in with Google Play Games as {AuthenticationService.Instance.PlayerId}.");
+                        return true;
+                    }
+                    catch (Exception exception) when (exception is AuthenticationException || exception is RequestFailedException)
+                    {
+                        // A Play Games account the server cannot verify still plays online, as a guest.
+                        FlowLogger.LogError($"AccountService - Google Play Games sign-in was refused, signing in as a guest: {exception.Message}");
+                        code = null;
+                    }
                 }
 
                 // Anonymous sign-in reuses the session token this device kept, so the account lasts
                 // until the app's data is cleared.
                 await AuthenticationService.Instance.SignInAnonymouslyAsync();
                 FlowLogger.Log($"Signed in as {AuthenticationService.Instance.PlayerId}.");
-                if (code != null) await LinkOrSwitch(code);
+                if (code != null)
+                {
+                    try { await LinkOrSwitch(code); }
+                    catch (Exception exception) when (exception is AuthenticationException || exception is RequestFailedException)
+                    {
+                        // Signed in already: a link that fails leaves the guest account playing.
+                        FlowLogger.LogError($"AccountService - linking Google Play Games failed: {exception.Message}");
+                    }
+                }
                 return true;
             }
             catch (Exception exception) when (exception is AuthenticationException || exception is RequestFailedException)
             {
-                FlowLogger.LogWarning($"AccountService - sign-in failed, playing offline: {exception.Message}");
+                FlowLogger.LogError($"AccountService - sign-in failed, playing offline: {exception.Message}");
                 return false;
             }
         }
