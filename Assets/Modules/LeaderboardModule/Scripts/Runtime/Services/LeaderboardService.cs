@@ -83,13 +83,13 @@ namespace Modules.LeaderboardModule.Services
                     FlowLogger.Log("LeaderboardService - the board was slow; asking once more.");
                     page = await WithTimeout(CloudCodeService.Instance.CallModuleEndpointAsync<LeaderboardPageVO>(MODULE, BOARD, arguments), BOARD_TIMEOUT);
                 }
-                if (page == null) FlowLogger.Log("LeaderboardService - the board did not come back in time.");
+                if (page == null) FlowLogger.LogError("LeaderboardService - the board did not come back in time.");
                 else FlowLogger.Log($"LeaderboardService - {board}: {page.Top.Count} rows, mine: {page.Me?.Name ?? "none"} {page.Me?.Tag ?? "-"} icon {page.Me?.Icon ?? "-"}");
                 return page;
             }
             catch (Exception exception)
             {
-                FlowLogger.Log($"LeaderboardService - the board could not be read: {exception.Message}");
+                FlowLogger.LogError($"LeaderboardService - the board could not be read: {exception.Message}");
                 return null;
             }
         }
@@ -111,7 +111,7 @@ namespace Modules.LeaderboardModule.Services
             }
             catch (Exception exception)
             {
-                FlowLogger.Log($"LeaderboardService - the profile could not be sent: {exception.Message}");
+                FlowLogger.LogError($"LeaderboardService - the profile could not be sent: {exception.Message}");
                 return false;
             }
         }
@@ -128,7 +128,11 @@ namespace Modules.LeaderboardModule.Services
             return await call;
         }
 
-        private static bool SignedIn() =>
-            UnityServices.State == ServicesInitializationState.Initialized && AuthenticationService.Instance.IsSignedIn;
+        private static bool SignedIn()
+        {
+            bool signedIn = UnityServices.State == ServicesInitializationState.Initialized && AuthenticationService.Instance.IsSignedIn;
+            if (!signedIn) FlowLogger.LogError($"LeaderboardService - not signed in (services {UnityServices.State}).");
+            return signedIn;
+        }
     }
 }
