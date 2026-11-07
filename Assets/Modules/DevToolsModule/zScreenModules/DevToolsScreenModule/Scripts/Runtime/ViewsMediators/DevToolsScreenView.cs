@@ -110,6 +110,7 @@ namespace Modules.DevToolsModule.DevToolsScreenModule.ViewsMediators
             if (_displayTogglesButton != null) _displayTogglesButton.onClick.AddListener(OpenDisplayToggles);
             if (_togglesBack != null) _togglesBack.onClick.AddListener(CloseToggles);
             WirePin(true);
+            WireErrors(true);
         }
         private void OnDisable()
         {
@@ -125,6 +126,7 @@ namespace Modules.DevToolsModule.DevToolsScreenModule.ViewsMediators
             if (_displayTogglesButton != null) _displayTogglesButton.onClick.RemoveListener(OpenDisplayToggles);
             if (_togglesBack != null) _togglesBack.onClick.RemoveListener(CloseToggles);
             WirePin(false);
+            WireErrors(false);
             CloseToggles();
         }
 

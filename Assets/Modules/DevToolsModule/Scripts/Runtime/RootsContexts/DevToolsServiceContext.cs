@@ -10,7 +10,15 @@ namespace Modules.DevToolsModule.RootsContexts
         {
             base.InjectionBindings();
             InjectionBinder.Bind<DevToolsModel>();
+            InjectionBinder.Bind<DevErrorLogModel>();
             InjectionBinderCrossContext.Bind<IDevToolsService, DevToolsService>();
+        }
+
+        public override void Setup()
+        {
+            base.Setup();
+            // Made now rather than when the panel first asks, so it hears the errors logged before then.
+            InjectionBinder.GetInstance<DevErrorLogModel>();
         }
     }
 }

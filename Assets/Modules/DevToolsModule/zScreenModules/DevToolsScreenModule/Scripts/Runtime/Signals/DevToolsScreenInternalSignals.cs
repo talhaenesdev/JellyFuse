@@ -23,5 +23,10 @@ namespace Modules.DevToolsModule.DevToolsScreenModule.Signals
         public Signal<string> PinEntered = new();
         /// <summary>The PIN typed did not match.</summary>
         public Signal PinRejected = new();
+
+        /// <summary>The errors page asks for the errors logged so far.</summary>
+        public Signal ShowErrors = new();
+        /// <summary>Clear was pressed on the errors page.</summary>
+        public Signal ClearErrors = new();
     }
 }

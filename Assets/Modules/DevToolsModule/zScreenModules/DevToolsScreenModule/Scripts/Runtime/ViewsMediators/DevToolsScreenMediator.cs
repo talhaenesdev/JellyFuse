@@ -42,6 +42,8 @@ namespace Modules.DevToolsModule.DevToolsScreenModule.ViewsMediators
             _internalSignals.ToggleChanged.AddListener(_view.ShowToggle);
             _view.PinSubmitted += OnPinSubmitted;
             _internalSignals.PinRejected.AddListener(_view.ShowPinRejected);
+            _view.ErrorsRequested += OnErrorsRequested;
+            _view.ErrorsClearClicked += OnErrorsClear;
         }
 
         private void OnScreenHidden(IScreenBody screen)
@@ -60,6 +62,18 @@ namespace Modules.DevToolsModule.DevToolsScreenModule.ViewsMediators
             _internalSignals.ToggleChanged.RemoveListener(_view.ShowToggle);
             _view.PinSubmitted -= OnPinSubmitted;
             _internalSignals.PinRejected.RemoveListener(_view.ShowPinRejected);
+            _view.ErrorsRequested -= OnErrorsRequested;
+            _view.ErrorsClearClicked -= OnErrorsClear;
+        }
+
+        private void OnErrorsRequested()
+        {
+            if (_view.Data.HasState(ScreenState.AvailableToSendSignal)) _internalSignals.ShowErrors.Dispatch();
+        }
+
+        private void OnErrorsClear()
+        {
+            if (_view.Data.HasState(ScreenState.AvailableToSendSignal)) _internalSignals.ClearErrors.Dispatch();
         }
 
         private void OnPinSubmitted(string pin)

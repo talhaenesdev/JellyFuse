@@ -26,5 +26,8 @@ namespace Modules.DevToolsModule.Services
         bool IsOn(string key);
         /// <summary>Sets and keeps the switch on this device; false when CD_DevTools does not list the key.</summary>
         bool Set(string key, bool on);
+        /// <summary>The last errors and exceptions this run logged, newest last; readable on a store build too.</summary>
+        IReadOnlyList<string> Errors();
+        void ClearErrors();
     }
 }

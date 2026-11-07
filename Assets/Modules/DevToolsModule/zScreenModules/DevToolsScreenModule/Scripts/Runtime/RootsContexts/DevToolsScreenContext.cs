@@ -42,6 +42,10 @@ namespace Modules.DevToolsModule.DevToolsScreenModule.RootsContexts
             base.CommandBindings();
             CommandBinder.Bind(_signals.Incoming.OpenDevToolsScreen).ToSequence<OpenDevToolsScreenCommand>();
             CommandBinder.Bind(_internalSignals.SetToggle).ToSequence<SetDevToggleCommand>();
+            CommandBinder.Bind(_internalSignals.ShowErrors).ToSequence<ShowDevErrorsCommand>();
+            CommandBinder.Bind(_internalSignals.ClearErrors)
+                .ToSequence<ClearDevErrorsCommand>()
+                .ToSequence<ShowDevErrorsCommand>();
 
             // The secret way in, for a store build: four corners in order, then the PIN.
             CommandBinder.Bind(_internalSignals.ListenForSecret).ToSequence<StartSecretListeningCommand>();
