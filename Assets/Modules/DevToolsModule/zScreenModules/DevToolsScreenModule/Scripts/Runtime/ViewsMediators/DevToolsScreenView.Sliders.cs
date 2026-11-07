@@ -83,6 +83,7 @@ namespace Modules.DevToolsModule.DevToolsScreenModule.ViewsMediators
             {
                 for (int i = _list.childCount - 1; i >= 0; i--) Destroy(_list.GetChild(i).gameObject);
                 _sliders.Clear();
+                _colourPreviews.Clear();
                 _list.sizeDelta = new Vector2(_list.sizeDelta.x, 0);
                 _rowCount = 0; _lastGroup = null;
                 _pageName = page;
@@ -118,6 +119,7 @@ namespace Modules.DevToolsModule.DevToolsScreenModule.ViewsMediators
                 _sliders[data.Key] = (row.Slider, row.Value, data);
             }
             _settingSliders = false;
+            foreach (var key in _colourPreviews.Keys) RefreshPreview(key);
             _emptyHint.gameObject.SetActive(_sliders.Count == 0);
             _list.sizeDelta = new Vector2(_list.sizeDelta.x, _rowCount * _sliderRowHeight);
         }
@@ -188,6 +190,9 @@ namespace Modules.DevToolsModule.DevToolsScreenModule.ViewsMediators
                 _rowCount++;
             }
             _lastGroup = data.Group;
+            string colourKey = ColourBase(data.Key);
+            // A colour's strip - its preview and palette - comes before its first channel.
+            if (colourKey != null && data.Key.EndsWith(".r")) AddColourStrip(colourKey);
             var row = new GameObject("Row_" + data.Key, typeof(RectTransform)).GetComponent<RectTransform>();
             row.SetParent(_list, false);
             row.anchorMin = new Vector2(0, 1); row.anchorMax = new Vector2(1, 1); row.pivot = new Vector2(.5f, 1);
@@ -216,7 +221,9 @@ namespace Modules.DevToolsModule.DevToolsScreenModule.ViewsMediators
                 if (!_sliders.TryGetValue(key, out var entry)) return;
                 entry.Value.text = Format(entry.Data, v);
                 if (!_settingSliders) SliderChanged?.Invoke(key, v);
+                RefreshPreview(colourKey);
             });
+            if (colourKey != null) TintChannel(slider, key);
             var trigger = sliderGo.AddComponent<EventTrigger>();
             // The held row stays in sight over the board, on a dark strip, so its value can be read while the rest is hidden.
             var rowGroup = row.gameObject.AddComponent<CanvasGroup>();
