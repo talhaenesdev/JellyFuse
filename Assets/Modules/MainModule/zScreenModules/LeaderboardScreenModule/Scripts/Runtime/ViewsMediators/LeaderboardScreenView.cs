@@ -54,6 +54,7 @@ namespace Modules.MainModule.LeaderboardScreenModule.ViewsMediators
         private Func<string, string> _localize;
         private LeaderboardBoard _board;
         private CD_ProfileIcons _icons;
+        private CD_ProfileFrames _frames;
 
         private void OnEnable()
         {
@@ -77,7 +78,11 @@ namespace Modules.MainModule.LeaderboardScreenModule.ViewsMediators
         private void OnEditProfileClicked() => EditProfileClicked?.Invoke();
 
         /// <summary>The catalogue a row's icon id is looked up in.</summary>
-        public void SetIcons(CD_ProfileIcons icons) => _icons = icons;
+        public void SetIcons(CD_ProfileIcons icons, CD_ProfileFrames frames)
+        {
+            _icons = icons;
+            _frames = frames;
+        }
 
         public override void BeforeScreenActivation()
         {
@@ -156,6 +161,17 @@ namespace Modules.MainModule.LeaderboardScreenModule.ViewsMediators
                 avatar.sprite = icon?.Sprite;
                 avatar.color = icon == null ? new Color(1, 1, 1, .35f) : icon.Sprite != null ? Color.white : icon.FallbackColor;
             }
+            var frameImage = row.Find("Img_Frame")?.GetComponent<Image>();
+            if (frameImage != null)
+            {
+                var frame = Frame(data.Frame);
+                frameImage.gameObject.SetActive(frame != null);
+                if (frame != null)
+                {
+                    frameImage.sprite = frame.Sprite;
+                    frameImage.color = frame.Sprite != null ? Color.white : frame.FallbackColor;
+                }
+            }
             var badge = row.Find("Img_Badge")?.GetComponent<Image>();
             if (badge != null && _badges.Length > 0)
             {
@@ -186,6 +202,15 @@ namespace Modules.MainModule.LeaderboardScreenModule.ViewsMediators
             foreach (var icon in _icons.Icons)
                 if (icon != null && icon.Id == id) return icon;
             return _icons.Icons[0];
+        }
+
+        /// <summary>The picked frame, or the first in the catalogue for a player who never picked one.</summary>
+        private ProfileFrameCVO Frame(string id)
+        {
+            if (_frames == null || _frames.Frames.Count == 0) return null;
+            foreach (var frame in _frames.Frames)
+                if (frame != null && frame.Id == id) return frame;
+            return _frames.Frames[0];
         }
 
         private bool IsPodium(RectTransform row) => Array.IndexOf(_podium, row) >= 0;

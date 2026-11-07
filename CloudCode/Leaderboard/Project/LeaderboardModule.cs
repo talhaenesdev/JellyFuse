@@ -74,18 +74,20 @@ namespace Leaderboard
         }
 
         /// <summary>
-        /// The name and icon the player picked in the game, kept in their public Cloud Save data so every board shows
+        /// The name, icon and frame the player picked in the game, kept in their public Cloud Save data so every board shows
         /// them. The name is trimmed and cut to MaxNameLength; an empty one falls back to the Authentication name.
         /// </summary>
         [CloudCodeFunction("SetProfile")]
-        public async Task<ProfileResult> SetProfile(IExecutionContext context, IGameApiClient api, string name, string icon)
+        public async Task<ProfileResult> SetProfile(IExecutionContext context, IGameApiClient api, string name, string icon, string frame)
         {
             name = (name ?? string.Empty).Trim();
             if (name.Length > MaxNameLength) name = name.Substring(0, MaxNameLength);
             icon = (icon ?? string.Empty).Trim();
             if (icon.Length > 64) icon = icon.Substring(0, 64);
+            frame = (frame ?? string.Empty).Trim();
+            if (frame.Length > 64) frame = frame.Substring(0, 64);
             await api.CloudSaveData.SetPublicItemAsync(context, context.ServiceToken, context.ProjectId, context.PlayerId,
-                new SetItemBody(ProfileKey, new PlayerProfile { Name = name, Icon = icon }));
+                new SetItemBody(ProfileKey, new PlayerProfile { Name = name, Icon = icon, Frame = frame }));
             return new ProfileResult { Saved = true, Name = name };
         }
 
@@ -130,6 +132,7 @@ namespace Leaderboard
                 if (profile == null) return;
                 if (!string.IsNullOrWhiteSpace(profile.Name)) row.Name = profile.Name;
                 row.Icon = profile.Icon ?? string.Empty;
+                row.Frame = profile.Frame ?? string.Empty;
             }
             catch (Exception)
             {
@@ -166,6 +169,7 @@ namespace Leaderboard
         public long Score { get; set; }
         public bool IsMe { get; set; }
         public string Icon { get; set; } = string.Empty;
+        public string Frame { get; set; } = string.Empty;
     }
 
     public class ProfileResult
@@ -178,6 +182,7 @@ namespace Leaderboard
     {
         public string Name { get; set; } = string.Empty;
         public string Icon { get; set; } = string.Empty;
+        public string Frame { get; set; } = string.Empty;
     }
 
     public class BoardResult

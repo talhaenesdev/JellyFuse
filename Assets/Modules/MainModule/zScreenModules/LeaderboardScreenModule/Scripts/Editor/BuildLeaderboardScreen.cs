@@ -240,6 +240,11 @@ namespace Modules.MainModule.LeaderboardScreenModule.Editor
                 avatar.raycastTarget = false;
                 Anchor(avatar.rectTransform, new Vector2(.22f, top - .03f), new Vector2(.78f, top + .2f));
                 avatar.transform.SetSiblingIndex(mark.transform.GetSiblingIndex());
+                var podiumFrame = Ui("Img_Frame", slot, typeof(Image)).GetComponent<Image>();
+                podiumFrame.preserveAspect = true;
+                podiumFrame.raycastTarget = false;
+                Anchor(podiumFrame.rectTransform, new Vector2(.18f, top - .05f), new Vector2(.82f, top + .22f));
+                podiumFrame.transform.SetSiblingIndex(avatar.transform.GetSiblingIndex() + 1);
                 if (i > 0)
                 {
                     var number = Text("Txt_Place", mark.transform, font, (i + 1).ToString(), 44, Color.white);
@@ -322,6 +327,10 @@ namespace Modules.MainModule.LeaderboardScreenModule.Editor
             avatar.preserveAspect = true;
             avatar.raycastTarget = false;
             Side(avatar.rectTransform, 0, 116, 92, 12);
+            var frameImage = Ui("Img_Frame", row.transform, typeof(Image)).GetComponent<Image>();
+            frameImage.preserveAspect = true;
+            frameImage.raycastTarget = false;
+            Side(frameImage.rectTransform, 0, 108, 108, 4);
 
             nameText.rectTransform.offsetMin = new Vector2(222, 0);
             nameText.rectTransform.offsetMax = new Vector2(-250, 0);

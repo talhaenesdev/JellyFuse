@@ -93,7 +93,7 @@ namespace Modules.LeaderboardModule.Services
             }
         }
 
-        public async Task<bool> SetProfileAsync(string name, string iconId)
+        public async Task<bool> SetProfileAsync(string name, string iconId, string frameId)
         {
             if (!SignedIn()) return false;
             try
@@ -102,6 +102,7 @@ namespace Modules.LeaderboardModule.Services
                 {
                     { "name", name ?? string.Empty },
                     { "icon", iconId ?? string.Empty },
+                    { "frame", frameId ?? string.Empty },
                 });
                 bool sent = (await WithTimeout(call))?.Saved == true;
                 if (!sent) FlowLogger.Log("LeaderboardService - the profile did not reach the server in time.");

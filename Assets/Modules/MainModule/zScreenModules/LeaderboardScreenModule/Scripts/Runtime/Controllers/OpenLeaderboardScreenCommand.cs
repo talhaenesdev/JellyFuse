@@ -35,7 +35,7 @@ namespace Modules.MainModule.LeaderboardScreenModule.Controllers
                 }
                 screen.SetLocalizer(_localization.Get);
                 // The profile icons players pick; without the catalogue the rows go without pictures.
-                screen.SetIcons(_shared.GetScriptable<CD_ProfileIcons>());
+                screen.SetIcons(_shared.GetScriptable<CD_ProfileIcons>(), _shared.GetScriptable<CD_ProfileFrames>());
                 screen.ShowLoading(LeaderboardBoard.AllTime);
                 Release();
             }

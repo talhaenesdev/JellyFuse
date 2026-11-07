@@ -11,5 +11,7 @@ namespace Modules.LeaderboardModule.Data.ValueObjects
         public bool IsMe { get; set; }
         /// <summary>The profile icon the player picked, or empty when they never picked one.</summary>
         public string Icon { get; set; } = string.Empty;
+        /// <summary>The profile frame the player picked, or empty.</summary>
+        public string Frame { get; set; } = string.Empty;
     }
 }

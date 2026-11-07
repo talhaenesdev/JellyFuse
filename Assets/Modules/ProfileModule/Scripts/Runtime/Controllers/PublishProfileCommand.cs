@@ -8,7 +8,7 @@ using Modules.ProfileModule.Models;
 namespace Modules.ProfileModule.Controllers
 {
     /// <summary>
-    /// Sends the saved name and icon to the leaderboard, so every board shows them. Offline, the step carries on:
+    /// Sends the saved name, icon and frame to the leaderboard, so every board shows them. Offline, the step carries on:
     /// the profile is saved on the device either way, and the next save sends it again.
     /// </summary>
     internal sealed class PublishProfileCommand : Command
@@ -22,7 +22,7 @@ namespace Modules.ProfileModule.Controllers
             try
             {
                 var selection = _model.CreateSelection();
-                await _leaderboard.SetProfileAsync(selection.PlayerName, selection.SelectedIconId);
+                await _leaderboard.SetProfileAsync(selection.PlayerName, selection.SelectedIconId, selection.SelectedFrameId);
                 Release();
             }
             catch (Exception exception)
