@@ -30,6 +30,12 @@ namespace Modules.MainModule.LeaderboardScreenModule.ViewsMediators
         [SerializeField] private RectTransform _rowTemplate;
         [Tooltip("The player's own row, under the list.")]
         [SerializeField] private RectTransform _meRow;
+        [Tooltip("The first three players, in the order 1st, 2nd, 3rd; each holds Txt_Name and Txt_Score.")]
+        [SerializeField] private RectTransform[] _podium = new RectTransform[0];
+        [Tooltip("Rank badges for 1st, 2nd, 3rd and every other place, behind a row's rank.")]
+        [SerializeField] private Sprite[] _badges = new Sprite[0];
+        [SerializeField] private Sprite _tabOnSprite;
+        [SerializeField] private Sprite _tabOffSprite;
         [SerializeField] private Color _tabOn = new(1f, .82f, .25f);
         [SerializeField] private Color _tabOff = new(.42f, .2f, .78f);
         [SerializeField] private Color _rowColour = new(.26f, .06f, .63f, .88f);
@@ -81,6 +87,7 @@ namespace Modules.MainModule.LeaderboardScreenModule.ViewsMediators
             _board = board;
             PaintTabs();
             HideRows();
+            HidePodium();
             if (_meRow != null) _meRow.gameObject.SetActive(false);
             Status(L("leaderboard.loading", "Loading..."));
         }
@@ -90,10 +97,19 @@ namespace Modules.MainModule.LeaderboardScreenModule.ViewsMediators
         {
             if (board != _board) return;
             HideRows();
+            HidePodium();
             if (page == null) { Status(L("leaderboard.offline", "Can't reach the leaderboard. Check your connection.")); return; }
             if (page.Top.Count == 0) Status(L("leaderboard.empty", "No scores yet. Win a level to be the first!"));
             else Status(string.Empty);
-            for (int i = 0; i < page.Top.Count; i++) Fill(Row(i), page.Top[i]);
+            // The first places stand on the podium; the list starts after them.
+            int onPodium = Mathf.Min(_podium.Length, page.Top.Count);
+            for (int i = 0; i < onPodium; i++)
+            {
+                if (_podium[i] == null) continue;
+                _podium[i].gameObject.SetActive(true);
+                Fill(_podium[i], page.Top[i]);
+            }
+            for (int i = onPodium; i < page.Top.Count; i++) Fill(Row(i - onPodium), page.Top[i]);
             if (_meRow != null)
             {
                 _meRow.gameObject.SetActive(page.Me != null);
@@ -119,8 +135,14 @@ namespace Modules.MainModule.LeaderboardScreenModule.ViewsMediators
             Set(row, "Txt_Rank", data.Rank.ToString());
             Set(row, "Txt_Name", string.IsNullOrEmpty(data.Name) ? L("leaderboard.player", "Player") : TrimName(data.Name));
             Set(row, "Txt_Score", data.Score.ToString("N0"));
+            var badge = row.Find("Img_Badge")?.GetComponent<Image>();
+            if (badge != null && _badges.Length > 0)
+            {
+                int last = _badges.Length - 1;
+                badge.sprite = _badges[data.Rank >= 1 && data.Rank - 1 < last ? data.Rank - 1 : last];
+            }
             var image = row.GetComponent<Image>();
-            if (image != null && row != _meRow) image.color = data.IsMe ? _myRowColour : _rowColour;
+            if (image != null && row != _meRow && !IsPodium(row)) image.color = data.IsMe ? _myRowColour : _rowColour;
         }
 
         // Unity Authentication adds "#1234" to a player's name so names stay unique; the list shows the name alone.
@@ -136,6 +158,13 @@ namespace Modules.MainModule.LeaderboardScreenModule.ViewsMediators
             if (text != null) text.text = value;
         }
 
+        private bool IsPodium(RectTransform row) => Array.IndexOf(_podium, row) >= 0;
+
+        private void HidePodium()
+        {
+            foreach (var slot in _podium) if (slot != null) slot.gameObject.SetActive(false);
+        }
+
         private void HideRows()
         {
             foreach (var row in _rows) row.gameObject.SetActive(false);
@@ -143,8 +172,19 @@ namespace Modules.MainModule.LeaderboardScreenModule.ViewsMediators
 
         private void PaintTabs()
         {
-            if (_allTimeTab != null) _allTimeTab.image.color = _board == LeaderboardBoard.AllTime ? _tabOn : _tabOff;
-            if (_weeklyTab != null) _weeklyTab.image.color = _board == LeaderboardBoard.Weekly ? _tabOn : _tabOff;
+            PaintTab(_allTimeTab, _board == LeaderboardBoard.AllTime);
+            PaintTab(_weeklyTab, _board == LeaderboardBoard.Weekly);
+        }
+
+        private void PaintTab(Button tab, bool on)
+        {
+            if (tab == null) return;
+            if (_tabOnSprite != null && _tabOffSprite != null)
+            {
+                tab.image.sprite = on ? _tabOnSprite : _tabOffSprite;
+                tab.image.color = Color.white;
+            }
+            else tab.image.color = on ? _tabOn : _tabOff;
         }
 
         private void Status(string text)
