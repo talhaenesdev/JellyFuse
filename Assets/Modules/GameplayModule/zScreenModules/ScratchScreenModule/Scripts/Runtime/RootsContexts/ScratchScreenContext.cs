@@ -19,7 +19,7 @@ namespace Modules.GameplayModule.ScratchScreenModule.RootsContexts
             Tag = ScreenTag.Default,
             Load = ScreenLoadCVO.Addressable("ScratchScreen"),
             HasShowAnimation = false,
-            HasHideAnimation = false,
+            HasHideAnimation = true,
         };
 
         private ScratchScreenSignals _signals;

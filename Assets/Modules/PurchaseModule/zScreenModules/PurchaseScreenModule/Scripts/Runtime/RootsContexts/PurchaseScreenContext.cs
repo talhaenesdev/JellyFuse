@@ -17,7 +17,7 @@ namespace Modules.PurchaseModule.PurchaseScreenModule.RootsContexts
             Tag = ScreenTag.Default,
             Load = ScreenLoadCVO.Addressable("PurchaseScreen"),
             HasShowAnimation = false,
-            HasHideAnimation = false,
+            HasHideAnimation = true,
         };
 
 		private PurchaseScreenSignals _signals;

@@ -283,6 +283,12 @@ namespace Modules.GameplayModule.SlotScreenModule.ViewsMediators
         private void OnAdSpinClicked() { if (!Spinning) AdSpinClicked?.Invoke(); }
 
         protected override void PlayShowAnimation() => ShowCompleted?.Invoke(this);
-        protected override void PlayHideAnimation() => HideCompleted?.Invoke(this);
+        protected override void PlayHideAnimation()
+        {
+            // The panel shrinks and fades out first; the screen is hidden once it has.
+            var panel = GetComponentInChildren<PanelAnimator>();
+            if (panel != null) panel.Close(() => HideCompleted?.Invoke(this));
+            else HideCompleted?.Invoke(this);
+        }
     }
 }

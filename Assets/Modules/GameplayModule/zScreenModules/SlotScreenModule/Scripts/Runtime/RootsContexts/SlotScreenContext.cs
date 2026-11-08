@@ -19,7 +19,7 @@ namespace Modules.GameplayModule.SlotScreenModule.RootsContexts
             Tag = ScreenTag.Default,
             Load = ScreenLoadCVO.Addressable("SlotScreen"),
             HasShowAnimation = false,
-            HasHideAnimation = false,
+            HasHideAnimation = true,
         };
 
         private SlotScreenSignals _signals;

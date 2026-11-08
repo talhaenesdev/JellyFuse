@@ -18,7 +18,7 @@ namespace Modules.GameplayModule.SettingsScreenModule.RootsContexts
             Tag = ScreenTag.Default,
             Load = ScreenLoadCVO.Addressable("SettingsScreen"),
             HasShowAnimation = false,
-            HasHideAnimation = false,
+            HasHideAnimation = true,
         };
 
         private SettingsScreenSignals _signals;

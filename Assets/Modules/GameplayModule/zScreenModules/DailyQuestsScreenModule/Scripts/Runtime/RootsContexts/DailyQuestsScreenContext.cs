@@ -19,7 +19,7 @@ namespace Modules.GameplayModule.DailyQuestsScreenModule.RootsContexts
             Tag = ScreenTag.Default,
             Load = ScreenLoadCVO.Addressable("DailyQuestsScreen"),
             HasShowAnimation = false,
-            HasHideAnimation = false,
+            HasHideAnimation = true,
         };
 
 		private DailyQuestsScreenSignals _signals;

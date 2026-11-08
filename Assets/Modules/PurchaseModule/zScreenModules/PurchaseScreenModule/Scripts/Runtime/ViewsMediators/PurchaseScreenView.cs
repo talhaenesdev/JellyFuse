@@ -4,6 +4,7 @@ using FlowIoC.BaseModule.Injectable.Components;
 using FlowIoC.ScreenModule.ViewsMediators.Screen;
 using Modules.PurchaseModule.Shared.Data.ValueObjects;
 using TMPro;
+using Modules.UiWidgetsModule.Entities;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -156,6 +157,12 @@ namespace Modules.PurchaseModule.PurchaseScreenModule.ViewsMediators
         }
 
         protected override void PlayShowAnimation() => ShowCompleted?.Invoke(this);
-        protected override void PlayHideAnimation() => HideCompleted?.Invoke(this);
+        protected override void PlayHideAnimation()
+        {
+            // The panel shrinks and fades out first; the screen is hidden once it has.
+            var panel = GetComponentInChildren<PanelAnimator>();
+            if (panel != null) panel.Close(() => HideCompleted?.Invoke(this));
+            else HideCompleted?.Invoke(this);
+        }
     }
 }

@@ -19,7 +19,7 @@ namespace Modules.GameplayModule.LoginRewardsScreenModule.RootsContexts
             Tag = ScreenTag.Default,
             Load = ScreenLoadCVO.Addressable("LoginRewardsScreen"),
             HasShowAnimation = false,
-            HasHideAnimation = false,
+            HasHideAnimation = true,
         };
 
         private LoginRewardsScreenSignals _signals;

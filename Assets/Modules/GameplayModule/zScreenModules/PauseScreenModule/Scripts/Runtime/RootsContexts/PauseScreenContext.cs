@@ -19,7 +19,7 @@ namespace Modules.GameplayModule.PauseScreenModule.RootsContexts
             Tag = ScreenTag.Default,
             Load = ScreenLoadCVO.Addressable("PauseScreen"),
             HasShowAnimation = false,
-            HasHideAnimation = false,
+            HasHideAnimation = true,
         };
 
         private PauseScreenSignals _signals;

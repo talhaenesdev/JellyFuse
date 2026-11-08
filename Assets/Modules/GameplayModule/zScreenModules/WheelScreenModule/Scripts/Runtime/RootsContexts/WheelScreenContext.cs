@@ -19,7 +19,7 @@ namespace Modules.GameplayModule.WheelScreenModule.RootsContexts
             Tag = ScreenTag.Default,
             Load = ScreenLoadCVO.Addressable("WheelScreen"),
             HasShowAnimation = false,
-            HasHideAnimation = false,
+            HasHideAnimation = true,
         };
 
         private WheelScreenSignals _signals;

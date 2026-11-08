@@ -124,6 +124,32 @@ namespace Modules.UiWidgetsModule.Entities
             _sequence.OnComplete(() => { _group.interactable = true; _sequence = null; });
         }
 
+        /// <summary>
+        /// Plays the closing: the panel shrinks a little and fades, the dim fades with it, and then it stands as it
+        /// was made again before <paramref name="done"/> runs - the screen hides it in that same frame, so the next
+        /// opening starts from the panel's own size. Without settings it closes at once.
+        /// </summary>
+        public void Close(System.Action done, float seconds = .16f)
+        {
+            CancelQueuedOpen();
+            Settle();
+            if (_settings == null || _settings.Duration <= 0 || seconds <= 0 || !isActiveAndEnabled) { done?.Invoke(); return; }
+            _scale = _rect.localScale; _position = _rect.anchoredPosition;
+            _group.interactable = false;
+            _sequence = DOTween.Sequence().SetUpdate(_ignoreTimeScale).SetTarget(this);
+            _sequence.Insert(0, _rect.DOScale(_scale * .86f, seconds).SetEase(Ease.InQuad));
+            _sequence.Insert(0, DOTween.To(() => _group.alpha, a => _group.alpha = a, 0, seconds).SetEase(Ease.InQuad));
+            if (_dim != null && _dimAlpha > 0)
+                _sequence.Insert(0, DOTween.To(() => _dim.color.a, a => SetDim(a), 0, seconds).SetEase(Ease.InQuad));
+            _sequence.OnComplete(() =>
+            {
+                _sequence = null;
+                _rect.localScale = _scale;
+                RestoreVisuals();
+                done?.Invoke();
+            });
+        }
+
         /// <summary>Ends an opening wherever it is: the panel stands as it was made.</summary>
         private void Settle()
         {
