@@ -138,6 +138,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             _dragSurface.Initialize(_board, OnGrab, OnDrag, OnDrop, CancelDrag);
             _spriteBoard.gameObject.SetActive(false);
             _spriteBoard.DeliveryStarted += seconds => JellyMelting?.Invoke(seconds);
+            _spriteBoard.ComboReached += ShowCombo;
             _timeColour = _time.color;
             Keyed(_undoLabel, "gameplay.undo");
             Keyed(_restartLabel, "gameplay.restart");
@@ -472,6 +473,9 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             if (!_timeTexts.TryGetValue(whole, out var text)) _timeTexts[whole] = text = $"{whole / 60:00}:{whole % 60:00}";
             if (!ReferenceEquals(_time.text, text)) _time.text = text;
             _time.color = _clockFrozen ? _presentation.Hud.FrostTimeColour : seconds <= _presentation.Hud.TimeWarningSeconds ? _presentation.Hud.TimeWarningColour : _timeColour;
+            // The walls glow red over the warning's seconds, strongest at the end; not while the clock is frozen.
+            float warning = _presentation.Hud.TimeWarningSeconds;
+            if (_hasBoard) _spriteBoard.SetUrgency(_clockFrozen || warning <= 0 || seconds <= 0 ? 0 : 1 - seconds / warning);
         }
         private void UpdateHud()
         {

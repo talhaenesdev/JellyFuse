@@ -123,6 +123,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                 var travel = (Vector2)d * ((furthest + .5f) * _cell);
                 var mouth = OpenMouth(gate, laneMin, laneMax, width, colour, piece.Cells.Count);
                 mouth.Door = door;
+                FxDeliver(mouth.EdgeFrom, mouth.EdgeTo, d, colour, piece.Cells.Count);
                 // Drawn off its door's rows (or columns) - still catching up round a corner - it first lines up in
                 // front of the door, then goes straight in: never across the corner into it.
                 var along = (Vector2)d * Vector2.Dot(drawn, d);

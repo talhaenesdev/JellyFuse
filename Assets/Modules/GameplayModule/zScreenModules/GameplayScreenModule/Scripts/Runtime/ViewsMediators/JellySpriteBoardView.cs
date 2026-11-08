@@ -815,6 +815,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                 {
                     Kick(blob, Feel.FusePop);
                     BurstFuse(piece.Cells, Tint((int)piece.Colour));
+                    FxFuse(piece.Cells, Tint((int)piece.Colour));
                     // The flash, ring and shake are kept for the fuse that completes a shape a door waits for.
                     if (FormsWaitingShape(piece)) Impact(piece.Id, piece.Cells, Tint((int)piece.Colour));
                 }
@@ -938,6 +939,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             // this runs before the blobs of pieces that are gone are dropped.
             StartDelivery(previous, snapshot, route, width, depth);
             BurstVanished(previous, snapshot);
+            FxPresented(previous, snapshot);
             _gone.Clear();
             foreach (var pair in _blobs) if (!pair.Value.Seen) _gone.Add(pair.Key);
             foreach (var id in _gone) _blobs.Remove(id);
@@ -1172,7 +1174,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             if (!Feel.AnimateJellies) ResetFeel();
             // A still board is left alone: nothing is written to the UI, so its canvas is not rebuilt.
             bool impact = StepImpact(Time.unscaledDeltaTime);
-            bool animated = Feel.AnimateJellies && Feel.BreathAmount > 0 || AnyFuseHint() || DeliveryRunning || impact;
+            bool fx = StepFx(Time.unscaledDeltaTime);
+            bool animated = Feel.AnimateJellies && Feel.BreathAmount > 0 || AnyFuseHint() || DeliveryRunning || impact || fx;
             if (moving || animated || _dirty) { Apply(); _dirty = moving; }
         }
         private bool AnyFuseHint()
@@ -1366,6 +1369,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         public void Clear()
         {
             ClearImpact();
+            ClearFx();
             ClearDust();
             ReleaseGates(); _gateOpen.Clear();
             ClearBlobs();
