@@ -2,7 +2,9 @@
   "name": "Modules.Screen",
   "references": [
     "FlowIoC",
-    "Modules.Screen.Signals"
+    "Modules.Screen.Signals",
+    "Unity.RenderPipelines.Core.Runtime",
+    "Unity.RenderPipelines.Universal.Runtime"
   ],
   "includePlatforms": [],
   "excludePlatforms": [],
