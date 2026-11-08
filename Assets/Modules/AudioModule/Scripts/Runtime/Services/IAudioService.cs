@@ -8,6 +8,8 @@ namespace Modules.AudioModule.Services
         bool SoundsEnabled { get; }
         bool MusicEnabled { get; }
         void Play(AudioCue cue);
+        /// <summary>The cue at a pitch of its own on top of its jitter: 1 as authored, higher for a rising run.</summary>
+        void Play(AudioCue cue, float pitch);
         /// <summary>Fades over to the track and loops it; asking for the one already playing changes nothing.</summary>
         void PlayMusic(MusicTrack track);
         void SetSoundsEnabled(bool enabled);

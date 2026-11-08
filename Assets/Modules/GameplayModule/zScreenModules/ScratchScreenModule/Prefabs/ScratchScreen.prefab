@@ -1132,6 +1132,7 @@ GameObject:
   - component: {fileID: 4381905369073064726}
   - component: {fileID: 2790079525257062818}
   - component: {fileID: 8591270271620142481}
+  - component: {fileID: 1032196001030381918}
   m_Layer: 5
   m_Name: Btn_AdCard
   m_TagString: Untagged
@@ -1241,6 +1242,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1032196001030381918
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2635042053063401624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 147470804a76c34429a0166703ac7abc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.UiWidgets::Modules.UiWidgetsModule.Entities.ButtonPressAnimator
+  _preset: {fileID: 0}
 --- !u!1 &2832372732305038862
 GameObject:
   m_ObjectHideFlags: 0
@@ -1544,6 +1558,7 @@ GameObject:
   - component: {fileID: 5886525559755809710}
   - component: {fileID: 7330820381107572357}
   - component: {fileID: 66332554894374779}
+  - component: {fileID: 6460837464513920843}
   m_Layer: 5
   m_Name: Btn_Close
   m_TagString: Untagged
@@ -1652,6 +1667,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &6460837464513920843
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3209477665487609050}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 147470804a76c34429a0166703ac7abc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.UiWidgets::Modules.UiWidgetsModule.Entities.ButtonPressAnimator
+  _preset: {fileID: 0}
 --- !u!1 &3617957132067199383
 GameObject:
   m_ObjectHideFlags: 0
@@ -2323,6 +2351,7 @@ GameObject:
   - component: {fileID: 3881308614267135294}
   - component: {fileID: 4469911929256263517}
   - component: {fileID: 5545269306507491896}
+  - component: {fileID: 7580097302470120036}
   m_Layer: 5
   m_Name: Btn_Card
   m_TagString: Untagged
@@ -2432,6 +2461,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &7580097302470120036
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6567437909946653010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 147470804a76c34429a0166703ac7abc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.UiWidgets::Modules.UiWidgetsModule.Entities.ButtonPressAnimator
+  _preset: {fileID: 0}
 --- !u!1 &6640577957921928010
 GameObject:
   m_ObjectHideFlags: 0
@@ -2444,6 +2486,7 @@ GameObject:
   - component: {fileID: 2385952974391205660}
   - component: {fileID: 699132390240844324}
   - component: {fileID: 3333680710532403482}
+  - component: {fileID: 3277364020199972111}
   m_Layer: 5
   m_Name: Btn_OpenAll
   m_TagString: Untagged
@@ -2553,6 +2596,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &3277364020199972111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6640577957921928010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 147470804a76c34429a0166703ac7abc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.UiWidgets::Modules.UiWidgetsModule.Entities.ButtonPressAnimator
+  _preset: {fileID: 0}
 --- !u!1 &7056099237884650823
 GameObject:
   m_ObjectHideFlags: 0
@@ -2852,6 +2908,7 @@ GameObject:
   - component: {fileID: 9190679260643679329}
   - component: {fileID: 7559351260256747889}
   - component: {fileID: 8543166198713960513}
+  - component: {fileID: 6441959410840905743}
   m_Layer: 5
   m_Name: Btn_Backdrop
   m_TagString: Untagged
@@ -2977,6 +3034,19 @@ MonoBehaviour:
   _left: 1
   _right: 1
   _coverAspect: 0
+--- !u!114 &6441959410840905743
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7939998598215296544}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 147470804a76c34429a0166703ac7abc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.UiWidgets::Modules.UiWidgetsModule.Entities.ButtonPressAnimator
+  _preset: {fileID: 0}
 --- !u!1 &8212096429459710927
 GameObject:
   m_ObjectHideFlags: 0

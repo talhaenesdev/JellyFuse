@@ -13,6 +13,7 @@ namespace Modules.AudioModule.Services
         public bool SoundsEnabled => _model.SoundsEnabled;
         public bool MusicEnabled => _model.MusicEnabled;
         public void Play(AudioCue cue) => _signals.Play.Dispatch(cue);
+        public void Play(AudioCue cue, float pitch) => _signals.PlayPitched.Dispatch(cue, pitch);
         public void PlayMusic(MusicTrack track) => _signals.PlayMusic.Dispatch(track);
         public void SetSoundsEnabled(bool enabled) => _signals.SetSoundsEnabled.Dispatch(enabled);
         public void SetMusicEnabled(bool enabled) => _signals.SetMusicEnabled.Dispatch(enabled);

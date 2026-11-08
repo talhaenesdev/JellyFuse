@@ -424,6 +424,7 @@ GameObject:
   - component: {fileID: 5342661840858771873}
   - component: {fileID: 2155043041735928336}
   - component: {fileID: 7999695936991703978}
+  - component: {fileID: 634298813549009088}
   m_Layer: 5
   m_Name: Btn_PlayEvent
   m_TagString: Untagged
@@ -548,6 +549,19 @@ MonoBehaviour:
   m_EffectColor: {r: 0.22745098, g: 0.047058824, b: 0.5411765, a: 0.78431374}
   m_EffectDistance: {x: 0, y: -5}
   m_UseGraphicAlpha: 1
+--- !u!114 &634298813549009088
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 760158928490313221}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 147470804a76c34429a0166703ac7abc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.UiWidgets::Modules.UiWidgetsModule.Entities.ButtonPressAnimator
+  _preset: {fileID: 0}
 --- !u!1 &1010046315234357746
 GameObject:
   m_ObjectHideFlags: 0
@@ -1061,6 +1075,7 @@ GameObject:
   - component: {fileID: 2924788082013452191}
   - component: {fileID: 8652206806292008808}
   - component: {fileID: 2572544211739758962}
+  - component: {fileID: 2989293550754998986}
   m_Layer: 5
   m_Name: Btn_Back
   m_TagString: Untagged
@@ -1185,6 +1200,19 @@ MonoBehaviour:
   m_EffectColor: {r: 0.22745098, g: 0.047058824, b: 0.5411765, a: 0.78431374}
   m_EffectDistance: {x: 0, y: -5}
   m_UseGraphicAlpha: 1
+--- !u!114 &2989293550754998986
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2069116354582195295}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 147470804a76c34429a0166703ac7abc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.UiWidgets::Modules.UiWidgetsModule.Entities.ButtonPressAnimator
+  _preset: {fileID: 0}
 --- !u!1 &2160938049145688689
 GameObject:
   m_ObjectHideFlags: 0
@@ -2306,6 +2334,7 @@ GameObject:
   - component: {fileID: 1679615634150700895}
   - component: {fileID: 8753768356094372266}
   - component: {fileID: 5846416512103212515}
+  - component: {fileID: 4493956120390951288}
   m_Layer: 5
   m_Name: Btn_PlayEvent
   m_TagString: Untagged
@@ -2430,6 +2459,19 @@ MonoBehaviour:
   m_EffectColor: {r: 0.22745098, g: 0.047058824, b: 0.5411765, a: 0.78431374}
   m_EffectDistance: {x: 0, y: -5}
   m_UseGraphicAlpha: 1
+--- !u!114 &4493956120390951288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4401879906009455394}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 147470804a76c34429a0166703ac7abc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.UiWidgets::Modules.UiWidgetsModule.Entities.ButtonPressAnimator
+  _preset: {fileID: 0}
 --- !u!1 &4771156243377141637
 GameObject:
   m_ObjectHideFlags: 0
@@ -4516,6 +4558,7 @@ GameObject:
   - component: {fileID: 6859647461662185851}
   - component: {fileID: 7018998815145630133}
   - component: {fileID: 2464360912044834061}
+  - component: {fileID: 1239927383372200155}
   m_Layer: 5
   m_Name: Btn_PlayEvent
   m_TagString: Untagged
@@ -4640,6 +4683,19 @@ MonoBehaviour:
   m_EffectColor: {r: 0.22745098, g: 0.047058824, b: 0.5411765, a: 0.78431374}
   m_EffectDistance: {x: 0, y: -5}
   m_UseGraphicAlpha: 1
+--- !u!114 &1239927383372200155
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8099091674994776822}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 147470804a76c34429a0166703ac7abc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.UiWidgets::Modules.UiWidgetsModule.Entities.ButtonPressAnimator
+  _preset: {fileID: 0}
 --- !u!1 &8833209080950050148
 GameObject:
   m_ObjectHideFlags: 0

@@ -150,6 +150,7 @@ GameObject:
   - component: {fileID: 8799046990966256873}
   - component: {fileID: 6901003713733940699}
   - component: {fileID: 1088189221986062497}
+  - component: {fileID: 7154081804795834735}
   m_Layer: 0
   m_Name: Pnl_Buy
   m_TagString: Untagged
@@ -274,6 +275,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &7154081804795834735
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 203815217141710297}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 147470804a76c34429a0166703ac7abc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.UiWidgets::Modules.UiWidgetsModule.Entities.ButtonPressAnimator
+  _preset: {fileID: 0}
 --- !u!1 &227099417560714522
 GameObject:
   m_ObjectHideFlags: 0
@@ -797,6 +811,7 @@ GameObject:
   - component: {fileID: 5839590315017028667}
   - component: {fileID: 7953200957415066718}
   - component: {fileID: 337304951823209123}
+  - component: {fileID: 4923954379999689631}
   m_Layer: 5
   m_Name: Btn_Leaderboard
   m_TagString: Untagged
@@ -954,6 +969,19 @@ MonoBehaviour:
   _rest: 2.2
   _hop: 14
   _wiggle: 9
+--- !u!114 &4923954379999689631
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 930910119318087422}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 147470804a76c34429a0166703ac7abc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.UiWidgets::Modules.UiWidgetsModule.Entities.ButtonPressAnimator
+  _preset: {fileID: 0}
 --- !u!1 &948793389546560632
 GameObject:
   m_ObjectHideFlags: 0
@@ -1442,6 +1470,7 @@ GameObject:
   - component: {fileID: 7948535547115959606}
   - component: {fileID: 3686683997056436376}
   - component: {fileID: 7172906531657761278}
+  - component: {fileID: 3709905570680407736}
   m_Layer: 5
   m_Name: Btn_Scratch
   m_TagString: Untagged
@@ -1600,6 +1629,19 @@ MonoBehaviour:
   _rest: 2.2
   _hop: 14
   _wiggle: 9
+--- !u!114 &3709905570680407736
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1469160803034821210}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 147470804a76c34429a0166703ac7abc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.UiWidgets::Modules.UiWidgetsModule.Entities.ButtonPressAnimator
+  _preset: {fileID: 0}
 --- !u!1 &1644395142515316688
 GameObject:
   m_ObjectHideFlags: 0
@@ -3440,6 +3482,7 @@ GameObject:
   - component: {fileID: 5646491015177042292}
   - component: {fileID: 5569050115559501331}
   - component: {fileID: 6798206621270966785}
+  - component: {fileID: 4166778161842076533}
   m_Layer: 0
   m_Name: Btn_ShopClose
   m_TagString: Untagged
@@ -3548,6 +3591,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &4166778161842076533
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3212368290553818069}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 147470804a76c34429a0166703ac7abc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.UiWidgets::Modules.UiWidgetsModule.Entities.ButtonPressAnimator
+  _preset: {fileID: 0}
 --- !u!1 &3259131522546130888
 GameObject:
   m_ObjectHideFlags: 0
@@ -4399,6 +4455,7 @@ GameObject:
   - component: {fileID: 858269816590576307}
   - component: {fileID: 8804704494458897717}
   - component: {fileID: 6232682402425310168}
+  - component: {fileID: 3864311968517681722}
   m_Layer: 5
   m_Name: Btn_DailyQuests
   m_TagString: Untagged
@@ -4557,6 +4614,19 @@ MonoBehaviour:
   _rest: 2.2
   _hop: 14
   _wiggle: 9
+--- !u!114 &3864311968517681722
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4668075496397837148}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 147470804a76c34429a0166703ac7abc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.UiWidgets::Modules.UiWidgetsModule.Entities.ButtonPressAnimator
+  _preset: {fileID: 0}
 --- !u!1 &4897881371215207876
 GameObject:
   m_ObjectHideFlags: 0
@@ -4571,6 +4641,7 @@ GameObject:
   - component: {fileID: 1482687629713016916}
   - component: {fileID: 8708096859342671325}
   - component: {fileID: 5390609487529070689}
+  - component: {fileID: 5270819782686425161}
   m_Layer: 5
   m_Name: Btn_Slot
   m_TagString: Untagged
@@ -4729,6 +4800,19 @@ MonoBehaviour:
   _rest: 2.2
   _hop: 14
   _wiggle: 9
+--- !u!114 &5270819782686425161
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4897881371215207876}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 147470804a76c34429a0166703ac7abc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.UiWidgets::Modules.UiWidgetsModule.Entities.ButtonPressAnimator
+  _preset: {fileID: 0}
 --- !u!1 &4904037523095323909
 GameObject:
   m_ObjectHideFlags: 0
@@ -4954,6 +5038,7 @@ GameObject:
   - component: {fileID: 7202440429925510490}
   - component: {fileID: 2861680315727073867}
   - component: {fileID: 4212772014765478317}
+  - component: {fileID: 128762511571210021}
   m_Layer: 0
   m_Name: Img_Plus
   m_TagString: Untagged
@@ -5093,6 +5178,19 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 154cdf74fe292fa45b2e59b2eeaca076, type: 3}
   _ring: {fileID: 21300000, guid: 287c23cc80187c7448534d1fb499865d, type: 3}
   _ringScale: 1.6
+--- !u!114 &128762511571210021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5060807967848698187}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 147470804a76c34429a0166703ac7abc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.UiWidgets::Modules.UiWidgetsModule.Entities.ButtonPressAnimator
+  _preset: {fileID: 0}
 --- !u!1 &5141964767410311235
 GameObject:
   m_ObjectHideFlags: 0
@@ -5873,6 +5971,7 @@ GameObject:
   - component: {fileID: 3907607994860594344}
   - component: {fileID: 6275705564121657729}
   - component: {fileID: 2231290770085303730}
+  - component: {fileID: 6746068204117864809}
   m_Layer: 0
   m_Name: Pnl_Buy
   m_TagString: Untagged
@@ -5997,6 +6096,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &6746068204117864809
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5672567860607345114}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 147470804a76c34429a0166703ac7abc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.UiWidgets::Modules.UiWidgetsModule.Entities.ButtonPressAnimator
+  _preset: {fileID: 0}
 --- !u!1 &5733424960359986107
 GameObject:
   m_ObjectHideFlags: 0
@@ -8409,6 +8521,7 @@ GameObject:
   - component: {fileID: 3390358989548233981}
   - component: {fileID: 8004848550612776935}
   - component: {fileID: 186561999654629855}
+  - component: {fileID: 132643515085106676}
   m_Layer: 0
   m_Name: Pnl_Buy
   m_TagString: Untagged
@@ -8533,6 +8646,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &132643515085106676
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7791732025517370102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 147470804a76c34429a0166703ac7abc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.UiWidgets::Modules.UiWidgetsModule.Entities.ButtonPressAnimator
+  _preset: {fileID: 0}
 --- !u!1 &7927637884646225963
 GameObject:
   m_ObjectHideFlags: 0
@@ -9027,6 +9153,7 @@ GameObject:
   - component: {fileID: 6251118895563519734}
   - component: {fileID: 1576310754671148406}
   - component: {fileID: 3236590762300959894}
+  - component: {fileID: 6165100009759258082}
   m_Layer: 5
   m_Name: Btn_Wheel
   m_TagString: Untagged
@@ -9185,6 +9312,19 @@ MonoBehaviour:
   _rest: 2.2
   _hop: 14
   _wiggle: 9
+--- !u!114 &6165100009759258082
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8397122639355704505}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 147470804a76c34429a0166703ac7abc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.UiWidgets::Modules.UiWidgetsModule.Entities.ButtonPressAnimator
+  _preset: {fileID: 0}
 --- !u!1 &8462931953656801964
 GameObject:
   m_ObjectHideFlags: 0
@@ -9382,6 +9522,7 @@ GameObject:
   - component: {fileID: 7148710096128742284}
   - component: {fileID: 4561724773608029880}
   - component: {fileID: 8233308002976863221}
+  - component: {fileID: 5100595923370897705}
   m_Layer: 0
   m_Name: Pnl_Buy
   m_TagString: Untagged
@@ -9506,6 +9647,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &5100595923370897705
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8523939150633404682}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 147470804a76c34429a0166703ac7abc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.UiWidgets::Modules.UiWidgetsModule.Entities.ButtonPressAnimator
+  _preset: {fileID: 0}
 --- !u!1 &8591004167466041245
 GameObject:
   m_ObjectHideFlags: 0
@@ -9938,6 +10092,7 @@ GameObject:
   - component: {fileID: 5788659093721525245}
   - component: {fileID: 931503685831645871}
   - component: {fileID: 2149721952817134992}
+  - component: {fileID: 2480608277483219098}
   m_Layer: 5
   m_Name: Btn_LoginRewards
   m_TagString: Untagged
@@ -10096,6 +10251,19 @@ MonoBehaviour:
   _rest: 2.2
   _hop: 14
   _wiggle: 9
+--- !u!114 &2480608277483219098
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9106407788431976968}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 147470804a76c34429a0166703ac7abc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.UiWidgets::Modules.UiWidgetsModule.Entities.ButtonPressAnimator
+  _preset: {fileID: 0}
 --- !u!1 &9204721974724039745
 GameObject:
   m_ObjectHideFlags: 0
@@ -10108,6 +10276,7 @@ GameObject:
   - component: {fileID: 2465673419836769906}
   - component: {fileID: 6802400684851661109}
   - component: {fileID: 7781630207518419453}
+  - component: {fileID: 8856432091888249612}
   m_Layer: 0
   m_Name: Pnl_Price
   m_TagString: Untagged
@@ -10217,6 +10386,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &8856432091888249612
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9204721974724039745}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 147470804a76c34429a0166703ac7abc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.UiWidgets::Modules.UiWidgetsModule.Entities.ButtonPressAnimator
+  _preset: {fileID: 0}
 --- !u!1 &9219488001318474748
 GameObject:
   m_ObjectHideFlags: 0

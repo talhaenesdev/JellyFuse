@@ -21,7 +21,8 @@ namespace Modules.GameplayModule.Controllers
             else if (after.Status == PuzzleStatus.Lost) _haptics.Play(HapticPreset.Failure);
             // A jelly going into its door trembles for as long as it melts; the screen plays that (Melt).
             else if (after.Exited > before.Exited) return;
-            else if (after.Pieces.Count < before.Pieces.Count) _haptics.Play(HapticPreset.Medium);
+            // A fuse well into a combo lands harder.
+            else if (after.Pieces.Count < before.Pieces.Count) _haptics.Play(_feedback.Combo >= 3 ? HapticPreset.Heavy : HapticPreset.Medium);
             else if (!_feedback.WasDragging && _model.IsDragging) _haptics.Play(HapticPreset.Selection);
         }
     }

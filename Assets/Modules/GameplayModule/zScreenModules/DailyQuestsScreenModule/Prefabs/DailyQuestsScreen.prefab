@@ -827,6 +827,7 @@ GameObject:
   - component: {fileID: 3311162707442902163}
   - component: {fileID: 292065741030776335}
   - component: {fileID: 5230466722552807288}
+  - component: {fileID: 1771344583001225365}
   m_Layer: 5
   m_Name: Btn_Close
   m_TagString: Untagged
@@ -935,6 +936,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1771344583001225365
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5334658736896390899}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 147470804a76c34429a0166703ac7abc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.UiWidgets::Modules.UiWidgetsModule.Entities.ButtonPressAnimator
+  _preset: {fileID: 0}
 --- !u!1 &5650854731520600283
 GameObject:
   m_ObjectHideFlags: 0
@@ -1270,6 +1284,7 @@ GameObject:
   - component: {fileID: 6327407596366653587}
   - component: {fileID: 4605304373546401924}
   - component: {fileID: 6053387550410129154}
+  - component: {fileID: 1827223958114390644}
   m_Layer: 5
   m_Name: Btn_Backdrop
   m_TagString: Untagged
@@ -1395,6 +1410,19 @@ MonoBehaviour:
   _left: 1
   _right: 1
   _coverAspect: 0
+--- !u!114 &1827223958114390644
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8294948398669462871}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 147470804a76c34429a0166703ac7abc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.UiWidgets::Modules.UiWidgetsModule.Entities.ButtonPressAnimator
+  _preset: {fileID: 0}
 --- !u!1 &8390562693857760942
 GameObject:
   m_ObjectHideFlags: 0
@@ -1800,6 +1828,7 @@ GameObject:
   - component: {fileID: 3653161974134080393}
   - component: {fileID: 4382729009905203857}
   - component: {fileID: 8195515759808819676}
+  - component: {fileID: 2437486497219688754}
   m_Layer: 5
   m_Name: Btn_Claim
   m_TagString: Untagged
@@ -1909,3 +1938,16 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2437486497219688754
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8563303051046816745}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 147470804a76c34429a0166703ac7abc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.UiWidgets::Modules.UiWidgetsModule.Entities.ButtonPressAnimator
+  _preset: {fileID: 0}

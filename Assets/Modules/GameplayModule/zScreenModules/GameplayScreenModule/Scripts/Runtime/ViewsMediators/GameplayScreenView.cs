@@ -350,6 +350,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             // Leaving the win panel early shows the whole count at once.
             if (_pendingReward > 0 || _coinFlight != null) FinishCoinFlight();
             if (_panelDelay != null) { StopCoroutine(_panelDelay); _panelDelay = null; }
+            StopCelebration();
             EndOutOfLives();
             if (_winScore != null) _winScore.gameObject.SetActive(false);
             if (_winPanel != null) { _winPanel.parent.gameObject.SetActive(false); _losePanel.parent.gameObject.SetActive(false); _retryPanel.parent.gameObject.SetActive(false); }
@@ -376,7 +377,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             if (delay > 0) yield return new WaitForSecondsRealtime(delay);
             _panelDelay = null;
             ShowDim(panel);
-            if (panel == _winPanel) StartCoinFlight();
+            if (panel == _winPanel) { Celebrate(panel); StartCoinFlight(); }
         }
         private static void ShowDim(RectTransform panel) { panel.parent.gameObject.SetActive(true); panel.parent.SetAsLastSibling(); }
         public void ApplyLevel(int number, bool hasNext) { _levelNumber = number; _hasNextLevel = hasNext; if (_built) _levelLabel.text = LF("gameplay.level", _levelFormat, number); _adOffers = AdOffersRVO.None; HidePanels(); }

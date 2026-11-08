@@ -6,6 +6,7 @@ namespace Modules.AudioModule.Signals
     internal sealed class AudioInternalSignals : ISignalHolder
     {
         public Signal<AudioCue> Play = new(hideCommandLog: true);
+        public Signal<AudioCue, float> PlayPitched = new(hideCommandLog: true);
         public Signal<MusicTrack> PlayMusic = new();
         public Signal<bool> SetSoundsEnabled = new();
         public Signal<bool> SetMusicEnabled = new();

@@ -29,6 +29,7 @@ namespace Modules.AudioModule.RootsContexts
         {
             base.CommandBindings();
             CommandBinder.Bind(_signals.Play).ToSequence<PlayAudioCueCommand>();
+            CommandBinder.Bind(_signals.PlayPitched).ToSequence<PlayPitchedAudioCueCommand>();
             CommandBinder.Bind(_signals.PlayMusic).ToSequence<PlayMusicCommand>();
             CommandBinder.Bind(_signals.SetSoundsEnabled).ToSequence<SetSoundsEnabledCommand>();
             CommandBinder.Bind(_signals.SetMusicEnabled).ToSequence<SetMusicEnabledCommand>();
