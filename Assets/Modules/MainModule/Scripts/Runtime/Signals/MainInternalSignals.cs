@@ -10,5 +10,7 @@ namespace Modules.MainModule.Signals
     internal class MainInternalSignals : ISignalHolder
     {
         public Signal Launch = new Signal();
+        /// <summary>Every frame while the frame rate is watched for the glow.</summary>
+        public Signal GlowTick = new Signal(hideCommandLog: true);
     }
 }

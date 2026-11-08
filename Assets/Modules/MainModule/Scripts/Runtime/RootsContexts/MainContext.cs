@@ -27,6 +27,7 @@ namespace Modules.MainModule.RootsContexts
         {
             base.InjectionBindings();
             InjectionBinder.Bind<FrameRateModel>();
+            InjectionBinder.Bind<GlowModel>();
         }
 
         public override void MediationBindings()
@@ -51,7 +52,14 @@ namespace Modules.MainModule.RootsContexts
                 .ToParallel<PreloadScreensCommand>()
                 .ToSequence<FillPoolsCommand>()
                 .ToSequence<ILoadingService.Commands.Await>(MainConstants.BOOT_SET)
-                .ToSequence<SignalDispatchCommand>(_mainSignals.Outgoing.Started);
+                .ToSequence<SignalDispatchCommand>(_mainSignals.Outgoing.Started)
+                .ToSequence<StartGlowWatchCommand>();
+
+            // The glow stays while the device keeps up; slow windows in a row switch it off for good.
+            CommandBinder.Bind(_internalSignals.GlowTick)
+                .ToSequence<MeasureGlowFrameCommand>()
+                .ToSequence<JudgeGlowCommand>()
+                .ToSequence<SwitchGlowOffCommand>();
 
             // A retry from the loading screen runs the boot again.
             CommandBinder.Bind(_mainSignals.Incoming.RetryBoot).ToSequence<SignalDispatchCommand>(_internalSignals.Launch);
