@@ -55,8 +55,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             Span(cells, out float spanX, out float spanY);
             float size = Mathf.Max(spanX, spanY) * _cell;
             var centre = Position(CentreOf(cells));
-            AddFlare(centre, size * .9f, size * (2.2f + .35f * boost), Color.Lerp(colour, Color.white, .35f), .5f, .9f, 0);
-            AddFlare(centre, size * .3f, size * 1.1f, Color.white, .25f, .8f, 0);
+            AddFlare(centre, size * .9f, size * (1.5f + .15f * boost), Color.Lerp(colour, Color.white, .2f), .4f, .35f + .05f * boost, 0);
         }
 
         /// <summary>A jelly went through its door: a flare at the door, and confetti thrown back out of it.</summary>
@@ -65,16 +64,16 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             float boost = CountCombo();
             var centre = (mouthFrom + mouthTo) * .5f;
             float width = Mathf.Max(_cell, Vector2.Distance(mouthFrom, mouthTo));
-            AddFlare(centre, width * .8f, width * (2f + .3f * boost), Color.Lerp(colour, Color.white, .3f), .6f, .9f, Feel.DoorEnterTime * .5f);
-            int count = Mathf.Min(40, 8 + cells * 4 + (int)(boost * 4));
+            AddFlare(centre, width * .8f, width * (1.4f + .15f * boost), Color.Lerp(colour, Color.white, .2f), .45f, .35f + .05f * boost, Feel.DoorEnterTime * .5f);
+            int count = Mathf.Min(16, 4 + cells * 2 + (int)(boost * 2));
             for (int i = 0; i < count; i++)
             {
                 var bit = TakeBit();
                 bit.Position = Vector2.Lerp(mouthFrom, mouthTo, Random.value);
                 var across = new Vector2(-direction.y, direction.x);
-                bit.Velocity = (-direction * Random.Range(.6f, 1.4f) + across * Random.Range(-1f, 1f)) * _cell * Random.Range(2.5f, 5f);
+                bit.Velocity = (-direction * Random.Range(.6f, 1.4f) + across * Random.Range(-1f, 1f)) * _cell * Random.Range(1.5f, 3f);
                 bit.Life = Random.Range(.5f, 1f);
-                bit.Size = _cell * Random.Range(.08f, .16f);
+                bit.Size = _cell * Random.Range(.06f, .11f);
                 bit.Colour = Color.HSVToRGB(Random.value, .55f, 1f);
             }
         }
@@ -100,7 +99,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                     var next = cell + direction;
                     if (Contains(piece.Cells, next) || IsFloor(next)) continue;
                     var point = Position(cell) + (Vector2)direction * (_cell * .5f);
-                    AddFlare(point, _cell * .3f, _cell * 1.1f, colour, .35f, .85f, delay);
+                    AddFlare(point, _cell * .25f, _cell * .7f, colour, .3f, .4f, delay);
                 }
             }
         }
@@ -117,7 +116,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             {
                 var from = edge.Point - centre;
                 float angle = Mathf.Repeat(Mathf.Atan2(from.x, from.y) / (2 * Mathf.PI), 1);
-                AddFlare(edge.Point + edge.Normal * _cell * .2f, _cell * .4f, _cell * 1.4f, new Color(1f, .9f, .5f), .5f, .8f, angle * 1.1f);
+                AddFlare(edge.Point, _cell * .4f, _cell * 1f, new Color(1f, .9f, .5f), .45f, .45f, angle * 1.1f);
             }
         }
 
@@ -169,12 +168,12 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                 {
                     var colour = Tint((int)held.Colour);
                     float size = Mathf.Max(blob.Span.x, blob.Span.y) * _cell;
-                    Steady(blob.Centre + blob.Offset, size * (1.5f + .15f * pulse), Color.Lerp(colour, Color.white, .3f), .45f + .2f * pulse);
+                    Steady(blob.Centre + blob.Offset, size * (1.3f + .08f * pulse), colour, .2f + .1f * pulse);
                     for (int door = 0; door < _level.Gates.Count; door++)
                     {
                         var stage = _snapshot.WaitingStage(door);
                         if (stage == null || stage.Colour != held.Colour || !_doorFrames.TryGetValue(door, out var frame) || frame.Frozen) continue;
-                        Steady(frame.Centre, Mathf.Max(frame.Size.x, frame.Size.y) * (1.3f + .2f * pulse), Color.Lerp(colour, Color.white, .25f), .5f + .35f * pulse);
+                        Steady(frame.Centre, Mathf.Max(frame.Size.x, frame.Size.y) * (1.15f + .1f * pulse), colour, .2f + .15f * pulse);
                     }
                 }
                 // The clock running out: the walls glow red, faster and stronger as it does.
@@ -184,7 +183,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                     float beat = .5f + .5f * Mathf.Sin(_time * (6f + 8f * _urgency));
                     var red = new Color(1f, .2f, .15f);
                     foreach (var edge in _edges)
-                        Steady(edge.Point, _cell * (1.1f + .3f * beat), red, (.15f + .35f * beat) * _urgency);
+                        Steady(edge.Point, _cell * (.9f + .2f * beat), red, (.08f + .17f * beat) * _urgency);
                 }
             }
             for (int i = _steadyUsed; i < _steady.Count; i++) if (_steady[i].gameObject.activeSelf) _steady[i].gameObject.SetActive(false);
@@ -228,12 +227,15 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             return image;
         }
 
-        /// <summary>The layer the glows draw on: under the bits, over everything else, moving with the board's shake.</summary>
+        /// <summary>
+        /// The layer the glows draw on: over the floor, under the walls and the jellies, so a glow lights the floor
+        /// round a jelly and never covers it - the lift of a jelly about to fuse stays in sight.
+        /// </summary>
         private void EnsureFxLayer()
         {
             if (_fxLayer != null) return;
             _fxLayer = Layer("FxLayer");
-            _fxLayer.SetSiblingIndex(_bitLayer.GetSiblingIndex());
+            _fxLayer.SetSiblingIndex(_edgeCornerLayer.GetSiblingIndex() + 1);
         }
 
         /// <summary>A soft white disc, made once: every glow is this, tinted.</summary>
