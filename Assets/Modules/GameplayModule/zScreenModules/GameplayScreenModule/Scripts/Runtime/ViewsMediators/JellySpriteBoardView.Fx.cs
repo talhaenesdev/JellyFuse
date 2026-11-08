@@ -25,12 +25,13 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         private const float COMBO_WINDOW = 2.5f;
         private static readonly int GLOW_STRENGTH = Shader.PropertyToID("_UIGlowStrength");
 
-        private RectTransform _fxLayer;
+        private RectTransform _fxLayer, _fxBackLayer;
         private Sprite _glowSprite;
         private readonly List<Flare> _flares = new();
         private readonly List<Flare> _freeFlares = new();
         private readonly List<Image> _steady = new();
         private int _steadyUsed;
+        private Image _heldHalo;
         private readonly List<(Vector2 Point, Vector2 Normal)> _edges = new();
         private JellyLevelCVO _edgesFor;
         private float _comboClock = 99;
@@ -55,7 +56,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             Span(cells, out float spanX, out float spanY);
             float size = Mathf.Max(spanX, spanY) * _cell;
             var centre = Position(CentreOf(cells));
-            AddFlare(centre, size * .9f, size * (1.5f + .15f * boost), Color.Lerp(colour, Color.white, .2f), .4f, .35f + .05f * boost, 0);
+            AddFlare(centre, size * .9f, size * (1.5f + .15f * boost), Color.Lerp(colour, Color.white, .25f), .4f, .5f + .05f * boost, 0);
         }
 
         /// <summary>A jelly went through its door: a flare at the door, and confetti thrown back out of it.</summary>
@@ -64,7 +65,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             float boost = CountCombo();
             var centre = (mouthFrom + mouthTo) * .5f;
             float width = Mathf.Max(_cell, Vector2.Distance(mouthFrom, mouthTo));
-            AddFlare(centre, width * .8f, width * (1.4f + .15f * boost), Color.Lerp(colour, Color.white, .2f), .45f, .35f + .05f * boost, Feel.DoorEnterTime * .5f);
+            AddFlare(centre, width * .8f, width * (1.4f + .15f * boost), Color.Lerp(colour, Color.white, .25f), .45f, .5f + .05f * boost, Feel.DoorEnterTime * .5f);
             int count = Mathf.Min(16, 4 + cells * 2 + (int)(boost * 2));
             for (int i = 0; i < count; i++)
             {
@@ -160,6 +161,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             }
 
             _steadyUsed = 0;
+            bool heldShown = false;
             if (on && _snapshot != null && _snapshot.Status == PuzzleStatus.Playing)
             {
                 float pulse = .5f + .5f * Mathf.Sin(_time * 5f);
@@ -168,7 +170,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                 {
                     var colour = Tint((int)held.Colour);
                     float size = Mathf.Max(blob.Span.x, blob.Span.y) * _cell;
-                    Steady(blob.Centre + blob.Offset, size * (1.3f + .08f * pulse), colour, .2f + .1f * pulse);
+                    HeldHalo(blob.Centre + blob.Offset, size * (1.3f + .08f * pulse), colour, .3f + .15f * pulse);
+                    heldShown = true;
                     for (int door = 0; door < _level.Gates.Count; door++)
                     {
                         var stage = _snapshot.WaitingStage(door);
@@ -186,8 +189,9 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                         Steady(edge.Point, _cell * (.9f + .2f * beat), red, (.08f + .17f * beat) * _urgency);
                 }
             }
+            if (!heldShown && _heldHalo != null && _heldHalo.gameObject.activeSelf) _heldHalo.gameObject.SetActive(false);
             for (int i = _steadyUsed; i < _steady.Count; i++) if (_steady[i].gameObject.activeSelf) _steady[i].gameObject.SetActive(false);
-            return _flares.Count > 0 || _steadyUsed > 0;
+            return _flares.Count > 0 || _steadyUsed > 0 || heldShown;
         }
 
         // ---------- drawing ----------
@@ -216,11 +220,20 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             image.color = WithAlpha(colour, Mathf.Clamp01(alpha));
         }
 
-        private Image GlowImage(string name)
+        private void HeldHalo(Vector2 position, float size, Color colour, float alpha)
+        {
+            if (_heldHalo == null) _heldHalo = GlowImage("Img_HeldHalo", _fxBackLayer);
+            if (!_heldHalo.gameObject.activeSelf) _heldHalo.gameObject.SetActive(true);
+            _heldHalo.rectTransform.anchoredPosition = position;
+            _heldHalo.rectTransform.sizeDelta = Vector2.one * size;
+            _heldHalo.color = WithAlpha(colour, Mathf.Clamp01(alpha));
+        }
+
+        private Image GlowImage(string name, RectTransform layer = null)
         {
             var image = new GameObject(name, typeof(RectTransform)).AddComponent<Image>();
             image.gameObject.layer = gameObject.layer;
-            image.rectTransform.SetParent(_fxLayer, false);
+            image.rectTransform.SetParent(layer != null ? layer : _fxLayer, false);
             image.rectTransform.anchorMin = image.rectTransform.anchorMax = new Vector2(.5f, .5f);
             image.raycastTarget = false;
             image.sprite = GlowSprite();
@@ -228,14 +241,17 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         }
 
         /// <summary>
-        /// The layer the glows draw on: over the floor, under the walls and the jellies, so a glow lights the floor
-        /// round a jelly and never covers it - the lift of a jelly about to fuse stays in sight.
+        /// Two layers. The flares, the doors' and the walls' glows draw over the board, under the bits, where they
+        /// are seen. The held jelly's halo draws behind the jellies, on the floor round it: over it, it would cover
+        /// the lift of the jelly about to fuse.
         /// </summary>
         private void EnsureFxLayer()
         {
             if (_fxLayer != null) return;
+            _fxBackLayer = Layer("FxBackLayer");
+            _fxBackLayer.SetSiblingIndex(_edgeCornerLayer.GetSiblingIndex() + 1);
             _fxLayer = Layer("FxLayer");
-            _fxLayer.SetSiblingIndex(_edgeCornerLayer.GetSiblingIndex() + 1);
+            _fxLayer.SetSiblingIndex(_bitLayer.GetSiblingIndex());
         }
 
         /// <summary>A soft white disc, made once: every glow is this, tinted.</summary>
@@ -282,6 +298,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             foreach (var flare in _flares) { flare.Image.gameObject.SetActive(false); _freeFlares.Add(flare); }
             _flares.Clear();
             foreach (var image in _steady) image.gameObject.SetActive(false);
+            if (_heldHalo != null) _heldHalo.gameObject.SetActive(false);
             _edges.Clear(); _edgesFor = null;
             _combo = 0; _comboClock = 99; _urgency = 0; _lastStatus = PuzzleStatus.Playing;
         }
