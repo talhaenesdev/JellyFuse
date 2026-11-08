@@ -151,7 +151,8 @@ namespace Modules.MainModule.LeaderboardScreenModule.ViewsMediators
 
         private void Fill(RectTransform row, LeaderboardRowVO data)
         {
-            Set(row, "Txt_Rank", data.Rank.ToString());
+            // The rank sits on its badge, not on the row itself.
+            Set(row, "Img_Badge/Txt_Rank", data.Rank.ToString());
             Set(row, "Txt_Name", string.IsNullOrEmpty(data.Name) ? L("leaderboard.player", "Player") : TrimName(data.Name));
             Set(row, "Txt_Score", data.Score.ToString("N0"));
             Set(row, "Txt_Tag", data.Tag ?? string.Empty);
