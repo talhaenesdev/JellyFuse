@@ -113,6 +113,9 @@ namespace Modules.ScreenModule.Editor
         /// <summary>Files the component in the Root adapter's Shared Monos, replacing what was filed under the name.</summary>
         private static void FileSharedMono(GameObject root, string key, MonoBehaviour component)
         {
+            // ScreenRoot shipped without an adapter: it is the one place a Root's shared components are filed.
+            if (root.GetComponent<FlowIoC.BaseModule.Adapters.RootAdapter>() == null)
+                root.AddComponent<FlowIoC.BaseModule.Adapters.RootAdapter>();
             foreach (var behaviour in root.GetComponents<MonoBehaviour>())
             {
                 var field = FindField(behaviour.GetType(), "_sharedMonoMap");
