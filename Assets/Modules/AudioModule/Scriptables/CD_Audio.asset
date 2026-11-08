@@ -108,6 +108,14 @@ MonoBehaviour:
     Volume: 0.6
     PitchJitter: 0
     MinimumInterval: 0.15
+  - Cue: 12
+    Enabled: 1
+    Clips:
+    - {fileID: 8300000, guid: 60d1d7a33e2c9694886a1fcf3eed2e67, type: 3}
+    - {fileID: 8300000, guid: 44ed3d00da6373341b8a8b22abc72022, type: 3}
+    Volume: 0.45
+    PitchJitter: 0.06
+    MinimumInterval: 0.12
   Music:
   - Track: 1
     Clip: {fileID: 8300000, guid: 7b9489cbf64721d449bfaf1cfca09fe8, type: 3}

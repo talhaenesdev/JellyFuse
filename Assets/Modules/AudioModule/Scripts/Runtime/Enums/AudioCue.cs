@@ -18,5 +18,6 @@ namespace Modules.AudioModule.Enums
         Ufo = 9,
         Undo = 10,
         Denied = 11,
+        Bump = 12,
     }
 }
