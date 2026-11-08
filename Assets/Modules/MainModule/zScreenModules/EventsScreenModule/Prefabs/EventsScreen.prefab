@@ -4350,6 +4350,7 @@ GameObject:
   - component: {fileID: 731137172939312951}
   - component: {fileID: 6550201177315464612}
   - component: {fileID: 254437069160573570}
+  - component: {fileID: 5296324780587216452}
   m_Layer: 5
   m_Name: EventsScreen
   m_TagString: Untagged
@@ -4408,6 +4409,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Modules.Events.Screen::Modules.MainModule.EventsScreenModule.ViewsMediators.EventsScreenView
   _backButton: {fileID: 8652206806292008808}
   _eventList: {fileID: 6716063285010194190}
+--- !u!114 &5296324780587216452
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7533940054118233530}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1337a11d9bc77624a8645b66073a5ef8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.UiWidgets::Modules.UiWidgetsModule.Entities.PanelAnimator
+  _settings: {fileID: 11400000, guid: bc94fed26e0d3eb44b508876156a5845, type: 2}
+  _dim: {fileID: 0}
+  _ignoreTimeScale: 1
 --- !u!1 &7735711067566867522
 GameObject:
   m_ObjectHideFlags: 0

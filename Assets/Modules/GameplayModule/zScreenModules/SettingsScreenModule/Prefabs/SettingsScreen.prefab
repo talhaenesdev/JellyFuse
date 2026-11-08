@@ -1525,6 +1525,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1151290662874035561}
   - component: {fileID: 8941724980776491344}
+  - component: {fileID: 4097934197353839331}
   m_Layer: 0
   m_Name: Pnl_SettingsDialog
   m_TagString: Untagged
@@ -1579,6 +1580,21 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &4097934197353839331
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5802525442790490324}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1337a11d9bc77624a8645b66073a5ef8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.UiWidgets::Modules.UiWidgetsModule.Entities.PanelAnimator
+  _settings: {fileID: 11400000, guid: 000baad2ecae4c547b29f73221e46a3f, type: 2}
+  _dim: {fileID: 0}
+  _ignoreTimeScale: 1
 --- !u!1 &5869829930445813879
 GameObject:
   m_ObjectHideFlags: 0

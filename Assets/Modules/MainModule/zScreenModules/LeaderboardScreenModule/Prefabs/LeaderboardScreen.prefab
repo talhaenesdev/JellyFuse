@@ -3595,6 +3595,7 @@ GameObject:
   - component: {fileID: 9183052396457500617}
   - component: {fileID: 1827290155810371766}
   - component: {fileID: 7871253503510738470}
+  - component: {fileID: 256088937452857518}
   m_Layer: 5
   m_Name: LeaderboardScreen
   m_TagString: Untagged
@@ -3689,6 +3690,21 @@ MonoBehaviour:
   _tabOff: {r: 0.42, g: 0.2, b: 0.78, a: 1}
   _rowColour: {r: 1, g: 1, b: 1, a: 1}
   _myRowColour: {r: 0.7, g: 1, b: 1, a: 1}
+--- !u!114 &256088937452857518
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4999042567116676320}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1337a11d9bc77624a8645b66073a5ef8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.UiWidgets::Modules.UiWidgetsModule.Entities.PanelAnimator
+  _settings: {fileID: 11400000, guid: bc94fed26e0d3eb44b508876156a5845, type: 2}
+  _dim: {fileID: 0}
+  _ignoreTimeScale: 1
 --- !u!1 &5059884225443906393
 GameObject:
   m_ObjectHideFlags: 0

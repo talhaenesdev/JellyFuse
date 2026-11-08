@@ -3194,6 +3194,7 @@ GameObject:
   - component: {fileID: 2641286229340992100}
   - component: {fileID: 4175026905130661282}
   - component: {fileID: 5473120400799720124}
+  - component: {fileID: 3671592220952449757}
   m_Layer: 0
   m_Name: Panel_Profile
   m_TagString: Untagged
@@ -3296,6 +3297,21 @@ MonoBehaviour:
   m_FlexibleWidth: 1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
+--- !u!114 &3671592220952449757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7774257242409044898}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1337a11d9bc77624a8645b66073a5ef8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.UiWidgets::Modules.UiWidgetsModule.Entities.PanelAnimator
+  _settings: {fileID: 11400000, guid: 000baad2ecae4c547b29f73221e46a3f, type: 2}
+  _dim: {fileID: 1127651668424824474}
+  _ignoreTimeScale: 1
 --- !u!1 &8078671693457346926
 GameObject:
   m_ObjectHideFlags: 0
