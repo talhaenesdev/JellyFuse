@@ -23,6 +23,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             public float Delay, Age, Life, From, To, Alpha;
         }
         private const float COMBO_WINDOW = 2.5f;
+        private const bool FLARES = false;
         private static readonly int GLOW_STRENGTH = Shader.PropertyToID("_UIGlowStrength");
 
         private RectTransform _fxLayer, _fxBackLayer;
@@ -170,13 +171,13 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                 {
                     var colour = Tint((int)held.Colour);
                     float size = Mathf.Max(blob.Span.x, blob.Span.y) * _cell;
-                    HeldHalo(blob.Centre + blob.Offset, size * (1.3f + .08f * pulse), colour, .3f + .15f * pulse);
+                    HeldHalo(blob.Centre + blob.Offset, size * (1.25f + .05f * pulse), colour, .15f + .08f * pulse);
                     heldShown = true;
                     for (int door = 0; door < _level.Gates.Count; door++)
                     {
                         var stage = _snapshot.WaitingStage(door);
                         if (stage == null || stage.Colour != held.Colour || !_doorFrames.TryGetValue(door, out var frame) || frame.Frozen) continue;
-                        Steady(frame.Centre, Mathf.Max(frame.Size.x, frame.Size.y) * (1.15f + .1f * pulse), colour, .2f + .15f * pulse);
+                        Steady(frame.Centre, Mathf.Max(frame.Size.x, frame.Size.y) * (1.1f + .05f * pulse), colour, .1f + .08f * pulse);
                     }
                 }
                 // The clock running out: the walls glow red, faster and stronger as it does.
@@ -186,7 +187,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                     float beat = .5f + .5f * Mathf.Sin(_time * (6f + 8f * _urgency));
                     var red = new Color(1f, .2f, .15f);
                     foreach (var edge in _edges)
-                        Steady(edge.Point, _cell * (.9f + .2f * beat), red, (.08f + .17f * beat) * _urgency);
+                        Steady(edge.Point, _cell * (.8f + .15f * beat), red, (.05f + .1f * beat) * _urgency);
                 }
             }
             if (!heldShown && _heldHalo != null && _heldHalo.gameObject.activeSelf) _heldHalo.gameObject.SetActive(false);
@@ -198,7 +199,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
 
         private void AddFlare(Vector2 position, float from, float to, Color colour, float life, float alpha, float delay)
         {
-            if (!GlowOn) return;
+            // The round flares did not suit the board's look: off, until a better-shaped one is drawn.
+            if (!FLARES || !GlowOn) return;
             EnsureFxLayer();
             Flare flare;
             if (_freeFlares.Count > 0) { flare = _freeFlares[^1]; _freeFlares.RemoveAt(_freeFlares.Count - 1); }
