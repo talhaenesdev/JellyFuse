@@ -13,6 +13,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         /// <summary>The finger went down on a jelly: remember where, so the jelly can trail it between cells.</summary>
         public void BeginFollow(Vector2 localPoint, Vector2 rectSize)
         {
+            _followPoint = localPoint;
             _following = Pick(localPoint, rectSize, out _, out int id);
             if (!_following) return;
             _grabPoint = BoardPoint(localPoint, rectSize);
@@ -22,6 +23,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         public void Follow(Vector2 localPoint, Vector2 rectSize)
         {
             if (!_following) return;
+            _followPoint = localPoint;
             _dragDelta = BoardPoint(localPoint, rectSize) - _grabPoint;
             UpdateFollow();
         }

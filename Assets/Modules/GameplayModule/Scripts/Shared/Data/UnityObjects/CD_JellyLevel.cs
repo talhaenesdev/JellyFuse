@@ -12,8 +12,10 @@ namespace Modules.GameplayModule.Shared.Data.UnityObjects
         public const int MAX_DOOR = 4;
         public string LevelName = "First fusion";
         [TextArea] public string Hint;
-        [Range(3,20)] public int Width = 7;
+        [Range(3,40)] public int Width = 7;
         [Range(3,20)] public int Height = 7;
+        [Tooltip("How many columns the screen shows across. 0: the whole map fits. A wider map is slid left and right in play, starting at its left end.")]
+        [Min(0)] public int ViewColumns;
         [Min(1)] public float Seconds = 120;
         [Tooltip("Hard or Super Hard is shown under the timer while the level is played. Normal: nothing is shown.")]
         public LevelDifficulty Difficulty;
@@ -149,7 +151,7 @@ namespace Modules.GameplayModule.Shared.Data.UnityObjects
                 gates,Holes,LevelName,Hint,(palette != null ? palette.AsLevelColours() : Enumerable.Empty<JellyColourCVO>()).Concat(ExtraColours),
                 Shapes.Select((p, i) => (Id: i + 1, Shape: p)).Where(e => e.Shape.Frozen).ToDictionary(e => e.Id, e => Mathf.Max(1, e.Shape.ThawAfter)),
                 Shapes.Select((p, i) => (Id: i + 1, Shape: p)).Where(e => e.Shape.ArrowBlock).ToDictionary(e => e.Id, e => e.Shape.ArrowAxis),
-                FreeArrowAfterFusion, Difficulty);
+                FreeArrowAfterFusion, Difficulty, ViewColumns);
         }
         /// <summary>One thing wrong with the level: an English text with {0}-style places, and what goes in them.</summary>
         public readonly struct Issue
@@ -173,7 +175,7 @@ namespace Modules.GameplayModule.Shared.Data.UnityObjects
             string At(Vector2Int c) => (c.x + 1) + ", " + (c.y + 1);
             var doors=PlayedDoors();
             bool Inside(Vector2Int c)=>c.x>=0&&c.x<Width&&c.y>=0&&c.y<Height;
-            if(Width<3||Width>20||Height<3||Height>20)Add("The board must be 3 to 20 cells wide and tall.");
+            if(Width<3||Width>40||Height<3||Height>20)Add("The board must be 3 to 40 cells wide and 3 to 20 tall.");
             if(Seconds<=0||float.IsNaN(Seconds)||float.IsInfinity(Seconds))Add("The time limit must be more than 0 seconds.");
             if(Shapes.Count==0)Add("There is no jelly on the board. Place at least one.");
             if(doors.Count==0)Add("There is no door. Place at least one in the wall round the board.");

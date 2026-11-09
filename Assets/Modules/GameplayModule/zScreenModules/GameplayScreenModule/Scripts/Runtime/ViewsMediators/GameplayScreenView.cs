@@ -108,6 +108,9 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
 #endif
         public CD_JellyPresentation Presentation => _presentation;
         private JellyDragSurface _dragSurface;
+        /// <summary>The finger slides the map rather than a jelly; where it last was, for either.</summary>
+        private bool _panning;
+        private Vector2 _lastPoint;
         private bool _built, _hasBoard;
         private PuzzleSnapshotRVO _snapshot;
         private Vector2 _dragStart;
@@ -139,6 +142,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             _spriteBoard.gameObject.SetActive(false);
             _spriteBoard.DeliveryStarted += seconds => JellyMelting?.Invoke(seconds);
             _spriteBoard.ComboReached += ShowCombo;
+            _spriteBoard.AutoPanned += () => { if (_liveDrag) OnDrag(_lastPoint); };
             _timeColour = _time.color;
             Keyed(_undoLabel, "gameplay.undo");
             Keyed(_restartLabel, "gameplay.restart");
@@ -303,7 +307,9 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             if (_liveDrag || !_hasBoard || _snapshot == null || _snapshot.Status != PuzzleStatus.Playing) return;
             if (PickBoosterTarget(point)) return;
             bool picked = _spriteBoard.Pick(point, _board.rect.size, out _grabbedCell, out _heldId);
-            if (!picked) return;
+            // Pressed where there is no jelly to take: on a map wider than the board, that drag slides the map.
+            if (!picked) { _panning = _spriteBoard.CanPan; _lastPoint = point; return; }
+            _lastPoint = point;
             _dragStart = BoardPoint(point); _dragTarget = _grabbedCell; _liveDrag = true;
             _spriteBoard.BeginFollow(point, _board.rect.size);
             Dragged?.Invoke(_grabbedCell, _dragTarget, false);
@@ -311,7 +317,9 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
 
         private void OnDrag(Vector2 point)
         {
+            if (_panning) { _spriteBoard.Pan(point.x - _lastPoint.x); _lastPoint = point; return; }
             if (!_liveDrag) return;
+            _lastPoint = point;
             _spriteBoard.Follow(point, _board.rect.size);
             var delta = BoardPoint(point) - _dragStart;
             var target = _grabbedCell + new Vector2Int(Mathf.RoundToInt(delta.x), Mathf.RoundToInt(delta.y));
@@ -321,6 +329,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
 
         private void OnDrop(Vector2 point)
         {
+            if (_panning) { _panning = false; return; }
             if (!_liveDrag) return; OnDrag(point); if (!_liveDrag) return;
             _liveDrag = false; _heldId = -1; EndFollow(); Dragged?.Invoke(_grabbedCell, _dragTarget, true);
         }
@@ -330,6 +339,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
 
         private void CancelDrag()
         {
+            _panning = false;
             if (!_liveDrag) return; _liveDrag = false; _heldId = -1; EndFollow(); Dragged?.Invoke(_grabbedCell, _dragTarget, true);
         }
 

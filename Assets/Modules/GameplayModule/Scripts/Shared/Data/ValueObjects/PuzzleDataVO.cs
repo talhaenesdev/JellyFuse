@@ -101,6 +101,8 @@ namespace Modules.GameplayModule.Shared.Data.ValueObjects
         public string ColourName(int id, string fallback) => _extraColours.TryGetValue(id, out var colour) ? colour.Name : fallback;
         public int Width { get; }
         public int Height { get; }
+        /// <summary>Columns the screen shows across; 0 shows the whole map. A wider map is slid to see the rest.</summary>
+        public int ViewColumns { get; }
         public float Seconds { get; }
         public IReadOnlyList<Vector2Int> Walls { get; }
         public IReadOnlyList<Vector2Int> Holes { get; }
@@ -119,9 +121,10 @@ namespace Modules.GameplayModule.Shared.Data.ValueObjects
         public JellyLevelCVO(int width, int height, float seconds, IEnumerable<Vector2Int> walls,
             IEnumerable<JellyPieceVO> pieces, IEnumerable<JellyGateCVO> gates, IEnumerable<Vector2Int> holes = null, string name = "Jelly Fuse", string hint = "", IEnumerable<JellyColourCVO> extraColours = null,
             IReadOnlyDictionary<int, int> frozenPieces = null, IReadOnlyDictionary<int, JellyAxis> arrowPieces = null, bool freeArrowAfterFusion = false,
-            LevelDifficulty difficulty = LevelDifficulty.Normal)
+            LevelDifficulty difficulty = LevelDifficulty.Normal, int viewColumns = 0)
         {
             Difficulty = difficulty;
+            ViewColumns = Mathf.Max(0, viewColumns);
             FrozenPieces = frozenPieces ?? new Dictionary<int, int>();
             ArrowPieces = arrowPieces ?? new Dictionary<int, JellyAxis>();
             FreeArrowAfterFusion = freeArrowAfterFusion;

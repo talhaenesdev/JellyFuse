@@ -123,7 +123,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         {
             var layer = new GameObject(name, typeof(RectTransform)).GetComponent<RectTransform>();
             layer.gameObject.layer = gameObject.layer;
-            layer.SetParent(transform, false);
+            layer.SetParent(Content(), false);
             layer.anchorMin = layer.anchorMax = layer.pivot = new Vector2(.5f, .5f);
             layer.sizeDelta = Vector2.zero;
             return layer;
@@ -131,7 +131,11 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
 
         // ---------- geometry ----------
 
-        public Vector2 BoardPoint(Vector2 localPoint, Vector2 rectSize) => new Vector2(localPoint.x, localPoint.y / Look.SpriteTilt) / _cell + _centre;
+        public Vector2 BoardPoint(Vector2 localPoint, Vector2 rectSize)
+        {
+            localPoint = Unpanned(localPoint);
+            return new Vector2(localPoint.x, localPoint.y / Look.SpriteTilt) / _cell + _centre;
+        }
         public bool Pick(Vector2 localPoint, Vector2 rectSize, out Vector2Int cell, out int id)
         {
             var point = BoardPoint(localPoint, rectSize);
@@ -369,6 +373,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             _centre = new Vector2((minX + maxX) * .5f, (minY + maxY) * .5f);
             var size = _rect.rect.size;
             _cell = FillWidth ? size.x / (maxX - minX) : Mathf.Min(size.x / (maxX - minX), size.y / ((maxY - minY) * Look.SpriteTilt));
+            _cell = FitPan(_cell, maxX - minX, maxY - minY, size);
             var tilt = new Vector3(1, Look.SpriteTilt, 1);
             _boardLayer.localScale = tilt; _jellyLayer.localScale = tilt; _edgeCornerLayer.localScale = tilt; _doorLayer.localScale = tilt;
             _deliveryLayer.localScale = tilt; _bitLayer.localScale = tilt;
@@ -1167,6 +1172,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             UpdateGates(Time.unscaledDeltaTime);
             float dt = Mathf.Min(Time.unscaledDeltaTime, 1 / 30f);
             _time += dt;
+            StepAutoPan(dt);
             // Two half steps keep a stiff spring stable at low frame rates. Sliding and lifting always
             // run, so a move, an undo and a lift stay smooth; AnimateJellies only adds the jelly feel.
             bool moving = false;
