@@ -103,6 +103,8 @@ namespace Modules.GameplayModule.Shared.Data.ValueObjects
         public int Height { get; }
         /// <summary>Columns the screen shows across; 0 shows the whole map. A wider map is slid to see the rest.</summary>
         public int ViewColumns { get; }
+        /// <summary>The level opens with a hand showing that the map slides.</summary>
+        public bool PanHint { get; }
         public float Seconds { get; }
         public IReadOnlyList<Vector2Int> Walls { get; }
         public IReadOnlyList<Vector2Int> Holes { get; }
@@ -121,8 +123,9 @@ namespace Modules.GameplayModule.Shared.Data.ValueObjects
         public JellyLevelCVO(int width, int height, float seconds, IEnumerable<Vector2Int> walls,
             IEnumerable<JellyPieceVO> pieces, IEnumerable<JellyGateCVO> gates, IEnumerable<Vector2Int> holes = null, string name = "Jelly Fuse", string hint = "", IEnumerable<JellyColourCVO> extraColours = null,
             IReadOnlyDictionary<int, int> frozenPieces = null, IReadOnlyDictionary<int, JellyAxis> arrowPieces = null, bool freeArrowAfterFusion = false,
-            LevelDifficulty difficulty = LevelDifficulty.Normal, int viewColumns = 0)
+            LevelDifficulty difficulty = LevelDifficulty.Normal, int viewColumns = 0, bool panHint = false)
         {
+            PanHint = panHint;
             Difficulty = difficulty;
             ViewColumns = Mathf.Max(0, viewColumns);
             FrozenPieces = frozenPieces ?? new Dictionary<int, int>();

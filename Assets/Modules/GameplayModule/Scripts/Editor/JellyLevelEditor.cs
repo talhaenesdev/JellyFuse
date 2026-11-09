@@ -136,8 +136,8 @@ namespace Modules.GameplayModule.Editor
             _settings = EditorGUILayout.Foldout(_settings, F("Level settings: {0}  |  {1} × {2}  |  {3} s", level.LevelName, level.Width, level.Height, level.Seconds), true);
             if (!_settings) return;
             serializedObject.Update();
-            string[] fields = { "LevelName", "Hint", "Width", "Height", "ViewColumns", "Seconds", "Difficulty", "FreeArrowAfterFusion" };
-            string[] labels = { "Level name", "Hint", "Width", "Height", "Visible columns", "Time (s)", "Difficulty", "Free arrows after fusion" };
+            string[] fields = { "LevelName", "Hint", "Width", "Height", "ViewColumns", "PanHint", "Seconds", "Difficulty", "FreeArrowAfterFusion" };
+            string[] labels = { "Level name", "Hint", "Width", "Height", "Visible columns", "Slide hint", "Time (s)", "Difficulty", "Free arrows after fusion" };
             for (int i = 0; i < fields.Length; i++) EditorGUILayout.PropertyField(serializedObject.FindProperty(fields[i]), new GUIContent(T(labels[i])));
             serializedObject.ApplyModifiedProperties();
             DrawPalette(level);

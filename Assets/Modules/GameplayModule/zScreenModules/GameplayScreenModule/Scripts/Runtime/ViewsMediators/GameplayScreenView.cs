@@ -230,6 +230,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             _hasBoard = true;
             _spriteBoard.gameObject.SetActive(true);
             _spriteBoard.Initialize(_presentation);
+            _spriteBoard.PanHintText = L("tutorial.pan", "Swipe to see the rest of the map");
             if (_snapshot != null) _spriteBoard.Present(_snapshot, _heldId);
             if (_tutorial != null) ApplyTutorial(_tutorial);
         }
@@ -402,6 +403,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             if (_snapshot != null && _built && _snapshot.Status != PuzzleStatus.Playing) FillPanels();
             DrawLifeTime();
             ShowTutorialText();
+            if (_hasBoard) _spriteBoard.PanHintText = L("tutorial.pan", "Swipe to see the rest of the map");
             ShowDifficulty();
         }
         private TMP_Text _difficulty;

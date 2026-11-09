@@ -16,6 +16,8 @@ namespace Modules.GameplayModule.Shared.Data.UnityObjects
         [Range(3,20)] public int Height = 7;
         [Tooltip("How many columns the screen shows across. 0: the whole map fits. A wider map is slid left and right in play, starting at its left end.")]
         [Min(0)] public int ViewColumns;
+        [Tooltip("On a map that slides: it opens with a hand showing the player to slide it, until they do.")]
+        public bool PanHint;
         [Min(1)] public float Seconds = 120;
         [Tooltip("Hard or Super Hard is shown under the timer while the level is played. Normal: nothing is shown.")]
         public LevelDifficulty Difficulty;
@@ -151,7 +153,7 @@ namespace Modules.GameplayModule.Shared.Data.UnityObjects
                 gates,Holes,LevelName,Hint,(palette != null ? palette.AsLevelColours() : Enumerable.Empty<JellyColourCVO>()).Concat(ExtraColours),
                 Shapes.Select((p, i) => (Id: i + 1, Shape: p)).Where(e => e.Shape.Frozen).ToDictionary(e => e.Id, e => Mathf.Max(1, e.Shape.ThawAfter)),
                 Shapes.Select((p, i) => (Id: i + 1, Shape: p)).Where(e => e.Shape.ArrowBlock).ToDictionary(e => e.Id, e => e.Shape.ArrowAxis),
-                FreeArrowAfterFusion, Difficulty, ViewColumns);
+                FreeArrowAfterFusion, Difficulty, ViewColumns, PanHint);
         }
         /// <summary>One thing wrong with the level: an English text with {0}-style places, and what goes in them.</summary>
         public readonly struct Issue

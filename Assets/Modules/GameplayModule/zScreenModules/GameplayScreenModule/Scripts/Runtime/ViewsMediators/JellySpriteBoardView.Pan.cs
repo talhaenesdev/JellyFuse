@@ -59,7 +59,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             int columns = _level.ViewColumns;
             float cell = columns > 0 && columns < spanX ? Mathf.Min(size.x / columns, size.y / (spanY * Look.SpriteTilt)) : fitted;
             _panMax = Mathf.Max(0, (spanX * cell - size.x) * .5f);
-            if (!ReferenceEquals(_pannedLevel, _level)) { _pannedLevel = _level; SetPan(_panMax); }
+            if (!ReferenceEquals(_pannedLevel, _level)) { _pannedLevel = _level; SetPan(_panMax); StartPanHint(); }
             else SetPan(_pan);
             return cell;
         }

@@ -1173,6 +1173,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             float dt = Mathf.Min(Time.unscaledDeltaTime, 1 / 30f);
             _time += dt;
             StepAutoPan(dt);
+            StepPanHint(dt);
             // Two half steps keep a stiff spring stable at low frame rates. Sliding and lifting always
             // run, so a move, an undo and a lift stay smooth; AnimateJellies only adds the jelly feel.
             bool moving = false;
@@ -1376,6 +1377,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         {
             ClearImpact();
             ClearFx();
+            ClearPanHint();
             ClearDust();
             ReleaseGates(); _gateOpen.Clear();
             ClearBlobs();
