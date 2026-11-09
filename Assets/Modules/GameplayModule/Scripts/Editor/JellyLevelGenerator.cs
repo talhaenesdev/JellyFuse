@@ -47,12 +47,21 @@ namespace Modules.GameplayModule.Editor
         {
             int inTen = (number - 1) % 10;        // 0 rests after a hard one ... 9 is the hard one
             int lift = Mathf.Max(0, (number - 51) / 25);
-            if (number % 50 == 0) return new JellyLevelGenerator { MinMoves = 25, MinMaking = 5, SuperHard = true, SolveMs = 3500 };
+            // After level 101 brings in the map that slides, every ten has two of them, away from the hard one.
+            if (number > 101 && number % 50 != 0 && (number % 10 == 3 || number % 10 == 7))
+                return new JellyLevelGenerator { MinMoves = 12 + lift, MinMaking = 1, Wide = true, SolveMs = 4500 };
+            if (number % 50 == 0) return new JellyLevelGenerator { MinMoves = 25, MinMaking = 5, SuperHard = true, SolveMs = 6000 };
             if (number % 10 == 0) return new JellyLevelGenerator { MinMoves = 18 + lift, MinMaking = 2, Hard = true, SolveMs = 3500 };
             return new JellyLevelGenerator { MinMoves = 12 + inTen / 3 + lift, MinMaking = inTen / 4, SolveMs = 3500 };
         }
         /// <summary>The draft is marked Hard instead of judged from its solution.</summary>
         public bool Hard { get; set; }
+        /// <summary>
+        /// Two boards side by side, wider than the screen, joined by a bridge or two one cell high across a gap of
+        /// holes; the level shows WIDE_COLUMNS of them and the map slides to the rest.
+        /// </summary>
+        public bool Wide { get; set; }
+        public const int WIDE_COLUMNS = 9;
         public int SolveMs { get; set; } = 3000;
         /// <summary>What the solver said of each draft tried.</summary>
         public List<string> Log { get; } = new();
@@ -89,12 +98,31 @@ namespace Modules.GameplayModule.Editor
         {
             var level = ScriptableObject.CreateInstance<CD_JellyLevel>();
             level.LevelName = "Level " + number;
-            level.Width = rng.Next(8, 11);
-            level.Height = rng.Next(9, 13);
+            level.Width = Wide ? rng.Next(17, 22) : rng.Next(8, 11);
+            level.Height = Wide ? rng.Next(8, 11) : rng.Next(9, 13);
             int W = level.Width, H = level.Height;
 
             // Notched corners and a stub or two in the frame, so the floor is not a plain box.
             var walls = new HashSet<Vector2Int>();
+            // A wide map: a gap of holes down the middle, the full height of the board and its frame, crossed by one
+            // or two bridges one cell high. While the board is built the gap counts as wall, so no door, jelly or
+            // check reaches into it; it becomes holes at the end, which the map draws as open ground.
+            var gap = new HashSet<Vector2Int>();
+            if (Wide)
+            {
+                level.ViewColumns = WIDE_COLUMNS;
+                int gapWidth = rng.Next(2, 5), gapStart = W / 2 - gapWidth / 2;
+                var bridges = new List<int> { rng.Next(2, H - 2) };
+                if (rng.NextDouble() < .5)
+                {
+                    int second = rng.Next(2, H - 2);
+                    if (Mathf.Abs(second - bridges[0]) >= 3) bridges.Add(second);
+                }
+                for (int x = gapStart; x < gapStart + gapWidth; x++)
+                for (int y = 0; y < H; y++)
+                    if (!bridges.Contains(y)) gap.Add(new Vector2Int(x, y));
+                foreach (var cell in gap) walls.Add(cell);
+            }
             foreach (var corner in new[] { new Vector2Int(1, 1), new Vector2Int(W - 2, 1), new Vector2Int(1, H - 2), new Vector2Int(W - 2, H - 2) })
             {
                 if (rng.NextDouble() > .45) continue;
@@ -125,9 +153,11 @@ namespace Modules.GameplayModule.Editor
             int doorCount = SuperHard ? (rng.NextDouble() < .5 ? 4 : 3)
                 : number >= 60 && rng.NextDouble() < .35 ? 4 : rng.NextDouble() < .55 ? 3 : 2;
             var sides = new List<JellySide> { JellySide.Top, JellySide.Bottom, JellySide.Left, JellySide.Right }.OrderBy(_ => rng.Next()).ToList();
+            // A wide map has a door at each end, so both islands are played.
+            if (Wide) sides = new List<JellySide> { JellySide.Left, JellySide.Right }.Concat(sides.Where(s => s is JellySide.Top or JellySide.Bottom)).ToList();
             var colours = COLOURS.OrderBy(_ => rng.Next()).Take(rng.Next(4, 7)).ToList();
             int floorCells = (W - 2) * (H - 2) - walls.Count;
-            int target = (int)(floorCells * ((SuperHard ? .52 : Hard ? .44 : .36) + rng.NextDouble() * .12));
+            int target = (int)(floorCells * ((SuperHard ? .52 : Hard ? .44 : Wide ? .24 : .36) + rng.NextDouble() * .12));
             int perDoor = Mathf.Max(6, target / doorCount);
             for (int d = 0; d < doorCount; d++)
             {
@@ -173,7 +203,8 @@ namespace Modules.GameplayModule.Editor
             }
             // The frame cells a door opens are not wall.
             var doorCells = new HashSet<Vector2Int>(level.Doors.SelectMany(level.DoorCells));
-            level.Walls = walls.Where(c => !doorCells.Contains(c)).ToList();
+            level.Walls = walls.Where(c => !doorCells.Contains(c) && !gap.Contains(c)).ToList();
+            level.Holes = gap.ToList();
             // No floor cell closed in on three sides by wall or frame: such a pocket is where the rim's corner pieces
             // pile onto each other.
             for (int x = 1; x < W - 1; x++)
@@ -186,7 +217,7 @@ namespace Modules.GameplayModule.Editor
                 {
                     var n = c + step;
                     bool frame = n.x == 0 || n.y == 0 || n.x == W - 1 || n.y == H - 1;
-                    if (walls.Contains(n) || (frame && !doorCells.Contains(n))) closed++;
+                    if ((walls.Contains(n) && !gap.Contains(n)) || (frame && !doorCells.Contains(n) && !gap.Contains(n))) closed++;
                 }
                 if (closed >= 3) { UnityEngine.Object.DestroyImmediate(level); return null; }
             }

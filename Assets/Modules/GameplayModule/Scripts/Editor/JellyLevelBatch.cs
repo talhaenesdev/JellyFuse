@@ -54,7 +54,10 @@ namespace Modules.GameplayModule.Editor
 
         private void Step()
         {
-            var draft = JellyLevelGenerator.ForLevel(_number).Make(_number, _seed++, _list, 1);
+            var generator = JellyLevelGenerator.ForLevel(_number);
+            // A wide map the solver cannot crack in half the tries is made a plain board instead, so no level is left out.
+            if (generator.Wide && _tries >= MAX_TRIES / 2) generator.Wide = false;
+            var draft = generator.Make(_number, _seed++, _list, 1);
             _tries++;
             if (draft == null)
             {
