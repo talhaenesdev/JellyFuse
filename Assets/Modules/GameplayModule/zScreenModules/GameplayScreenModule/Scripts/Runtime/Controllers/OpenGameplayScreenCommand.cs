@@ -46,6 +46,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.Controllers
 
                 screen.ConfigurePresentation();
                 screen.SetLocalizer(_localization.Get);
+                screen.ApplyBoardColours(_shared.GetScriptable<CD_BoardColours>());
                 var progress = _shared.GetScriptable<SD_JellyProgress>();
                 screen.ApplyCoins(progress != null ? progress.Coins : 0);
                 screen.ShowTopBar(_devTools != null && _devTools.IsOn(GameplayScreenDevToggles.TOP_BAR));

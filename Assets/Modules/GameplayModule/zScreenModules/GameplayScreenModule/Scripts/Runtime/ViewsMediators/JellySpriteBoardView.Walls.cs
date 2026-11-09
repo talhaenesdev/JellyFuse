@@ -186,7 +186,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         }
         private void Add(Vector2 position, Vector2 size, Sprite art, JellySide side, bool corner)
         {
-            var item = Place(Take(_jellyLayer), Role.Wall, position, size * _cell, Look.PaintedWallTint, 0, 0, -1, art);
+            var item = Place(Take(_jellyLayer), Role.Wall, position, size * _cell, WallTint, 0, 0, -1, art);
             // Corners come after the straights they join, among walls drawn at the same depth.
             if (side == JellySide.Top) item.SortY = corner ? 1e30f : float.MaxValue;
             else if (side == JellySide.Bottom) { item.Front = true; item.SortY = corner ? 1e29f : 1e30f; }
@@ -216,7 +216,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         {
             if (art == null) return;
             var size = Vector2.Scale(cells, Skin.PieceSize);
-            var item = Place(Take(_jellyLayer), Role.Wall, Position(cell) + (shift + Skin.PieceOffset + Skin.WallOffset(side)) * _cell, size * _cell, Look.PaintedWallTint, 0, 0, -1, art);
+            var item = Place(Take(_jellyLayer), Role.Wall, Position(cell) + (shift + Skin.PieceOffset + Skin.WallOffset(side)) * _cell, size * _cell, WallTint, 0, 0, -1, art);
             // Seen from above at an angle: a wall with the floor below it is behind every jelly, a wall
             // with the floor above it in front of every jelly, held or not; side walls sort by their row.
             if (side == JellySide.Top) item.SortY = float.MaxValue;
@@ -241,7 +241,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             Item item;
             // A wall stands up like a jelly does, so it is sorted with them in the jelly layer.
             if (painted != null)
-                item = Place(Take(_jellyLayer), Role.Wall, Position(cell) + (Skin.PieceOffset + inset) * _cell, Skin.PieceSize * _cell, Look.PaintedWallTint, 0, 0, -1, painted);
+                item = Place(Take(_jellyLayer), Role.Wall, Position(cell) + (Skin.PieceOffset + inset) * _cell, Skin.PieceSize * _cell, WallTint, 0, 0, -1, painted);
             else
                 item = Place(Take(_jellyLayer), Role.Wall, Position(cell), Vector2.one * _cell * (inner ? Look.SpriteWallSize : 1),
                     Look.WallColour, Look.SpriteWallDepth);
@@ -282,7 +282,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             // the row under it is drawn over its bottom edge; every other door is drawn over the board.
             bool behind = painted != null && gate.Side == JellySide.Top;
             var door = painted != null
-                ? Place(Take(behind ? _jellyLayer : _doorLayer), Role.Wall, centre + Skin.PieceOffset * _cell, cells * _cell, Look.PaintedDoorTint, 0, 0, -1, painted)
+                ? Place(Take(behind ? _jellyLayer : _doorLayer), Role.Wall, centre + Skin.PieceOffset * _cell, cells * _cell, DoorTint, 0, 0, -1, painted)
                 : Place(Take(_doorLayer), Role.Door, centre, cells * _cell - Vector2.one * _cell * .06f, Color.Lerp(colour, Look.BoardColour, .55f));
             if (painted != null) door.BodyImage.material = Skin.DoorTint;
             if (behind) door.SortY = 1e29f; // after the top wall and its corners, before every jelly

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using FlowIoC.BaseModule.Injectable.Components;
 using FlowIoC.ScreenModule.ViewsMediators.Screen;
 using Modules.GameplayModule.GameplayScreenModule.Data.UnityObjects;
+using Modules.GameplayModule.Shared.Data.UnityObjects;
 using Modules.GameplayModule.Shared.Data.ValueObjects;
 using Modules.GameplayModule.Shared.Enums;
 using TMPro;
@@ -222,6 +223,16 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             if (_presentation == null || _presentation.Feel == null || _presentation.Look == null || _presentation.Hud == null)
                 throw new InvalidOperationException("GameplayScreen requires CD_JellyPresentation with its Feel, Look and Hud set.");
             Build(); ApplySavedFeel(); StopPresentation(); _snapshot = null;
+        }
+
+        private CD_BoardColours _boardColours;
+
+        /// <summary>The colours the board is painted with: the gameplay module's, which the content server may have replaced.</summary>
+        public void ApplyBoardColours(CD_BoardColours colours)
+        {
+            _boardColours = colours;
+            _spriteBoard.Colours = colours;
+            RefreshPresentation();
         }
 
         public void ConfigurePresentation()

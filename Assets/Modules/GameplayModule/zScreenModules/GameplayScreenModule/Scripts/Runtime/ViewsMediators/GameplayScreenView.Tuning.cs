@@ -40,22 +40,22 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             },
             [PAGE_LOOK] = new[]
             {
-                "Look.PaintedWallTint.r", "Look.PaintedWallTint.g", "Look.PaintedWallTint.b",
-                "Look.PaintedDoorTint.r", "Look.PaintedDoorTint.g", "Look.PaintedDoorTint.b",
-                "Look.PaintedTileTint.r", "Look.PaintedTileTint.g", "Look.PaintedTileTint.b",
-                "Look.PaintedTileAltTint.r", "Look.PaintedTileAltTint.g", "Look.PaintedTileAltTint.b",
-                "Look.GridCornerTint.r", "Look.GridCornerTint.g", "Look.GridCornerTint.b",
+                "Board.Wall.r", "Board.Wall.g", "Board.Wall.b",
+                "Board.Door.r", "Board.Door.g", "Board.Door.b",
+                "Board.Tile.r", "Board.Tile.g", "Board.Tile.b",
+                "Board.TileAlt.r", "Board.TileAlt.g", "Board.TileAlt.b",
+                "Board.GridCorner.r", "Board.GridCorner.g", "Board.GridCorner.b",
                 "Look.GridCornerLightTint.r", "Look.GridCornerLightTint.g", "Look.GridCornerLightTint.b",
             },
         };
         /// <summary>The colours on the colour page, by field: the section each sits under and its name there.</summary>
         private static readonly Dictionary<string, (string Group, string Label)> COLOUR_NAMES = new()
         {
-            ["PaintedWallTint"] = ("Duvarlar", "Duvar"),
-            ["PaintedDoorTint"] = ("Kapılar", "Kapı"),
-            ["PaintedTileTint"] = ("Grid", "Karo A"),
-            ["PaintedTileAltTint"] = ("Grid", "Karo B"),
-            ["GridCornerTint"] = ("Grid", "Köşe"),
+            ["Wall"] = ("Duvarlar", "Duvar"),
+            ["Door"] = ("Kapılar", "Kapı"),
+            ["Tile"] = ("Grid", "Karo A"),
+            ["TileAlt"] = ("Grid", "Karo B"),
+            ["GridCorner"] = ("Grid", "Köşe"),
             ["GridCornerLightTint"] = ("Grid", "Parlayan Köşe"),
         };
         /// <summary>Fields that change how a picture is cut or meshed, or where the map sits: redrawn after them.</summary>
@@ -97,7 +97,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             Write(target, field, key, value);
             PlayerPrefs.SetFloat(PREFS + key, value);
             PlayerPrefs.Save();
-            if (key.StartsWith("Hud.") || key.StartsWith("Look.") || REBUILD.Contains(key)) RefreshPresentation();
+            if (key.StartsWith("Hud.") || key.StartsWith("Look.") || key.StartsWith("Board.") || REBUILD.Contains(key)) RefreshPresentation();
         }
 
         /// <summary>
@@ -116,7 +116,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                 if (!defaults.TryGetValue(type, out var fresh)) defaults[type] = fresh = ScriptableObject.CreateInstance(type);
                 field.SetValue(target, field.GetValue(fresh));
                 PlayerPrefs.DeleteKey(PREFS + key);
-                rebuild |= key.StartsWith("Hud.") || key.StartsWith("Look.") || REBUILD.Contains(key);
+                rebuild |= key.StartsWith("Hud.") || key.StartsWith("Look.") || key.StartsWith("Board.") || REBUILD.Contains(key);
             }
             foreach (var fresh in defaults.Values) Destroy(fresh);
             PlayerPrefs.Save();
@@ -131,6 +131,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             if (key.StartsWith("Hud.")) { target = _presentation.Hud; name = name.Substring(4); }
             else if (key.StartsWith("Look.")) { target = _presentation.Look; name = name.Substring(5); }
             else if (key.StartsWith("Panel.")) { target = _panelAnimation; name = name.Substring(6); }
+            else if (key.StartsWith("Board.")) { target = _boardColours; name = name.Substring(6); }
             field = target != null ? target.GetType().GetField(name) : null;
             if (field == null) return false;
             return Channel(key) >= 0 ? field.FieldType == typeof(Color) : field.FieldType == typeof(float) || field.FieldType == typeof(int);

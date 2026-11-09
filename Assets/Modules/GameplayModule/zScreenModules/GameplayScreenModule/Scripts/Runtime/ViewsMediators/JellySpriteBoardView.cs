@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Modules.GameplayModule.GameplayScreenModule.Data.UnityObjects;
+using Modules.GameplayModule.Shared.Data.UnityObjects;
 using Modules.GameplayModule.Shared.Data.ValueObjects;
 using Modules.GameplayModule.Shared.Enums;
 using UnityEngine;
@@ -88,6 +89,14 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         private CD_JellyPresentation _config;
         private CD_JellyFeel Feel => _config.Feel;
         private CD_JellyBoardLook Look => _config.Look;
+
+        /// <summary>The board's colours, filed by the gameplay module and refreshed from the content server; the look's own until set.</summary>
+        public CD_BoardColours Colours { get; set; }
+        private Color WallTint => Colours != null ? Colours.Wall : Look.PaintedWallTint;
+        private Color DoorTint => Colours != null ? Colours.Door : Look.PaintedDoorTint;
+        private Color TileTint => Colours != null ? Colours.Tile : Look.PaintedTileTint;
+        private Color TileAltTint => Colours != null ? Colours.TileAlt : Look.PaintedTileAltTint;
+        private Color GridCornerTint => Colours != null ? Colours.GridCorner : Look.GridCornerTint;
         private JellyLevelCVO _level;
         private PuzzleSnapshotRVO _snapshot;
         private Vector2 _centre;
@@ -626,7 +635,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                 if (Contains(_level.Holes, cell) || Contains(_level.Walls, cell) || IsDoorCell(cell)) continue;
                 var tile = (x + y) % 2 == 1 && Look.TileSpriteAlt != null ? Look.TileSpriteAlt : Look.TileSprite;
                 _boardItems.Add(Place(Take(_boardLayer), Role.Tile, Position(cell), Vector2.one * _cell * Look.SpriteTileSize,
-                    tile != null ? (tile == Look.TileSpriteAlt && tile != Look.TileSprite ? Look.PaintedTileAltTint : Look.PaintedTileTint) : Look.TileColour, 0, 0, -1, tile));
+                    tile != null ? (tile == Look.TileSpriteAlt && tile != Look.TileSprite ? TileAltTint : TileTint) : Look.TileColour, 0, 0, -1, tile));
             }
             // At every corner of the floor tiles - between them, along the board's edge and at its corners - the grid's corner piece sits on the gap.
             _gridCorners.Clear();
@@ -638,7 +647,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                     if (!a && !b && !c && !d) continue;
                     bool edge = !(a && b && c && d);
                     var corner = Place(Take(edge ? _edgeCornerLayer : _boardLayer), Role.Tile, Position(new Vector2(x + .5f, y + .5f)), Vector2.one * _cell * Look.GridCornerSize,
-                        Look.GridCornerTint, 0, 0, -1, Look.GridCornerSprite);
+                        GridCornerTint, 0, 0, -1, Look.GridCornerSprite);
                     _boardItems.Add(corner);
                     _gridCorners[new Vector2Int(x, y)] = corner;
                 }
@@ -687,7 +696,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             {
                 if (!_gridCorners.TryGetValue(key, out var item)) continue;
                 item.BodyImage.sprite = lit ? Look.GridCornerLightSprite : Look.GridCornerSprite;
-                item.BodyImage.color = lit ? Look.GridCornerLightTint : Look.GridCornerTint;
+                item.BodyImage.color = lit ? Look.GridCornerLightTint : GridCornerTint;
                 item.Root.localScale = Vector3.one * (lit ? Mathf.Lerp(1, Look.FuseGlowCornerScale, swell) : 1);
                 if (bright <= 0 || Look.FuseGlowBloomColour.a <= 0 || Look.FuseGlowBloomStrength <= 0 || Look.FuseGlowBloomSize <= 0) continue;
                 if (used == _blooms.Count)

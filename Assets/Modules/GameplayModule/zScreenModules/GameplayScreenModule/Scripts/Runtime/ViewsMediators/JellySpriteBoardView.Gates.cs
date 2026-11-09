@@ -66,7 +66,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             gate.Fresh = !_gateOpen.TryGetValue(index, out var open);
             gate.Open = gate.Fresh ? 0 : open;
             gate.LeftImage.sprite = left; gate.RightImage.sprite = right;
-            gate.LeftImage.color = gate.RightImage.color = Look.PaintedDoorTint;
+            gate.LeftImage.color = gate.RightImage.color = DoorTint;
             gate.LeftImage.material = gate.RightImage.material = Skin.DoorTint;
             // The picture is drawn at DoorPixels sprite pixels to a cell: the leaves keep that scale.
             float scale = _cell / Skin.DoorPixels;
