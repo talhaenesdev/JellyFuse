@@ -215,6 +215,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         // With no level after this one, Continue plays this one again.
         private void OnNextClicked()
         {
+            // The daily challenge is played apart from the run: won, it goes back to the main screen.
+            if (_levelNumber <= 0) { OnQuitClicked(); return; }
             if (!_hasNextLevel) { OnRestartClicked(); return; }
             HidePanels(); NextLevelClicked?.Invoke();
         }
@@ -395,9 +397,10 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         /// <summary>The result texts, in the language in use; also redrawn when the language changes.</summary>
         private void FillPanels()
         {
-            string level = LF("gameplay.level_title", "Level {0}", _levelNumber);
+            string level = _levelNumber <= 0 ? LevelText() : LF("gameplay.level_title", "Level {0}", _levelNumber);
             _winLevel.text = level; _loseTitle.text = level; _retryTitle.text = level;
-            _nextLabel.text = _hasNextLevel ? L("gameplay.continue", "Continue") : L("gameplay.play_again", "Play again");
+            _nextLabel.text = _levelNumber <= 0 ? L("gameplay.home", "Home")
+                : _hasNextLevel ? L("gameplay.continue", "Continue") : L("gameplay.play_again", "Play again");
             DrawAdButtons();
         }
         private IEnumerator ShowPanel(RectTransform panel, float delay)
