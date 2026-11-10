@@ -29,7 +29,9 @@ namespace Modules.GameplayModule.Controllers
                 {"level", _model.LevelIndex + 1},
                 {"moves", after.Moves},
                 {"secondsLeft", (int) _model.RemainingSeconds},
-                {"reason", after.Status == PuzzleStatus.Won ? "won" : "stuck"}
+                {"reason", after.Status == PuzzleStatus.Won ? "won" : "stuck"},
+                {"difficulty", after.Level.Difficulty.ToString()},
+                {"wide", after.Level.ViewColumns > 0}
             });
         }
     }

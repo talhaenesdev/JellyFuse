@@ -18,7 +18,9 @@ namespace Modules.GameplayModule.Controllers
                 {"level", _model.LevelIndex + 1},
                 {"moves", _model.Snapshot().Moves},
                 {"secondsLeft", 0},
-                {"reason", "time"}
+                {"reason", "time"},
+                {"difficulty", _model.Snapshot().Level?.Difficulty.ToString() ?? ""},
+                {"wide", _model.Snapshot().Level != null && _model.Snapshot().Level.ViewColumns > 0}
             });
     }
 }

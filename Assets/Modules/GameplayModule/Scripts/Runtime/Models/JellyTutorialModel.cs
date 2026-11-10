@@ -24,10 +24,14 @@ namespace Modules.GameplayModule.Models
             // A step still being authored - no cell to lead the jelly to - is left out.
             foreach (var step in steps) if (step != null && step.Path.Count >= 2) _steps.Add(step);
             _step = 0;
+            Reported = 0;
             Refresh();
         }
         public void Lead(int pieceId, Vector2Int corner, int size) { PieceId = pieceId; StartCorner = corner; StartSize = size; }
         public void Next() { _step++; Refresh(); }
+        public int StepIndex => _step;
+        public int StepCount => _steps.Count;
+        public int Reported { get; set; }
         public void End() { _step = _steps.Count; Refresh(); }
         private void Refresh()
         {

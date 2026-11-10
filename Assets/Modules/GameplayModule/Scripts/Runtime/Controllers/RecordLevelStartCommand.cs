@@ -13,6 +13,11 @@ namespace Modules.GameplayModule.Controllers
         [Inject] private IAnalyticsService _analytics { get; set; }
 
         public override void Execute() =>
-            _analytics.Record("level_start", new Dictionary<string, object> {{"level", _model.LevelIndex + 1}});
+            _analytics.Record("level_start", new Dictionary<string, object>
+            {
+                {"level", _model.LevelIndex + 1},
+                {"difficulty", _model.Snapshot().Level?.Difficulty.ToString() ?? ""},
+                {"wide", _model.Snapshot().Level != null && _model.Snapshot().Level.ViewColumns > 0}
+            });
     }
 }

@@ -26,5 +26,10 @@ namespace Modules.GameplayModule.Models
         /// <summary>On to the next step; past the last, the tutorial is over.</summary>
         void Next();
         void End();
+        /// <summary>Steps done so far, and how many the level has.</summary>
+        int StepIndex { get; }
+        int StepCount { get; }
+        /// <summary>The last step reported to analytics, so each is reported once.</summary>
+        int Reported { get; set; }
     }
 }
