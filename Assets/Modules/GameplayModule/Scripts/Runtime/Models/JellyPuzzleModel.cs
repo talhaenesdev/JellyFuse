@@ -22,6 +22,7 @@ namespace Modules.GameplayModule.Models
             public int[] DoorFrozen;
             public Dictionary<int, int> JellyFrozen;
             public Dictionary<int, int> MoveWays;
+            public Dictionary<Vector2Int, int> Crates;
         }
         private readonly Stack<History> _history = new();
         private List<JellyPieceVO> _pieces = new();
@@ -39,6 +40,10 @@ namespace Modules.GameplayModule.Models
         /// not listed moves any way. A fused piece keeps only the ways all of its parts could move.
         /// </summary>
         private Dictionary<int, int> _moveWays = new();
+        /// <summary>The crates still standing, by cell: the fuses next to each it still takes to break, 2 whole, 1 cracked.</summary>
+        private Dictionary<Vector2Int, int> _crates = new();
+        public const int CRATE_HITS = 2;
+        private readonly List<Vector2Int> _hitCrates = new();
         private History _dragBefore;
         private Vector2Int _dragAnchor;
         private int _dragId;
@@ -76,6 +81,7 @@ namespace Modules.GameplayModule.Models
         public bool RewardDoubled { get; set; }
         public bool TimeExtended { get; private set; }
         public bool InPlay { get; set; }
+        public bool Daily { get; set; }
         public bool ClockStarted { get; set; }
         /// <summary>The last stage of a door that counts when judging a shape: the one it waits for now, or its whole queue.</summary>
         // A shape is judged only against the jelly each door waits for now, never the ones queued behind it.
@@ -93,6 +99,8 @@ namespace Modules.GameplayModule.Models
             _moveWays = new Dictionary<int, int>();
             foreach (var arrow in level.ArrowPieces)
                 _moveWays[arrow.Key] = arrow.Value == JellyAxis.Horizontal ? PuzzleSnapshotRVO.Horizontal : PuzzleSnapshotRVO.Vertical;
+            _crates = new Dictionary<Vector2Int, int>();
+            foreach (var crate in level.Crates) _crates[crate] = CRATE_HITS;
             _doorCells.Clear();
             foreach (var gate in level.Gates) foreach (var cell in gate.Cells) _doorCells.Add(cell);
             _history.Clear(); _moves = 0; _exited = 0;
@@ -144,7 +152,7 @@ namespace Modules.GameplayModule.Models
             if (_cached != null) return _cached;
             FillFuseReady();
             return _cached = new PuzzleSnapshotRVO(_level, _pieces, Status, _moves, _exited,
-                _history.Count > 0 && Status != PuzzleStatus.Lost, GetWarning(), _progress, _fuseReady, HeldFreeSides(), _doorFrozen, _jellyFrozen, _moveWays);
+                _history.Count > 0 && Status != PuzzleStatus.Lost, GetWarning(), _progress, _fuseReady, HeldFreeSides(), _doorFrozen, _jellyFrozen, _moveWays, _crates);
         }
         /// <summary>The sides the held jelly can step to: free floor, or out through its open exit. The board leads it only that way.</summary>
         private int HeldFreeSides()
@@ -192,6 +200,7 @@ namespace Modules.GameplayModule.Models
         {
             Pieces = new List<JellyPieceVO>(_pieces), Moves = _moves, Exited = _exited, Progress = (int[])_progress.Clone(),
             DoorFrozen = (int[])_doorFrozen.Clone(), JellyFrozen = new Dictionary<int, int>(_jellyFrozen), MoveWays = new Dictionary<int, int>(_moveWays),
+            Crates = new Dictionary<Vector2Int, int>(_crates),
         };
         /// <summary>A jelly went through a door: every frozen door and jelly is one closer to thawing.</summary>
         private void Thaw()
@@ -434,7 +443,7 @@ namespace Modules.GameplayModule.Models
             foreach (var c in piece.Cells)
             {
                 var cell = c + offset;
-                if (!Inside(cell) || Contains(_level.Walls, cell) || Contains(_level.Holes, cell) || _doorCells.Contains(cell)) return false;
+                if (!Inside(cell) || Contains(_level.Walls, cell) || Contains(_level.Holes, cell) || _doorCells.Contains(cell) || _crates.ContainsKey(cell)) return false;
                 foreach (var other in _pieces) if (other.Id != piece.Id && Contains(other.Cells, cell)) return false;
             }
             return true;
@@ -553,6 +562,7 @@ namespace Modules.GameplayModule.Models
             foreach (var wall in _level.Walls) _blocked.Add(wall);
             foreach (var hole in _level.Holes) _blocked.Add(hole);
             foreach (var door in _doorCells) _blocked.Add(door);
+            foreach (var crate in _crates.Keys) _blocked.Add(crate);
             foreach (var other in _pieces) if (other.Id != piece.Id) foreach (var cell in other.Cells) _blocked.Add(cell);
             if (!FreeAt(piece, goal)) return Vector2Int.zero;
             _routeFirst.Clear(); _routeQueue.Clear();
@@ -660,7 +670,20 @@ namespace Modules.GameplayModule.Models
                 Changed();
                 frames?.Add(Snapshot());
             }
+            if (changed && HitCrates(piece)) frames?.Add(Snapshot());
             return changed;
+        }
+        /// <summary>A fuse shakes the crates next to the fused jelly: each takes one hit, and one with none left breaks and frees its cell.</summary>
+        private bool HitCrates(JellyPieceVO piece)
+        {
+            if (_crates.Count == 0) return false;
+            _hitCrates.Clear();
+            foreach (var crate in _crates.Keys)
+                for (int i = 0; i < piece.Cells.Count; i++)
+                    if (Adjacent(piece.Cells[i], crate)) { _hitCrates.Add(crate); break; }
+            foreach (var crate in _hitCrates) if (--_crates[crate] <= 0) _crates.Remove(crate);
+            if (_hitCrates.Count > 0) Changed();
+            return _hitCrates.Count > 0;
         }
 
         // ---------- boosters ----------
@@ -785,7 +808,7 @@ namespace Modules.GameplayModule.Models
             if (_dragBefore != null || _history.Count == 0 || Status == PuzzleStatus.Lost) return false;
             var before = _history.Pop();
             _progress = before.Progress;
-            _doorFrozen = before.DoorFrozen; _jellyFrozen = before.JellyFrozen; _moveWays = before.MoveWays;
+            _doorFrozen = before.DoorFrozen; _jellyFrozen = before.JellyFrozen; _moveWays = before.MoveWays; _crates = before.Crates;
             _pieces = before.Pieces; _moves = before.Moves; _exited = before.Exited;
             Status = PuzzleStatus.Playing;
             IsTicking = true;

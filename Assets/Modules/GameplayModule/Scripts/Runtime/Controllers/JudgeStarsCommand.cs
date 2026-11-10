@@ -28,10 +28,15 @@ namespace Modules.GameplayModule.Controllers
             if (progress == null || level == null || _model.Status != PuzzleStatus.Won || _model.WinPaid) return;
             float left = level.Seconds > 0 ? Mathf.Clamp01(_model.RemainingSeconds / level.Seconds) : 1;
             int stars = left > THREE_STARS ? 3 : left > TWO_STARS ? 2 : 1;
-            int index = _model.LevelIndex;
-            while (progress.Stars.Count <= index) progress.Stars.Add(0);
-            bool best = stars > progress.Stars[index];
-            if (best) progress.Stars[index] = stars;
+            // The daily challenge's stars are shown, never kept: they belong to no level of the run.
+            bool best = false;
+            if (!_model.Daily)
+            {
+                int index = _model.LevelIndex;
+                while (progress.Stars.Count <= index) progress.Stars.Add(0);
+                best = stars > progress.Stars[index];
+                if (best) progress.Stars[index] = stars;
+            }
             _signals.Outgoing.StarsEarned.Dispatch(stars, best);
         }
     }

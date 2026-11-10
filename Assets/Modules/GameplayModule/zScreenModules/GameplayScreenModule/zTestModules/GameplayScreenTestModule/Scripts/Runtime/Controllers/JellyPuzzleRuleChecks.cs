@@ -184,6 +184,19 @@ namespace Modules.GameplayModule.GameplayScreenModule.GameplayScreenTestModule.C
             model.Start(new JellyLevelCVO(3, 3, 60, Array.Empty<Vector2Int>(), new[] { Piece(1, JellyColour.Pink, 0, 1) }, new[] { single }, new[] { new Vector2Int(1, 1) }));
             model.Drag(new Vector2Int(0, 1), new Vector2Int(3, 1), true);
             Check(model.Snapshot().Moves == 0, "Holes block movement rather than being traversable empty cells");
+            // Crates: they block like a wall; a fuse next to one cracks it, a second breaks it, undo puts it back.
+            model.Start(new JellyLevelCVO(3, 1, 60, Array.Empty<Vector2Int>(), new[] { Piece(1, JellyColour.Pink, 0, 0) }, Array.Empty<JellyGateCVO>(), crates: new[] { new Vector2Int(1, 0) }));
+            model.Drag(new Vector2Int(0, 0), new Vector2Int(2, 0), true);
+            Check(model.Snapshot().Moves == 0 && model.Snapshot().Crates.Count == 1, "A crate blocks a jelly like a wall");
+            var crateDoor = new JellyGateCVO(JellySide.Right, 0, 1, 7, 7, new[] { Shape(JellyColour.Pink, (0, 0), (1, 0), (2, 0)) });
+            model.Start(new JellyLevelCVO(7, 7, 60, Array.Empty<Vector2Int>(),
+                new[] { Piece(1, JellyColour.Pink, 0, 0), Piece(2, JellyColour.Pink, 3, 0), Piece(3, JellyColour.Pink, 5, 0) }, new[] { crateDoor }, crates: new[] { new Vector2Int(1, 1) }));
+            model.Drag(new Vector2Int(3, 0), new Vector2Int(1, 0), true);
+            Check(model.Snapshot().Crates.TryGetValue(new Vector2Int(1, 1), out int crateHits) && crateHits == 1, "A fuse next to a crate cracks it");
+            model.Drag(new Vector2Int(5, 0), new Vector2Int(2, 0), true);
+            Check(model.Snapshot().Crates.Count == 0, "A second fuse next to a crate breaks it");
+            model.Undo();
+            Check(model.Snapshot().Crates.TryGetValue(new Vector2Int(1, 1), out crateHits) && crateHits == 1, "Undo puts a broken crate back, cracked");
 
             // Frozen: a door that takes nothing and a jelly that cannot move, until jellies go through doors.
             var icy = new JellyLevelCVO(6, 4, 60, Array.Empty<Vector2Int>(), new[]

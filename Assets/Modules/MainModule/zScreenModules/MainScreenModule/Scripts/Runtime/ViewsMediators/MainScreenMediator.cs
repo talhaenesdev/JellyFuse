@@ -39,6 +39,7 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
             _view.SlotClicked += OnSlotClicked;
             _view.LeaderboardClicked += OnLeaderboardClicked;
             _view.ScratchClicked += OnScratchClicked;
+            _view.DailyChallengeClicked += OnDailyChallengeClicked;
             _signals.Incoming.ApplyEvents.AddListener(_view.ApplyEvents);
             _view.ShopBuyClicked += OnShopBuyClicked;
             _signals.Incoming.ApplyNextLevel.AddListener(_view.ApplyNextLevel);
@@ -69,6 +70,7 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
             _view.SlotClicked -= OnSlotClicked;
             _view.LeaderboardClicked -= OnLeaderboardClicked;
             _view.ScratchClicked -= OnScratchClicked;
+            _view.DailyChallengeClicked -= OnDailyChallengeClicked;
             _signals.Incoming.ApplyEvents.RemoveListener(_view.ApplyEvents);
             _view.ShopBuyClicked -= OnShopBuyClicked;
             _signals.Incoming.ApplyNextLevel.RemoveListener(_view.ApplyNextLevel);
@@ -138,6 +140,10 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
             if (_view.Data.HasState(ScreenState.AvailableToSendSignal)) _signals.Outgoing.SlotClicked.Dispatch();
         }
 
+        private void OnDailyChallengeClicked()
+        {
+            if (_view.Data.HasState(ScreenState.AvailableToSendSignal)) _signals.Outgoing.DailyChallengeClicked.Dispatch();
+        }
         private void OnScratchClicked()
         {
             if (_view.Data.HasState(ScreenState.AvailableToSendSignal)) _signals.Outgoing.ScratchClicked.Dispatch();

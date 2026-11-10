@@ -23,8 +23,23 @@ namespace Modules.GameplayModule.Controllers
             if (_model.Status != PuzzleStatus.Won || _model.WinPaid) return;
             _model.WinPaid = true;
             var levels = _shared.GetScriptable<CD_JellyLevels>();
-            int reward = levels != null ? levels.CoinReward(_model.LevelIndex) : 0;
-            reward = EventsFunction.WinReward(reward, _shared.GetScriptable<SD_JellyProgress>(), _shared.GetScriptable<CD_Events>());
+            var progress = _shared.GetScriptable<SD_JellyProgress>();
+            var events = _shared.GetScriptable<CD_Events>();
+            int reward;
+            if (_model.Daily && progress != null && events != null)
+            {
+                // The daily challenge pays its own reward, once a day: its coins as the win's, its booster on top.
+                bool first = progress.DailyChallengeDay != ShopDayFunction.Today();
+                progress.DailyChallengeDay = ShopDayFunction.Today();
+                var daily = events.DailyChallengeReward;
+                reward = first && daily != null ? daily.Coins : 0;
+                if (first && daily != null && daily.BoosterCount > 0) progress.Booster(daily.Booster).Count += daily.BoosterCount;
+            }
+            else
+            {
+                reward = levels != null ? levels.CoinReward(_model.LevelIndex) : 0;
+                reward = EventsFunction.WinReward(reward, progress, events);
+            }
             _model.WinReward = reward;
             _internalSignals.PayWin.Dispatch(reward);
         }

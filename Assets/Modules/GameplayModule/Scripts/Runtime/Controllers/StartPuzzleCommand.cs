@@ -24,7 +24,20 @@ namespace Modules.GameplayModule.Controllers
                 // The first start of a run carries on from the level the player was on last time.
                 _model.LevelIndex = levels.StartIndex(_shared.GetScriptable<SD_JellyProgress>());
             }
-            var level = levels.Get(_model.LevelIndex);
+            // Today's daily challenge, when it was picked and still has a level; else the run's level.
+            var level = _model.Daily ? EventsFunction.DailyChallengeLevel(_shared.GetScriptable<CD_Events>()) : null;
+            if (level == null) _model.Daily = false;
+            if (_model.Daily)
+            {
+                _model.Start(level.CreateLevel(levels.Palette));
+                // Level 0 is the daily challenge: the screen names it so instead of a number.
+                _signals.Outgoing.LevelChanged.Dispatch(0, true);
+                _signals.Outgoing.BoardChanged.Dispatch(new PuzzleTurnVO(new[] { _model.Snapshot() }));
+                _signals.Outgoing.TimeChanged.Dispatch(_model.RemainingSeconds);
+                _signals.Outgoing.ClockFrozen.Dispatch(0f);
+                return;
+            }
+            level = levels.Get(_model.LevelIndex);
             if (level == null || !levels.IsPlayable(_model.LevelIndex))
             {
                 string why = level == null ? "no playable level from the start level on" : level.name + ": " + string.Join("; ", level.Validate());

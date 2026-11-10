@@ -78,6 +78,8 @@ namespace Modules.ConnectorModule.RootsContexts
             _gameplayScreenSignals.Outgoing.HomeClicked.Connect(_gameplaySignals.Incoming.RefreshLives);
             _gameplaySignals.Outgoing.CoinsChanged.Connect(_mainScreenSignals.Incoming.ApplyCoins, LIVES_GROUP);
             _mainScreenSignals.Outgoing.LivesPlusClicked.Connect(_gameplaySignals.Incoming.OpenLivesOffer, LIVES_GROUP);
+            _mainScreenSignals.Outgoing.DailyChallengeClicked.Connect(_gameplaySignals.Incoming.StartDailyChallenge, LIVES_GROUP);
+            _gameplaySignals.Outgoing.DailyChallengeChosen.Connect(_gameplayScreenSignals.Incoming.OpenGameplayScreen, LIVES_GROUP);
             // The shop asks which once-a-day products are sold out today; Gameplay keeps that day.
             _mainScreenSignals.Outgoing.ShopSoldOutRequested.Connect(_gameplaySignals.Incoming.RequestShopSoldOut, LIVES_GROUP);
             _gameplaySignals.Outgoing.ShopSoldOutChanged.Connect(_mainScreenSignals.Incoming.ApplyShopSoldOut, LIVES_GROUP);

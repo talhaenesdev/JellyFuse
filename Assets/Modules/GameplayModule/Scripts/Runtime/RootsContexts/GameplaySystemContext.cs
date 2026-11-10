@@ -62,6 +62,10 @@ namespace Modules.GameplayModule.RootsContexts
                 .ToSequence<AnnounceLivesCommand>()
                 .ToSequence<ScheduleNotificationsCommand>()
                 .ToSequence<AnnounceEventsCommand>();
+            CommandBinder.Bind(_signals.Incoming.StartDailyChallenge)
+                .ToSequence<RefreshEventsCommand>()
+                .ToSequence<ChooseDailyChallengeCommand>()
+                .ToSequence<SignalDispatchCommand>(_signals.Outgoing.DailyChallengeChosen);
             CommandBinder.Bind(_signals.Incoming.LoadRemoteLevels)
                 .ToParallel<LoadRemoteLevelsCommand>()
                 .ToParallel<LoadRemoteBoardColoursCommand>();
@@ -93,6 +97,7 @@ namespace Modules.GameplayModule.RootsContexts
                 .ToSequence<BreakWinStreakCommand>()
                 .ToSequence<StopPuzzleClockCommand>()
                 .ToSequence<LeaveLevelCommand>()
+                .ToSequence<EndDailyChallengeCommand>()
                 .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
                 .ToSequence<AnnounceLivesCommand>()
                 .ToSequence<ScheduleNotificationsCommand>()

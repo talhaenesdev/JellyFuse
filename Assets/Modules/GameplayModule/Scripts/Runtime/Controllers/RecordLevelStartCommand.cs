@@ -16,6 +16,7 @@ namespace Modules.GameplayModule.Controllers
             _analytics.Record("level_start", new Dictionary<string, object>
             {
                 {"level", _model.LevelIndex + 1},
+                {"daily", _model.Daily},
                 {"difficulty", _model.Snapshot().Level?.Difficulty.ToString() ?? ""},
                 {"wide", _model.Snapshot().Level != null && _model.Snapshot().Level.ViewColumns > 0}
             });

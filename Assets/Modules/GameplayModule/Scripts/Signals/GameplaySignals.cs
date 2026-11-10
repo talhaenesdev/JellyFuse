@@ -16,6 +16,8 @@ namespace Modules.GameplayModule.Signals
     public class GameplaySignalsIncoming
     {
         public Signal Start = new();
+        /// <summary>The daily challenge button was pressed: today's daily level is played, when it is not won yet.</summary>
+        public Signal StartDailyChallenge = new();
         /// <summary>The boot has begun: fetch the level list published since this build, if there is one.</summary>
         public Signal LoadRemoteLevels = new();
         public Signal<Vector2Int, Vector2Int, bool> Drag = new(hideCommandLog: true);
@@ -100,6 +102,8 @@ namespace Modules.GameplayModule.Signals
         public Signal<int, bool> LevelScored = new();
         /// <summary>The stars the level just won earned, 1 to 3, and whether they beat its best.</summary>
         public Signal<int, bool> StarsEarned = new();
+        /// <summary>Today's daily challenge was picked to play: the gameplay screen opens on it.</summary>
+        public Signal DailyChallengeChosen = new();
         /// <summary>The coins the player now holds.</summary>
         public Signal<int> CoinsChanged = new();
         /// <summary>The once-a-day shop products already bought today, by product id.</summary>

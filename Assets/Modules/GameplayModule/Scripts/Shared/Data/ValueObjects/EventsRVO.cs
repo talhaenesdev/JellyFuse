@@ -27,5 +27,9 @@ namespace Modules.GameplayModule.Shared.Data.ValueObjects
         public int SlotSpins;
         /// <summary>Scratch cards the player can take now; 0: an ad gives one.</summary>
         public int ScratchCards;
+        /// <summary>Whether today's daily challenge is there to play: a level is set for today and it is not won yet.</summary>
+        public bool DailyChallengeReady;
+        /// <summary>What winning today's daily challenge gives.</summary>
+        public RewardCVO DailyChallengeReward;
     }
 }

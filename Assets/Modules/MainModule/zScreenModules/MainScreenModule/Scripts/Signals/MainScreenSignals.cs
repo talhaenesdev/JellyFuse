@@ -66,6 +66,8 @@ namespace Modules.MainModule.MainScreenModule.Signals
         public Signal LeaderboardClicked = new();
         /// <summary>The scratch card button was pressed.</summary>
         public Signal ScratchClicked = new();
+        /// <summary>The daily challenge button was pressed.</summary>
+        public Signal DailyChallengeClicked = new();
         /// <summary>The screen opened and wants the daily events.</summary>
         public Signal EventsRequested = new();
     }

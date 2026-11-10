@@ -37,6 +37,8 @@ namespace Modules.GameplayModule.Models
         bool ExtendTime(float seconds);
         /// <summary>A level is on screen: set when one starts, cleared when the gameplay screen closes.</summary>
         bool InPlay { get; set; }
+        /// <summary>The level in play is today's daily challenge, not the next level of the run.</summary>
+        bool Daily { get; set; }
         /// <summary>The clock has started: it waits for the level's first move.</summary>
         bool ClockStarted { get; set; }
         void Start(JellyLevelCVO level);

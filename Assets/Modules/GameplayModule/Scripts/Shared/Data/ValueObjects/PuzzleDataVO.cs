@@ -108,6 +108,8 @@ namespace Modules.GameplayModule.Shared.Data.ValueObjects
         public float Seconds { get; }
         public IReadOnlyList<Vector2Int> Walls { get; }
         public IReadOnlyList<Vector2Int> Holes { get; }
+        /// <summary>The wooden crates the level starts with: each blocks its floor cell until two fuses next to it break it.</summary>
+        public IReadOnlyList<Vector2Int> Crates { get; }
         public string Name { get; }
         public string Hint { get; }
         public IReadOnlyList<JellyPieceVO> Pieces { get; }
@@ -123,9 +125,10 @@ namespace Modules.GameplayModule.Shared.Data.ValueObjects
         public JellyLevelCVO(int width, int height, float seconds, IEnumerable<Vector2Int> walls,
             IEnumerable<JellyPieceVO> pieces, IEnumerable<JellyGateCVO> gates, IEnumerable<Vector2Int> holes = null, string name = "Jelly Fuse", string hint = "", IEnumerable<JellyColourCVO> extraColours = null,
             IReadOnlyDictionary<int, int> frozenPieces = null, IReadOnlyDictionary<int, JellyAxis> arrowPieces = null, bool freeArrowAfterFusion = false,
-            LevelDifficulty difficulty = LevelDifficulty.Normal, int viewColumns = 0, bool panHint = false)
+            LevelDifficulty difficulty = LevelDifficulty.Normal, int viewColumns = 0, bool panHint = false, IEnumerable<Vector2Int> crates = null)
         {
             PanHint = panHint;
+            Crates = Array.AsReadOnly((crates ?? Array.Empty<Vector2Int>()).Distinct().ToArray());
             Difficulty = difficulty;
             ViewColumns = Mathf.Max(0, viewColumns);
             FrozenPieces = frozenPieces ?? new Dictionary<int, int>();
@@ -171,6 +174,9 @@ namespace Modules.GameplayModule.Shared.Data.ValueObjects
         private readonly Dictionary<int, int> _moveWays;
         /// <summary>The ways a piece can move, as Horizontal and Vertical added up: AnyWay for an ordinary jelly, one of them for an arrow block, none when two arrow blocks of different ways fused.</summary>
         public int MoveWays(int pieceId) => _moveWays.TryGetValue(pieceId, out var ways) ? ways : AnyWay;
+        private readonly Dictionary<Vector2Int, int> _crates;
+        /// <summary>The crates still standing, and the hits each has left: 2 whole, 1 cracked.</summary>
+        public IReadOnlyDictionary<Vector2Int, int> Crates => _crates;
         public const int Right = 1, Left = 2, Up = 4, Down = 8;
         /// <summary>Whether the held jelly can take one step this way: onto free floor, or out through its exit.</summary>
         public bool CanHeldStep(Vector2Int step) =>
@@ -178,8 +184,9 @@ namespace Modules.GameplayModule.Shared.Data.ValueObjects
         public PuzzleSnapshotRVO(JellyLevelCVO level, IEnumerable<JellyPieceVO> pieces, PuzzleStatus status,
             int moves, int exited, bool canUndo, string warning, IEnumerable<int> doorProgress = null,
             IEnumerable<int> fuseReady = null, int heldFreeSides = 0, IEnumerable<int> doorFrozen = null, IReadOnlyDictionary<int, int> jellyFrozen = null,
-            IReadOnlyDictionary<int, int> moveWays = null)
+            IReadOnlyDictionary<int, int> moveWays = null, IReadOnlyDictionary<Vector2Int, int> crates = null)
         {
+            _crates = crates != null ? new Dictionary<Vector2Int, int>(crates) : new Dictionary<Vector2Int, int>();
             _moveWays = moveWays != null ? new Dictionary<int, int>(moveWays) : new Dictionary<int, int>();
             HeldFreeSides = heldFreeSides;
             DoorFrozen = Array.AsReadOnly(doorFrozen?.ToArray() ?? new int[level?.Gates.Count ?? 0]);

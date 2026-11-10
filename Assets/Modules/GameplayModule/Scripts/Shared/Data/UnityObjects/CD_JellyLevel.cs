@@ -37,6 +37,8 @@ namespace Modules.GameplayModule.Shared.Data.UnityObjects
         }
         public List<Vector2Int> Walls = new();
         public List<Vector2Int> Holes = new();
+        [Tooltip("Wooden crates: each stands on a floor cell and blocks it like a wall. A fuse next to one cracks it, a second breaks it and frees the cell.")]
+        public List<Vector2Int> Crates = new();
         public List<JellyShapeCVO> Shapes = new();
         public List<JellyDoorCVO> Doors = new();
         [Tooltip("The moves this level's tutorial makes the player do, in order. Empty: no tutorial.")]
@@ -153,7 +155,7 @@ namespace Modules.GameplayModule.Shared.Data.UnityObjects
                 gates,Holes,LevelName,Hint,(palette != null ? palette.AsLevelColours() : Enumerable.Empty<JellyColourCVO>()).Concat(ExtraColours),
                 Shapes.Select((p, i) => (Id: i + 1, Shape: p)).Where(e => e.Shape.Frozen).ToDictionary(e => e.Id, e => Mathf.Max(1, e.Shape.ThawAfter)),
                 Shapes.Select((p, i) => (Id: i + 1, Shape: p)).Where(e => e.Shape.ArrowBlock).ToDictionary(e => e.Id, e => e.Shape.ArrowAxis),
-                FreeArrowAfterFusion, Difficulty, ViewColumns, PanHint);
+                FreeArrowAfterFusion, Difficulty, ViewColumns, PanHint, Crates);
         }
         /// <summary>One thing wrong with the level: an English text with {0}-style places, and what goes in them.</summary>
         public readonly struct Issue
@@ -188,6 +190,7 @@ namespace Modules.GameplayModule.Shared.Data.UnityObjects
                 if (!Enum.IsDefined(typeof(JellyColour), colour) && !ExtraColours.Any(c => c.Id == (int)colour)) Add("Colour number {0} is used but not defined. Pick another colour for its jellies.", (int)colour);
             var occupied=new HashSet<Vector2Int>();
             foreach(var c in Walls.Concat(Holes))if(!Inside(c)||!occupied.Add(c))Add("A wall or empty cell at {0} is off the board or painted twice. Erase it.", At(c));
+            foreach(var c in Crates)if(!Inside(c)||IsFrame(c)||!occupied.Add(c))Add("A crate at {0} is off the board, in the wall round it, or on a cell already taken. Erase it.", At(c));
             var frame=new HashSet<Vector2Int>(FrameWalls());
             foreach(var p in Shapes)
             {

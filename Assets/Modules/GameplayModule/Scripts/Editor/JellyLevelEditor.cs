@@ -20,7 +20,7 @@ namespace Modules.GameplayModule.Editor
     [CustomEditor(typeof(CD_JellyLevel))]
     public sealed class JellyLevelEditor : UnityEditor.Editor
     {
-        private enum Tool { Jelly = 0, Door = 1, Wall = 2, Hole = 3, Erase = 4, Tutorial = 5 }
+        private enum Tool { Jelly = 0, Door = 1, Wall = 2, Hole = 3, Erase = 4, Tutorial = 5, Crate = 6 }
         private enum Selection { None = 0, Shape = 1, Door = 2 }
 
         // Shapes offered in the Shape rows, in two rows of six. Cells are (x, y) with y up; ↻ rotates.
@@ -154,7 +154,7 @@ namespace Modules.GameplayModule.Editor
         private void DrawTools()
         {
             EditorGUILayout.Space(4);
-            var labels = new[] { T("Jelly"), T("Door"), T("Wall"), T("Empty"), T("Erase"), T("Tutorial") };
+            var labels = new[] { T("Jelly"), T("Door"), T("Wall"), T("Empty"), T("Erase"), T("Tutorial"), T("Crate") };
             var tool = (Tool)GUILayout.Toolbar((int)_tool, labels, GUILayout.Height(26));
             if (tool != _tool) { _tool = tool; _dragging = false; _notice = null; }
             string help = _tool switch
@@ -163,6 +163,7 @@ namespace Modules.GameplayModule.Editor
                 Tool.Door => "Click the wall round the board (its outermost cells): place a door.  Click a door: select it, then set the jellies it takes below the board.  Drag: move.",
                 Tool.Wall => "Drag to paint walls.",
                 Tool.Hole => "Drag to paint empty cells: no floor, nothing can pass.",
+                Tool.Crate => "Drag to paint wooden crates: they block like a wall until two fuses next to them break them.",
                 Tool.Tutorial => "Click a cell of the jelly to lead, then the cells to lead it through, in order; the last one is where it is let go of (a door cell sends it out). Right-click takes back the last cell.",
                 _ => "Click or drag: delete what is underneath.",
             };
@@ -438,7 +439,7 @@ namespace Modules.GameplayModule.Editor
             side is JellySide.Left or JellySide.Right ? cells.Max(c => c.y) - cells.Min(c => c.y) + 1 : cells.Max(c => c.x) - cells.Min(c => c.x) + 1;
         private static bool Inside(CD_JellyLevel level, Vector2Int c) => c.x >= 0 && c.x < level.Width && c.y >= 0 && c.y < level.Height;
         private bool CanPlaceShape(CD_JellyLevel level, List<Vector2Int> cells, int ignore) =>
-            cells.All(c => Inside(level, c) && !level.Walls.Contains(c) && !level.Holes.Contains(c) && (!level.IsFrame(c) || DoorAt(level, c) >= 0) &&
+            cells.All(c => Inside(level, c) && !level.Walls.Contains(c) && !level.Holes.Contains(c) && !level.Crates.Contains(c) && (!level.IsFrame(c) || DoorAt(level, c) >= 0) &&
                            !level.Shapes.Where((_, i) => i != ignore).Any(p => p.Cells.Contains(c)));
         private int ShapeAt(CD_JellyLevel level, Vector2Int cell) => level.Shapes.FindIndex(p => p.Cells.Contains(cell));
 
@@ -573,6 +574,7 @@ namespace Modules.GameplayModule.Editor
                 string text = "";
                 if (level.Walls.Contains(cell)) { tint = new Color(.55f, .58f, .64f); text = "▇"; }
                 if (level.Holes.Contains(cell)) { tint = Color.black; text = "×"; }
+                if (level.Crates.Contains(cell)) { tint = new Color(.62f, .4f, .18f); text = "▣"; }
                 int shape = ShapeAt(level, cell);
                 if (shape >= 0)
                 {
@@ -645,7 +647,7 @@ namespace Modules.GameplayModule.Editor
             else if (e.button == 1 || _tool == Tool.Erase) EraseAt(level, cell);
             else if (_dragging) { }
             else if (e.type == EventType.MouseDown) Click(level, cell, ghost, valid);
-            else if (_tool is Tool.Wall or Tool.Hole) PaintCell(level, cell);
+            else if (_tool is Tool.Wall or Tool.Hole or Tool.Crate) PaintCell(level, cell);
             e.Use();
         }
 
@@ -676,7 +678,7 @@ namespace Modules.GameplayModule.Editor
                 if (_selection != Selection.Door || _door != door) _stage = 0;
                 _selection = Selection.Door; _door = door; _tool = Tool.Door; _dragging = true; _dragFrom = cell; return;
             }
-            if (_tool is Tool.Wall or Tool.Hole) { PaintCell(level, cell); return; }
+            if (_tool is Tool.Wall or Tool.Hole or Tool.Crate) { PaintCell(level, cell); return; }
             if (_tool == Tool.Jelly && !Inside(level, cell)) { _selection = Selection.None; return; }
             if (_tool == Tool.Door && !OnRing(level, cell, out _, out _))
             { _selection = Selection.None; _notice = level.IsFrame(cell) ? "A corner cannot hold a door." : "Doors go in the wall round the board: its outermost cells."; return; }
@@ -782,9 +784,10 @@ namespace Modules.GameplayModule.Editor
         {
             if (!Inside(level, cell)) return;
             if (ShapeAt(level, cell) >= 0) { _notice = "Cannot paint over a jelly."; return; }
-            var list = _tool == Tool.Wall ? level.Walls : level.Holes;
+            if (_tool == Tool.Crate && level.IsFrame(cell)) { _notice = "A crate stands inside the wall round the board."; return; }
+            var list = _tool == Tool.Wall ? level.Walls : _tool == Tool.Crate ? level.Crates : level.Holes;
             if (list.Contains(cell)) return;
-            Change(level, "Paint board", () => { level.Walls.Remove(cell); level.Holes.Remove(cell); list.Add(cell); });
+            Change(level, "Paint board", () => { level.Walls.Remove(cell); level.Holes.Remove(cell); level.Crates.Remove(cell); list.Add(cell); });
         }
 
         private void EraseAt(CD_JellyLevel level, Vector2Int cell)
@@ -792,8 +795,8 @@ namespace Modules.GameplayModule.Editor
             int shape = ShapeAt(level, cell), door = DoorAt(level, cell);
             if (shape >= 0) { Change(level, "Delete jelly", () => level.Shapes.RemoveAt(shape)); _selection = Selection.None; }
             else if (door >= 0) { Change(level, "Delete door", () => level.Doors.RemoveAt(door)); _selection = Selection.None; }
-            else if (level.Walls.Contains(cell) || level.Holes.Contains(cell))
-                Change(level, "Erase", () => { level.Walls.Remove(cell); level.Holes.Remove(cell); });
+            else if (level.Walls.Contains(cell) || level.Holes.Contains(cell) || level.Crates.Contains(cell))
+                Change(level, "Erase", () => { level.Walls.Remove(cell); level.Holes.Remove(cell); level.Crates.Remove(cell); });
         }
 
         private void DrawMiniature(Rect rect, IEnumerable<Vector2Int> cells, Color colour)
@@ -886,7 +889,7 @@ namespace Modules.GameplayModule.Editor
             _advanced = EditorGUILayout.Foldout(_advanced, T("Advanced: raw data"), true);
             if (!_advanced) return;
             serializedObject.Update();
-            foreach (var field in new[] { "Walls", "Holes", "Shapes", "Doors" })
+            foreach (var field in new[] { "Walls", "Holes", "Crates", "Shapes", "Doors" })
             {
                 var property = serializedObject.FindProperty(field);
                 EditorGUILayout.PropertyField(property, _texts.Label(property), true);

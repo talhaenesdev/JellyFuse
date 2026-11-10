@@ -50,6 +50,18 @@ namespace Modules.GameplayModule.GameplayScreenModule.Data.UnityObjects
         [Range(.3f, 1)] public float SpriteBridgeLength = .7f;
         [Range(.3f, 1)] public float SpriteBridgeWidth = .8f;
 
+        [Section("Crates")]
+        [Tooltip("A whole wooden crate: its top face fills the cell and its front hangs below it. Empty: crates are drawn as plain brown blocks.")]
+        public Sprite CrateSprite;
+        [Tooltip("The same crate after one fuse next to it, cracked. Same size and angle as Crate Sprite.")]
+        public Sprite CrateCrackedSprite;
+        [Tooltip("The splinters a breaking crate throws out.")]
+        public Sprite CrateBitsSprite;
+        [Tooltip("How much taller than a cell the crate picture is drawn, its front face included.")]
+        [Range(1, 1.6f)] public float CrateHeight = 1.12f;
+        [Tooltip("Seconds a crate takes to break apart.")]
+        [Range(.05f, 1)] public float CrateBreakSeconds = .35f;
+
         [Section("Board art")]
         [Tooltip("Floor tile. A painted tile is drawn as it is; with TileSpriteAlt the two alternate as a checkerboard.")]
         public Sprite TileSprite;

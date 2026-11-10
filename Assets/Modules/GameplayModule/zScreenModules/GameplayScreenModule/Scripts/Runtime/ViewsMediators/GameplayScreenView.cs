@@ -408,7 +408,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             if (panel == _winPanel) { Celebrate(panel); StartCoinFlight(); }
         }
         private static void ShowDim(RectTransform panel) { panel.parent.gameObject.SetActive(true); panel.parent.SetAsLastSibling(); }
-        public void ApplyLevel(int number, bool hasNext) { _levelNumber = number; _hasNextLevel = hasNext; if (_built) _levelLabel.text = LF("gameplay.level", _levelFormat, number); _adOffers = AdOffersRVO.None; HidePanels(); }
+        public void ApplyLevel(int number, bool hasNext) { _levelNumber = number; _hasNextLevel = hasNext; if (_built) _levelLabel.text = LevelText(); _adOffers = AdOffersRVO.None; HidePanels(); }
         /// <summary>The function that turns a key into text in the language in use (ILocalizationService.Get). Redraws every text.</summary>
         public void SetLocalizer(Func<string,string> localize) { _localize = localize; RefreshTexts(); }
         /// <summary>The game's language changed.</summary>
@@ -416,7 +416,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         private void RefreshTexts()
         {
             foreach (var keyed in _keyedTexts) if (keyed.Label != null) keyed.Label.text = L(keyed.Key, keyed.English);
-            if (_built) _levelLabel.text = LF("gameplay.level", _levelFormat, _levelNumber);
+            if (_built) _levelLabel.text = LevelText();
             if (_snapshot != null && _built && _snapshot.Status != PuzzleStatus.Playing) FillPanels();
             DrawLifeTime();
             ShowTutorialText();
@@ -453,6 +453,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             _difficulty.text = super ? L("gameplay.difficulty.super_hard", "Super Hard") : L("gameplay.difficulty.hard", "Hard");
             _difficulty.gameObject.SetActive(true);
         }
+        /// <summary>The level's name over the board: its number, or the daily challenge's name for level 0.</summary>
+        private string LevelText() => _levelNumber <= 0 ? L("gameplay.daily_challenge", "Daily") : LF("gameplay.level", _levelFormat, _levelNumber);
         private string L(string key, string english)
         {
             string text = _localize?.Invoke(key);
@@ -509,7 +511,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         }
         private void UpdateHud()
         {
-            _levelLabel.text = LF("gameplay.level", _levelFormat, _levelNumber);
+            _levelLabel.text = LevelText();
             _undo.interactable = _snapshot.CanUndo && !_liveDrag;
             _message.text = _snapshot.Warning ?? "";
             UpdatePanels();

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Modules.GameplayModule.Shared.Data.ValueObjects;
+using Modules.GameplayModule.Shared.Enums;
 using UnityEngine;
 
 namespace Modules.GameplayModule.Shared.Data.UnityObjects
@@ -53,6 +54,11 @@ namespace Modules.GameplayModule.Shared.Data.UnityObjects
         [Tooltip("How likely a card wins nothing, against the prizes' weights.")]
         [Min(0)] public float ScratchMissWeight = 3;
         public RewardCVO ScratchMissReward = new() { Coins = 10 };
+
+        [Tooltip("The daily challenge's levels: one a day, in turn, the list starting over when it runs out. Empty: no daily challenge.")]
+        public List<CD_JellyLevel> DailyChallengeLevels = new();
+        [Tooltip("What winning the daily challenge gives, once a day. Its coins are the win's coins.")]
+        public RewardCVO DailyChallengeReward = new() { Coins = 150, Booster = BoosterType.Rocket, BoosterCount = 1 };
 
         public bool IsWeekend(DateTime localDay) => WeekendMultiplier > 1 && WeekendDays.Contains(localDay.DayOfWeek);
 

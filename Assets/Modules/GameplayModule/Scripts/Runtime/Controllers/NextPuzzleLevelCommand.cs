@@ -19,6 +19,8 @@ namespace Modules.GameplayModule.Controllers
 
         public override void Execute()
         {
+            // After the daily challenge, Next goes back to the run's own level, without moving it on.
+            if (_model.Daily && _model.Status == PuzzleStatus.Won) { _model.Daily = false; return; }
             var levels = _shared.GetScriptable<CD_JellyLevels>();
             int next = levels.PlayableFrom(_model.LevelIndex + 1);
             if (_model.Status != PuzzleStatus.Won || next < 0)

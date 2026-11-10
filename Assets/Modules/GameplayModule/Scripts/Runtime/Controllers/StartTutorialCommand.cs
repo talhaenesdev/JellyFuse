@@ -18,7 +18,8 @@ namespace Modules.GameplayModule.Controllers
 
         public override void Execute()
         {
-            var level = _shared.GetScriptable<CD_JellyLevels>().Get(_puzzle.LevelIndex);
+            // The daily challenge has no tutorial: the run's level's steps would lead jellies that are not there.
+            var level = _puzzle.Daily ? null : _shared.GetScriptable<CD_JellyLevels>().Get(_puzzle.LevelIndex);
             _tutorial.Begin(level != null ? level.Tutorial : new System.Collections.Generic.List<JellyTutorialStepCVO>());
             var board = _puzzle.Snapshot();
             JellyTutorialFunction.FindJelly(_tutorial, board);

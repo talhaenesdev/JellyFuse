@@ -762,7 +762,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             int previousHeld = _held;
             _snapshot = snapshot; _held = held;
             // A new level or a settings change starts every blob afresh where it belongs.
-            if (previous == null || forceRefresh) ClearBlobs();
+            if (previous == null || forceRefresh) { ClearBlobs(); ClearCrates(); }
             if (_level != snapshot.Level || previous == null || forceRefresh || !SameInts(previous.DoorProgress, snapshot.DoorProgress))
             {
                 // Only a rebuild changes which doors are drawn, so only then are the closing ones found.
@@ -957,6 +957,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             _gone.Clear();
             foreach (var pair in _blobs) if (!pair.Value.Seen) _gone.Add(pair.Key);
             foreach (var id in _gone) _blobs.Remove(id);
+            PresentCrates(snapshot);
             StackInColumns(snapshot);
             SortBlocks();
             UpdateFollow();
@@ -1167,6 +1168,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             _sortBuffer.Clear();
             foreach (var item in _boardItems) if (item.Root.parent == _jellyLayer) _sortBuffer.Add(item);
             foreach (var blob in _blobs.Values) foreach (var part in blob.Parts) _sortBuffer.Add(part.Item);
+            SortCrates();
             _sortBuffer.Sort(_drawOrder);
             foreach (var block in _sortBuffer) block.Root.SetAsLastSibling();
         }
@@ -1191,6 +1193,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             // A still board is left alone: nothing is written to the UI, so its canvas is not rebuilt.
             bool impact = StepImpact(Time.unscaledDeltaTime);
             bool fx = StepFx(Time.unscaledDeltaTime);
+            fx |= StepCrates(Time.unscaledDeltaTime);
             bool animated = Feel.AnimateJellies && Feel.BreathAmount > 0 || AnyFuseHint() || DeliveryRunning || impact || fx;
             if (moving || animated || _dirty) { Apply(); _dirty = moving; }
         }
@@ -1386,6 +1389,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         {
             ClearImpact();
             ClearFx();
+            ClearCrates();
             ClearPanHint();
             ClearDust();
             ReleaseGates(); _gateOpen.Clear();

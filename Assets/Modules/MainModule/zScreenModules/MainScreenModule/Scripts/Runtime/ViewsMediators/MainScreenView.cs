@@ -77,6 +77,12 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
         [SerializeField] private Button _scratchButton;
         [Tooltip("Shown while a scratch card is held.")]
         [SerializeField] private GameObject _scratchDot;
+        [Tooltip("Plays today's daily challenge level.")]
+        [SerializeField] private Button _dailyChallengeButton;
+        [Tooltip("Shown while today's daily challenge is not won yet.")]
+        [SerializeField] private GameObject _dailyChallengeDot;
+        [Tooltip("Shown once today's daily challenge is won; the button waits for tomorrow.")]
+        [SerializeField] private GameObject _dailyChallengeDone;
         [Tooltip("Shown on bonus days, with the multiplier.")]
         [SerializeField] private GameObject _weekendBadge;
         [SerializeField] private TMP_Text _weekendMultiplier;
@@ -110,6 +116,7 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
         public Action SlotClicked;
         public Action LeaderboardClicked;
         public Action ScratchClicked;
+        public Action DailyChallengeClicked;
         /// <summary>A shop buy panel with a price was pressed: its product id.</summary>
         public Action<string> ShopBuyClicked;
 
@@ -140,6 +147,7 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
             if (_slotButton != null) _slotButton.onClick.AddListener(OnSlotClicked);
             if (_leaderboardButton != null) _leaderboardButton.onClick.AddListener(OnLeaderboardClicked);
             if (_scratchButton != null) _scratchButton.onClick.AddListener(OnScratchClicked);
+            if (_dailyChallengeButton != null) _dailyChallengeButton.onClick.AddListener(OnDailyChallengeClicked);
             for (int i = 0; i < _tabActions.Count; i++) _navTabs[i].onClick.AddListener(_tabActions[i]);
             for (int i = 0; i < _shopActions.Count; i++) if (_shopButtons[i] != null) _shopButtons[i].onClick.AddListener(_shopActions[i]);
             if (_shopCloseButton != null) _shopCloseButton.onClick.AddListener(OnShopCloseClicked);
@@ -160,6 +168,7 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
             if (_slotButton != null) _slotButton.onClick.RemoveListener(OnSlotClicked);
             if (_leaderboardButton != null) _leaderboardButton.onClick.RemoveListener(OnLeaderboardClicked);
             if (_scratchButton != null) _scratchButton.onClick.RemoveListener(OnScratchClicked);
+            if (_dailyChallengeButton != null) _dailyChallengeButton.onClick.RemoveListener(OnDailyChallengeClicked);
             for (int i = 0; i < _tabActions.Count; i++) _navTabs[i].onClick.RemoveListener(_tabActions[i]);
             for (int i = 0; i < _shopActions.Count; i++) if (_shopButtons[i] != null) _shopButtons[i].onClick.RemoveListener(_shopActions[i]);
             if (_shopCloseButton != null) _shopCloseButton.onClick.RemoveListener(OnShopCloseClicked);
@@ -178,6 +187,7 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
         private void OnSlotClicked() => SlotClicked?.Invoke();
         private void OnLeaderboardClicked() => LeaderboardClicked?.Invoke();
         private void OnScratchClicked() => ScratchClicked?.Invoke();
+        private void OnDailyChallengeClicked() => DailyChallengeClicked?.Invoke();
         // The close button is a second way to the Home tab, so it takes the tab's own path.
         private void OnShopCloseClicked() => OnTabClicked(_homeTab);
         // The shop is the first tab; the coins' + is a second way to it.
@@ -549,6 +559,9 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
             ShowPlays(_wheelDot, events.WheelSpins);
             ShowPlays(_slotDot, events.SlotSpins);
             ShowPlays(_scratchDot, events.ScratchCards);
+            if (_dailyChallengeDot != null) _dailyChallengeDot.SetActive(events.DailyChallengeReady);
+            if (_dailyChallengeDone != null) _dailyChallengeDone.SetActive(!events.DailyChallengeReady);
+            if (_dailyChallengeButton != null) _dailyChallengeButton.interactable = events.DailyChallengeReady;
             if (_weekendBadge != null) _weekendBadge.SetActive(events.WeekendMultiplier > 1);
             if (_weekendMultiplier != null) _weekendMultiplier.text = "x" + events.WeekendMultiplier;
         }

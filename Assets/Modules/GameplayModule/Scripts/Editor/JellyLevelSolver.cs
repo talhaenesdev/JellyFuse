@@ -316,6 +316,7 @@ namespace Modules.GameplayModule.Editor
             key.Append('#');
             foreach (var p in snapshot.DoorProgress) key.Append(p).Append(',');
             foreach (var f in snapshot.DoorFrozen) key.Append(f).Append(',');
+            foreach (var c in snapshot.Crates.OrderBy(c => c.Key.x).ThenBy(c => c.Key.y)) key.Append('c').Append(c.Key.x).Append(',').Append(c.Key.y).Append('=').Append(c.Value);
             return key.ToString();
         }
     }

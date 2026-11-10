@@ -171,6 +171,22 @@ namespace Modules.GameplayModule.Controllers
             if (reward.BoosterCount > 0) progress.Booster(reward.Booster).Count += reward.BoosterCount;
         }
 
+        /// <summary>Today's daily challenge level: the list's levels one a day in turn, broken ones passed over; null when there is none.</summary>
+        public static CD_JellyLevel DailyChallengeLevel(CD_Events config)
+        {
+            if (config == null || config.DailyChallengeLevels.Count == 0) return null;
+            int count = config.DailyChallengeLevels.Count, today = ShopDayFunction.Today();
+            for (int i = 0; i < count; i++)
+            {
+                var level = config.DailyChallengeLevels[((today + i) % count + count) % count];
+                if (level != null && level.Validate().Count == 0) return level;
+            }
+            return null;
+        }
+        /// <summary>Whether today's daily challenge is there to play: there is a level for today and it is not won yet.</summary>
+        public static bool DailyChallengeReady(SD_JellyProgress progress, CD_Events config) =>
+            progress.DailyChallengeDay != ShopDayFunction.Today() && DailyChallengeLevel(config) != null;
+
         public static EventsRVO Snapshot(SD_JellyProgress progress, CD_Events config)
         {
             bool claimable = LoginClaimable(progress, config);
@@ -198,6 +214,8 @@ namespace Modules.GameplayModule.Controllers
                 WheelSpins = WheelSpins(progress, config),
                 SlotSpins = SlotSpins(progress, config),
                 ScratchCards = ScratchCards(progress, config),
+                DailyChallengeReady = DailyChallengeReady(progress, config),
+                DailyChallengeReward = config.DailyChallengeReward,
             };
         }
 
