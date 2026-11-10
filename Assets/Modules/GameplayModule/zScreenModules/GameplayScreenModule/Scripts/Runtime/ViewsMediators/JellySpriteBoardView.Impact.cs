@@ -89,17 +89,23 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                 float strength = Mathf.Max(0, _shakeLeft / Feel.FuseShakeTime) * Feel.FuseShake * _cell;
                 offset = new Vector2(Mathf.Sin(_time * 90), Mathf.Cos(_time * 70)) * strength;
             }
-            foreach (RectTransform layer in transform) layer.anchoredPosition = offset;
+            ShakeLayers(offset);
             return true;
         }
         /// <summary>How much the jelly flashes white now, 0 to 1.</summary>
         private float FlashOf(int id) => _flashes.TryGetValue(id, out var left) ? left * left * Feel.FuseFlash : 0;
 
+        /// <summary>Every layer to this shake offset; the slid map keeps its slide on top of it, or a shake would snap it to the middle.</summary>
+        private void ShakeLayers(Vector2 offset)
+        {
+            foreach (RectTransform layer in transform) layer.anchoredPosition = layer == _content ? offset + new Vector2(_pan, 0) : offset;
+        }
+
         private void ClearImpact()
         {
             foreach (var ring in _rings) { ring.Image.gameObject.SetActive(false); _freeRings.Add(ring); }
             _rings.Clear(); _flashes.Clear(); _shakeLeft = 0;
-            foreach (RectTransform layer in transform) layer.anchoredPosition = Vector2.zero;
+            ShakeLayers(Vector2.zero);
         }
     }
 }

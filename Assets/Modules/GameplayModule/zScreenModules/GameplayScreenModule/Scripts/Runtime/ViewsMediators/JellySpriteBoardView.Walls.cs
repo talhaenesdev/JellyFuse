@@ -33,6 +33,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                 {
                     // A wall joined to the outside is part of the wall round the board: the outline
                     // drawn along the floor shows it. Without painted art it is drawn as a block.
+                    // A wall too thin to join the frame still has the frame running past it.
+                    if (painted && !_outside.Contains(cell) && TouchesOutside(cell)) Outline(cell);
                     if (!painted || !_outside.Contains(cell))
                         Wall(cell, Skin != null && !_outside.Contains(cell) ? Skin.InnerPiece(Neighbours(cell)) : null, !_outside.Contains(cell), Vector2.zero);
                     continue;
@@ -82,11 +84,23 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                 {
                     var next = cell + side;
                     if (next.x < 0 || next.y < 0 || next.x >= width || next.y >= height || _outside.Contains(next)) continue;
-                    if (Contains(_level.Walls, next) || Contains(_level.Holes, next)) Seed(next);
+                    if (Contains(_level.Holes, next)) { Seed(next); continue; }
+                    // A wall one cell thick with floor on both sides is too thin for the frame's corner art:
+                    // it stays a wall standing on its own, drawn as an inner wall touching the frame.
+                    if (Contains(_level.Walls, next) && !Thin(next, side)) Seed(next);
                 }
             }
         }
         private bool Out(Vector2Int cell) => _outside.Contains(cell);
+        private bool TouchesOutside(Vector2Int cell) => Out(cell + Vector2Int.up) || Out(cell + Vector2Int.down) || Out(cell + Vector2Int.left) || Out(cell + Vector2Int.right);
+        /// <summary>A wall reached going this way with open floor on both of its other sides.</summary>
+        private bool Thin(Vector2Int cell, Vector2Int going)
+        {
+            var across = new Vector2Int(going.y, going.x);
+            return Floor(cell + across) && Floor(cell - across);
+        }
+        private bool Floor(Vector2Int cell) =>
+            cell.x >= 0 && cell.y >= 0 && cell.x < _level.Width && cell.y < _level.Height && !Contains(_level.Walls, cell) && !Contains(_level.Holes, cell) && !IsDoorCell(cell);
 
         /// <summary>
         /// The wall pieces round one floor cell: a straight piece on each side facing the outside, a
