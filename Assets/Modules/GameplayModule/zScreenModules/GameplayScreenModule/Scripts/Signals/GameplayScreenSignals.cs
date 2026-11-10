@@ -22,6 +22,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.Signals
         public Signal<int> ApplyCoins = new();
         /// <summary>The leaderboard points the level just won scored, and whether they are its best yet; shown on the win panel.</summary>
         public Signal<int, bool> ApplyScore = new();
+        /// <summary>The stars the level just won earned, and whether they beat its best; shown on the win panel.</summary>
+        public Signal<int, bool> ApplyStars = new();
         /// <summary>The coins the level just won paid, shown on the win panel.</summary>
         public Signal<int> ApplyReward = new();
         /// <summary>The rewarded ads the result panels offer now.</summary>

@@ -97,6 +97,11 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         /// </summary>
         private void Update()
         {
+            StepStars();
+            UpdateKeys();
+        }
+        private void UpdateKeys()
+        {
             var keyboard = UnityEngine.InputSystem.Keyboard.current;
             if (keyboard == null || _liveDrag) return;
             if (keyboard.nKey.wasPressedThisFrame) { HidePanels(); StopPresentation(); SkipLevelPressed?.Invoke(1); }
@@ -375,6 +380,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             StopCelebration();
             EndOutOfLives();
             if (_winScore != null) _winScore.gameObject.SetActive(false);
+            HideStars();
             if (_winPanel != null) { _winPanel.parent.gameObject.SetActive(false); _losePanel.parent.gameObject.SetActive(false); _retryPanel.parent.gameObject.SetActive(false); }
         }
         private void UpdatePanels()

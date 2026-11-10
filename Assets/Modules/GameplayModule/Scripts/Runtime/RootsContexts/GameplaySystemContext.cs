@@ -74,6 +74,7 @@ namespace Modules.GameplayModule.RootsContexts
                 .ToSequence<RecordTutorialStepCommand>()
                 .ToSequence<CountMergesCommand>()
                 .ToSequence<CountWinCommand>()
+                .ToSequence<JudgeStarsCommand>()
                 .ToSequence<CheckWinPaymentCommand>()
                 .ToSequence<CountPuzzleComboCommand>()
                 .ToSequence<PlayPuzzleFeedbackCommand>()
@@ -137,6 +138,7 @@ namespace Modules.GameplayModule.RootsContexts
                 .ToSequence<CapturePuzzleFeedbackCommand>()
                 .ToSequence<ForcePuzzleResultCommand>()
                 .ToSequence<CountWinCommand>()
+                .ToSequence<JudgeStarsCommand>()
                 .ToSequence<CheckWinPaymentCommand>()
                 .ToSequence<CountPuzzleComboCommand>()
                 .ToSequence<PlayPuzzleFeedbackCommand>()
@@ -234,6 +236,7 @@ namespace Modules.GameplayModule.RootsContexts
                 .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
                 .ToSequence<AnnounceBoostersCommand>()
                 .ToSequence<CountWinCommand>()
+                .ToSequence<JudgeStarsCommand>()
                 .ToSequence<CheckWinPaymentCommand>();
             CommandBinder.Bind(_internalSignals.TimeExpired)
                 .ToSequence<IHapticService.Commands.Play>(HapticPreset.Failure)

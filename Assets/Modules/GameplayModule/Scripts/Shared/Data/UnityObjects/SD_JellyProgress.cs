@@ -32,6 +32,8 @@ namespace Modules.GameplayModule.Shared.Data.UnityObjects
         public int FreeBoosterAdDay = -1;
         [Tooltip("Levels won in a row; a level lost or left starts it again.")]
         [Min(0)] public int WinStreak;
+        [Tooltip("The most stars each level has been won with, by level index; 0 not won yet.")]
+        public List<int> Stars = new();
         [Tooltip("Login rewards taken in the current run of days, 0 to CD_Events' count.")]
         [Min(0)] public int LoginRewardsTaken;
         /// <summary>The local day the last login reward was taken (days since 2000-01-01); -1 never.</summary>
