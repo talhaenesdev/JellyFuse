@@ -45,6 +45,14 @@ namespace Modules.GameplayModule.GameplayScreenModule.Data.UnityObjects
         [Range(12, 80)] public float DifficultyTextSize = 34;
         [Tooltip("How far below the timer the label sits, in layout units.")]
         public float DifficultyOffset = 8;
+        [Tooltip("The frame behind the label on a Hard level. Empty: the label stands alone in Hard Colour.")]
+        public Sprite HardFrame;
+        [Tooltip("The frame behind the label on a Super Hard level. Empty: the label stands alone in Super Hard Colour.")]
+        public Sprite SuperHardFrame;
+        [Tooltip("The frame's height, in layout units; its width follows the picture.")]
+        [Range(30, 200)] public float DifficultyFrameHeight = 72;
+        [Tooltip("The label's colour when it sits in a frame.")]
+        public Color DifficultyOnFrameColour = Color.white;
 
         [Section("Win and lose panels")]
         [Tooltip("Seconds after the win before the panel shows, so the last jelly is seen leaving.")]

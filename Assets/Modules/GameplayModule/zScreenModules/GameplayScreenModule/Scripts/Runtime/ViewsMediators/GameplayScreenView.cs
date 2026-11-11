@@ -427,11 +427,17 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             ShowDifficulty();
         }
         private TMP_Text _difficulty;
+        private Image _difficultyFrame;
         /// <summary>Hard or Super Hard under the timer, from the level being played; nothing on a Normal level.</summary>
         private void ShowDifficulty()
         {
             var difficulty = _snapshot?.Level?.Difficulty ?? LevelDifficulty.Normal;
-            if (difficulty == LevelDifficulty.Normal || _time == null) { if (_difficulty != null) _difficulty.gameObject.SetActive(false); return; }
+            if (difficulty == LevelDifficulty.Normal || _time == null)
+            {
+                if (_difficulty != null) _difficulty.gameObject.SetActive(false);
+                if (_difficultyFrame != null) _difficultyFrame.gameObject.SetActive(false);
+                return;
+            }
             var clock = (RectTransform)_time.transform.parent;
             var hud = _presentation.Hud;
             if (_difficulty == null)
@@ -453,6 +459,40 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             _difficulty.fontSize = hud.DifficultyTextSize;
             bool super = difficulty == LevelDifficulty.SuperHard;
             _difficulty.color = super ? hud.SuperHardColour : hud.HardColour;
+            _difficulty.enableAutoSizing = false;
+            _difficulty.alignment = TextAlignmentOptions.Top;
+            var frameSprite = super ? hud.SuperHardFrame : hud.HardFrame;
+            if (frameSprite != null)
+            {
+                if (_difficultyFrame == null)
+                {
+                    _difficultyFrame = new GameObject("Img_DifficultyFrame", typeof(RectTransform)).AddComponent<Image>();
+                    _difficultyFrame.gameObject.layer = clock.gameObject.layer;
+                    _difficultyFrame.rectTransform.SetParent(clock.parent, false);
+                    _difficultyFrame.raycastTarget = false;
+                    _difficultyFrame.preserveAspect = true;
+                }
+                _difficultyFrame.sprite = frameSprite;
+                float height = hud.DifficultyFrameHeight;
+                float width = height * frameSprite.rect.width / Mathf.Max(1, frameSprite.rect.height);
+                var frame = _difficultyFrame.rectTransform;
+                frame.anchorMin = rect.anchorMin; frame.anchorMax = rect.anchorMax; frame.pivot = rect.pivot;
+                frame.anchoredPosition = rect.anchoredPosition;
+                frame.sizeDelta = new Vector2(width, height);
+                // Drawn under the label: moved just before it whenever it is not already.
+                if (frame.GetSiblingIndex() > rect.GetSiblingIndex()) frame.SetSiblingIndex(rect.GetSiblingIndex());
+                _difficultyFrame.gameObject.SetActive(true);
+                // The label sits in the frame's body, which hangs a little below the picture's middle.
+                rect.anchoredPosition = frame.anchoredPosition - new Vector2(0, height * .54f);
+                rect.pivot = new Vector2(.5f, .5f);
+                rect.sizeDelta = new Vector2(width * .68f, height * .62f);
+                _difficulty.alignment = TextAlignmentOptions.Center;
+                _difficulty.enableAutoSizing = true;
+                _difficulty.fontSizeMin = 12;
+                _difficulty.fontSizeMax = hud.DifficultyTextSize;
+                _difficulty.color = hud.DifficultyOnFrameColour;
+            }
+            else if (_difficultyFrame != null) _difficultyFrame.gameObject.SetActive(false);
             _difficulty.text = super ? L("gameplay.difficulty.super_hard", "Super Hard") : L("gameplay.difficulty.hard", "Hard");
             _difficulty.gameObject.SetActive(true);
         }
