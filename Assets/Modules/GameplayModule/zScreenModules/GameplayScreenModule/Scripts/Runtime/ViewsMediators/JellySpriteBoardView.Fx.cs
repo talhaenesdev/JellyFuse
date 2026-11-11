@@ -40,8 +40,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         private float _urgency;
         private PuzzleStatus _lastStatus = PuzzleStatus.Playing;
 
-        /// <summary>Fuses and doors close together: how many in a row, from 2 on.</summary>
-        public event System.Action<int> ComboReached;
+        /// <summary>Fuses and doors close together: how many in a row, from 2 on, and the colour of the jelly that made it.</summary>
+        public event System.Action<int, Color> ComboReached;
 
         private bool GlowOn => Shader.GetGlobalFloat(GLOW_STRENGTH) > .5f;
 
@@ -53,7 +53,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         /// <summary>Jellies fused: a flare as big as the new jelly, bigger with the combo.</summary>
         private void FxFuse(IReadOnlyList<Vector2Int> cells, Color colour)
         {
-            float boost = CountCombo();
+            float boost = CountCombo(colour);
             Span(cells, out float spanX, out float spanY);
             float size = Mathf.Max(spanX, spanY) * _cell;
             var centre = Position(CentreOf(cells));
@@ -63,7 +63,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         /// <summary>A jelly went through its door: a flare at the door, and confetti thrown back out of it.</summary>
         private void FxDeliver(Vector2 mouthFrom, Vector2 mouthTo, Vector2 direction, Color colour, int cells)
         {
-            float boost = CountCombo();
+            float boost = CountCombo(colour);
             var centre = (mouthFrom + mouthTo) * .5f;
             float width = Mathf.Max(_cell, Vector2.Distance(mouthFrom, mouthTo));
             AddFlare(centre, width * .8f, width * (1.4f + .15f * boost), Color.Lerp(colour, Color.white, .25f), .45f, .5f + .05f * boost, Feel.DoorEnterTime * .5f);
@@ -123,11 +123,11 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         }
 
         /// <summary>One more fuse or door: the combo grows when it comes within COMBO_WINDOW of the last. Returns how far past one it is.</summary>
-        private float CountCombo()
+        private float CountCombo(Color colour)
         {
             _combo = _comboClock <= COMBO_WINDOW ? _combo + 1 : 1;
             _comboClock = 0;
-            if (_combo >= 2) ComboReached?.Invoke(_combo);
+            if (_combo >= 2) ComboReached?.Invoke(_combo, colour);
             return Mathf.Min(4, _combo - 1);
         }
 

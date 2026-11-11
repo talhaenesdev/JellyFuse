@@ -5,14 +5,15 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
 {
     /// <summary>
     /// The word a combo earns - Nice, Great, Amazing - popping up over the board and floating away. It is a copy
-    /// of the warning line, so it wears the HUD's font, and one copy is kept and reused.
+    /// of the warning line, so it wears the HUD's font, and one copy is kept and reused. It is coloured like the
+    /// jelly whose fuse or door made the combo.
     /// </summary>
     public partial class GameplayScreenView
     {
         private TMP_Text _comboText;
         private Coroutine _comboShow;
 
-        private void ShowCombo(int combo)
+        private void ShowCombo(int combo, Color jelly)
         {
             if (_message == null || !isActiveAndEnabled) return;
             if (_comboText == null)
@@ -27,7 +28,9 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                 rect.sizeDelta = new Vector2(900, 200);
             }
             _comboText.text = combo >= 4 ? L("gameplay.combo_4", "Amazing!") : combo == 3 ? L("gameplay.combo_3", "Great!") : L("gameplay.combo_2", "Nice!");
-            _comboText.color = combo >= 4 ? new Color(1f, .55f, .9f) : combo == 3 ? new Color(.5f, .9f, 1f) : new Color(1f, .88f, .35f);
+            // The jelly's own colour, opaque.
+            var colour = jelly; colour.a = 1;
+            _comboText.color = colour;
             _comboText.fontSize = 70 + Mathf.Min(combo, 5) * 8;
             _comboText.transform.SetAsLastSibling();
             if (_comboShow != null) StopCoroutine(_comboShow);
