@@ -47,8 +47,15 @@ namespace Modules.GameplayModule.SettingsScreenModule.ViewsMediators
         [SerializeField] private Button _languageButton;
         [SerializeField] private TMP_Text _languageValue;
 
+        [Header("Privacy")]
+        [SerializeField] private TMP_Text _privacyLabel;
+        [Tooltip("Asks the consent question again, so the player can change the answer.")]
+        [SerializeField] private Button _privacyButton;
+        [SerializeField] private TMP_Text _privacyValue;
+
         public Action<string> LanguagePicked;
         public Action CloseClicked;
+        public Action PrivacyClicked;
         public Action<SettingsOption> OptionClicked;
 
         private Func<string, string> _localize;
@@ -64,6 +71,7 @@ namespace Modules.GameplayModule.SettingsScreenModule.ViewsMediators
             _musicSwitch.Requested += OnMusicClicked;
             _hapticsSwitch.Requested += OnHapticsClicked;
             if (_languageButton != null) _languageButton.onClick.AddListener(OnLanguageClicked);
+            if (_privacyButton != null) _privacyButton.onClick.AddListener(OnPrivacyClicked);
         }
 
         private void OnDisable()
@@ -75,6 +83,7 @@ namespace Modules.GameplayModule.SettingsScreenModule.ViewsMediators
             _musicSwitch.Requested -= OnMusicClicked;
             _hapticsSwitch.Requested -= OnHapticsClicked;
             if (_languageButton != null) _languageButton.onClick.RemoveListener(OnLanguageClicked);
+            if (_privacyButton != null) _privacyButton.onClick.RemoveListener(OnPrivacyClicked);
         }
 
         public void ShowLanguages(IReadOnlyList<LanguageCVO> languages, string current, Func<string, string> localize)
@@ -162,6 +171,8 @@ namespace Modules.GameplayModule.SettingsScreenModule.ViewsMediators
             _hapticsLabel.text = L("settings.haptics", "Haptics") + ":";
             if (_languageLabel != null) _languageLabel.text = L("settings.language", "Language") + ":";
             if (_languageValue != null) _languageValue.text = LanguageAt(IndexOf(_language))?.Name ?? _language;
+            if (_privacyLabel != null) _privacyLabel.text = L("settings.privacy", "Privacy") + ":";
+            if (_privacyValue != null) _privacyValue.text = L("settings.privacy_change", "Change");
         }
 
         private int IndexOf(string code)
@@ -189,6 +200,7 @@ namespace Modules.GameplayModule.SettingsScreenModule.ViewsMediators
         }
 
         private void OnCloseClicked() => CloseClicked?.Invoke();
+        private void OnPrivacyClicked() => PrivacyClicked?.Invoke();
         // The switch says which state it was asked for; the setting toggles, so only the request counts.
         private void OnNotificationsClicked(bool on) => OptionClicked?.Invoke(SettingsOption.Notifications);
         private void OnSoundsClicked(bool on) => OptionClicked?.Invoke(SettingsOption.Sounds);

@@ -21,5 +21,7 @@ namespace Modules.GameplayModule.SettingsScreenModule.Signals
         public Signal<string> LanguagePicked = new();
         /// <summary>The player closed the screen.</summary>
         public Signal Closed = new();
+        /// <summary>The player wants to change the answer to the consent question.</summary>
+        public Signal PrivacyClicked = new();
     }
 }

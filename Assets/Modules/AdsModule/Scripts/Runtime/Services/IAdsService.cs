@@ -8,7 +8,7 @@ namespace Modules.AdsModule.Services
         /// <summary>
         /// Starts LevelPlay with the app filed in CD_Ads and keeps a rewarded ad loaded from then on.
         /// <paramref name="consent"/> is the player's answer to the consent question: false keeps the ads
-        /// non-personalised.
+        /// non-personalised. Called again once started, it only passes on a changed answer.
         /// </summary>
         void Start(bool consent);
 

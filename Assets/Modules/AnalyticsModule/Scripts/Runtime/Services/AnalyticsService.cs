@@ -25,6 +25,20 @@ namespace Modules.AnalyticsModule.Services
 #endif
         }
 
+        public void StopCollecting()
+        {
+#if !UNITY_EDITOR
+            try
+            {
+                if (UnityServices.State == ServicesInitializationState.Initialized) Unity.Services.Analytics.AnalyticsService.Instance.StopDataCollection();
+            }
+            catch (Exception exception)
+            {
+                FlowLogger.LogWarning($"Analytics did not stop: {exception.Message}");
+            }
+#endif
+        }
+
         public void Record(string eventName, IReadOnlyDictionary<string, object> parameters = null)
         {
 #if UNITY_EDITOR

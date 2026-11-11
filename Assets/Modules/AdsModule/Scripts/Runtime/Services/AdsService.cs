@@ -26,7 +26,9 @@ namespace Modules.AdsModule.Services
         {
             string appKey = _model.Config != null ? _model.Config.AppKey : null;
             string rewardedAdUnitId = _model.Config != null ? _model.Config.RewardedAdUnitId : null;
-            if (_started || string.IsNullOrEmpty(appKey) || string.IsNullOrEmpty(rewardedAdUnitId)) return;
+            // A changed answer is told to LevelPlay as it runs.
+            if (_started) { LevelPlay.SetConsent(consent); return; }
+            if (string.IsNullOrEmpty(appKey) || string.IsNullOrEmpty(rewardedAdUnitId)) return;
             _started = true;
             // Told before Init, so the first request already carries the answer.
             LevelPlay.SetConsent(consent);

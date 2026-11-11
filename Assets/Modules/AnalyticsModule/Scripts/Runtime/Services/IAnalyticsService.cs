@@ -8,6 +8,9 @@ namespace Modules.AnalyticsModule.Services
         /// <summary>Starts sending. Called once the player has agreed; without it nothing leaves the device.</summary>
         void StartCollecting();
 
+        /// <summary>Stops sending, when the player withdraws the agreement.</summary>
+        void StopCollecting();
+
         /// <summary>Records one event with its parameters - ints, floats, bools or strings.</summary>
         void Record(string eventName, IReadOnlyDictionary<string, object> parameters = null);
 

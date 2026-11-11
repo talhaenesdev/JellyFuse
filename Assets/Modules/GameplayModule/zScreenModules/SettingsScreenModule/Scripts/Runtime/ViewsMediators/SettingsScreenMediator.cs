@@ -33,6 +33,7 @@ namespace Modules.GameplayModule.SettingsScreenModule.ViewsMediators
             _view.OptionClicked += OnOptionClicked;
             _internalSignals.OptionChanged.AddListener(_view.ShowOption);
             _view.CloseClicked += OnClose;
+            _view.PrivacyClicked += OnPrivacy;
             _signals.Incoming.ApplyLanguage.AddListener(_view.ShowCurrent);
         }
 
@@ -42,6 +43,7 @@ namespace Modules.GameplayModule.SettingsScreenModule.ViewsMediators
             _view.OptionClicked -= OnOptionClicked;
             _internalSignals.OptionChanged.RemoveListener(_view.ShowOption);
             _view.CloseClicked -= OnClose;
+            _view.PrivacyClicked -= OnPrivacy;
             _signals.Incoming.ApplyLanguage.RemoveListener(_view.ShowCurrent);
         }
 
@@ -53,6 +55,12 @@ namespace Modules.GameplayModule.SettingsScreenModule.ViewsMediators
         private void OnLanguagePicked(string code)
         {
             if (_view.Data.HasState(ScreenState.AvailableToSendSignal)) _signals.Outgoing.LanguagePicked.Dispatch(code);
+        }
+
+        // The consent question opens over the settings, which stay open underneath.
+        private void OnPrivacy()
+        {
+            if (_view.Data.HasState(ScreenState.AvailableToSendSignal)) _signals.Outgoing.PrivacyClicked.Dispatch();
         }
 
         // Closing decides nothing, so the Mediator hides the screen itself.

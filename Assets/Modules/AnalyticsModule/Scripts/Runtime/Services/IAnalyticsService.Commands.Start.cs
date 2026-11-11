@@ -8,8 +8,8 @@ namespace Modules.AnalyticsModule.Services
         public static partial class Commands
         {
             /// <summary>
-            /// Starts collection when the player agreed - the signal's payload. A refusal starts nothing, so the
-            /// events recorded afterwards never leave the device.
+            /// Starts collection when the player agreed - the signal's payload. A refusal starts nothing, and stops
+            /// a collection an earlier agreement started, so the events recorded afterwards never leave the device.
             /// </summary>
             public class Start : Command
             {
@@ -19,6 +19,7 @@ namespace Modules.AnalyticsModule.Services
                 public override void Execute()
                 {
                     if (_consent) _analytics.StartCollecting();
+                    else _analytics.StopCollecting();
                 }
             }
         }
