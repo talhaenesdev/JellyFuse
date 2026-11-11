@@ -5,8 +5,12 @@ namespace Modules.AdsModule.Services
     /// <summary>Rewarded ads through Unity LevelPlay. Answers the caller that asked.</summary>
     public partial interface IAdsService
     {
-        /// <summary>Starts LevelPlay and keeps a rewarded ad loaded from then on.</summary>
-        void Initialize(string appKey, string rewardedAdUnitId);
+        /// <summary>
+        /// Starts LevelPlay with the app filed in CD_Ads and keeps a rewarded ad loaded from then on.
+        /// <paramref name="consent"/> is the player's answer to the consent question: false keeps the ads
+        /// non-personalised.
+        /// </summary>
+        void Start(bool consent);
 
         /// <summary>A rewarded ad is loaded and can be shown now.</summary>
         bool IsRewardedReady { get; }

@@ -12,5 +12,7 @@ namespace Modules.MainModule.Signals
         public Signal Launch = new Signal();
         /// <summary>Every frame while the frame rate is watched for the glow.</summary>
         public Signal GlowTick = new Signal(hideCommandLog: true);
+        /// <summary>The player answered the consent question on an earlier run: ads and analytics start with it.</summary>
+        public Signal<bool> StartConsentedServices = new Signal<bool>();
     }
 }

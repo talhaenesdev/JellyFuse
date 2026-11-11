@@ -19,6 +19,8 @@ namespace Modules.MainModule.Signals
         public Signal ResetPlayer = new();
             /// <summary>The developer switch for an uncapped frame rate changed: set the frame rate again.</summary>
             public Signal<bool> ApplyFrameRate = new();
+            /// <summary>The player answered the consent question: true lets ads and analytics use personal data.</summary>
+            public Signal<bool> ConsentAnswered = new();
         }
 
         public class MainSignalsOutgoing
@@ -36,6 +38,9 @@ namespace Modules.MainModule.Signals
             /// decide that opening the main screen is what starting means.
             /// </summary>
             public Signal Started = new();
+
+            /// <summary>The player has not answered the consent question yet: somebody has to ask it.</summary>
+            public Signal ConsentRequested = new();
         }
     }
 }

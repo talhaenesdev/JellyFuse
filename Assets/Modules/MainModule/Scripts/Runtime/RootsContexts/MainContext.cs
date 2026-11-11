@@ -1,3 +1,5 @@
+using Modules.AdsModule.Services;
+using Modules.AnalyticsModule.Services;
 using FlowIoC.BaseModule.Contexts;
 using FlowIoC.BaseModule.Controller.Commands;
 using FlowIoC.ScreenModule.Service;
@@ -28,6 +30,7 @@ namespace Modules.MainModule.RootsContexts
             base.InjectionBindings();
             InjectionBinder.Bind<FrameRateModel>();
             InjectionBinder.Bind<GlowModel>();
+            InjectionBinder.Bind<ConsentModel>();
         }
 
         public override void MediationBindings()
@@ -53,7 +56,17 @@ namespace Modules.MainModule.RootsContexts
                 .ToSequence<FillPoolsCommand>()
                 .ToSequence<ILoadingService.Commands.Await>(MainConstants.BOOT_SET)
                 .ToSequence<SignalDispatchCommand>(_mainSignals.Outgoing.Started)
+                .ToSequence<JudgeConsentCommand>()
                 .ToSequence<StartGlowWatchCommand>();
+
+            // Ads and analytics wait for the player's consent answer: asked once, remembered after.
+            CommandBinder.Bind(_mainSignals.Incoming.ConsentAnswered)
+                .ToSequence<RecordConsentCommand>()
+                .ToSequence<IAdsService.Commands.Start>()
+                .ToSequence<IAnalyticsService.Commands.Start>();
+            CommandBinder.Bind(_internalSignals.StartConsentedServices)
+                .ToSequence<IAdsService.Commands.Start>()
+                .ToSequence<IAnalyticsService.Commands.Start>();
 
             // The glow stays while the device keeps up; slow windows in a row switch it off for good.
             CommandBinder.Bind(_internalSignals.GlowTick)

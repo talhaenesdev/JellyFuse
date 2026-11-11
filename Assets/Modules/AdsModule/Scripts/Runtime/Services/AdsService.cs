@@ -1,6 +1,8 @@
 using System;
 using System.Threading.Tasks;
+using FlowIoC.BaseModule.Injectable.Attributes;
 using FlowIoC.ConsoleModule;
+using Modules.AdsModule.Models;
 using Unity.Services.LevelPlay;
 
 namespace Modules.AdsModule.Services
@@ -18,10 +20,16 @@ namespace Modules.AdsModule.Services
 
         public bool IsRewardedReady => _rewarded != null && _rewarded.IsAdReady();
 
-        public void Initialize(string appKey, string rewardedAdUnitId)
+        [Inject] private AdsModel _model { get; set; }
+
+        public void Start(bool consent)
         {
+            string appKey = _model.Config != null ? _model.Config.AppKey : null;
+            string rewardedAdUnitId = _model.Config != null ? _model.Config.RewardedAdUnitId : null;
             if (_started || string.IsNullOrEmpty(appKey) || string.IsNullOrEmpty(rewardedAdUnitId)) return;
             _started = true;
+            // Told before Init, so the first request already carries the answer.
+            LevelPlay.SetConsent(consent);
             LevelPlay.OnInitSuccess += _ => LoadRewarded(rewardedAdUnitId);
             LevelPlay.OnInitFailed += error => FlowLogger.LogWarning($"LevelPlay did not start: {error.ErrorMessage}");
             LevelPlay.Init(appKey);

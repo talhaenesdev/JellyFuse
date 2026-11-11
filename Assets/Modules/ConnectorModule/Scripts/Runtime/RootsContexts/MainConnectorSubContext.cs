@@ -4,6 +4,7 @@ using Modules.GameplayModule.GameplayScreenModule.Signals;
 using Modules.GameplayModule.Signals;
 using Modules.LoadingModule.LoadingScreenModule.Signals;
 using Modules.LocalizationModule.Signals;
+using Modules.MainModule.ConsentScreenModule.Signals;
 using Modules.MainModule.MainScreenModule.Signals;
 using Modules.MainModule.EventsScreenModule.Signals;
 using Modules.MainModule.LeaderboardScreenModule.Signals;
@@ -17,6 +18,7 @@ namespace Modules.ConnectorModule.RootsContexts
     {
         private const string LANGUAGE_GROUP = nameof(MainConnectorSubContext) + ".Language";
         private const string LIVES_GROUP = nameof(MainConnectorSubContext) + ".Lives";
+        private const string CONSENT_GROUP = nameof(MainConnectorSubContext) + ".Consent";
         private MainSignals _mainSignals;
         private MainScreenSignals _mainScreenSignals;
         private EventsScreenSignals _eventsScreenSignals;
@@ -27,6 +29,7 @@ namespace Modules.ConnectorModule.RootsContexts
         private LocalizationSignals _localizationSignals;
         private ProfileSignals _profileSignals;
         private ProfileSelectionScreenSignals _profileSelectionSignals;
+        private ConsentScreenSignals _consentScreenSignals;
 
         public override void Setup()
         {
@@ -42,6 +45,7 @@ namespace Modules.ConnectorModule.RootsContexts
             _localizationSignals = InjectionBinderCrossContext.GetInstance<LocalizationSignals>();
             _profileSignals = InjectionBinderCrossContext.GetInstance<ProfileSignals>();
             _profileSelectionSignals = InjectionBinderCrossContext.GetInstance<ProfileSelectionScreenSignals>();
+            _consentScreenSignals = InjectionBinderCrossContext.GetInstance<ConsentScreenSignals>();
 
             IncomingSignals();
             OutgoingSignals();
@@ -50,6 +54,8 @@ namespace Modules.ConnectorModule.RootsContexts
         private void IncomingSignals()
         {
             _mainSignals.Outgoing.Started.Connect(_mainScreenSignals.Incoming.OpenMainScreen);
+            // The consent question is asked by its panel; the answer goes back to Main, which starts ads and analytics.
+            _mainSignals.Outgoing.ConsentRequested.Connect(_consentScreenSignals.Incoming.OpenConsentScreen, CONSENT_GROUP);
 
             // The loading screen's retry button asks Main to boot again; the set it names is Main's boot.
             _loadingScreenSignals.Outgoing.RetryClicked.Connect(_ => _mainSignals.Incoming.RetryBoot.Dispatch());
@@ -89,6 +95,7 @@ namespace Modules.ConnectorModule.RootsContexts
             _mainScreenSignals.Outgoing.EventsClicked.Connect(_eventsScreenSignals.Incoming.OpenEventsScreen);
             _mainScreenSignals.Outgoing.LeaderboardClicked.Connect(_leaderboardScreenSignals.Incoming.OpenLeaderboardScreen);
             _profileSelectionSignals.Outgoing.SaveRequested.Connect(_profileSignals.Incoming.SaveProfile);
+            _consentScreenSignals.Outgoing.Answered.Connect(_mainSignals.Incoming.ConsentAnswered, CONSENT_GROUP);
             _leaderboardScreenSignals.Outgoing.EditProfileClicked.Connect(_profileSignals.Incoming.OpenSelection);
         }
 
@@ -127,6 +134,7 @@ namespace Modules.ConnectorModule.RootsContexts
             _leaderboardScreenSignals.Outgoing.EditProfileClicked.Disconnect();
             // Its own group, so the gameplay screen keeps hearing about the lives.
             SignalConnector.DisconnectGroup(LIVES_GROUP);
+            SignalConnector.DisconnectGroup(CONSENT_GROUP);
         }
     }
 }

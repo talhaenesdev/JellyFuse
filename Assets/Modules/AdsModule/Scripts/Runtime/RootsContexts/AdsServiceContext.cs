@@ -1,38 +1,20 @@
 using FlowIoC.BaseModule.Contexts;
-using Modules.AdsModule.Controllers;
 using Modules.AdsModule.Models;
 using Modules.AdsModule.Services;
-using Modules.AdsModule.Signals;
 
 namespace Modules.AdsModule.RootsContexts
 {
+    /// <summary>
+    /// LevelPlay does not start by itself: it waits for the player's consent answer, and the module that asks
+    /// binds <see cref="IAdsService.Commands.Start"/> to that answer.
+    /// </summary>
     public class AdsServiceContext : Context
     {
-        private AdsInternalSignals _internalSignals;
-
-        public override void SignalBindings()
-        {
-            base.SignalBindings();
-            _internalSignals = InjectionBinder.Bind<AdsInternalSignals>();
-        }
-
         public override void InjectionBindings()
         {
             base.InjectionBindings();
             InjectionBinder.Bind<AdsModel>();
             InjectionBinderCrossContext.Bind<IAdsService, AdsService>();
-        }
-
-        public override void CommandBindings()
-        {
-            base.CommandBindings();
-            CommandBinder.Bind(_internalSignals.Initialize).ToSequence<InitializeAdsCommand>();
-        }
-
-        public override void Launch()
-        {
-            base.Launch();
-            _internalSignals.Initialize.Dispatch();
         }
     }
 }
