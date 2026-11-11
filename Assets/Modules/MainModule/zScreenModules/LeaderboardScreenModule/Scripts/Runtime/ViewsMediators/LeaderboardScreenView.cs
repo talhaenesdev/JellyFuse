@@ -43,8 +43,16 @@ namespace Modules.MainModule.LeaderboardScreenModule.ViewsMediators
         [SerializeField] private Sprite _tabOffSprite;
         [SerializeField] private Color _tabOn = new(1f, .82f, .25f);
         [SerializeField] private Color _tabOff = new(.42f, .2f, .78f);
+        [Tooltip("The label of the tab that is lit.")]
+        [SerializeField] private Color _tabOnLabel = new(.29f, .07f, .55f);
+        [Tooltip("The label of the tab that is not lit, so it reads on the darker picture.")]
+        [SerializeField] private Color _tabOffLabel = Color.white;
         [SerializeField] private Color _rowColour = new(.26f, .06f, .63f, .88f);
         [SerializeField] private Color _myRowColour = new(.12f, .7f, .95f, 1f);
+        [Tooltip("When set, a list row wears this picture untinted instead of the row colour.")]
+        [SerializeField] private Sprite _rowSprite;
+        [Tooltip("When set, the asking player's row in the list wears this picture untinted instead of the my-row colour.")]
+        [SerializeField] private Sprite _myRowSprite;
 
         public Action BackClicked;
         public Action<LeaderboardBoard> TabClicked;
@@ -181,7 +189,12 @@ namespace Modules.MainModule.LeaderboardScreenModule.ViewsMediators
                 badge.sprite = _badges[data.Rank >= 1 && data.Rank - 1 < last ? data.Rank - 1 : last];
             }
             var image = row.GetComponent<Image>();
-            if (image != null && row != _meRow && !IsPodium(row)) image.color = data.IsMe ? _myRowColour : _rowColour;
+            if (image != null && row != _meRow && !IsPodium(row))
+            {
+                var sprite = data.IsMe ? _myRowSprite : _rowSprite;
+                if (sprite != null) { image.sprite = sprite; image.color = Color.white; }
+                else image.color = data.IsMe ? _myRowColour : _rowColour;
+            }
         }
 
         // Unity Authentication adds "#1234" to a player's name so names stay unique; the list shows the name alone.
@@ -236,6 +249,8 @@ namespace Modules.MainModule.LeaderboardScreenModule.ViewsMediators
         private void PaintTab(Button tab, bool on)
         {
             if (tab == null) return;
+            var label = tab.GetComponentInChildren<TMP_Text>();
+            if (label != null) label.color = on ? _tabOnLabel : _tabOffLabel;
             if (_tabOnSprite != null && _tabOffSprite != null)
             {
                 tab.image.sprite = on ? _tabOnSprite : _tabOffSprite;
