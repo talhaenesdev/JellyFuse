@@ -46,12 +46,13 @@ namespace Modules.GameplayModule.Editor
         public static JellyLevelGenerator ForLevel(int number)
         {
             int inTen = (number - 1) % 10;        // 0 rests after a hard one ... 9 is the hard one
-            int lift = Mathf.Max(0, (number - 51) / 25);
+            // The climb stops at level 151: past it a level is made harder by crates and doors, not by length.
+            int lift = Mathf.Clamp((number - 51) / 25, 0, 4);
             // After level 101 brings in the map that slides, every ten has two of them, away from the hard one.
             if (number > 101 && number % 50 != 0 && (number % 10 == 3 || number % 10 == 7))
                 return new JellyLevelGenerator { MinMoves = 12 + lift, MinMaking = 1, Wide = true, SolveMs = 4500 };
-            if (number % 50 == 0) return new JellyLevelGenerator { MinMoves = 25, MinMaking = 5, SuperHard = true, SolveMs = 6000 };
-            if (number % 10 == 0) return new JellyLevelGenerator { MinMoves = 18 + lift, MinMaking = 2, Hard = true, SolveMs = 3500 };
+            if (number % 50 == 0) return new JellyLevelGenerator { MinMoves = 22, MinMaking = 4, SuperHard = true, SolveMs = 6000 };
+            if (number % 10 == 0) return new JellyLevelGenerator { MinMoves = 18 + Mathf.Min(lift, 2), MinMaking = 2, Hard = true, SolveMs = 3500 };
             return new JellyLevelGenerator { MinMoves = 12 + inTen / 3 + lift, MinMaking = inTen / 4, SolveMs = 3500 };
         }
         /// <summary>The draft is marked Hard instead of judged from its solution.</summary>
@@ -267,6 +268,14 @@ namespace Modules.GameplayModule.Editor
                     shape.ArrowBlock = true;
                     shape.ArrowAxis = rng.NextDouble() < .5 ? JellyAxis.Horizontal : JellyAxis.Vertical;
                 }
+            // After level 151 brings in the wooden crates, about half the boards have a few, on free floor and never
+            // in front of a door, where one would close the way out before the first fuse.
+            if (number > 151 && !Wide && rng.NextDouble() < (tough ? .7 : .5))
+            {
+                var mouths = new HashSet<Vector2Int>(level.Doors.SelectMany(d => level.DoorCells(d).Select(c => c - JellyGateCVOStep(d.Side))));
+                foreach (var cell in free.Where(c => !taken.Contains(c) && !mouths.Contains(c)).OrderBy(_ => rng.Next()).Take(rng.Next(2, tough ? 6 : 5)))
+                    level.Crates.Add(cell);
+            }
             return level;
         }
 
