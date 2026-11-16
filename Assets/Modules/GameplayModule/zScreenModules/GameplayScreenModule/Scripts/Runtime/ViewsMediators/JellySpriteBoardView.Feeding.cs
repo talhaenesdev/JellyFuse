@@ -86,25 +86,6 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             for (int i = _pipeImagesUsed; i < _pipeImages.Count; i++) _pipeImages[i].gameObject.SetActive(false);
         }
 
-        /// <summary>
-        /// Whether the top wall has room for the fed cat and the pipe over its head before the screen's buttons: the
-        /// row the spout needs is under the ceiling. Without that room the cat and its bowl go on the front wall.
-        /// </summary>
-        private bool TopHasFeedingRoom()
-        {
-            if (_level == null || _rect == null || !Ceiling.HasValue) return true;
-            int maxY = int.MinValue;
-            for (int y = 0; y < _level.Height; y++) for (int x = 0; x < _level.Width; x++)
-                if (IsFloor(new Vector2Int(x, y))) maxY = Mathf.Max(maxY, y);
-            if (maxY == int.MinValue) return true;
-            float cell = _cell, tilt = Look.SpriteTilt;
-            var parent = _catLayer != null ? _catLayer : (RectTransform)transform;
-            float top = Mathf.Min(_rect.rect.yMax, parent.InverseTransformPoint(new Vector3(0, Ceiling.Value, 0)).y - cell * .35f * tilt);
-            float ceilingRow = top / (cell * tilt) + _centre.y - .5f;
-            float feetRow = maxY + .5f + Look.CatFeetHeight;
-            float needed = feetRow + Look.CatSize / tilt + .5f;
-            return ceilingRow >= needed;
-        }
 
         /// <summary>The board's cell in the pipe layer's space: the pipes keep to the board's own grid.</summary>
         private Vector2 PipeAt(Vector2 cell)
@@ -178,7 +159,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                     // The buttons over the board, in the pipe layer's space, a little under them.
                     if (Ceiling.HasValue && _pipeLayer != null) top = Mathf.Min(top, _pipeLayer.InverseTransformPoint(new Vector3(0, Ceiling.Value, 0)).y - cell * .35f * tilt);
                     int ceiling = Mathf.FloorToInt(top / (cell * tilt) + _centre.y - .5f);
-                    if (ceiling >= maxY + 1) boxMaxY = Mathf.Min(boxMaxY, ceiling);
+                    // Never lower than just over the frame: there the pipe runs behind the cat rather than into the wall.
+                    boxMaxY = Mathf.Min(boxMaxY, Mathf.Max(ceiling, maxY + 2));
                 }
                 spoutRow = boxMaxY;
             }
