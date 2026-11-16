@@ -741,15 +741,7 @@ namespace Modules.GameplayModule.Models
 
         public bool ClearColour(JellyColour colour)
         {
-            if (_level == null || Status != PuzzleStatus.Playing) return false;
-            // A booster never touches what is frozen: not a frozen jelly of the colour, nor a frozen door still
-            // waiting for it - taking the colour away would leave that jelly, or that request, with no way out.
-            foreach (var piece in _pieces) if (piece.Colour == colour && IsFrozen(piece.Id)) return false;
-            for (int g = 0; g < _level.Gates.Count; g++)
-            {
-                if (_doorFrozen[g] <= 0) continue;
-                for (int s = _progress[g]; s < _level.Gates[g].Stages.Count; s++) if (_level.Gates[g].Stages[s].Colour == colour) return false;
-            }
+            if (_level == null || Status != PuzzleStatus.Playing || ColourHeld(colour)) return false;
             FinishDrag();
             bool any = false;
             for (int i = _pieces.Count - 1; i >= 0; i--)
@@ -760,6 +752,30 @@ namespace Modules.GameplayModule.Models
             _clearedColours.Add(colour);
             AfterBooster();
             return true;
+        }
+
+        /// <summary>
+        /// A booster never touches what is frozen: not a frozen jelly of the colour, nor a frozen door still
+        /// waiting for it - taking the colour away would leave that jelly, or that request, with no way out.
+        /// </summary>
+        private bool ColourHeld(JellyColour colour)
+        {
+            foreach (var piece in _pieces) if (piece.Colour == colour && IsFrozen(piece.Id)) return true;
+            for (int g = 0; g < _level.Gates.Count; g++)
+            {
+                if (_doorFrozen[g] <= 0) continue;
+                for (int s = _progress[g]; s < _level.Gates[g].Stages.Count; s++) if (_level.Gates[g].Stages[s].Colour == colour) return true;
+            }
+            return false;
+        }
+
+        public bool CanClearAnyColour()
+        {
+            if (_level == null || Status != PuzzleStatus.Playing) return false;
+            // The UFO is aimed at a jelly, so only a colour with a jelly that can be tapped counts.
+            foreach (var piece in _pieces)
+                if (!IsFrozen(piece.Id) && !ColourHeld(piece.Colour)) return true;
+            return false;
         }
 
         private void RemovePiece(JellyPieceVO piece)

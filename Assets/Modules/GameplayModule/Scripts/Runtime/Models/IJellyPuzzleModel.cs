@@ -61,6 +61,8 @@ namespace Modules.GameplayModule.Models
         bool ClearDoor(int door, bool biggestFirst, bool withoutEnough);
         /// <summary>UFO: every jelly of the colour goes, and every door request for it is skipped. False when a frozen jelly is of the colour, or a frozen door still waits for it.</summary>
         bool ClearColour(JellyColour colour);
+        /// <summary>Whether a UFO has a colour it may take: one on the board or still asked for, that no frozen jelly or frozen door holds.</summary>
+        bool CanClearAnyColour();
 #if UNITY_EDITOR
         /// <summary>Editor-only cheat: ends the level now as won, or as lost with the clock at zero.</summary>
         void ForceResult(PuzzleStatus status);

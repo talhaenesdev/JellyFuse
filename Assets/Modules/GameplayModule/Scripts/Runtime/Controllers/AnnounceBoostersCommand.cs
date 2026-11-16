@@ -37,8 +37,11 @@ namespace Modules.GameplayModule.Controllers
                     Count = count, Price = booster.CoinPrice,
                     // A freeze does not stack: while the clock is frozen, Freeze Time waits until it runs again.
                     // With no use left the button still works: it opens the offer for one more.
+                    // A UFO with no colour it may take - each held by a frozen jelly or a frozen door - waits too:
+                    // armed, it would wait for a tap nothing on the board could answer.
                     Usable = unlocked && progress != null
-                        && !(booster.Type == BoosterType.FreezeTime && _model.ClockFreezeSeconds > 0),
+                        && !(booster.Type == BoosterType.FreezeTime && _model.ClockFreezeSeconds > 0)
+                        && !(booster.Type == BoosterType.Ufo && !_model.CanClearAnyColour()),
                     FreeByAd = freeByAd,
                     OnOffer = unlocked && count <= 0,
                 });

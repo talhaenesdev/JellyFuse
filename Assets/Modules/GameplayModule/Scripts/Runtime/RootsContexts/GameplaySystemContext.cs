@@ -72,6 +72,8 @@ namespace Modules.GameplayModule.RootsContexts
             CommandBinder.Bind(_signals.Incoming.Drag)
                 .ToSequence<CapturePuzzleFeedbackCommand>()
                 .ToSequence<DragJellyCommand>()
+                // A move can thaw a jelly or a door, and that can give a UFO a colour to take again.
+                .ToSequence<AnnounceBoostersCommand>()
                 .ToSequence<StartClockOnMoveCommand>()
                 .ToSequence<StartPuzzleClockCommand>()
                 .ToSequence<AdvanceTutorialCommand>()
@@ -87,6 +89,7 @@ namespace Modules.GameplayModule.RootsContexts
                 .ToSequence<RequestReviewCommand>();
             CommandBinder.Bind(_signals.Incoming.Undo)
                 .ToSequence<UndoPuzzleCommand>()
+                .ToSequence<AnnounceBoostersCommand>()
                 .ToSequence<IAudioService.Commands.Play>(AudioCue.Undo)
                 .ToSequence<StartPuzzleClockCommand>();
             CommandBinder.Bind(_signals.Incoming.Stop).ToSequence<StopPuzzleClockCommand>();
