@@ -5,26 +5,43 @@ using UnityEngine.UI;
 namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
 {
     /// <summary>
-    /// Cats strolling along the top of the wall frame: each takes a run of wall with floor under it and no
-    /// door in it, walks up and down it, and now and then sits, washes, stretches or naps. They are only
-    /// for the look - nothing touches them and they touch nothing - and they sit on a canvas of their own,
-    /// so walking every frame rebuilds no other part of the board.
+    /// Cats strolling along the top of the wall frame and the front wall: each takes a run of wall with floor
+    /// beside it and no door in it, walks up and down it, and now and then sits, washes, stretches, naps, looks
+    /// about, swats at nothing or blinks slowly. A finger on a cat is answered: on its body it is petted and leans
+    /// in, just above its head it stands up and reaches for the finger, and quick taps make it hop. They are only
+    /// for the look - nothing in the game hears of them - and they sit on a canvas of their own, so walking every
+    /// frame rebuilds no other part of the board. Only the part of a cat over the wall can be touched, so a cat
+    /// never stands between a finger and a jelly.
     /// </summary>
     public sealed partial class JellySpriteBoardView
     {
-        private enum CatAct { Walk = 0, SitDown = 1, Sit = 2, Sleep = 3, Stretch = 4, Lick = 5, StandUp = 6 }
+        private enum CatAct
+        {
+            Walk = 0, SitDown = 1, Sit = 2, Sleep = 3, Stretch = 4, Lick = 5, StandUp = 6,
+            Petted = 7, Rub = 8, Reach = 9, Belly = 10, Hop = 11, Blink = 12, Curious = 13, Swat = 14,
+        }
 
         private sealed class Cat
         {
             public Image Image;
+            public CatTouchArea Touch;
             public float MinX, MaxX, FeetY, X, TargetX, Clock, Left;
             public CatAct Act;
-            public bool FacingLeft;
+            public bool FacingLeft, Held;
+            public int Taps;
+            public float LastTap;
         }
 
-        // Rows of the sheet, 8 frames each.
+        // Rows of the strolling sheet, 8 frames each.
         private const int CAT_ROW_WALK = 0, CAT_ROW_SIT = 1, CAT_ROW_SIT_DOWN = 2, CAT_ROW_SLEEP = 3, CAT_ROW_STRETCH = 4, CAT_ROW_LICK = 5;
+        // Rows of the touch sheet.
+        private const int TOUCH_ROW_PETTED = 0, TOUCH_ROW_RUB = 1, TOUCH_ROW_REACH = 2, TOUCH_ROW_BELLY = 3, TOUCH_ROW_HOP = 4,
+            TOUCH_ROW_BLINK = 5, TOUCH_ROW_CURIOUS = 6, TOUCH_ROW_SWAT = 7;
         private const int CAT_FRAMES = 8;
+        /// <summary>The share of a cat's touchable height, from the top, that counts as above its head.</summary>
+        private const float CAT_HEAD_SHARE = .4f;
+        private const int CAT_HOP_TAPS = 3;
+        private const float CAT_TAP_GAP = .6f;
 
         private RectTransform _catLayer;
         private readonly List<Cat> _cats = new();
@@ -32,6 +49,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         private readonly List<(int Y, int MinX, int MaxX, bool Top)> _catRuns = new();
 
         private bool CatsDrawn => Look.CatFrames != null && Look.CatFrames.Length >= CAT_FRAMES * 6 && Look.CatCount > 0;
+        private bool CatTouchDrawn => Look.CatTouchFrames != null && Look.CatTouchFrames.Length >= CAT_FRAMES * 8;
 
         private void BuildCats()
         {
@@ -42,6 +60,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             {
                 _catLayer = Layer("CatLayer");
                 _catLayer.gameObject.AddComponent<Canvas>();
+                // A canvas of its own hears no finger without a raycaster of its own.
+                _catLayer.gameObject.AddComponent<GraphicRaycaster>();
             }
             _catLayer.SetAsLastSibling();
 
@@ -59,7 +79,12 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                 float feet = run.Top ? run.Y + .5f + Look.CatFeetHeight : run.Y - .5f - Look.CatBottomFeetDepth;
                 var low = Position(new Vector2(run.MinX - .5f + half, feet));
                 var high = Position(new Vector2(run.MaxX + .5f - half, feet));
-                var cat = new Cat { Image = image, MinX = low.x, MaxX = Mathf.Max(low.x, high.x), FeetY = low.y * tilt };
+                var cat = new Cat { Image = image, Touch = image.GetComponentInChildren<CatTouchArea>(true), MinX = low.x, MaxX = Mathf.Max(low.x, high.x), FeetY = low.y * tilt };
+                // On the front wall the cat's head reaches over the last row of the floor: only what stands over the
+                // wall can be touched there, so a drag on that row still takes the jelly.
+                float reach = size;
+                if (!run.Top) reach = Mathf.Clamp(Position(new Vector2(0, run.Y - .5f)).y * tilt - cat.FeetY, size * .35f, size);
+                ShapeCatTouch(cat, size, reach);
                 cat.X = Random.Range(cat.MinX, cat.MaxX);
                 cat.Clock = Random.Range(0f, 1f);
                 StartCatWalk(cat);
@@ -117,10 +142,59 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                 image.preserveAspect = true;
                 image.rectTransform.pivot = new Vector2(.5f, 0);
                 image.rectTransform.anchorMin = image.rectTransform.anchorMax = new Vector2(.5f, .5f);
+                // The touchable part: an invisible box over the cat's body, from its feet up.
+                var hit = new GameObject("Hit_Cat", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(CatTouchArea));
+                hit.layer = go.layer;
+                var hitRect = (RectTransform)hit.transform;
+                hitRect.SetParent(go.transform, false);
+                hitRect.anchorMin = hitRect.anchorMax = new Vector2(.5f, 0);
+                hitRect.pivot = new Vector2(.5f, 0);
+                var hitImage = hit.GetComponent<Image>();
+                hitImage.color = new Color(1, 1, 1, 0);
+                hitImage.raycastTarget = true;
             }
             image.gameObject.SetActive(true);
             return image;
         }
+
+        private void ShapeCatTouch(Cat cat, float size, float reach)
+        {
+            if (cat.Touch == null) return;
+            ((RectTransform)cat.Touch.transform).sizeDelta = new Vector2(size * .7f, reach);
+            // A cat without the touch art is only to look at.
+            cat.Touch.GetComponent<Image>().raycastTarget = CatTouchDrawn;
+            cat.Touch.Pressed = height => OnCatPressed(cat, height);
+            cat.Touch.Held = height => OnCatHeld(cat, height);
+            cat.Touch.Released = () => OnCatReleased(cat);
+        }
+
+        // ---------- a finger on a cat ----------
+
+        private void OnCatPressed(Cat cat, float height)
+        {
+            if (!CatTouchDrawn) return;
+            float now = Time.unscaledTime;
+            cat.Taps = now - cat.LastTap <= CAT_TAP_GAP ? cat.Taps + 1 : 1;
+            cat.LastTap = now;
+            cat.Held = true;
+            if (cat.Taps >= CAT_HOP_TAPS) { cat.Taps = 0; StartCatAct(cat, CatAct.Hop, 0); return; }
+            if (height >= 1 - CAT_HEAD_SHARE) { StartCatAct(cat, CatAct.Reach, 1.2f); return; }
+            float roll = Random.value;
+            if (roll < .15f) StartCatAct(cat, CatAct.Belly, 0);
+            else StartCatAct(cat, roll < .55f ? CatAct.Petted : roll < .85f ? CatAct.Rub : CatAct.Blink, Random.Range(2.5f, 4f));
+        }
+
+        private void OnCatHeld(Cat cat, float height)
+        {
+            if (!CatTouchDrawn || !cat.Held) return;
+            // Stroked from the body up past the head: it stops leaning in and reaches for the finger instead.
+            if (height >= 1 - CAT_HEAD_SHARE && cat.Act != CatAct.Reach && cat.Act != CatAct.Hop && cat.Act != CatAct.Belly) StartCatAct(cat, CatAct.Reach, 1.2f);
+            if (cat.Act is CatAct.Reach or CatAct.Petted or CatAct.Rub) cat.Left = Mathf.Max(cat.Left, 1.2f);
+        }
+
+        private static void OnCatReleased(Cat cat) => cat.Held = false;
+
+        // ---------- every frame ----------
 
         private void StepCats(float dt)
         {
@@ -139,10 +213,14 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                     case CatAct.SitDown:
                     case CatAct.Stretch:
                     case CatAct.StandUp:
+                    case CatAct.Belly:
+                    case CatAct.Hop:
+                    case CatAct.Swat:
                         if (cat.Clock * Look.CatFps >= CAT_FRAMES) NextCatAct(cat);
                         break;
                     default:
-                        cat.Left -= dt;
+                        // A finger still on the cat keeps it there.
+                        if (!cat.Held || cat.Act is not (CatAct.Reach or CatAct.Petted or CatAct.Rub)) cat.Left -= dt;
                         if (cat.Left <= 0) NextCatAct(cat);
                         break;
                 }
@@ -159,11 +237,20 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                 case CatAct.Sit:
                 case CatAct.Lick: StartCatAct(cat, CatAct.StandUp, 0); return;
                 case CatAct.Sleep: StartCatAct(cat, CatAct.Stretch, 0); return;
+                // Loved, it sits a moment and blinks before it wanders off.
+                case CatAct.Petted:
+                case CatAct.Rub:
+                case CatAct.Belly:
+                case CatAct.Hop: StartCatAct(cat, CatAct.Blink, Random.Range(1.2f, 2f)); return;
             }
             float roll = Random.value;
-            if (cat.Act == CatAct.Walk && roll < .3f) StartCatAct(cat, CatAct.SitDown, 0);
-            else if (cat.Act == CatAct.Walk && roll < .42f) StartCatAct(cat, CatAct.Sleep, Random.Range(5f, 9f));
-            else if (cat.Act == CatAct.Walk && roll < .52f) StartCatAct(cat, CatAct.Stretch, 0);
+            bool touchArt = CatTouchDrawn;
+            if (cat.Act == CatAct.Walk && roll < .22f) StartCatAct(cat, CatAct.SitDown, 0);
+            else if (cat.Act == CatAct.Walk && roll < .32f) StartCatAct(cat, CatAct.Sleep, Random.Range(5f, 9f));
+            else if (cat.Act == CatAct.Walk && roll < .40f) StartCatAct(cat, CatAct.Stretch, 0);
+            else if (touchArt && cat.Act == CatAct.Walk && roll < .52f) StartCatAct(cat, CatAct.Curious, Random.Range(2f, 3.5f));
+            else if (touchArt && cat.Act == CatAct.Walk && roll < .60f) StartCatAct(cat, CatAct.Swat, 0);
+            else if (touchArt && cat.Act == CatAct.Walk && roll < .68f) StartCatAct(cat, CatAct.Blink, Random.Range(1.5f, 2.5f));
             else StartCatWalk(cat);
         }
 
@@ -188,24 +275,35 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         private void PlaceCat(Cat cat)
         {
             int frame = (int)(cat.Clock * Look.CatFps);
-            int row, index;
-            switch (cat.Act)
+            int once = Mathf.Min(frame, CAT_FRAMES - 1), loop = frame % CAT_FRAMES;
+            Sprite sprite = cat.Act switch
             {
-                case CatAct.SitDown: row = CAT_ROW_SIT_DOWN; index = Mathf.Min(frame, CAT_FRAMES - 1); break;
+                CatAct.SitDown => Walk(CAT_ROW_SIT_DOWN, once),
                 // Standing up is sitting down played backwards.
-                case CatAct.StandUp: row = CAT_ROW_SIT_DOWN; index = CAT_FRAMES - 1 - Mathf.Min(frame, CAT_FRAMES - 1); break;
-                case CatAct.Stretch: row = CAT_ROW_STRETCH; index = Mathf.Min(frame, CAT_FRAMES - 1); break;
-                case CatAct.Sit: row = CAT_ROW_SIT; index = frame % CAT_FRAMES; break;
-                case CatAct.Lick: row = CAT_ROW_LICK; index = frame % CAT_FRAMES; break;
+                CatAct.StandUp => Walk(CAT_ROW_SIT_DOWN, CAT_FRAMES - 1 - once),
+                CatAct.Stretch => Walk(CAT_ROW_STRETCH, once),
+                CatAct.Sit => Walk(CAT_ROW_SIT, loop),
+                CatAct.Lick => Walk(CAT_ROW_LICK, loop),
                 // A sleeping cat breathes slowly.
-                case CatAct.Sleep: row = CAT_ROW_SLEEP; index = (int)(cat.Clock * Look.CatFps * .5f) % CAT_FRAMES; break;
-                default: row = CAT_ROW_WALK; index = frame % CAT_FRAMES; break;
-            }
-            var sprite = Look.CatFrames[row * CAT_FRAMES + index];
+                CatAct.Sleep => Walk(CAT_ROW_SLEEP, (int)(cat.Clock * Look.CatFps * .5f) % CAT_FRAMES),
+                CatAct.Petted => Touch(TOUCH_ROW_PETTED, loop),
+                CatAct.Rub => Touch(TOUCH_ROW_RUB, loop),
+                CatAct.Reach => Touch(TOUCH_ROW_REACH, loop),
+                CatAct.Belly => Touch(TOUCH_ROW_BELLY, once),
+                CatAct.Hop => Touch(TOUCH_ROW_HOP, once),
+                CatAct.Blink => Touch(TOUCH_ROW_BLINK, loop),
+                CatAct.Curious => Touch(TOUCH_ROW_CURIOUS, loop),
+                CatAct.Swat => Touch(TOUCH_ROW_SWAT, once),
+                _ => Walk(CAT_ROW_WALK, loop),
+            };
             if (cat.Image.sprite != sprite) cat.Image.sprite = sprite;
             var rect = cat.Image.rectTransform;
             rect.anchoredPosition = new Vector2(cat.X, cat.FeetY);
             rect.localScale = new Vector3(cat.FacingLeft ? -1 : 1, 1, 1);
         }
+
+        private Sprite Walk(int row, int index) => Look.CatFrames[row * CAT_FRAMES + index];
+        // Without the touch art a touch act never starts, but a cat already in one keeps the stroll's sitting frame.
+        private Sprite Touch(int row, int index) => CatTouchDrawn ? Look.CatTouchFrames[row * CAT_FRAMES + index] : Walk(CAT_ROW_SIT, index);
     }
 }

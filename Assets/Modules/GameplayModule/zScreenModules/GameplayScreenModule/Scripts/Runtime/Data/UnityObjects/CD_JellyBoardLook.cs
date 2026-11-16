@@ -67,6 +67,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.Data.UnityObjects
         [Section("Cats")]
         [Tooltip("The cat sheet's frames, row by row, 8 to a row: walk, sit idle, sit down, sleep, stretch, lick, hop. Empty: no cats.")]
         public Sprite[] CatFrames;
+        [Tooltip("The touch sheet's frames, row by row, 8 to a row: petted, rub, reach up, belly up, hop, slow blink, curious, swat. Empty: the cats cannot be touched and stroll as before.")]
+        public Sprite[] CatTouchFrames;
         [Tooltip("How many cats stroll along the top of the wall frame. Each takes a run of wall of its own.")]
         [Range(0, 3)] public int CatCount = 2;
         [Tooltip("Each cat wears one of these, picked at random when the board is built. The art is white, so white keeps it as drawn.")]
