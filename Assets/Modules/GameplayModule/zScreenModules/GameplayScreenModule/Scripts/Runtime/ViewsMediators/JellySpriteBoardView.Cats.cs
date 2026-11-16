@@ -134,7 +134,9 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                     if (edge && start < 0) start = x;
                     if (!edge && start >= 0)
                     {
-                        if (x - start >= Look.CatMinRun) _catRuns.Add((y, start, x - 1, top));
+                        // The fed cat takes even one cell of top wall - a door can fill the rest of it - and mostly sits by its bowl.
+                        int least = top && FeedingDrawn ? 1 : Look.CatMinRun;
+                        if (x - start >= least) _catRuns.Add((y, start, x - 1, top));
                         start = -1;
                     }
                 }
