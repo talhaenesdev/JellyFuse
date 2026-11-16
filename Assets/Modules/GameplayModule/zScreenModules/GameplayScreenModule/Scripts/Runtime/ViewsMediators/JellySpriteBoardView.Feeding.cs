@@ -37,7 +37,6 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             public float PuffTime;
         }
 
-        private const float SPOUT_NOZZLE = .21f;
         private const float PIECE_GRAVITY = 22f;
 
         private RectTransform _pipeLayer;
@@ -55,9 +54,13 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         private float _eatClock;
         private bool _fedWin;
 
+        // The pipes' tiles in the order BuildPipeTiles draws them.
+        private const int TILE_H = 0, TILE_V = 1, TILE_LB = 2, TILE_RB = 3, TILE_LT = 4, TILE_RT = 5, TILE_T_DOWN = 6, TILE_T_UP = 7,
+            TILE_T_LEFT = 8, TILE_T_RIGHT = 9, TILE_CROSS = 10, TILE_CAP = 11, TILE_SPOUT = 12, TILE_SPOUT_TEE = 13;
+        private const int PIPE_N = 1, PIPE_E = 2, PIPE_S = 4, PIPE_W = 8;
+
         private bool FeedingDrawn => Look.CatEatFrames != null && Look.CatEatFrames.Length >= CAT_FRAMES * 3
-                                     && Look.PipeStraightX != null && Look.PipeStraightY != null && Look.PipeSpout != null
-                                     && Look.PipeCornerLB != null && Look.PipeCornerRB != null && Look.PipeCornerLT != null && Look.PipeCornerRT != null
+                                     && Look.PipeTiles != null && Look.PipeTiles.Length > TILE_SPOUT_TEE
                                      && Look.BowlFrames != null && Look.BowlFrames.Length >= 4;
 
         private void BuildFeeding()
@@ -83,14 +86,82 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             for (int i = _pipeImagesUsed; i < _pipeImages.Count; i++) _pipeImages[i].gameObject.SetActive(false);
         }
 
-        /// <summary>The cat on the top wall is fed if there is one; its bowl stands in the middle of its run.</summary>
+        /// <summary>The board's cell in the pipe layer's space: the pipes keep to the board's own grid.</summary>
+        private Vector2 PipeAt(Vector2 cell)
+        {
+            var p = Position(cell);
+            return new Vector2(p.x, p.y * Look.SpriteTilt);
+        }
+
+        /// <summary>
+        /// The cat on the top wall is fed if there is one; its bowl stands in the middle of its run. Every door's pipe
+        /// goes out from the door to a box round the board, along the box the shorter way to the bowl's column, and into
+        /// the spout over the bowl. The pipes are laid on the board's own cells, so where two share a cell they are one
+        /// pipe, and each cell takes the one tile that joins the sides its pipes leave by - a straight, a bend, a T or a
+        /// cross. No tile is stretched and no pipe lies over another.
+        /// </summary>
         private void LayPipes()
         {
             foreach (var cat in _cats) if (cat.Top) { _feeder = cat; break; }
             _feeder ??= _cats[0];
             _bowlTop = _feeder.Top;
             float cell = _cell, tilt = Look.SpriteTilt;
-            _bowlAt = new Vector2((_feeder.MinX + _feeder.MaxX) * .5f, _feeder.FeetY);
+
+            int minX = int.MaxValue, maxX = int.MinValue, minY = int.MaxValue, maxY = int.MinValue;
+            for (int y = 0; y < _level.Height; y++) for (int x = 0; x < _level.Width; x++)
+            {
+                if (!IsFloor(new Vector2Int(x, y))) continue;
+                minX = Mathf.Min(minX, x); maxX = Mathf.Max(maxX, x); minY = Mathf.Min(minY, y); maxY = Mathf.Max(maxY, y);
+            }
+            if (minX > maxX) return;
+            // The box, in cells: two out from the floor - past the frame - and wide enough for every door's first cell.
+            int boxMinX = minX - 2, boxMaxX = maxX + 2, boxMinY = minY - 2, boxMaxY = maxY + 2;
+            var starts = new Dictionary<int, (Vector2Int Cell, Vector2Int Direction)>();
+            for (int g = 0; g < _level.Gates.Count; g++)
+            {
+                var gate = _level.Gates[g];
+                var mid = Vector2.zero;
+                foreach (var c in gate.Cells) mid += (Vector2)c;
+                mid /= Mathf.Max(1, gate.Cells.Count);
+                var start = Vector2Int.RoundToInt(mid) + gate.Direction;
+                starts[g] = (start, gate.Direction);
+                boxMinX = Mathf.Min(boxMinX, start.x); boxMaxX = Mathf.Max(boxMaxX, start.x);
+                boxMinY = Mathf.Min(boxMinY, start.y); boxMaxY = Mathf.Max(boxMaxY, start.y);
+            }
+            // On a board that does not slide, the pipes keep on screen: where the box would leave the board's rect it is
+            // drawn in, and the pipe runs behind a door's picture there.
+            if (!CanPan && _rect != null)
+            {
+                var bounds = _rect.rect;
+                int left = Mathf.CeilToInt(bounds.xMin / cell + _centre.x + .5f), right = Mathf.FloorToInt(bounds.xMax / cell + _centre.x - .5f);
+                int bottom = Mathf.CeilToInt(bounds.yMin / (cell * tilt) + _centre.y + .5f);
+                if (left <= minX - 1) boxMinX = Mathf.Max(boxMinX, left);
+                if (right >= maxX + 1) boxMaxX = Mathf.Min(boxMaxX, right);
+                if (bottom <= minY - 1) boxMinY = Mathf.Max(boxMinY, bottom);
+            }
+            // The bowl in the middle of the fed cat's run, on a column of the grid so the spout drops right into it.
+            int bowlColumn = Mathf.RoundToInt(((_feeder.MinX + _feeder.MaxX) * .5f) / cell + _centre.x);
+            _bowlAt = new Vector2(PipeAt(new Vector2(bowlColumn, 0)).x, _feeder.FeetY);
+            // Over the cat's head on the top wall - its picture stands about a cell and a half high on this grid - or
+            // under its feet on the front wall.
+            float headRows = (Look.CatSize * cell) / (cell * tilt);
+            int spoutRow;
+            if (_bowlTop)
+            {
+                spoutRow = Mathf.CeilToInt(_feeder.FeetY / (cell * tilt) + _centre.y + headRows + .5f);
+                boxMaxY = Mathf.Max(boxMaxY, spoutRow);
+                spoutRow = boxMaxY;
+            }
+            else
+            {
+                spoutRow = Mathf.FloorToInt(_feeder.FeetY / (cell * tilt) + _centre.y - .8f);
+                boxMinY = Mathf.Min(boxMinY, spoutRow);
+                spoutRow = boxMinY;
+            }
+            var spoutCell = new Vector2Int(bowlColumn, spoutRow);
+            int nozzleSide = _bowlTop ? PIPE_S : PIPE_N;
+            _nozzle = PipeAt(new Vector2(bowlColumn, spoutRow + (_bowlTop ? -.5f : .5f)));
+
             if (_bowl == null)
             {
                 _bowl = new GameObject("Img_CatBowl", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image)).GetComponent<Image>();
@@ -108,72 +179,104 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             _bowl.rectTransform.anchoredPosition = _bowlAt;
             _bowl.sprite = Look.BowlFrames[0];
 
-            // The box the pipes run round: the floor and its frame, every door on it, and the fed cat's head.
-            int minX = int.MaxValue, maxX = int.MinValue, minY = int.MaxValue, maxY = int.MinValue;
-            for (int y = 0; y < _level.Height; y++) for (int x = 0; x < _level.Width; x++)
+            var sides = new Dictionary<Vector2Int, int>();
+            void Join(Vector2Int a, Vector2Int b)
             {
-                if (!IsFloor(new Vector2Int(x, y))) continue;
-                minX = Mathf.Min(minX, x); maxX = Mathf.Max(maxX, x); minY = Mathf.Min(minY, y); maxY = Mathf.Max(maxY, y);
+                var step = b - a;
+                int from = step.x > 0 ? PIPE_E : step.x < 0 ? PIPE_W : step.y > 0 ? PIPE_N : PIPE_S;
+                int to = step.x > 0 ? PIPE_W : step.x < 0 ? PIPE_E : step.y > 0 ? PIPE_S : PIPE_N;
+                sides[a] = (sides.TryGetValue(a, out int s) ? s : 0) | from;
+                sides[b] = (sides.TryGetValue(b, out int t) ? t : 0) | to;
             }
-            if (minX > maxX) return;
-            float margin = Look.PipeMargin;
-            Vector2 S(Vector2 board) { var p = Position(board); return new Vector2(p.x, p.y * tilt); }
-            var low = S(new Vector2(minX - .5f - Look.MapFrameLeft - margin, minY - .5f - Look.MapFrameMargin - Look.SpriteBoardDepth - margin));
-            var high = S(new Vector2(maxX + .5f + Look.MapFrameRight + margin, maxY + .5f + Look.MapFrameMargin + margin));
-            float xMin = low.x, xMax = high.x, yMin = low.y, yMax = high.y;
-            var doorStarts = new Dictionary<int, (Vector2 Start, Vector2Int Direction)>();
-            for (int g = 0; g < _level.Gates.Count; g++)
-            {
-                var gate = _level.Gates[g];
-                var mid = Vector2.zero;
-                foreach (var c in gate.Cells) mid += (Vector2)c;
-                mid /= Mathf.Max(1, gate.Cells.Count);
-                var start = S(mid + (Vector2)gate.Direction * .5f);
-                doorStarts[g] = (start, gate.Direction);
-                // A door's picture reaches past the frame: the pipe still runs outside it.
-                var outer = S(mid + (Vector2)gate.Direction * 1.1f);
-                xMin = Mathf.Min(xMin, outer.x - margin * cell); xMax = Mathf.Max(xMax, outer.x + margin * cell);
-                yMin = Mathf.Min(yMin, outer.y - margin * cell); yMax = Mathf.Max(yMax, outer.y + margin * cell);
-            }
-            // On a board that does not slide, the pipes stay on screen: kept inside the board's rect, and where that is
-            // tight they run behind a door's picture rather than off the edge.
-            if (!CanPan && _rect != null)
-            {
-                var bounds = _rect.rect;
-                xMin = Mathf.Max(xMin, bounds.xMin + cell * .3f);
-                xMax = Mathf.Min(xMax, bounds.xMax - cell * .3f);
-                yMin = Mathf.Max(yMin, bounds.yMin + cell * .3f);
-            }
-            // The pipe passes over the fed cat's head, or under its feet on the front wall.
-            if (_bowlTop) yMax = Mathf.Max(yMax, _bowlAt.y + Look.CatSize * cell + cell * .45f);
-            else yMin = Mathf.Min(yMin, _bowlAt.y - cell * .7f);
-            float edgeY = _bowlTop ? yMax : yMin;
-            _nozzle = new Vector2(_bowlAt.x, edgeY + (_bowlTop ? -.5f : .5f) * cell);
-
-            foreach (var pair in doorStarts)
+            foreach (var pair in starts)
             {
                 var (start, d) = pair.Value;
-                var onEdge = d.x > 0 ? new Vector2(xMax, start.y) : d.x < 0 ? new Vector2(xMin, start.y) : d.y > 0 ? new Vector2(start.x, yMax) : new Vector2(start.x, yMin);
-                var target = new Vector2(_bowlAt.x, edgeY);
-                var path = new List<Vector2> { start, onEdge };
-                AroundBox(onEdge, target, xMin, xMax, yMin, yMax, path);
-                // The last stretch runs along the bowl's edge of the box into the spout, which bends down (or up) to the bowl.
-                var before = path[^1];
-                float side = before.x <= _bowlAt.x ? 1 : -1;
-                var spout = new Vector2(_bowlAt.x - SPOUT_NOZZLE * cell * side, edgeY);
-                var entry = new Vector2(spout.x - .5f * cell * side, edgeY);
-                if (Mathf.Abs(before.y - edgeY) > .5f) path.Add(new Vector2(before.x, edgeY));
-                path.Add(entry);
-                Simplify(path);
+                // A door whose first cell is past a box drawn in for the screen starts inside it, under its picture,
+                // rather than poking a stub out the far side.
+                start = new Vector2Int(Mathf.Clamp(start.x, boxMinX, boxMaxX), Mathf.Clamp(start.y, boxMinY, boxMaxY));
+                var corners = new List<Vector2> { start };
+                var onEdge = d.x > 0 ? new Vector2Int(boxMaxX, start.y) : d.x < 0 ? new Vector2Int(boxMinX, start.y) : d.y > 0 ? new Vector2Int(start.x, boxMaxY) : new Vector2Int(start.x, boxMinY);
+                // A door whose first cell is outside a box drawn in for the screen comes back in to it.
+                onEdge = new Vector2Int(Mathf.Clamp(onEdge.x, boxMinX, boxMaxX), Mathf.Clamp(onEdge.y, boxMinY, boxMaxY));
+                corners.Add(onEdge);
+                AroundBox(onEdge, spoutCell, boxMinX, boxMaxX, boxMinY, boxMaxY, corners);
+                corners.Add(spoutCell);
+                // Walk it cell by cell, joining each to the next.
+                var cells = new List<Vector2Int> { start };
+                // The pipe begins under the door's picture.
+                sides[start] = (sides.TryGetValue(start, out int first) ? first : 0) | (d.x > 0 ? PIPE_W : d.x < 0 ? PIPE_E : d.y > 0 ? PIPE_S : PIPE_N);
+                var at = start;
+                for (int i = 1; i < corners.Count; i++)
+                {
+                    var target = Vector2Int.RoundToInt(corners[i]);
+                    // Straight lines only: across first, then up or down, if a corner is not lined up with the last.
+                    while (at != target)
+                    {
+                        var next = at.x != target.x ? at + new Vector2Int(System.Math.Sign(target.x - at.x), 0) : at + new Vector2Int(0, System.Math.Sign(target.y - at.y));
+                        Join(at, next);
+                        cells.Add(next);
+                        at = next;
+                    }
+                }
                 var pipe = new Pipe();
-                DrawPipe(path, cell);
-                DrawSpout(spout, side, cell);
-                pipe.Path.AddRange(path);
-                pipe.Path.Add(spout + new Vector2(SPOUT_NOZZLE * cell * side, 0));
+                foreach (var c in cells) pipe.Path.Add(PipeAt(c));
                 pipe.Path.Add(_nozzle);
                 for (int i = 1; i < pipe.Path.Count; i++) pipe.Length += Vector2.Distance(pipe.Path[i - 1], pipe.Path[i]);
                 _pipes[pair.Key] = pipe;
             }
+            if (sides.Count == 0) return;
+            sides[spoutCell] = (sides.TryGetValue(spoutCell, out int spout) ? spout : 0) | nozzleSide;
+
+            var size = new Vector2(cell, cell * tilt);
+            foreach (var pair in sides)
+            {
+                if (pair.Key == spoutCell) continue;
+                PipeTile(pair.Key, pair.Value, size);
+            }
+            // The spout last, over the pipes that meet it.
+            SpoutTile(spoutCell, sides[spoutCell], size);
+        }
+
+        /// <summary>The tile that joins exactly these sides; a cell left with one side is capped.</summary>
+        private void PipeTile(Vector2Int cell, int sides, Vector2 size)
+        {
+            int tile; var flip = Vector2.one;
+            switch (sides)
+            {
+                case PIPE_E | PIPE_W: tile = TILE_H; break;
+                case PIPE_N | PIPE_S: tile = TILE_V; break;
+                case PIPE_W | PIPE_S: tile = TILE_LB; break;
+                case PIPE_E | PIPE_S: tile = TILE_RB; break;
+                case PIPE_W | PIPE_N: tile = TILE_LT; break;
+                case PIPE_E | PIPE_N: tile = TILE_RT; break;
+                case PIPE_W | PIPE_E | PIPE_S: tile = TILE_T_DOWN; break;
+                case PIPE_W | PIPE_E | PIPE_N: tile = TILE_T_UP; break;
+                case PIPE_N | PIPE_S | PIPE_W: tile = TILE_T_LEFT; break;
+                case PIPE_N | PIPE_S | PIPE_E: tile = TILE_T_RIGHT; break;
+                case PIPE_N | PIPE_E | PIPE_S | PIPE_W: tile = TILE_CROSS; break;
+                case PIPE_W: tile = TILE_CAP; break;
+                case PIPE_E: tile = TILE_CAP; flip = new Vector2(-1, 1); break;
+                // A cap facing up or down is not drawn; the pipe just ends straight.
+                case PIPE_N:
+                case PIPE_S: tile = TILE_V; break;
+                default: return;
+            }
+            PipeImage(Look.PipeTiles[tile], PipeAt(cell), size, flip);
+        }
+
+        /// <summary>
+        /// The spout: from one side it bends into the nozzle, from both sides it is a tee into it. Mirrored for a pipe
+        /// from the right, upside down under a bowl on the front wall.
+        /// </summary>
+        private void SpoutTile(Vector2Int cell, int sides, Vector2 size)
+        {
+            bool left = (sides & PIPE_W) != 0, right = (sides & PIPE_E) != 0;
+            var tile = left && right ? TILE_SPOUT_TEE : TILE_SPOUT;
+            var flip = new Vector2(!left && right ? -1 : 1, _bowlTop ? 1 : -1);
+            PipeImage(Look.PipeTiles[tile], PipeAt(cell), size, flip);
+            // A pipe that comes into the spout from behind it - from above it on the top wall - gets its own piece over it.
+            int back = _bowlTop ? PIPE_N : PIPE_S;
+            if ((sides & back) != 0) PipeImage(Look.PipeTiles[TILE_V], PipeAt(cell) + new Vector2(0, (_bowlTop ? .25f : -.25f) * size.y), new Vector2(size.x, size.y * .5f), Vector2.one);
         }
 
         /// <summary>Adds the box's corners met going the shorter way round from one point on its edge to another.</summary>
@@ -182,9 +285,9 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             float w = xMax - xMin, h = yMax - yMin, length = 2 * (w + h);
             float At(Vector2 p)
             {
-                if (Mathf.Abs(p.y - yMax) < .5f) return Mathf.Clamp(p.x - xMin, 0, w);
-                if (Mathf.Abs(p.x - xMax) < .5f) return w + Mathf.Clamp(yMax - p.y, 0, h);
-                if (Mathf.Abs(p.y - yMin) < .5f) return w + h + Mathf.Clamp(xMax - p.x, 0, w);
+                if (Mathf.Abs(p.y - yMax) < .01f) return Mathf.Clamp(p.x - xMin, 0, w);
+                if (Mathf.Abs(p.x - xMax) < .01f) return w + Mathf.Clamp(yMax - p.y, 0, h);
+                if (Mathf.Abs(p.y - yMin) < .01f) return w + h + Mathf.Clamp(xMax - p.x, 0, w);
                 return 2 * w + h + Mathf.Clamp(p.y - yMin, 0, h);
             }
             var corners = new[] { (w, new Vector2(xMax, yMax)), (w + h, new Vector2(xMax, yMin)), (2 * w + h, new Vector2(xMin, yMin)), (length, new Vector2(xMin, yMax)) };
@@ -196,55 +299,11 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             foreach (var (at, point) in corners)
             {
                 float along = cw ? (at - a + length) % length : (a - at + length) % length;
-                if (along > .5f && along < distance - .5f) met.Add((along, point));
+                if (along > .01f && along < distance - .01f) met.Add((along, point));
             }
             met.Sort((x, y) => x.Item1.CompareTo(y.Item1));
             foreach (var (_, point) in met) path.Add(point);
         }
-
-        /// <summary>Drops points on a straight line between their neighbours, and points on top of one another.</summary>
-        private static void Simplify(List<Vector2> path)
-        {
-            for (int i = path.Count - 2; i >= 1; i--)
-            {
-                var a = path[i - 1]; var b = path[i]; var c = path[i + 1];
-                bool same = (b - a).sqrMagnitude < 1 || (c - b).sqrMagnitude < 1;
-                bool straight = Mathf.Abs(a.x - b.x) < .5f && Mathf.Abs(b.x - c.x) < .5f || Mathf.Abs(a.y - b.y) < .5f && Mathf.Abs(b.y - c.y) < .5f;
-                if (same || straight) path.RemoveAt(i);
-            }
-        }
-
-        private void DrawPipe(List<Vector2> path, float cell)
-        {
-            float half = cell * .5f;
-            for (int i = 0; i + 1 < path.Count; i++)
-            {
-                var a = path[i]; var b = path[i + 1];
-                var direction = (b - a).normalized;
-                // Stops short of a bend by half a cell: the corner piece fills it.
-                var from = i > 0 ? a + direction * half : a;
-                var to = i + 2 < path.Count ? b - direction * half : b;
-                float length = Vector2.Distance(from, to);
-                if (length < 1) continue;
-                bool across = Mathf.Abs(direction.x) > Mathf.Abs(direction.y);
-                PipeImage(across ? Look.PipeStraightX : Look.PipeStraightY, (from + to) * .5f, across ? new Vector2(length + 2, cell) : new Vector2(cell, length + 2), Vector2.one);
-            }
-            for (int i = 1; i + 1 < path.Count; i++)
-            {
-                var into = (path[i] - path[i - 1]).normalized; var outOf = (path[i + 1] - path[i]).normalized;
-                // The piece joins the side the pipe comes in from to the side it leaves by.
-                bool left = into.x > .5f || outOf.x < -.5f, right = into.x < -.5f || outOf.x > .5f;
-                bool bottom = into.y > .5f || outOf.y < -.5f;
-                // The painted bottom corners are off centre, so a bottom corner is the top one turned upside down:
-                // the top corners' arms sit exactly on the cell's middle, as the straight pieces do.
-                Sprite corner = left ? Look.PipeCornerLT : right ? Look.PipeCornerRT : null;
-                if (corner != null) PipeImage(corner, path[i], Vector2.one * cell, new Vector2(1, bottom ? -1 : 1));
-            }
-        }
-
-        /// <summary>The spout comes in from the left and bends down; mirrored for a pipe from the right, and upside down under a bowl on the front wall.</summary>
-        private void DrawSpout(Vector2 at, float side, float cell) =>
-            PipeImage(Look.PipeSpout, at, Vector2.one * cell, new Vector2(side, _bowlTop ? 1 : -1));
 
         private void PipeImage(Sprite sprite, Vector2 at, Vector2 size, Vector2 scale)
         {
@@ -278,7 +337,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         {
             if (!_pipes.TryGetValue(door, out var pipe) || pipe.Length <= 0) return;
             var image = FoodImage(_pipeLayer, Look.FoodBlob);
-            image.color = colour;
+            // The blob is painted as food already: tinted over, a jelly's colour turned it muddy. A touch of the colour stays.
+            image.color = Color.Lerp(Color.white, colour, .25f);
             image.rectTransform.sizeDelta = Vector2.one * _cell * .42f;
             image.rectTransform.anchoredPosition = pipe.Path[0];
             _foodBlobs.Add(new FoodBlob { Image = image, Pipe = pipe, Pieces = Look.FoodPerJelly });

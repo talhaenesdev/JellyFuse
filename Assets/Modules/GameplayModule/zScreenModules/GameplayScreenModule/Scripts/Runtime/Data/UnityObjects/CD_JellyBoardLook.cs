@@ -73,8 +73,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.Data.UnityObjects
         [Section("Cat feeding")]
         [Tooltip("The eating sheet's frames, row by row, 8 to a row: noticing food, eating, full and happy. Empty: no pipes, no bowl, no food.")]
         public Sprite[] CatEatFrames;
-        [Tooltip("Pipe pieces: straight across, straight up, the corners left-bottom, right-bottom, left-top, right-top, and the spout. A door's pipe is laid out of these round the outside of the board to the fed cat's bowl.")]
-        public Sprite PipeStraightX, PipeStraightY, PipeCornerLB, PipeCornerRB, PipeCornerLT, PipeCornerRT, PipeSpout;
+        [Tooltip("The pipe tiles, one per cell, in the order Tools/Wobble Fuse/Rebuild Pipe Tiles draws them: across, up, the bends left-bottom, right-bottom, left-top, right-top, the tees down, up, left, right, the cross, the cap, the spout and the spout tee.")]
+        public Sprite[] PipeTiles;
         [Tooltip("The pipes' tint: the art is white so any colour fits.")]
         public Color PipeTint = new Color(.86f, .84f, .96f);
         [Tooltip("How far outside the board's frame the pipes run, in cells.")]
