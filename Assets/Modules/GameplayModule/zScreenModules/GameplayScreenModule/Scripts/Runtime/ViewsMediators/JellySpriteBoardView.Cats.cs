@@ -394,13 +394,23 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                 CatAct.Notice => FeedingDrawn ? Eat(0, once) : Walk(CAT_ROW_SIT, loop),
                 CatAct.Eat => FeedingDrawn ? Eat(1, loop) : Walk(CAT_ROW_SIT, loop),
                 CatAct.Full => FeedingDrawn ? Eat(2, once) : Walk(CAT_ROW_SIT, loop),
+                CatAct.Come when Moving(Look.CatTrotFrames) => Look.CatTrotFrames[loop],
+                CatAct.GoEat when Moving(Look.CatGallopFrames) => Look.CatGallopFrames[loop],
                 _ => Walk(CAT_ROW_WALK, loop),
             };
-            if (cat.Image.sprite != sprite) cat.Image.sprite = sprite;
             var rect = cat.Image.rectTransform;
+            if (cat.Image.sprite != sprite)
+            {
+                cat.Image.sprite = sprite;
+                // A frame drawn on a bigger canvas than the stroll's (the gallop) is drawn that much bigger, so the cat keeps its size.
+                float size = Look.CatSize * _cell * (sprite != null && Look.CatFrames[0] != null ? sprite.rect.width / Look.CatFrames[0].rect.width : 1);
+                rect.sizeDelta = new Vector2(size, size);
+            }
             rect.anchoredPosition = new Vector2(cat.X, cat.FeetY);
             rect.localScale = new Vector3(cat.FacingLeft ? -1 : 1, 1, 1);
         }
+
+        private static bool Moving(Sprite[] frames) => frames != null && frames.Length >= CAT_FRAMES;
 
         private Sprite Walk(int row, int index) => Look.CatFrames[row * CAT_FRAMES + index];
         // Without the touch art a touch act never starts, but a cat already in one keeps the stroll's sitting frame.

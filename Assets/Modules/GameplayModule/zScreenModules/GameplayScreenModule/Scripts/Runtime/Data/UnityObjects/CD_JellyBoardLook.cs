@@ -69,6 +69,10 @@ namespace Modules.GameplayModule.GameplayScreenModule.Data.UnityObjects
         public Sprite[] CatFrames;
         [Tooltip("The touch sheet's frames, row by row, 8 to a row: petted, rub, reach up, belly up, hop, slow blink, curious, swat. Empty: the cats cannot be touched and stroll as before.")]
         public Sprite[] CatTouchFrames;
+        [Tooltip("8 frames of a quick trot, used when a cat is called over. Empty: it walks there faster.")]
+        public Sprite[] CatTrotFrames;
+        [Tooltip("8 frames of a gallop, used when a cat runs to its food. A frame wider than the others draws the cat that much larger. Empty: it walks there faster.")]
+        public Sprite[] CatGallopFrames;
 
         [Section("Cat feeding")]
         [Tooltip("The eating sheet's frames, row by row, 8 to a row: noticing food, eating, full and happy. Empty: no pipes, no bowl, no food.")]
