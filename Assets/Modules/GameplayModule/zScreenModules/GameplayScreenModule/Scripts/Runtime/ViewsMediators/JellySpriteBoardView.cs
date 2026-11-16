@@ -1118,7 +1118,27 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                 var colour = Tint((int)old.Colour);
                 BurstVanish(old.Cells, colour, drawn);
                 if (Feel.VanishRing) SpreadRing(old.Cells, colour);
+                // Taken by a booster: the cat is fed as if it had gone through the door of its colour.
+                int door = DoorFor(previous, (int)old.Colour);
+                if (door >= 0) FeedFromDoor(door, colour);
             }
+        }
+
+        /// <summary>The door a jelly of this colour belongs to: one waiting for that colour now, else one with it still queued.</summary>
+        private int DoorFor(PuzzleSnapshotRVO snapshot, int colour)
+        {
+            for (int door = 0; door < _level.Gates.Count; door++)
+            {
+                var waiting = snapshot.WaitingStage(door);
+                if (waiting != null && (int)waiting.Colour == colour) return door;
+            }
+            for (int door = 0; door < _level.Gates.Count; door++)
+            {
+                var stages = _level.Gates[door].Stages;
+                for (int stage = snapshot.DoorProgress[door]; stage < stages.Count; stage++)
+                    if ((int)stages[stage].Colour == colour) return door;
+            }
+            return -1;
         }
         private Item AddPart(Blob blob, Role role, Vector2 position, Vector2 size, Color colour, float depth, int colourId, bool top, Sprite sprite = null)
         {
