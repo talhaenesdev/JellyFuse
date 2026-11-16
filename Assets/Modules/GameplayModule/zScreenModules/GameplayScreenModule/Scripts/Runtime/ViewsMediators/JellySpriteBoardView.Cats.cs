@@ -68,7 +68,15 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
 
             FindCatRuns();
             float tilt = Look.SpriteTilt;
-            for (int i = 0; i < _catRuns.Count && _cats.Count < Look.CatCount; i++)
+            // With the feeding drawn the board keeps one cat, the one by the bowl: on the top wall when there is room
+            // there, so the pipes have the shortest way to it.
+            int count = Look.CatCount;
+            if (FeedingDrawn)
+            {
+                count = Mathf.Min(count, 1);
+                _catRuns.Sort((a, b) => a.Top != b.Top ? (a.Top ? -1 : 1) : (b.MaxX - b.MinX).CompareTo(a.MaxX - a.MinX));
+            }
+            for (int i = 0; i < _catRuns.Count && _cats.Count < count; i++)
             {
                 var run = _catRuns[i];
                 var image = TakeCatImage();
