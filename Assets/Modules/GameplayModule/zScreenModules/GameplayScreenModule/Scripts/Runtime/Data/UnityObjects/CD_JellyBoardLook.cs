@@ -91,6 +91,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.Data.UnityObjects
         public Sprite[] FoodPieces;
         [Tooltip("The puff where a piece lands.")]
         public Sprite FoodPuff;
+        [Tooltip("White piles of food, small, medium and large, heaped in the bowl in the colour of the jelly that fed it. Empty: the bowl's own painted fill shows.")]
+        public Sprite[] FoodPiles;
         [Tooltip("The bowl empty, a quarter, half and heaped full.")]
         public Sprite[] BowlFrames;
         [Tooltip("How fast the food travels the pipe, in cells a second.")]

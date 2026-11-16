@@ -26,6 +26,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             public Pipe Pipe;
             public float Travelled;
             public int Pieces;
+            public Color Colour;
         }
 
         private sealed class FoodPiece
@@ -35,6 +36,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             public float Delay, Spin;
             public bool Puff;
             public float PuffTime;
+            public Color Colour;
         }
 
         private const float PIECE_GRAVITY = 22f;
@@ -46,7 +48,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         private readonly List<FoodBlob> _foodBlobs = new();
         private readonly List<FoodPiece> _foodPieces = new();
         private readonly List<Image> _freeFoodImages = new();
-        private Image _bowl;
+        private Image _bowl, _bowlPile;
+        private Color _bowlColour = Color.white;
         private Cat _feeder;
         private Vector2 _bowlAt, _nozzle;
         private bool _bowlTop;
@@ -70,7 +73,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             _foodBlobs.Clear(); _foodPieces.Clear();
             _pipes.Clear();
             _pipeImagesUsed = 0;
-            _feeder = null; _bowlFood = 0; _fedWin = false; _eatClock = 0;
+            _feeder = null; _bowlFood = 0; _fedWin = false; _eatClock = 0; _bowlColour = Color.white;
+            if (_bowlPile != null) _bowlPile.gameObject.SetActive(false);
             if (_bowl != null) _bowl.gameObject.SetActive(false);
             if (FeedingDrawn && _cats.Count > 0 && _level != null)
             {
@@ -381,10 +385,11 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             if (!_pipes.TryGetValue(door, out var pipe) || pipe.Length <= 0) return;
             var image = FoodImage(_pipeLayer, Look.FoodBlob);
             // The blob is painted as food already: tinted over, a jelly's colour turned it muddy. A touch of the colour stays.
-            image.color = Color.Lerp(Color.white, colour, .25f);
+            // The food art is white: it takes the colour of the jelly that went into the door.
+            image.color = colour;
             image.rectTransform.sizeDelta = Vector2.one * _cell * .42f;
             image.rectTransform.anchoredPosition = pipe.Path[0];
-            _foodBlobs.Add(new FoodBlob { Image = image, Pipe = pipe, Pieces = Look.FoodPerJelly });
+            _foodBlobs.Add(new FoodBlob { Image = image, Pipe = pipe, Pieces = Look.FoodPerJelly, Colour = colour });
         }
 
         private Image FoodImage(RectTransform layer, Sprite sprite)
@@ -427,7 +432,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                 blob.Travelled += Look.FoodSpeed * cell * dt;
                 if (blob.Travelled >= blob.Pipe.Length)
                 {
-                    Pour(blob.Pieces);
+                    Pour(blob.Pieces, blob.Colour);
                     Free(blob.Image);
                     _foodBlobs.RemoveAt(i);
                     continue;
@@ -447,7 +452,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                     piece.PuffTime += dt;
                     float k = piece.PuffTime / .35f;
                     piece.Image.rectTransform.localScale = Vector3.one * Mathf.Lerp(.6f, 1.2f, k);
-                    piece.Image.color = new Color(1, 1, 1, 1 - k);
+                    piece.Image.color = new Color(piece.Colour.r, piece.Colour.g, piece.Colour.b, 1 - k);
                     if (k >= 1) { Free(piece.Image); _foodPieces.RemoveAt(i); }
                     continue;
                 }
@@ -459,6 +464,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                 if (piece.Velocity.y < 0 && piece.Position.y <= bowlTop)
                 {
                     _bowlFood++;
+                    // The bowl fills with the colour of what fell in last.
+                    _bowlColour = piece.Colour;
                     ShowBowl();
                     // Lands with a puff where it fell.
                     if (Look.FoodPuff != null)
@@ -487,7 +494,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         }
 
         /// <summary>The blob reaches the spout: it comes out as a few pieces that fall into the bowl.</summary>
-        private void Pour(int pieces)
+        private void Pour(int pieces, Color colour)
         {
             float cell = _cell;
             for (int i = 0; i < pieces; i++)
@@ -497,10 +504,11 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                 // Over the bowl, under the cats.
                 image.rectTransform.SetSiblingIndex(_bowl != null ? _bowl.rectTransform.GetSiblingIndex() + 1 : 0);
                 image.rectTransform.sizeDelta = Vector2.one * cell * .3f;
+                image.color = colour;
                 image.rectTransform.anchoredPosition = _nozzle;
                 _foodPieces.Add(new FoodPiece
                 {
-                    Image = image, Position = _nozzle, Delay = i * .09f, Spin = Random.Range(-360f, 360f),
+                    Image = image, Colour = colour, Position = _nozzle, Delay = i * .09f, Spin = Random.Range(-360f, 360f),
                     // Out of a spout above, it drops; out of one below the bowl it is tossed up into it.
                     Velocity = new Vector2(Random.Range(-1.2f, 1.2f) * cell, _bowlTop ? Random.Range(0, cell) : Random.Range(7f, 8.5f) * cell),
                 });
@@ -511,7 +519,31 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         {
             if (_bowl == null) return;
             int stage = _bowlFood <= 0 ? 0 : _bowlFood <= 2 ? 1 : _bowlFood <= 5 ? 2 : 3;
-            _bowl.sprite = Look.BowlFrames[stage];
+            // With white piles to hand, the bowl stays empty and the food in it is a pile of the jelly's colour; without
+            // them the bowl's own painted fill shows.
+            bool piles = Look.FoodPiles != null && Look.FoodPiles.Length >= 3;
+            _bowl.sprite = Look.BowlFrames[piles ? 0 : stage];
+            if (!piles) return;
+            if (_bowlPile == null)
+            {
+                _bowlPile = new GameObject("Img_CatBowlFood", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image)).GetComponent<Image>();
+                _bowlPile.gameObject.layer = gameObject.layer;
+                _bowlPile.raycastTarget = false;
+                _bowlPile.preserveAspect = true;
+                _bowlPile.rectTransform.anchorMin = _bowlPile.rectTransform.anchorMax = new Vector2(.5f, .5f);
+                _bowlPile.rectTransform.pivot = new Vector2(.5f, .5f);
+            }
+            _bowlPile.rectTransform.SetParent(_bowl.rectTransform.parent, false);
+            // Behind the bowl: its front and rim hide the pile's foot, and the heap shows over the rim.
+            _bowlPile.rectTransform.SetSiblingIndex(_bowl.rectTransform.GetSiblingIndex());
+            _bowlPile.gameObject.SetActive(stage > 0);
+            if (stage == 0) return;
+            _bowlPile.sprite = Look.FoodPiles[stage - 1];
+            _bowlPile.color = _bowlColour;
+            // Heaped in the bowl's mouth, rising over its rim as it fills.
+            float size = _cell * (.5f + .1f * stage);
+            _bowlPile.rectTransform.sizeDelta = Vector2.one * size;
+            _bowlPile.rectTransform.anchoredPosition = _bowlAt + new Vector2(0, _cell * (.2f + .05f * stage));
         }
 
         /// <summary>Food in the bowl: the cat stops what it was doing - unless a finger is on it - and comes to eat.</summary>
