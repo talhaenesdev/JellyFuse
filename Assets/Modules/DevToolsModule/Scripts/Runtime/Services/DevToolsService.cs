@@ -1,12 +1,22 @@
+using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using FlowIoC.BaseModule.Injectable.Attributes;
+using FlowIoC.ConsoleModule;
 using Modules.DevToolsModule.Data.ValueObjects;
 using Modules.DevToolsModule.Models;
+using Unity.Services.Authentication;
+using Unity.Services.CloudCode;
+using Unity.Services.Core;
+using UnityEngine;
 
 namespace Modules.DevToolsModule.Services
 {
     internal sealed class DevToolsService : IDevToolsService
     {
+        private const string ALERT_MODULE = "DevAlert";
+        private const string ALERT_PIN = "PinEntered";
+
         [Inject] private DevToolsModel _model { get; set; }
         [Inject] private DevErrorLogModel _errors { get; set; }
 
@@ -22,5 +32,35 @@ namespace Modules.DevToolsModule.Services
         public bool Set(string key, bool on) => _model.Set(key, on);
         public IReadOnlyList<string> Errors() => _errors.Entries();
         public void ClearErrors() => _errors.Clear();
+
+        public void ReportPinEntry(bool accepted)
+        {
+#if !UNITY_EDITOR
+            _ = SendPinEntry(accepted, SystemInfo.deviceModel, Application.version);
+#endif
+        }
+
+        private static async Task SendPinEntry(bool accepted, string device, string version)
+        {
+            try
+            {
+                if (UnityServices.State != ServicesInitializationState.Initialized || !AuthenticationService.Instance.IsSignedIn)
+                {
+                    FlowLogger.Log("DevToolsService - not signed in; the PIN entry was not reported.");
+                    return;
+                }
+                await CloudCodeService.Instance.CallModuleEndpointAsync<bool>(ALERT_MODULE, ALERT_PIN, new Dictionary<string, object>
+                {
+                    { "accepted", accepted },
+                    { "device", device },
+                    { "version", version },
+                });
+            }
+            catch (Exception exception)
+            {
+                // Offline, or the module not deployed: the panel works the same, the developer just hears nothing.
+                FlowLogger.Log($"DevToolsService - the PIN entry could not be reported: {exception.Message}");
+            }
+        }
     }
 }

@@ -17,7 +17,9 @@ namespace Modules.DevToolsModule.DevToolsScreenModule.Controllers
 
         public override void Execute()
         {
-            if (_devTools.TryUnlock(_pin)) return;
+            bool accepted = _devTools.TryUnlock(_pin);
+            _devTools.ReportPinEntry(accepted);
+            if (accepted) return;
             _signals.PinRejected.Dispatch();
             Retain();
             Stop();

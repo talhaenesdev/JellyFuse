@@ -27,6 +27,11 @@ namespace Modules.DevToolsModule.Services
         bool EnabledInBuild { get; }
         /// <summary>Whether this opening of the panel may go ahead: always in a build with the panel enabled, else only right after the PIN was accepted.</summary>
         bool TakeOpening();
+        /// <summary>
+        /// Tells the developer on Telegram, through the DevAlert Cloud Code module, that a PIN was typed and
+        /// whether it was right. Sent in the background and never waited on; not sent from the Editor.
+        /// </summary>
+        void ReportPinEntry(bool accepted);
         bool IsOn(string key);
         /// <summary>Sets and keeps the switch on this device; false when CD_DevTools does not list the key.</summary>
         bool Set(string key, bool on);
