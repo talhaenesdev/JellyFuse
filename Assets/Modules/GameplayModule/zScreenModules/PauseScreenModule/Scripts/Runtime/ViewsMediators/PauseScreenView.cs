@@ -33,6 +33,19 @@ namespace Modules.GameplayModule.PauseScreenModule.ViewsMediators
         [SerializeField] private SlideSwitch _musicSwitch;
         [SerializeField] private SlideSwitch _hapticsSwitch;
 
+        [Header("Quit confirmation")]
+        [Tooltip("The pause card. Quit swaps it for the confirmation card; staying swaps it back.")]
+        [SerializeField] private GameObject _pauseDialog;
+        [Tooltip("Asks before leaving: leaving a level still in play costs a life.")]
+        [SerializeField] private GameObject _quitDialog;
+        [SerializeField] private TMP_Text _quitTitle;
+        [SerializeField] private TMP_Text _quitBody;
+        [SerializeField] private TMP_Text _quitStayLabel;
+        [SerializeField] private TMP_Text _quitConfirmLabel;
+        [SerializeField] private Button _quitStayButton;
+        [SerializeField] private Button _quitCloseButton;
+        [SerializeField] private Button _quitConfirmButton;
+
         /// <summary>Resume, or the close button: both carry on playing.</summary>
         public Action ResumeClicked;
         public Action QuitClicked;
@@ -44,7 +57,10 @@ namespace Modules.GameplayModule.PauseScreenModule.ViewsMediators
         {
             _closeButton.onClick.AddListener(OnResumeClicked);
             _resumeButton.onClick.AddListener(OnResumeClicked);
-            _quitButton.onClick.AddListener(OnQuitClicked);
+            _quitButton.onClick.AddListener(ShowQuitConfirm);
+            _quitStayButton.onClick.AddListener(ShowPause);
+            _quitCloseButton.onClick.AddListener(ShowPause);
+            _quitConfirmButton.onClick.AddListener(OnQuitClicked);
             _soundsSwitch.Requested += OnSoundsClicked;
             _musicSwitch.Requested += OnMusicClicked;
             _hapticsSwitch.Requested += OnHapticsClicked;
@@ -54,7 +70,10 @@ namespace Modules.GameplayModule.PauseScreenModule.ViewsMediators
         {
             _closeButton.onClick.RemoveListener(OnResumeClicked);
             _resumeButton.onClick.RemoveListener(OnResumeClicked);
-            _quitButton.onClick.RemoveListener(OnQuitClicked);
+            _quitButton.onClick.RemoveListener(ShowQuitConfirm);
+            _quitStayButton.onClick.RemoveListener(ShowPause);
+            _quitCloseButton.onClick.RemoveListener(ShowPause);
+            _quitConfirmButton.onClick.RemoveListener(OnQuitClicked);
             _soundsSwitch.Requested -= OnSoundsClicked;
             _musicSwitch.Requested -= OnMusicClicked;
             _hapticsSwitch.Requested -= OnHapticsClicked;
@@ -87,7 +106,23 @@ namespace Modules.GameplayModule.PauseScreenModule.ViewsMediators
             _hapticsLabel.text = L("settings.haptics", "Haptics") + ":";
             _resumeLabel.text = L("pause.resume", "Resume");
             _quitLabel.text = L("pause.quit", "Quit");
+            _quitTitle.text = L("pause.quitconfirm.title", "Leave Level?");
+            _quitBody.text = L("pause.quitconfirm.body", "If you leave now, you will lose a life.");
+            _quitStayLabel.text = L("pause.quitconfirm.stay", "Keep Playing");
+            _quitConfirmLabel.text = L("pause.quit", "Quit");
         }
+
+        /// <summary>The pooled screen opens on the pause card, whatever the last opening left showing.</summary>
+        public override void BeforeScreenActivation()
+        {
+            base.BeforeScreenActivation();
+            _quitDialog.SetActive(false);
+            _pauseDialog.SetActive(true);
+        }
+
+        // Swapping the two cards decides nothing; leaving is still the confirm button's Quit.
+        private void ShowQuitConfirm() { _pauseDialog.SetActive(false); _quitDialog.SetActive(true); }
+        private void ShowPause() { _quitDialog.SetActive(false); _pauseDialog.SetActive(true); }
 
         private string L(string key, string fallback)
         {

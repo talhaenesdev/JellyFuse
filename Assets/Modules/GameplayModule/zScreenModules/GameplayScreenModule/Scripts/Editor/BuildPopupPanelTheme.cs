@@ -80,6 +80,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.Editor
             AssignInfoPageSprites(rocket, freeze, ufo);
             BuildGameplayInfoPanel();
             BuildPausePanel(pause, pauseResume, pauseQuit);
+            BuildQuitConfirmPanel(Sprite("SPR_UI_Panel_QuitConfirm.png"));
             BuildResultPanels(win, lose, retry);
             BuildSettingsPanel(settings);
             BuildProfilePanel(profile);
@@ -171,6 +172,93 @@ namespace Modules.GameplayModule.GameplayScreenModule.Editor
                 if (divider != null && divider.TryGetComponent(out Image line)) line.color = new Color32(0x6E, 0x22, 0xD6, 0x55);
                 AssignButtonSprite(resume, resumeSprite);
                 AssignButtonSprite(quit, quitSprite);
+                PrefabUtility.SaveAsPrefabAsset(root, PAUSE_PREFAB);
+            }
+            finally { PrefabUtility.UnloadPrefabContents(root); }
+        }
+
+        /// <summary>
+        /// The card Quit opens before leaving: a copy of the pause card with its switches taken off, the broken
+        /// heart art behind it, a line saying a life goes, Keep Playing and Quit. It sits beside the pause card,
+        /// hidden; the view swaps the two.
+        /// </summary>
+        private static void BuildQuitConfirmPanel(Sprite art)
+        {
+            if (art == null) throw new MissingReferenceException("SPR_UI_Panel_QuitConfirm was not found.");
+            GameObject root = PrefabUtility.LoadPrefabContents(PAUSE_PREFAB);
+            try
+            {
+                MonoBehaviour view = FindBehaviourWithProperty(root, "_quitDialog");
+                if (view == null) throw new MissingReferenceException("PauseScreenView was not found.");
+                SerializedObject serialized = new(view);
+                TMP_Text pauseTitle = serialized.FindProperty("_title").objectReferenceValue as TMP_Text;
+                Button resume = serialized.FindProperty("_resumeButton").objectReferenceValue as Button;
+                Button quit = serialized.FindProperty("_quitButton").objectReferenceValue as Button;
+                if (pauseTitle == null || resume == null || quit == null) throw new MissingReferenceException("Pause panel references are incomplete.");
+                Transform pauseCard = CommonAncestor(pauseTitle.transform, resume.transform, quit.transform);
+
+                Transform stale = pauseCard.parent.Find("Pnl_QuitDialog");
+                if (stale != null) Object.DestroyImmediate(stale.gameObject);
+                GameObject copy = Object.Instantiate(pauseCard.gameObject, pauseCard.parent, false);
+                copy.name = "Pnl_QuitDialog";
+                copy.transform.SetSiblingIndex(pauseCard.GetSiblingIndex() + 1);
+                RectTransform card = (RectTransform)copy.transform;
+                // The art's light inside, at the pause card's width: 384 wide, 354 tall.
+                card.sizeDelta = new Vector2(384, 354);
+
+                Transform body = card.Find("Txt_Sounds");
+                if (body == null) throw new MissingReferenceException("Txt_Sounds was not found to shape the body text from.");
+                body.name = "Txt_Body";
+                foreach (string name in new[] { "Img_PausePanelTheme", "Pnl_Background", "Img_Divider", "Ico_Sounds", "Ico_Music", "Ico_Haptics", "Txt_Music", "Txt_Haptics", "Btn_Sounds", "Btn_Music", "Btn_Haptics" })
+                {
+                    Transform child = card.Find(name);
+                    if (child != null) Object.DestroyImmediate(child.gameObject);
+                }
+
+                // The crest and frame reach past the card; its content lands on the art's light inside.
+                CreateThemeImage(card, "Img_QuitPanelTheme", new Vector2(-45, -74), new Vector2(45, 141)).sprite = art;
+
+                TMP_Text title = card.Find("Txt_Title").GetComponent<TMP_Text>();
+                // Kept clear of the close button in the top right corner, and shrunk to fit a longer language.
+                Place(card, "Txt_Title", new Vector2(-24, -52));
+                ((RectTransform)title.transform).sizeDelta = new Vector2(264, 64);
+                title.enableAutoSizing = true;
+                title.fontSizeMin = 28;
+                title.fontSizeMax = title.fontSize;
+                InkTitle(title);
+
+                TMP_Text bodyText = body.GetComponent<TMP_Text>();
+                RectTransform bodyRect = (RectTransform)body;
+                bodyRect.anchorMin = bodyRect.anchorMax = new Vector2(.5f, 1);
+                bodyRect.pivot = new Vector2(.5f, .5f);
+                bodyRect.anchoredPosition = new Vector2(0, -122);
+                bodyRect.sizeDelta = new Vector2(320, 80);
+                bodyText.alignment = TextAlignmentOptions.Center;
+                bodyText.textWrappingMode = TextWrappingModes.Normal;
+                bodyText.enableAutoSizing = true;
+                bodyText.fontSizeMin = 20;
+                bodyText.fontSizeMax = 30;
+                bodyText.color = PANEL_INK;
+
+                Transform stay = card.Find(resume.name);
+                Transform leave = card.Find(quit.name);
+                stay.name = "Btn_Stay";
+                leave.name = "Btn_QuitConfirm";
+                Place(card, "Btn_Stay", new Vector2(0, 150));
+                Place(card, "Btn_QuitConfirm", new Vector2(0, 56));
+
+                serialized.FindProperty("_pauseDialog").objectReferenceValue = pauseCard.gameObject;
+                serialized.FindProperty("_quitDialog").objectReferenceValue = copy;
+                serialized.FindProperty("_quitTitle").objectReferenceValue = title;
+                serialized.FindProperty("_quitBody").objectReferenceValue = bodyText;
+                serialized.FindProperty("_quitStayLabel").objectReferenceValue = stay.GetComponentInChildren<TMP_Text>(true);
+                serialized.FindProperty("_quitConfirmLabel").objectReferenceValue = leave.GetComponentInChildren<TMP_Text>(true);
+                serialized.FindProperty("_quitStayButton").objectReferenceValue = stay.GetComponent<Button>();
+                serialized.FindProperty("_quitCloseButton").objectReferenceValue = card.Find("Btn_Close").GetComponent<Button>();
+                serialized.FindProperty("_quitConfirmButton").objectReferenceValue = leave.GetComponent<Button>();
+                serialized.ApplyModifiedPropertiesWithoutUndo();
+
+                copy.SetActive(false);
                 PrefabUtility.SaveAsPrefabAsset(root, PAUSE_PREFAB);
             }
             finally { PrefabUtility.UnloadPrefabContents(root); }
