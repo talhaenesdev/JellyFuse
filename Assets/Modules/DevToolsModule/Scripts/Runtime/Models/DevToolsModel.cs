@@ -12,7 +12,8 @@ namespace Modules.DevToolsModule.Models
     /// <summary>
     /// The switches CD_DevTools lists and their values on this device. A value is kept in PlayerPrefs
     /// under "DevTools." and its key; a switch never flipped here has its DefaultOn. A device unlocked
-    /// with the PIN behaves as if the panel were enabled, and stays unlocked until its data is cleared.
+    /// with the PIN keeps the switches it set, until its data is cleared; the panel itself asks for the PIN
+    /// every time it opens.
     /// </summary>
     public sealed class DevToolsModel : IConstructable
     {
@@ -32,6 +33,10 @@ namespace Modules.DevToolsModule.Models
         public bool PanelEnabled => _configEnabled || Unlocked;
         /// <summary>Whether this device was unlocked with the PIN.</summary>
         public bool Unlocked { get; private set; }
+        /// <summary>CD_DevTools.PanelEnabled: the panel opens without the PIN (a development build).</summary>
+        public bool EnabledInBuild => _configEnabled;
+        /// <summary>The PIN was just accepted: the one opening it lets through. Kept in memory only.</summary>
+        private bool _pinPass;
         public float CornerSequenceSeconds { get; private set; } = 3f;
         public float CornerZone { get; private set; } = .18f;
 
@@ -56,9 +61,22 @@ namespace Modules.DevToolsModule.Models
         {
             if (string.IsNullOrEmpty(_pinHash) || CD_DevTools.HashPin(pin) != _pinHash) return false;
             Unlocked = true;
+            _pinPass = true;
             PlayerPrefs.SetInt(UNLOCKED_PREF, 1);
             PlayerPrefs.Save();
             return true;
+        }
+
+        /// <summary>
+        /// Whether this opening of the panel may go ahead: a build with the panel enabled always may; otherwise
+        /// only the opening right after the PIN was accepted, so every opening asks for the PIN again.
+        /// </summary>
+        public bool TakeOpening()
+        {
+            if (_configEnabled) return true;
+            bool pass = _pinPass;
+            _pinPass = false;
+            return pass;
         }
 
         /// <summary>The switch's value; false for a key the config does not list.</summary>

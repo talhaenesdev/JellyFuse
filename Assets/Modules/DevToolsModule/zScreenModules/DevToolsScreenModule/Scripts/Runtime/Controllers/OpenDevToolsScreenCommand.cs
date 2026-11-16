@@ -21,9 +21,9 @@ namespace Modules.DevToolsModule.DevToolsScreenModule.Controllers
         public override async void Execute()
         {
             Retain();
-            // A store build ships with the panel switched off: the taps that ask for it open nothing,
-            // until this device is unlocked through the secret gesture and the PIN.
-            if (!_devTools.PanelEnabled)
+            // A store build ships with the panel switched off: the taps that ask for it open nothing, and the
+            // secret gesture opens it only once the PIN is accepted - every time, not once per device.
+            if (!_devTools.TakeOpening())
             {
                 Stop();
                 return;

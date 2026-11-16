@@ -16,6 +16,8 @@ namespace Modules.DevToolsModule.Services
         public float CornerSequenceSeconds => _model.CornerSequenceSeconds;
         public float CornerZone => _model.CornerZone;
         public bool TryUnlock(string pin) => _model.TryUnlock(pin);
+        public bool EnabledInBuild => _model.EnabledInBuild;
+        public bool TakeOpening() => _model.TakeOpening();
         public bool IsOn(string key) => _model.IsOn(key);
         public bool Set(string key, bool on) => _model.Set(key, on);
         public IReadOnlyList<string> Errors() => _errors.Entries();

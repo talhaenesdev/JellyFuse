@@ -15,8 +15,10 @@ player. Tick it again to test on a device.
 ## Secret unlock
 A store build still opens the panel on a developer's phone: tap the four screen corners in order -
 top-left, top-right, bottom-right, bottom-left - within `CornerSequenceSeconds`, and type the PIN.
-The device then stays unlocked (`DevTools.Unlocked` in PlayerPrefs) until the app's data is cleared,
-and behaves as if `PanelEnabled` were ticked: the switches read what this device saved. The corner
+The PIN is asked **every time** the panel opens: an accepted PIN lets through the one opening right
+after it, and nothing is remembered for the next. The device is still marked unlocked
+(`DevTools.Unlocked` in PlayerPrefs) until the app's data is cleared, so the switches it set keep
+working between openings - an FPS readout stays on after the panel closes. The corner
 gesture is the only way in - the old triple taps on the coin icon and level label were removed. Only `CD_DevTools.PinHash` (SHA-256, salted with the game) is in the build;
 a new PIN is typed into the asset's *Set Pin* field and turned into the hash on save. The gesture is
 read from the pointer by `DetectSecretCornerCommand` on a frame tick, so no screen knows about it,

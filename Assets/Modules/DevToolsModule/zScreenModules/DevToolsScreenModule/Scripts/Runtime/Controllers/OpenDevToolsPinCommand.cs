@@ -11,8 +11,8 @@ using Modules.LocalizationModule.Services;
 namespace Modules.DevToolsModule.DevToolsScreenModule.Controllers
 {
     /// <summary>
-    /// The secret gesture was made. A device that may already open the panel opens it as usual; any
-    /// other opens it behind the PIN pad, and nothing on it can be used until the PIN is accepted.
+    /// The secret gesture was made. A build with the panel enabled opens it as usual; a store build opens it
+    /// behind the PIN pad every time, and nothing on it can be used until the PIN is accepted.
     /// </summary>
     internal sealed class OpenDevToolsPinCommand : Command
     {
@@ -25,7 +25,7 @@ namespace Modules.DevToolsModule.DevToolsScreenModule.Controllers
         public override async void Execute()
         {
             Retain();
-            if (_devTools.PanelEnabled)
+            if (_devTools.EnabledInBuild)
             {
                 var signals = _signals;
                 Release();

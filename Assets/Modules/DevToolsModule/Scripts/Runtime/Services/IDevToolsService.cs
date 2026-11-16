@@ -23,6 +23,10 @@ namespace Modules.DevToolsModule.Services
         float CornerZone { get; }
         /// <summary>Unlocks this device when the PIN matches CD_DevTools.PinHash.</summary>
         bool TryUnlock(string pin);
+        /// <summary>CD_DevTools.PanelEnabled: the panel opens without the PIN.</summary>
+        bool EnabledInBuild { get; }
+        /// <summary>Whether this opening of the panel may go ahead: always in a build with the panel enabled, else only right after the PIN was accepted.</summary>
+        bool TakeOpening();
         bool IsOn(string key);
         /// <summary>Sets and keeps the switch on this device; false when CD_DevTools does not list the key.</summary>
         bool Set(string key, bool on);
