@@ -19,13 +19,15 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         {
             Walk = 0, SitDown = 1, Sit = 2, Sleep = 3, Stretch = 4, Lick = 5, StandUp = 6,
             Petted = 7, Rub = 8, Reach = 9, Belly = 10, Hop = 11, Blink = 12, Curious = 13, Swat = 14,
-            Notice = 15, GoEat = 16, Eat = 17, Full = 18,
+            Notice = 15, GoEat = 16, Eat = 17, Full = 18, Come = 19,
         }
 
         private sealed class Cat
         {
             public Image Image;
             public CatTouchArea Touch;
+            /// <summary>The strip of wall the cat walks along: a tap there calls it over.</summary>
+            public RectTransform Walkway;
             public float MinX, MaxX, FeetY, X, TargetX, Clock, Left;
             public CatAct Act;
             public bool FacingLeft, Held, Top;
@@ -47,6 +49,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         private RectTransform _catLayer;
         private readonly List<Cat> _cats = new();
         private readonly List<Image> _catPool = new();
+        private readonly List<RectTransform> _walkwayPool = new();
+        private const float CAT_COME_SPEED = 1.8f;
         private readonly List<(int Y, int MinX, int MaxX, bool Top)> _catRuns = new();
 
         private bool CatsDrawn => Look.CatFrames != null && Look.CatFrames.Length >= CAT_FRAMES * 6 && Look.CatCount > 0;
@@ -54,7 +58,14 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
 
         private void BuildCats()
         {
-            foreach (var cat in _cats) { cat.Image.gameObject.SetActive(false); _catPool.Add(cat.Image); }
+            foreach (var cat in _cats)
+            {
+                cat.Image.gameObject.SetActive(false);
+                _catPool.Add(cat.Image);
+                if (cat.Walkway == null) continue;
+                cat.Walkway.gameObject.SetActive(false);
+                _walkwayPool.Add(cat.Walkway);
+            }
             _cats.Clear();
             if (!CatsDrawn || _level == null) { BuildFeeding(); return; }
             if (_catLayer == null)
@@ -95,6 +106,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                 float reach = size;
                 if (!run.Top) reach = Mathf.Clamp(Position(new Vector2(0, run.Y - .5f)).y * tilt - cat.FeetY, size * .35f, size);
                 ShapeCatTouch(cat, size, reach);
+                ShapeWalkway(cat, low.x - half * _cell, high.x + half * _cell);
                 cat.X = Random.Range(cat.MinX, cat.MaxX);
                 cat.FacingLeft = Random.value < .5f;
                 // A level opens with its cats already settled, not on their way somewhere.
@@ -183,6 +195,57 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             cat.Touch.Released = () => OnCatReleased(cat);
         }
 
+        /// <summary>
+        /// An invisible strip over the wall the cat walks on, behind the cats so a touch on the cat itself is the cat's.
+        /// It only covers wall, never floor, so it takes no jelly's tap; the press still reaches the board for a pan.
+        /// </summary>
+        private void ShapeWalkway(Cat cat, float left, float right)
+        {
+            RectTransform strip;
+            if (_walkwayPool.Count > 0) { strip = _walkwayPool[^1]; _walkwayPool.RemoveAt(_walkwayPool.Count - 1); }
+            else
+            {
+                var go = new GameObject("Hit_CatWalkway", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(CatTouchArea));
+                go.layer = gameObject.layer;
+                strip = (RectTransform)go.transform;
+                strip.SetParent(_catLayer, false);
+                strip.anchorMin = strip.anchorMax = new Vector2(.5f, .5f);
+                strip.pivot = new Vector2(0, 0);
+                var image = go.GetComponent<Image>();
+                image.color = new Color(1, 1, 1, 0);
+                image.raycastTarget = true;
+            }
+            strip.gameObject.SetActive(true);
+            strip.SetAsFirstSibling();
+            // From a little under the cat's feet to the top of the wall it stands on.
+            float below = _cell * .25f, above = _cell * (cat.Top ? .45f : .35f);
+            strip.anchoredPosition = new Vector2(left, cat.FeetY - below);
+            strip.sizeDelta = new Vector2(Mathf.Max(right - left, _cell * .6f), below + above);
+            var touch = strip.GetComponent<CatTouchArea>();
+            touch.Pressed = null;
+            touch.Held = null;
+            touch.Released = null;
+            touch.PressedAcross = across => CallCat(cat, Mathf.Lerp(left, right, across));
+            cat.Walkway = strip;
+        }
+
+        /// <summary>A tap on its wall: the cat turns and comes to the finger, then looks up at it.</summary>
+        private void CallCat(Cat cat, float x)
+        {
+            // Food comes first.
+            if (cat.Act is CatAct.Notice or CatAct.GoEat or CatAct.Eat or CatAct.Full) return;
+            float target = Mathf.Clamp(x, cat.MinX, cat.MaxX);
+            if (Mathf.Abs(target - cat.X) < _cell * .3f)
+            {
+                cat.FacingLeft = x < cat.X;
+                StartCatAct(cat, CatTouchDrawn ? CatAct.Curious : CatAct.Sit, Random.Range(1.5f, 2.5f));
+                return;
+            }
+            cat.TargetX = target;
+            cat.FacingLeft = target < cat.X;
+            StartCatAct(cat, CatAct.Come, 0);
+        }
+
         // ---------- a finger on a cat ----------
 
         private void OnCatPressed(Cat cat, float height)
@@ -222,8 +285,9 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                 {
                     case CatAct.Walk:
                     case CatAct.GoEat:
-                        // Hungry, it trots.
-                        float step = Look.CatSpeed * _cell * dt * (cat.Act == CatAct.GoEat ? 2.2f : 1);
+                    case CatAct.Come:
+                        // Hungry, it trots; called, it hurries.
+                        float step = Look.CatSpeed * _cell * dt * (cat.Act == CatAct.GoEat ? 2.2f : cat.Act == CatAct.Come ? CAT_COME_SPEED : 1);
                         float gap = cat.TargetX - cat.X;
                         if (Mathf.Abs(gap) <= step) { cat.X = cat.TargetX; NextCatAct(cat); }
                         else cat.X += Mathf.Sign(gap) * step;
@@ -269,6 +333,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                 case CatAct.Notice: StartGoEat(cat); return;
                 case CatAct.GoEat: StartCatAct(cat, CatAct.Eat, 0); return;
                 case CatAct.Full: StartCatAct(cat, CatAct.Blink, Random.Range(3f, 5f)); return;
+                // Called over: it looks up at the finger, then sits.
+                case CatAct.Come: StartCatAct(cat, CatTouchDrawn ? CatAct.Curious : CatAct.SitDown, Random.Range(1.5f, 2.5f)); return;
             }
             // A cat mostly stays put: after a walk it always settles into something, and after that it walks on
             // only now and then - otherwise it finds something else to do where it is.

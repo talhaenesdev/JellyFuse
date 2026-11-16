@@ -18,6 +18,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         /// <summary>Still held, at a point from 0 to 1 up the area (above 1 once the finger has risen past it).</summary>
         public Action<float> Held;
         public Action Released;
+        /// <summary>Pressed, at a point from 0 to 1 across the area.</summary>
+        public Action<float> PressedAcross;
 
         private RectTransform _rect;
         private PointerEventData _press;
@@ -28,6 +30,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         {
             _press = data;
             Pressed?.Invoke(Height(data));
+            PressedAcross?.Invoke(Across(data));
             // The board under the cat hears the press too: it decides between a jelly, a booster's target and a pan.
             if (transform.parent != null) ExecuteEvents.ExecuteHierarchy(transform.parent.gameObject, data, ExecuteEvents.pointerDownHandler);
         }
@@ -49,6 +52,13 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             if (_press == null) return;
             _press = null;
             Released?.Invoke();
+        }
+
+        private float Across(PointerEventData data)
+        {
+            if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(_rect, data.position, data.pressEventCamera, out var local)) return .5f;
+            var rect = _rect.rect;
+            return rect.width > 0 ? (local.x - rect.xMin) / rect.width : .5f;
         }
 
         private float Height(PointerEventData data)

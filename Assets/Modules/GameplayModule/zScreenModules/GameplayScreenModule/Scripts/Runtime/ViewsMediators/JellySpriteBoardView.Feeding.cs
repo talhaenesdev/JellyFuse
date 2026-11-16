@@ -594,7 +594,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                 StartCatAct(cat, CatAct.Full, 0);
             }
             // Food left in the bowl and nothing better to do: back to it.
-            else if (_bowlFood > 0 && !cat.Held && cat.Act is CatAct.Walk or CatAct.Sit or CatAct.Lick or CatAct.Blink or CatAct.Curious or CatAct.Sleep)
+            else if (_bowlFood > 0 && !cat.Held && cat.Act is CatAct.Walk or CatAct.Come or CatAct.Sit or CatAct.Lick or CatAct.Blink or CatAct.Curious or CatAct.Sleep)
                 StartCatAct(cat, CatAct.Notice, 0);
         }
 
