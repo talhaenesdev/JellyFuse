@@ -81,6 +81,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.Data.UnityObjects
         [Range(-1, 2)] public float CatBottomFeetDepth = .55f;
         [Tooltip("Walking speed, in cells a second.")]
         [Range(.1f, 3)] public float CatSpeed = .6f;
+        [Tooltip("When a cat has finished sitting, napping or looking about, the chance it walks on rather than staying where it is.")]
+        [Range(0, 1)] public float CatWalkChance = .3f;
         [Tooltip("Frames a second.")]
         [Range(2, 24)] public float CatFps = 10f;
         [Tooltip("Shortest run of wall a cat walks on, in cells; a shorter one gets no cat.")]

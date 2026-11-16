@@ -86,8 +86,10 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                 if (!run.Top) reach = Mathf.Clamp(Position(new Vector2(0, run.Y - .5f)).y * tilt - cat.FeetY, size * .35f, size);
                 ShapeCatTouch(cat, size, reach);
                 cat.X = Random.Range(cat.MinX, cat.MaxX);
+                cat.FacingLeft = Random.value < .5f;
+                // A level opens with its cats already settled, not on their way somewhere.
+                StartCatAct(cat, CatAct.Sit, Random.Range(1.5f, 4f));
                 cat.Clock = Random.Range(0f, 1f);
-                StartCatWalk(cat);
                 _cats.Add(cat);
                 PlaceCat(cat);
             }
@@ -233,7 +235,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         {
             switch (cat.Act)
             {
-                case CatAct.SitDown: StartCatAct(cat, Random.value < .4f ? CatAct.Lick : CatAct.Sit, Random.Range(2.5f, 5f)); return;
+                case CatAct.SitDown: StartCatAct(cat, Random.value < .4f ? CatAct.Lick : CatAct.Sit, Random.Range(4f, 8f)); return;
                 case CatAct.Sit:
                 case CatAct.Lick: StartCatAct(cat, CatAct.StandUp, 0); return;
                 case CatAct.Sleep: StartCatAct(cat, CatAct.Stretch, 0); return;
@@ -243,23 +245,27 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                 case CatAct.Belly:
                 case CatAct.Hop: StartCatAct(cat, CatAct.Blink, Random.Range(1.2f, 2f)); return;
             }
+            // A cat mostly stays put: after a walk it always settles into something, and after that it walks on
+            // only now and then - otherwise it finds something else to do where it is.
+            bool walked = cat.Act == CatAct.Walk;
+            if (!walked && Random.value < Look.CatWalkChance) { StartCatWalk(cat); return; }
             float roll = Random.value;
             bool touchArt = CatTouchDrawn;
-            if (cat.Act == CatAct.Walk && roll < .22f) StartCatAct(cat, CatAct.SitDown, 0);
-            else if (cat.Act == CatAct.Walk && roll < .32f) StartCatAct(cat, CatAct.Sleep, Random.Range(5f, 9f));
-            else if (cat.Act == CatAct.Walk && roll < .40f) StartCatAct(cat, CatAct.Stretch, 0);
-            else if (touchArt && cat.Act == CatAct.Walk && roll < .52f) StartCatAct(cat, CatAct.Curious, Random.Range(2f, 3.5f));
-            else if (touchArt && cat.Act == CatAct.Walk && roll < .60f) StartCatAct(cat, CatAct.Swat, 0);
-            else if (touchArt && cat.Act == CatAct.Walk && roll < .68f) StartCatAct(cat, CatAct.Blink, Random.Range(1.5f, 2.5f));
-            else StartCatWalk(cat);
+            if (roll < .34f) StartCatAct(cat, CatAct.SitDown, 0);
+            else if (roll < .50f) StartCatAct(cat, CatAct.Sleep, Random.Range(6f, 11f));
+            else if (roll < .58f || !touchArt) StartCatAct(cat, CatAct.Stretch, 0);
+            else if (roll < .76f) StartCatAct(cat, CatAct.Curious, Random.Range(3f, 5f));
+            else if (roll < .84f) StartCatAct(cat, CatAct.Swat, 0);
+            else StartCatAct(cat, CatAct.Blink, Random.Range(2.5f, 4f));
         }
 
         private void StartCatWalk(Cat cat)
         {
-            // Somewhere at least a cell and a half away along its run, when the run has that much room.
-            float span = cat.MaxX - cat.MinX, least = Mathf.Min(span * .5f, _cell * 1.5f);
+            // A short stroll: somewhere one to two and a half cells away along its run, within the run.
+            float span = cat.MaxX - cat.MinX, least = Mathf.Min(span * .5f, _cell);
+            float most = Mathf.Max(least, _cell * 2.5f);
             float target = cat.X;
-            for (int i = 0; i < 6 && Mathf.Abs(target - cat.X) < least; i++) target = Random.Range(cat.MinX, cat.MaxX);
+            for (int i = 0; i < 8 && (Mathf.Abs(target - cat.X) < least || Mathf.Abs(target - cat.X) > most); i++) target = Random.Range(cat.MinX, cat.MaxX);
             cat.TargetX = target;
             if (Mathf.Abs(target - cat.X) > .5f) cat.FacingLeft = target < cat.X;
             StartCatAct(cat, CatAct.Walk, 0);
