@@ -55,7 +55,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             var sprite = hits < Models_CrateHits && Look.CrateCrackedSprite != null ? Look.CrateCrackedSprite : Look.CrateSprite;
             float height = Look.CrateHeight;
             // The top face fills the cell and the front hangs below it, over the cell in front.
-            var position = Position(cell) + new Vector2(0, -(height - 1) * .5f * _cell);
+            var position = Position(cell) + new Vector2(0, (Look.CrateLift - (height - 1) * .5f) * _cell);
             var item = Place(Take(_jellyLayer), Role.Marker, position, new Vector2(_cell * 1.06f, _cell * height), sprite != null ? Color.white : CRATE_FALLBACK, 0, 0, -1, sprite);
             if (sprite != null) item.BodyImage.type = Image.Type.Simple;
             // Sorted by the cell, not by the picture's lowered centre: it stands in its row like a jelly.
@@ -68,7 +68,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         private void BreakCrate(Vector2Int cell, Item item)
         {
             var bits = TakeCrateBits();
-            bits.rectTransform.anchoredPosition = Position(cell);
+            bits.rectTransform.anchoredPosition = Position(cell) + new Vector2(0, Look.CrateLift * _cell);
             bits.sprite = Look.CrateBitsSprite;
             bits.enabled = Look.CrateBitsSprite != null;
             _crateBreaks.Add(new CrateBreak { Item = item, Bits = bits, Position = item.Root.anchoredPosition });

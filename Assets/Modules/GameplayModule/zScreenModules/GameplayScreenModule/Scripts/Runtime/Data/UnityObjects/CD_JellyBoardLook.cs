@@ -59,6 +59,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.Data.UnityObjects
         public Sprite CrateBitsSprite;
         [Tooltip("How much taller than a cell the crate picture is drawn, its front face included.")]
         [Range(1, 1.6f)] public float CrateHeight = 1.12f;
+        [Tooltip("How far the crate picture is lifted, in cells, so it stands on its cell as high as a jelly does.")]
+        [Range(-.5f, .8f)] public float CrateLift = .2f;
         [Tooltip("Seconds a crate takes to break apart.")]
         [Range(.05f, 1)] public float CrateBreakSeconds = .35f;
 
