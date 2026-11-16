@@ -77,11 +77,14 @@ namespace Modules.LeaderboardModule.Services
                     { "board", board == LeaderboardBoard.Weekly ? "weekly" : "all_time" },
                     { "limit", limit },
                 };
-                var page = await WithTimeout(CloudCodeService.Instance.CallModuleEndpointAsync<LeaderboardPageVO>(MODULE, BOARD, arguments), BOARD_TIMEOUT);
-                if (page == null)
+                // A cold server answers the call that woke it, late: that call is waited on rather than dropped for a
+                // new one, which would start the wait again.
+                var call = CloudCodeService.Instance.CallModuleEndpointAsync<LeaderboardPageVO>(MODULE, BOARD, arguments);
+                var page = await WithTimeout(call, BOARD_TIMEOUT);
+                if (page == null && !call.IsCompleted)
                 {
-                    FlowLogger.Log("LeaderboardService - the board was slow; asking once more.");
-                    page = await WithTimeout(CloudCodeService.Instance.CallModuleEndpointAsync<LeaderboardPageVO>(MODULE, BOARD, arguments), BOARD_TIMEOUT);
+                    FlowLogger.Log("LeaderboardService - the board is slow, the server is waking; waiting on.");
+                    page = await WithTimeout(call, BOARD_TIMEOUT);
                 }
                 if (page == null) FlowLogger.LogError("LeaderboardService - the board did not come back in time.");
                 else FlowLogger.Log($"LeaderboardService - {board}: {page.Top.Count} rows, mine: {page.Me?.Name ?? "none"} {page.Me?.Tag ?? "-"} icon {page.Me?.Icon ?? "-"}");
@@ -127,6 +130,8 @@ namespace Modules.LeaderboardModule.Services
             }
             return await call;
         }
+
+        public bool IsReady => UnityServices.State == ServicesInitializationState.Initialized && AuthenticationService.Instance.IsSignedIn;
 
         private static bool SignedIn()
         {

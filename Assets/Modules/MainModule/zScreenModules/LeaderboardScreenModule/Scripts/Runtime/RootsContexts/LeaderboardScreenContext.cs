@@ -46,6 +46,13 @@ namespace Modules.MainModule.LeaderboardScreenModule.RootsContexts
             CommandBinder.Bind(_internalSignals.TabClicked)
                 .ToSequence<SelectLeaderboardBoardCommand>()
                 .ToSequence<LoadLeaderboardBoardCommand>();
+            CommandBinder.Bind(_internalSignals.Prefetch).ToSequence<PrefetchLeaderboardCommand>();
+        }
+
+        public override void Launch()
+        {
+            base.Launch();
+            _internalSignals.Prefetch.Dispatch();
         }
     }
 }
