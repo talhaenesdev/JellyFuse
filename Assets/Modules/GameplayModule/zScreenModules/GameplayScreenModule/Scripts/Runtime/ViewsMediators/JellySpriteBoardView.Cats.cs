@@ -56,8 +56,13 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         private bool CatsDrawn => Look.CatFrames != null && Look.CatFrames.Length >= CAT_FRAMES * 6 && Look.CatCount > 0;
         private bool CatTouchDrawn => Look.CatTouchFrames != null && Look.CatTouchFrames.Length >= CAT_FRAMES * 8;
 
+        private readonly List<Cat> _oldCats = new();
+
         private void BuildCats()
         {
+            bool sameLevel = _keepCats && _level != null;
+            _oldCats.Clear();
+            if (sameLevel) _oldCats.AddRange(_cats);
             foreach (var cat in _cats)
             {
                 cat.Image.gameObject.SetActive(false);
@@ -67,7 +72,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                 _walkwayPool.Add(cat.Walkway);
             }
             _cats.Clear();
-            if (!CatsDrawn || _level == null) { BuildFeeding(); return; }
+            if (!CatsDrawn || _level == null) { BuildFeeding(sameLevel); return; }
             if (_catLayer == null)
             {
                 _catLayer = Layer("CatLayer");
@@ -107,15 +112,30 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                 if (!run.Top) reach = Mathf.Clamp(Position(new Vector2(0, run.Y - .5f)).y * tilt - cat.FeetY, size * .35f, size);
                 ShapeCatTouch(cat, size, reach);
                 ShapeWalkway(cat, low.x - half * _cell, high.x + half * _cell);
-                cat.X = Random.Range(cat.MinX, cat.MaxX);
-                cat.FacingLeft = Random.value < .5f;
-                // A level opens with its cats already settled, not on their way somewhere.
-                StartCatAct(cat, CatAct.Sit, Random.Range(1.5f, 4f));
-                cat.Clock = Random.Range(0f, 1f);
+                var was = _cats.Count < _oldCats.Count ? _oldCats[_cats.Count] : null;
+                if (was != null)
+                {
+                    // The board was redrawn under it - a door closed: the cat stays where it was, doing what it was doing.
+                    image.color = was.Image.color;
+                    cat.X = Mathf.Clamp(was.X, cat.MinX, cat.MaxX);
+                    cat.TargetX = Mathf.Clamp(was.TargetX, cat.MinX, cat.MaxX);
+                    cat.FacingLeft = was.FacingLeft;
+                    cat.Act = was.Act; cat.Clock = was.Clock; cat.Left = was.Left;
+                    cat.Taps = was.Taps; cat.LastTap = was.LastTap;
+                }
+                else
+                {
+                    cat.X = Random.Range(cat.MinX, cat.MaxX);
+                    cat.FacingLeft = Random.value < .5f;
+                    // A level opens with its cats already settled, not on their way somewhere.
+                    StartCatAct(cat, CatAct.Sit, Random.Range(1.5f, 4f));
+                    cat.Clock = Random.Range(0f, 1f);
+                }
                 _cats.Add(cat);
                 PlaceCat(cat);
             }
-            BuildFeeding();
+            _oldCats.Clear();
+            BuildFeeding(sameLevel);
         }
 
         /// <summary>

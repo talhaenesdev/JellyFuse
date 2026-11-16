@@ -66,14 +66,19 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                                      && Look.PipeTiles != null && Look.PipeTiles.Length > TILE_SPOUT_TEE
                                      && Look.BowlFrames != null && Look.BowlFrames.Length >= 4;
 
-        private void BuildFeeding()
+        private void BuildFeeding(bool sameLevel)
         {
-            foreach (var blob in _foodBlobs) Free(blob.Image);
-            foreach (var piece in _foodPieces) Free(piece.Image);
-            _foodBlobs.Clear(); _foodPieces.Clear();
+            // Redrawn for the same level - a door closed - the food on its way and in the bowl stays.
+            if (!sameLevel)
+            {
+                foreach (var blob in _foodBlobs) Free(blob.Image);
+                foreach (var piece in _foodPieces) Free(piece.Image);
+                _foodBlobs.Clear(); _foodPieces.Clear();
+                _bowlFood = 0; _fedWin = false; _eatClock = 0; _bowlColour = Color.white;
+            }
             _pipes.Clear();
             _pipeImagesUsed = 0;
-            _feeder = null; _bowlFood = 0; _fedWin = false; _eatClock = 0; _bowlColour = Color.white;
+            _feeder = null;
             if (_bowlPile != null) _bowlPile.gameObject.SetActive(false);
             if (_bowlFront != null) _bowlFront.gameObject.SetActive(false);
             if (_bowl != null) _bowl.gameObject.SetActive(false);
@@ -87,6 +92,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                 // Behind everything: the pipes run outside the board and tuck under the doors they leave.
                 _pipeLayer.SetAsFirstSibling();
                 LayPipes();
+                // The heap already in the bowl is drawn again on the new bowl.
+                if (sameLevel && _bowlFood > 0) ShowBowl();
             }
             for (int i = _pipeImagesUsed; i < _pipeImages.Count; i++) _pipeImages[i].gameObject.SetActive(false);
         }

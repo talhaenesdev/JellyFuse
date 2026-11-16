@@ -615,6 +615,16 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
 
         // ---------- board ----------
 
+        private bool _keepCats;
+
+        private static bool DoorsAhead(PuzzleSnapshotRVO previous, PuzzleSnapshotRVO snapshot)
+        {
+            int before = 0, now = 0;
+            foreach (int p in previous.DoorProgress) before += p;
+            foreach (int p in snapshot.DoorProgress) now += p;
+            return now >= before;
+        }
+
         private void BuildBoard()
         {
             ReleaseGates();
@@ -770,7 +780,11 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             {
                 // Only a rebuild changes which doors are drawn, so only then are the closing ones found.
                 FindClosingDoors(forceRefresh ? null : previous, snapshot);
+                // A door moving on mid-play redraws the board under the cats: they and their food carry on. A new level,
+                // a restart (doors back to the start) or a settings change lays them out afresh.
+                _keepCats = previous != null && !forceRefresh && _level == snapshot.Level && DoorsAhead(previous, snapshot);
                 _level = snapshot.Level; BuildBoard();
+                _keepCats = false;
             }
 
             foreach (var blob in _blobs.Values)
