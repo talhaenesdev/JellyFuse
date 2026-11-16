@@ -235,8 +235,10 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                 // The piece joins the side the pipe comes in from to the side it leaves by.
                 bool left = into.x > .5f || outOf.x < -.5f, right = into.x < -.5f || outOf.x > .5f;
                 bool bottom = into.y > .5f || outOf.y < -.5f;
-                Sprite corner = left ? (bottom ? Look.PipeCornerLB : Look.PipeCornerLT) : right ? (bottom ? Look.PipeCornerRB : Look.PipeCornerRT) : null;
-                if (corner != null) PipeImage(corner, path[i], Vector2.one * cell, Vector2.one);
+                // The painted bottom corners are off centre, so a bottom corner is the top one turned upside down:
+                // the top corners' arms sit exactly on the cell's middle, as the straight pieces do.
+                Sprite corner = left ? Look.PipeCornerLT : right ? Look.PipeCornerRT : null;
+                if (corner != null) PipeImage(corner, path[i], Vector2.one * cell, new Vector2(1, bottom ? -1 : 1));
             }
         }
 
