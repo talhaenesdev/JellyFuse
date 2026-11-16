@@ -69,6 +69,30 @@ namespace Modules.GameplayModule.GameplayScreenModule.Data.UnityObjects
         public Sprite[] CatFrames;
         [Tooltip("The touch sheet's frames, row by row, 8 to a row: petted, rub, reach up, belly up, hop, slow blink, curious, swat. Empty: the cats cannot be touched and stroll as before.")]
         public Sprite[] CatTouchFrames;
+
+        [Section("Cat feeding")]
+        [Tooltip("The eating sheet's frames, row by row, 8 to a row: noticing food, eating, full and happy. Empty: no pipes, no bowl, no food.")]
+        public Sprite[] CatEatFrames;
+        [Tooltip("Pipe pieces: straight across, straight up, the corners left-bottom, right-bottom, left-top, right-top, and the spout. A door's pipe is laid out of these round the outside of the board to the fed cat's bowl.")]
+        public Sprite PipeStraightX, PipeStraightY, PipeCornerLB, PipeCornerRB, PipeCornerLT, PipeCornerRT, PipeSpout;
+        [Tooltip("The pipes' tint: the art is white so any colour fits.")]
+        public Color PipeTint = new Color(.86f, .84f, .96f);
+        [Tooltip("How far outside the board's frame the pipes run, in cells.")]
+        [Range(.2f, 2)] public float PipeMargin = .55f;
+        [Tooltip("The blob of food that travels the pipe, tinted with the jelly's colour.")]
+        public Sprite FoodBlob;
+        [Tooltip("The pieces of food that drop out of the spout, picked at random.")]
+        public Sprite[] FoodPieces;
+        [Tooltip("The puff where a piece lands.")]
+        public Sprite FoodPuff;
+        [Tooltip("The bowl empty, a quarter, half and heaped full.")]
+        public Sprite[] BowlFrames;
+        [Tooltip("How fast the food travels the pipe, in cells a second.")]
+        [Range(1, 30)] public float FoodSpeed = 9f;
+        [Tooltip("Pieces that drop for each jelly gone into a door.")]
+        [Range(1, 8)] public int FoodPerJelly = 3;
+        [Tooltip("Seconds the cat takes to eat one piece.")]
+        [Range(.1f, 3)] public float FoodEatSeconds = .6f;
         [Tooltip("How many cats stroll along the top of the wall frame. Each takes a run of wall of its own.")]
         [Range(0, 3)] public int CatCount = 2;
         [Tooltip("Each cat wears one of these, picked at random when the board is built. The art is white, so white keeps it as drawn.")]

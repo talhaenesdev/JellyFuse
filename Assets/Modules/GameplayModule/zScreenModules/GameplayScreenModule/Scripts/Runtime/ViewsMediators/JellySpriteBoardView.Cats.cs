@@ -19,6 +19,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         {
             Walk = 0, SitDown = 1, Sit = 2, Sleep = 3, Stretch = 4, Lick = 5, StandUp = 6,
             Petted = 7, Rub = 8, Reach = 9, Belly = 10, Hop = 11, Blink = 12, Curious = 13, Swat = 14,
+            Notice = 15, GoEat = 16, Eat = 17, Full = 18,
         }
 
         private sealed class Cat
@@ -27,7 +28,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             public CatTouchArea Touch;
             public float MinX, MaxX, FeetY, X, TargetX, Clock, Left;
             public CatAct Act;
-            public bool FacingLeft, Held;
+            public bool FacingLeft, Held, Top;
             public int Taps;
             public float LastTap;
         }
@@ -55,7 +56,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         {
             foreach (var cat in _cats) { cat.Image.gameObject.SetActive(false); _catPool.Add(cat.Image); }
             _cats.Clear();
-            if (!CatsDrawn || _level == null) return;
+            if (!CatsDrawn || _level == null) { BuildFeeding(); return; }
             if (_catLayer == null)
             {
                 _catLayer = Layer("CatLayer");
@@ -79,7 +80,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                 float feet = run.Top ? run.Y + .5f + Look.CatFeetHeight : run.Y - .5f - Look.CatBottomFeetDepth;
                 var low = Position(new Vector2(run.MinX - .5f + half, feet));
                 var high = Position(new Vector2(run.MaxX + .5f - half, feet));
-                var cat = new Cat { Image = image, Touch = image.GetComponentInChildren<CatTouchArea>(true), MinX = low.x, MaxX = Mathf.Max(low.x, high.x), FeetY = low.y * tilt };
+                var cat = new Cat { Image = image, Touch = image.GetComponentInChildren<CatTouchArea>(true), MinX = low.x, MaxX = Mathf.Max(low.x, high.x), FeetY = low.y * tilt, Top = run.Top };
                 // On the front wall the cat's head reaches over the last row of the floor: only what stands over the
                 // wall can be touched there, so a drag on that row still takes the jelly.
                 float reach = size;
@@ -93,6 +94,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                 _cats.Add(cat);
                 PlaceCat(cat);
             }
+            BuildFeeding();
         }
 
         /// <summary>
@@ -201,16 +203,22 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         private void StepCats(float dt)
         {
             if (_cats.Count == 0) return;
+            StepFeeding(dt);
             foreach (var cat in _cats)
             {
                 cat.Clock += dt;
                 switch (cat.Act)
                 {
                     case CatAct.Walk:
-                        float step = Look.CatSpeed * _cell * dt;
+                    case CatAct.GoEat:
+                        // Hungry, it trots.
+                        float step = Look.CatSpeed * _cell * dt * (cat.Act == CatAct.GoEat ? 2.2f : 1);
                         float gap = cat.TargetX - cat.X;
                         if (Mathf.Abs(gap) <= step) { cat.X = cat.TargetX; NextCatAct(cat); }
                         else cat.X += Mathf.Sign(gap) * step;
+                        break;
+                    case CatAct.Eat:
+                        // The feeding decides when it has eaten its fill.
                         break;
                     case CatAct.SitDown:
                     case CatAct.Stretch:
@@ -218,6 +226,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                     case CatAct.Belly:
                     case CatAct.Hop:
                     case CatAct.Swat:
+                    case CatAct.Notice:
+                    case CatAct.Full:
                         if (cat.Clock * Look.CatFps >= CAT_FRAMES) NextCatAct(cat);
                         break;
                     default:
@@ -244,6 +254,10 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                 case CatAct.Rub:
                 case CatAct.Belly:
                 case CatAct.Hop: StartCatAct(cat, CatAct.Blink, Random.Range(1.2f, 2f)); return;
+                // Food: it looks up, then trots to the bowl and eats.
+                case CatAct.Notice: StartGoEat(cat); return;
+                case CatAct.GoEat: StartCatAct(cat, CatAct.Eat, 0); return;
+                case CatAct.Full: StartCatAct(cat, CatAct.Blink, Random.Range(3f, 5f)); return;
             }
             // A cat mostly stays put: after a walk it always settles into something, and after that it walks on
             // only now and then - otherwise it finds something else to do where it is.
@@ -300,6 +314,9 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                 CatAct.Blink => Touch(TOUCH_ROW_BLINK, loop),
                 CatAct.Curious => Touch(TOUCH_ROW_CURIOUS, loop),
                 CatAct.Swat => Touch(TOUCH_ROW_SWAT, once),
+                CatAct.Notice => FeedingDrawn ? Eat(0, once) : Walk(CAT_ROW_SIT, loop),
+                CatAct.Eat => FeedingDrawn ? Eat(1, loop) : Walk(CAT_ROW_SIT, loop),
+                CatAct.Full => FeedingDrawn ? Eat(2, once) : Walk(CAT_ROW_SIT, loop),
                 _ => Walk(CAT_ROW_WALK, loop),
             };
             if (cat.Image.sprite != sprite) cat.Image.sprite = sprite;
