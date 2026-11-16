@@ -43,6 +43,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             _view.BoosterAdClicked += OnBoosterAdClicked;
             _view.BoosterOfferClicked += OnBoosterOfferClicked;
             _signals.Incoming.ApplyAdOffers.AddListener(_view.ApplyAdOffers);
+            _internalSignals.BoardAnimalLoaded.AddListener(_view.SetBoardAnimal);
             _signals.Incoming.SendTuningSliders.AddListener(OnSendTuningSliders);
             _signals.Incoming.SetTuned.AddListener(_view.SetTuned);
             _signals.Incoming.ResetTuning.AddListener(OnResetTuning);
@@ -89,6 +90,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             _view.BoosterAdClicked -= OnBoosterAdClicked;
             _view.BoosterOfferClicked -= OnBoosterOfferClicked;
             _signals.Incoming.ApplyAdOffers.RemoveListener(_view.ApplyAdOffers);
+            _internalSignals.BoardAnimalLoaded.RemoveListener(_view.SetBoardAnimal);
             _signals.Incoming.SendTuningSliders.RemoveListener(OnSendTuningSliders);
             _signals.Incoming.SetTuned.RemoveListener(_view.SetTuned);
             _signals.Incoming.ResetTuning.RemoveListener(OnResetTuning);

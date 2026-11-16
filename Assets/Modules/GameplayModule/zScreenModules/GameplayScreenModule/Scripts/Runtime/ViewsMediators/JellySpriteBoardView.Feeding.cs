@@ -62,7 +62,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             TILE_T_LEFT = 8, TILE_T_RIGHT = 9, TILE_CROSS = 10, TILE_CAP = 11, TILE_SPOUT = 12, TILE_SPOUT_TEE = 13;
         private const int PIPE_N = 1, PIPE_E = 2, PIPE_S = 4, PIPE_W = 8;
 
-        private bool FeedingDrawn => Look.CatEatFrames != null && Look.CatEatFrames.Length >= CAT_FRAMES * 3
+        private bool FeedingDrawn => CatEatFrames != null && CatEatFrames.Length >= CAT_FRAMES * 3
                                      && Look.PipeTiles != null && Look.PipeTiles.Length > TILE_SPOUT_TEE
                                      && Look.BowlFrames != null && Look.BowlFrames.Length >= 4;
 
@@ -638,6 +638,6 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                 StartCatAct(cat, CatAct.Notice, 0);
         }
 
-        private Sprite Eat(int row, int index) => Look.CatEatFrames[row * CAT_FRAMES + index];
+        private Sprite Eat(int row, int index) => CatEatFrames[row * CAT_FRAMES + index];
     }
 }

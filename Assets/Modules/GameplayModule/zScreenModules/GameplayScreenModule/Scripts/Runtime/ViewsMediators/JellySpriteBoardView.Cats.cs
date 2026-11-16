@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Modules.GameplayModule.Shared.Data.UnityObjects;
 using UnityEngine.UI;
 
 namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
@@ -53,8 +54,32 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         private const float CAT_COME_SPEED = 1.8f;
         private readonly List<(int Y, int MinX, int MaxX, bool Top)> _catRuns = new();
 
-        private bool CatsDrawn => Look.CatFrames != null && Look.CatFrames.Length >= CAT_FRAMES * 6 && Look.CatCount > 0;
-        private bool CatTouchDrawn => Look.CatTouchFrames != null && Look.CatTouchFrames.Length >= CAT_FRAMES * 8;
+        private CD_BoardAnimal _animal;
+
+        /// <summary>
+        /// The animal the player's profile brings: its frames take the place of the look's own cat, untinted - it is
+        /// drawn in its own colours. Null keeps the look's cat. Changing it lays the cats out afresh.
+        /// </summary>
+        public CD_BoardAnimal Animal
+        {
+            get => _animal;
+            set
+            {
+                if (_animal == value) return;
+                _animal = value;
+                if (_level != null && _catLayer != null) BuildCats();
+            }
+        }
+
+        private static bool Has(Sprite[] frames, int count) => frames != null && frames.Length >= count;
+        private Sprite[] CatFrames => _animal != null && Has(_animal.Frames, CAT_FRAMES * 6) ? _animal.Frames : Look.CatFrames;
+        private Sprite[] CatTouchFrames => _animal != null && Has(_animal.TouchFrames, CAT_FRAMES * 8) ? _animal.TouchFrames : Look.CatTouchFrames;
+        private Sprite[] CatTrotFrames => _animal != null && Has(_animal.TrotFrames, CAT_FRAMES) ? _animal.TrotFrames : Look.CatTrotFrames;
+        private Sprite[] CatGallopFrames => _animal != null && Has(_animal.GallopFrames, CAT_FRAMES) ? _animal.GallopFrames : Look.CatGallopFrames;
+        private Sprite[] CatEatFrames => _animal != null && Has(_animal.EatFrames, CAT_FRAMES * 3) ? _animal.EatFrames : Look.CatEatFrames;
+
+        private bool CatsDrawn => CatFrames != null && CatFrames.Length >= CAT_FRAMES * 6 && Look.CatCount > 0;
+        private bool CatTouchDrawn => CatTouchFrames != null && CatTouchFrames.Length >= CAT_FRAMES * 8;
 
         private readonly List<Cat> _oldCats = new();
 
@@ -99,7 +124,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                 var image = TakeCatImage();
                 float size = Look.CatSize * _cell;
                 image.rectTransform.sizeDelta = new Vector2(size, size);
-                image.color = Look.CatTints != null && Look.CatTints.Length > 0 ? Look.CatTints[Random.Range(0, Look.CatTints.Length)] : Color.white;
+                image.color = _animal == null && Look.CatTints != null && Look.CatTints.Length > 0 ? Look.CatTints[Random.Range(0, Look.CatTints.Length)] : Color.white;
                 // The run's ends, pulled in by half a cat so it never hangs off the wall.
                 float half = Look.CatSize * .35f;
                 float feet = run.Top ? run.Y + .5f + Look.CatFeetHeight : run.Y - .5f - Look.CatBottomFeetDepth;
@@ -414,8 +439,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                 CatAct.Notice => FeedingDrawn ? Eat(0, once) : Walk(CAT_ROW_SIT, loop),
                 CatAct.Eat => FeedingDrawn ? Eat(1, loop) : Walk(CAT_ROW_SIT, loop),
                 CatAct.Full => FeedingDrawn ? Eat(2, once) : Walk(CAT_ROW_SIT, loop),
-                CatAct.Come when Moving(Look.CatTrotFrames) => Look.CatTrotFrames[loop],
-                CatAct.GoEat when Moving(Look.CatGallopFrames) => Look.CatGallopFrames[loop],
+                CatAct.Come when Moving(CatTrotFrames) => CatTrotFrames[loop],
+                CatAct.GoEat when Moving(CatGallopFrames) => CatGallopFrames[loop],
                 _ => Walk(CAT_ROW_WALK, loop),
             };
             var rect = cat.Image.rectTransform;
@@ -423,7 +448,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             {
                 cat.Image.sprite = sprite;
                 // A frame drawn on a bigger canvas than the stroll's (the gallop) is drawn that much bigger, so the cat keeps its size.
-                float size = Look.CatSize * _cell * (sprite != null && Look.CatFrames[0] != null ? sprite.rect.width / Look.CatFrames[0].rect.width : 1);
+                float size = Look.CatSize * _cell * (sprite != null && CatFrames[0] != null ? sprite.rect.width / CatFrames[0].rect.width : 1);
                 rect.sizeDelta = new Vector2(size, size);
             }
             rect.anchoredPosition = new Vector2(cat.X, cat.FeetY);
@@ -432,8 +457,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
 
         private static bool Moving(Sprite[] frames) => frames != null && frames.Length >= CAT_FRAMES;
 
-        private Sprite Walk(int row, int index) => Look.CatFrames[row * CAT_FRAMES + index];
+        private Sprite Walk(int row, int index) => CatFrames[row * CAT_FRAMES + index];
         // Without the touch art a touch act never starts, but a cat already in one keeps the stroll's sitting frame.
-        private Sprite Touch(int row, int index) => CatTouchDrawn ? Look.CatTouchFrames[row * CAT_FRAMES + index] : Walk(CAT_ROW_SIT, index);
+        private Sprite Touch(int row, int index) => CatTouchDrawn ? CatTouchFrames[row * CAT_FRAMES + index] : Walk(CAT_ROW_SIT, index);
     }
 }

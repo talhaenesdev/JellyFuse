@@ -242,6 +242,12 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             RefreshPresentation();
         }
 
+        /// <summary>The animal the player's profile brings to the board; null keeps the board's own cat.</summary>
+        public void SetBoardAnimal(CD_BoardAnimal animal)
+        {
+            if (_spriteBoard != null) _spriteBoard.Animal = animal;
+        }
+
         public void ConfigurePresentation()
         {
             if (_hasBoard) return;
