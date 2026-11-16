@@ -74,7 +74,9 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             if (FeedingDrawn)
             {
                 count = Mathf.Min(count, 1);
-                _catRuns.Sort((a, b) => a.Top != b.Top ? (a.Top ? -1 : 1) : (b.MaxX - b.MinX).CompareTo(a.MaxX - a.MinX));
+                // On the front wall instead when the board sits too close to the buttons above it for the cat and its pipe.
+                bool top = TopHasFeedingRoom();
+                _catRuns.Sort((a, b) => a.Top != b.Top ? (a.Top == top ? -1 : 1) : (b.MaxX - b.MinX).CompareTo(a.MaxX - a.MinX));
             }
             for (int i = 0; i < _catRuns.Count && _cats.Count < count; i++)
             {

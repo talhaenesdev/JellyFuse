@@ -304,6 +304,13 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             }
             _board.offsetMin = new Vector2(left, bottom); _board.offsetMax = new Vector2(-right, -top);
             if (_spriteBoard != null) _spriteBoard.FillWidth = !aligned && !hud.MapFullWidth && hud.MapFillWidth;
+            // The row of buttons over the map is as high as anything drawn round the board may reach: the cat's pipes stop under it.
+            if (_spriteBoard != null && _undo != null && _settings != null)
+            {
+                var undoCorners = new Vector3[4]; ((RectTransform)_undo.transform).GetWorldCorners(undoCorners);
+                var settingsCorners = new Vector3[4]; ((RectTransform)_settings.transform).GetWorldCorners(settingsCorners);
+                _spriteBoard.Ceiling = Mathf.Min(undoCorners[0].y, settingsCorners[0].y);
+            }
         }
         private static float Bottom(RectTransform rect, RectTransform space) => Corner(rect, space, 0).y;
         private static float Top(RectTransform rect, RectTransform space) => Corner(rect, space, 1).y;

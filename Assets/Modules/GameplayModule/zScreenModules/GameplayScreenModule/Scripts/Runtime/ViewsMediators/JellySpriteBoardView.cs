@@ -355,6 +355,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
 
         /// <summary>On: the map is sized by its width alone, even where that makes it taller than its rect.</summary>
         public bool FillWidth { get; set; }
+        /// <summary>The world height of the screen's row of buttons over the board: nothing drawn round the board goes above it. Unset, the board's own rect is the limit.</summary>
+        public float? Ceiling { get; set; }
         private void Fit()
         {
             // Everything drawn: the floor, the wall frame round it (Map Frame Margin), and the doors with

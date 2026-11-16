@@ -86,6 +86,26 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             for (int i = _pipeImagesUsed; i < _pipeImages.Count; i++) _pipeImages[i].gameObject.SetActive(false);
         }
 
+        /// <summary>
+        /// Whether the top wall has room for the fed cat and the pipe over its head before the screen's buttons: the
+        /// row the spout needs is under the ceiling. Without that room the cat and its bowl go on the front wall.
+        /// </summary>
+        private bool TopHasFeedingRoom()
+        {
+            if (_level == null || _rect == null || !Ceiling.HasValue) return true;
+            int maxY = int.MinValue;
+            for (int y = 0; y < _level.Height; y++) for (int x = 0; x < _level.Width; x++)
+                if (IsFloor(new Vector2Int(x, y))) maxY = Mathf.Max(maxY, y);
+            if (maxY == int.MinValue) return true;
+            float cell = _cell, tilt = Look.SpriteTilt;
+            var parent = _catLayer != null ? _catLayer : (RectTransform)transform;
+            float top = Mathf.Min(_rect.rect.yMax, parent.InverseTransformPoint(new Vector3(0, Ceiling.Value, 0)).y - cell * .35f * tilt);
+            float ceilingRow = top / (cell * tilt) + _centre.y - .5f;
+            float feetRow = maxY + .5f + Look.CatFeetHeight;
+            float needed = feetRow + Look.CatSize / tilt + .5f;
+            return ceilingRow >= needed;
+        }
+
         /// <summary>The board's cell in the pipe layer's space: the pipes keep to the board's own grid.</summary>
         private Vector2 PipeAt(Vector2 cell)
         {
@@ -150,6 +170,16 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             {
                 spoutRow = Mathf.CeilToInt(_feeder.FeetY / (cell * tilt) + _centre.y + headRows + .5f);
                 boxMaxY = Mathf.Max(boxMaxY, spoutRow);
+                // Never up into the screen's top bar: the board's rect is the ceiling, even if the spout then hangs a
+                // little lower over the cat.
+                if (_rect != null)
+                {
+                    float top = _rect.rect.yMax;
+                    // The buttons over the board, in the pipe layer's space, a little under them.
+                    if (Ceiling.HasValue && _pipeLayer != null) top = Mathf.Min(top, _pipeLayer.InverseTransformPoint(new Vector3(0, Ceiling.Value, 0)).y - cell * .35f * tilt);
+                    int ceiling = Mathf.FloorToInt(top / (cell * tilt) + _centre.y - .5f);
+                    if (ceiling >= maxY + 1) boxMaxY = Mathf.Min(boxMaxY, ceiling);
+                }
                 spoutRow = boxMaxY;
             }
             else
@@ -235,6 +265,37 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             }
             // The spout last, over the pipes that meet it.
             SpoutTile(spoutCell, sides[spoutCell], size);
+            LayCouplings(sides, size);
+            foreach (var pair in starts)
+            {
+                // The plate where the pipe leaves its door, on its first cell outside the door's picture.
+                var start = new Vector2Int(Mathf.Clamp(pair.Value.Cell.x, boxMinX, boxMaxX), Mathf.Clamp(pair.Value.Cell.y, boxMinY, boxMaxY));
+                if (Look.PipeFlange != null && start == pair.Value.Cell) PipeImage(Look.PipeFlange, PipeAt(start), size, Vector2.one);
+            }
+        }
+
+        /// <summary>
+        /// A coupling over each joint where a straight meets a bend, tee, cross or the spout, and every few cells along a
+        /// straight run, so the pipe reads as pieces put together without crowding it.
+        /// </summary>
+        private void LayCouplings(Dictionary<Vector2Int, int> sides, Vector2 size)
+        {
+            if (Look.PipeCouplingAcross == null || Look.PipeCouplingUp == null) return;
+            bool Straight(int s) => s == (PIPE_E | PIPE_W) || s == (PIPE_N | PIPE_S);
+            int every = Mathf.Max(1, Look.PipeCouplingEvery);
+            foreach (var pair in sides)
+            {
+                // Each joint once: from a cell to its right and to its top neighbour.
+                foreach (var (side, step, sprite) in new[] { (PIPE_E, Vector2Int.right, Look.PipeCouplingAcross), (PIPE_N, Vector2Int.up, Look.PipeCouplingUp) })
+                {
+                    if ((pair.Value & side) == 0 || !sides.TryGetValue(pair.Key + step, out int other)) continue;
+                    bool changes = !Straight(pair.Value) || !Straight(other);
+                    var joint = pair.Key + step;
+                    bool spaced = ((side == PIPE_E ? joint.x : joint.y) % every + every) % every == 0;
+                    if (!changes && !spaced) continue;
+                    PipeImage(sprite, (PipeAt(pair.Key) + PipeAt(joint)) * .5f, size, Vector2.one);
+                }
+            }
         }
 
         /// <summary>The tile that joins exactly these sides; a cell left with one side is capped.</summary>

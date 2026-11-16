@@ -75,6 +75,12 @@ namespace Modules.GameplayModule.GameplayScreenModule.Data.UnityObjects
         public Sprite[] CatEatFrames;
         [Tooltip("The pipe tiles, one per cell, in the order Tools/Wobble Fuse/Rebuild Pipe Tiles draws them: across, up, the bends left-bottom, right-bottom, left-top, right-top, the tees down, up, left, right, the cross, the cap, the spout and the spout tee.")]
         public Sprite[] PipeTiles;
+        [Tooltip("Couplings laid over the pipes where they join: across a pipe running left-right, and across one running up-down. On every joint next to a bend, tee or cross, and every few cells along a straight.")]
+        public Sprite PipeCouplingAcross, PipeCouplingUp;
+        [Tooltip("The plate where a pipe leaves its door.")]
+        public Sprite PipeFlange;
+        [Tooltip("On a long straight, a coupling every this many cells.")]
+        [Range(1, 8)] public int PipeCouplingEvery = 3;
         [Tooltip("The pipes' tint: the art is white so any colour fits.")]
         public Color PipeTint = new Color(.86f, .84f, .96f);
         [Tooltip("How far outside the board's frame the pipes run, in cells.")]
