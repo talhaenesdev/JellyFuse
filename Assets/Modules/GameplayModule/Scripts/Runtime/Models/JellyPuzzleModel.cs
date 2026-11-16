@@ -713,7 +713,12 @@ namespace Modules.GameplayModule.Models
             // Tried in this order, so the first set found is made of the biggest (or smallest) pieces.
             _candidates.Sort((a, b) => biggestFirst ? b.Cells.Count.CompareTo(a.Cells.Count) : a.Cells.Count.CompareTo(b.Cells.Count));
             _picked.Clear(); _best.Clear(); _bestCells = 0;
-            bool exact = PickCells(0, stage.Cells.Count);
+            // The jelly the door was made for comes first: one piece the very size of its request. Picking
+            // smaller ones instead would take jellies other doors wait for and leave this one with nowhere to go.
+            bool exact = false;
+            foreach (var piece in _candidates)
+                if (piece.Cells.Count == stage.Cells.Count) { _best.Add(piece); exact = true; break; }
+            if (!exact) exact = PickCells(0, stage.Cells.Count);
             if (!exact && (!withoutEnough || _best.Count == 0)) return false;
             foreach (var piece in _best) RemovePiece(piece);
             _progress[door]++; _exited++;
@@ -791,10 +796,44 @@ namespace Modules.GameplayModule.Models
         private void AfterBooster()
         {
             SkipClearedRequests();
+            RemoveUnwantedJellies();
             if (_pieces.Count == 0) { Status = PuzzleStatus.Won; IsTicking = false; }
             _history.Clear();
             Changed();
         }
+        /// <summary>
+        /// A booster can take what a door was waiting for - part of a shape it asked for, or the last request
+        /// of a colour - and leave more jelly of a colour than the doors still ask for. The extra goes too,
+        /// smallest pieces first, so the level never stands with its doors done and jellies left over. A
+        /// colour no door asks for any more goes whole.
+        /// </summary>
+        private void RemoveUnwantedJellies()
+        {
+            var asked = new Dictionary<JellyColour, int>();
+            for (int g = 0; g < _level.Gates.Count; g++)
+                for (int s = _progress[g]; s < _level.Gates[g].Stages.Count; s++)
+                {
+                    var stage = _level.Gates[g].Stages[s];
+                    asked[stage.Colour] = (asked.TryGetValue(stage.Colour, out int cells) ? cells : 0) + stage.Cells.Count;
+                }
+            var left = new Dictionary<JellyColour, int>();
+            foreach (var piece in _pieces) left[piece.Colour] = (left.TryGetValue(piece.Colour, out int cells) ? cells : 0) + piece.Cells.Count;
+            foreach (var pair in left)
+            {
+                int extra = pair.Value - (asked.TryGetValue(pair.Key, out int wanted) ? wanted : 0);
+                while (extra > 0)
+                {
+                    JellyPieceVO smallest = null;
+                    foreach (var piece in _pieces)
+                        if (piece.Colour == pair.Key && (smallest == null || piece.Cells.Count < smallest.Cells.Count)) smallest = piece;
+                    // A piece bigger than the extra is kept: taking it would leave a request short instead.
+                    if (smallest == null || smallest.Cells.Count > extra) break;
+                    extra -= smallest.Cells.Count;
+                    RemovePiece(smallest);
+                }
+            }
+        }
+
         private void SkipClearedRequests()
         {
             if (_clearedColours.Count == 0) return;
