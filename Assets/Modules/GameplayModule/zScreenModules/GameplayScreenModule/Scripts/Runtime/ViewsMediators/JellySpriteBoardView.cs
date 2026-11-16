@@ -653,6 +653,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                 }
             UpdateFuseGlow(0);
             BuildWalls();
+            BuildCats();
         }
 
         /// <summary>The grid's corner pieces, by the cell to their lower left.</summary>
@@ -1185,6 +1186,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             _time += dt;
             StepAutoPan(dt);
             StepPanHint(dt);
+            StepCats(dt);
             // Two half steps keep a stiff spring stable at low frame rates. Sliding and lifting always
             // run, so a move, an undo and a lift stay smooth; AnimateJellies only adds the jelly feel.
             bool moving = false;

@@ -62,6 +62,26 @@ namespace Modules.GameplayModule.GameplayScreenModule.Data.UnityObjects
         [Tooltip("Seconds a crate takes to break apart.")]
         [Range(.05f, 1)] public float CrateBreakSeconds = .35f;
 
+        [Section("Cats")]
+        [Tooltip("The cat sheet's frames, row by row, 8 to a row: walk, sit idle, sit down, sleep, stretch, lick, hop. Empty: no cats.")]
+        public Sprite[] CatFrames;
+        [Tooltip("How many cats stroll along the top of the wall frame. Each takes a run of wall of its own.")]
+        [Range(0, 3)] public int CatCount = 2;
+        [Tooltip("Each cat wears one of these, picked at random when the board is built. The art is white, so white keeps it as drawn.")]
+        public Color[] CatTints = { Color.white };
+        [Tooltip("A cat's height, in cells.")]
+        [Range(.3f, 2)] public float CatSize = 1.3f;
+        [Tooltip("Where its feet stand above the top edge of the floor, in cells: the top of the wall.")]
+        [Range(-1, 2)] public float CatFeetHeight = .3f;
+        [Tooltip("On the front wall: how far below the bottom edge of the floor its feet stand, in cells.")]
+        [Range(-1, 2)] public float CatBottomFeetDepth = .55f;
+        [Tooltip("Walking speed, in cells a second.")]
+        [Range(.1f, 3)] public float CatSpeed = .6f;
+        [Tooltip("Frames a second.")]
+        [Range(2, 24)] public float CatFps = 10f;
+        [Tooltip("Shortest run of wall a cat walks on, in cells; a shorter one gets no cat.")]
+        [Range(1, 8)] public int CatMinRun = 2;
+
         [Section("Board art")]
         [Tooltip("Floor tile. A painted tile is drawn as it is; with TileSpriteAlt the two alternate as a checkerboard.")]
         public Sprite TileSprite;
