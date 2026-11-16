@@ -10,6 +10,8 @@ namespace Modules.MainModule.LeaderboardScreenModule.Signals
         public Signal<LeaderboardBoard> TabClicked = new();
         /// <summary>At boot: fetch the all-time board in the background, so the server is awake and a copy waits.</summary>
         public Signal Prefetch = new();
+        /// <summary>The board the screen shows from now on: its tab lights, and only that board's rows are drawn.</summary>
+        public Signal<LeaderboardBoard> BoardSelected = new();
         public Signal<LeaderboardBoard> BoardLoading = new();
         /// <summary>The board asked for, and what came back: null when the server could not be reached.</summary>
         public Signal<LeaderboardBoard, LeaderboardPageVO> BoardLoaded = new();

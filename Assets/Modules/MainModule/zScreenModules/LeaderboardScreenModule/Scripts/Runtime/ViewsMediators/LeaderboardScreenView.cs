@@ -108,6 +108,13 @@ namespace Modules.MainModule.LeaderboardScreenModule.ViewsMediators
             if (_editProfileLabel != null) _editProfileLabel.text = L("leaderboard.edit", "Edit");
         }
 
+        /// <summary>The board the screen is on: its tab lit; a board that comes back for the other tab is not drawn.</summary>
+        public void SelectBoard(LeaderboardBoard board)
+        {
+            _board = board;
+            PaintTabs();
+        }
+
         /// <summary>The board's tab lit, its rows cleared and a line saying it is on its way.</summary>
         public void ShowLoading(LeaderboardBoard board)
         {

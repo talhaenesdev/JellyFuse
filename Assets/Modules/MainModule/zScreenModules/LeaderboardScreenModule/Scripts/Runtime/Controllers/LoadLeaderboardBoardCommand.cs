@@ -33,6 +33,8 @@ namespace Modules.MainModule.LeaderboardScreenModule.Controllers
             var signals = _signals;
             try
             {
+                // The tab is switched first: a copy shown at once is then the board the screen is on.
+                signals.BoardSelected.Dispatch(board);
                 var cached = model.Cached(board);
                 if (cached != null) signals.BoardLoaded.Dispatch(board, cached);
                 else signals.BoardLoading.Dispatch(board);

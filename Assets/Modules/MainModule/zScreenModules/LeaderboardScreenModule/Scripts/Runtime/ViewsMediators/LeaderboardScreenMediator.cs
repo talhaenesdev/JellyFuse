@@ -19,6 +19,7 @@ namespace Modules.MainModule.LeaderboardScreenModule.ViewsMediators
             _view.ShowCompleted += OnScreenShown;
             _view.HideCompleted += OnScreenHidden;
             // A board can arrive before the show completes, so these listen for as long as the screen is registered.
+            _internalSignals.BoardSelected.AddListener(_view.SelectBoard);
             _internalSignals.BoardLoading.AddListener(_view.ShowLoading);
             _internalSignals.BoardLoaded.AddListener(_view.ShowBoard);
         }
@@ -27,6 +28,7 @@ namespace Modules.MainModule.LeaderboardScreenModule.ViewsMediators
         {
             _view.ShowCompleted -= OnScreenShown;
             _view.HideCompleted -= OnScreenHidden;
+            _internalSignals.BoardSelected.RemoveListener(_view.SelectBoard);
             _internalSignals.BoardLoading.RemoveListener(_view.ShowLoading);
             _internalSignals.BoardLoaded.RemoveListener(_view.ShowBoard);
         }
