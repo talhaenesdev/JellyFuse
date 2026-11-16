@@ -99,6 +99,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.Data.UnityObjects
         public Sprite[] FoodPiles;
         [Tooltip("The bowl empty, a quarter, half and heaped full.")]
         public Sprite[] BowlFrames;
+        [Tooltip("The bowl's front wall and rim alone, cut from the empty bowl on the same canvas: drawn over the food heap so the heap sits in the bowl. Empty: the heap shows from behind the bowl.")]
+        public Sprite BowlFront;
         [Tooltip("How fast the food travels the pipe, in cells a second.")]
         [Range(1, 30)] public float FoodSpeed = 9f;
         [Tooltip("Pieces that drop for each jelly gone into a door.")]

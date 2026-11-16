@@ -48,7 +48,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         private readonly List<FoodBlob> _foodBlobs = new();
         private readonly List<FoodPiece> _foodPieces = new();
         private readonly List<Image> _freeFoodImages = new();
-        private Image _bowl, _bowlPile;
+        private Image _bowl, _bowlPile, _bowlFront;
         private Color _bowlColour = Color.white;
         private Cat _feeder;
         private Vector2 _bowlAt, _nozzle;
@@ -75,6 +75,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             _pipeImagesUsed = 0;
             _feeder = null; _bowlFood = 0; _fedWin = false; _eatClock = 0; _bowlColour = Color.white;
             if (_bowlPile != null) _bowlPile.gameObject.SetActive(false);
+            if (_bowlFront != null) _bowlFront.gameObject.SetActive(false);
             if (_bowl != null) _bowl.gameObject.SetActive(false);
             if (FeedingDrawn && _cats.Count > 0 && _level != null)
             {
@@ -534,16 +535,48 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                 _bowlPile.rectTransform.pivot = new Vector2(.5f, .5f);
             }
             _bowlPile.rectTransform.SetParent(_bowl.rectTransform.parent, false);
-            // Behind the bowl: its front and rim hide the pile's foot, and the heap shows over the rim.
-            _bowlPile.rectTransform.SetSiblingIndex(_bowl.rectTransform.GetSiblingIndex());
+            bool front = Look.BowlFront != null;
+            // With the bowl's front to hand the heap is drawn in the bowl, the front wall over its foot; without it the
+            // heap peeks out from behind the bowl.
+            _bowlPile.rectTransform.SetSiblingIndex(_bowl.rectTransform.GetSiblingIndex() + (front ? 1 : 0));
             _bowlPile.gameObject.SetActive(stage > 0);
+            if (front) ShowBowlFront(stage > 0);
             if (stage == 0) return;
             _bowlPile.sprite = Look.FoodPiles[stage - 1];
             _bowlPile.color = _bowlColour;
+            if (front)
+            {
+                // Heaped on the bowl's floor, its foot behind the front rim, rising over the rim as it fills.
+                float heap = _cell * (.58f + .04f * stage);
+                _bowlPile.rectTransform.sizeDelta = Vector2.one * heap;
+                _bowlPile.rectTransform.anchoredPosition = _bowlAt + new Vector2(0, _cell * (.3f + .015f * stage));
+                return;
+            }
             // Heaped in the bowl's mouth, rising over its rim as it fills.
             float size = _cell * (.5f + .1f * stage);
             _bowlPile.rectTransform.sizeDelta = Vector2.one * size;
             _bowlPile.rectTransform.anchoredPosition = _bowlAt + new Vector2(0, _cell * (.2f + .05f * stage));
+        }
+
+        private void ShowBowlFront(bool shown)
+        {
+            if (_bowlFront == null)
+            {
+                _bowlFront = new GameObject("Img_CatBowlFront", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image)).GetComponent<Image>();
+                _bowlFront.gameObject.layer = gameObject.layer;
+                _bowlFront.raycastTarget = false;
+                _bowlFront.preserveAspect = true;
+            }
+            var rect = _bowlFront.rectTransform;
+            rect.SetParent(_bowl.rectTransform.parent, false);
+            // Laid exactly over the bowl.
+            var bowl = _bowl.rectTransform;
+            rect.anchorMin = bowl.anchorMin; rect.anchorMax = bowl.anchorMax; rect.pivot = bowl.pivot;
+            rect.sizeDelta = bowl.sizeDelta;
+            rect.anchoredPosition = bowl.anchoredPosition;
+            rect.SetSiblingIndex(_bowlPile.rectTransform.GetSiblingIndex() + 1);
+            _bowlFront.sprite = Look.BowlFront;
+            _bowlFront.gameObject.SetActive(shown);
         }
 
         /// <summary>Food in the bowl: the cat stops what it was doing - unless a finger is on it - and comes to eat.</summary>
