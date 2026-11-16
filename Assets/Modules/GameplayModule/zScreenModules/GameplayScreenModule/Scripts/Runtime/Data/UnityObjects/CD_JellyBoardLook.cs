@@ -65,17 +65,17 @@ namespace Modules.GameplayModule.GameplayScreenModule.Data.UnityObjects
         [Range(.05f, 1)] public float CrateBreakSeconds = .35f;
 
         [Section("Cats")]
-        [Tooltip("The cat sheet's frames, row by row, 8 to a row: walk, sit idle, sit down, sleep, stretch, lick, hop. Empty: no cats.")]
+        [Tooltip("The cat sheet's frames, row by row, 16 to a row: walk, sit idle, sit down, sleep, stretch, lick. Empty: no cats.")]
         public Sprite[] CatFrames;
-        [Tooltip("The touch sheet's frames, row by row, 8 to a row: petted, rub, reach up, belly up, hop, slow blink, curious, swat. Empty: the cats cannot be touched and stroll as before.")]
+        [Tooltip("The touch sheet's frames, row by row, 16 to a row: petted, rub, reach up, belly up, hop, slow blink, curious, swat. Empty: the cats cannot be touched and stroll as before.")]
         public Sprite[] CatTouchFrames;
-        [Tooltip("8 frames of a quick trot, used when a cat is called over. Empty: it walks there faster.")]
+        [Tooltip("16 frames of a quick trot, used when a cat is called over. Empty: it walks there faster.")]
         public Sprite[] CatTrotFrames;
-        [Tooltip("8 frames of a gallop, used when a cat runs to its food. A frame wider than the others draws the cat that much larger. Empty: it walks there faster.")]
+        [Tooltip("16 frames of a gallop, used when a cat runs to its food. A frame wider than the others draws the cat that much larger. Empty: it walks there faster.")]
         public Sprite[] CatGallopFrames;
 
         [Section("Cat feeding")]
-        [Tooltip("The eating sheet's frames, row by row, 8 to a row: noticing food, eating, full and happy. Empty: no pipes, no bowl, no food.")]
+        [Tooltip("The eating sheet's frames, row by row, 16 to a row: noticing food, eating, full and happy. Empty: no pipes, no bowl, no food.")]
         public Sprite[] CatEatFrames;
         [Tooltip("The pipe tiles, one per cell, in the order Tools/Wobble Fuse/Rebuild Pipe Tiles draws them: across, up, the bends left-bottom, right-bottom, left-top, right-top, the tees down, up, left, right, the cross, the cap, the spout and the spout tee.")]
         public Sprite[] PipeTiles;

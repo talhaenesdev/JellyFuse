@@ -40,7 +40,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         // Rows of the touch sheet.
         private const int TOUCH_ROW_PETTED = 0, TOUCH_ROW_RUB = 1, TOUCH_ROW_REACH = 2, TOUCH_ROW_BELLY = 3, TOUCH_ROW_HOP = 4,
             TOUCH_ROW_BLINK = 5, TOUCH_ROW_CURIOUS = 6, TOUCH_ROW_SWAT = 7;
-        private const int CAT_FRAMES = 8;
+        private const int CAT_FRAMES = 16;
         /// <summary>The share of a cat's touchable height, from the top, that counts as above its head.</summary>
         private const float CAT_HEAD_SHARE = .4f;
         private const int CAT_HOP_TAPS = 3;
