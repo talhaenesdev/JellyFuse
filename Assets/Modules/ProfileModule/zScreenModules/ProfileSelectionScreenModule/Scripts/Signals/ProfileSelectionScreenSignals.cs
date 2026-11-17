@@ -18,5 +18,7 @@ namespace Modules.ProfileModule.ProfileSelectionScreenModule.Signals
     public class ProfileSelectionScreenSignalsOutgoing
     {
         public Signal<ProfileEditVO> SaveRequested = new();
+        /// <summary>The stats button was pressed: the player's stats popup opens over the screen.</summary>
+        public Signal StatsClicked = new();
     }
 }

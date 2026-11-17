@@ -57,6 +57,8 @@ namespace Modules.GameplayModule.Shared.Data.UnityObjects
         public bool ScratchFreeTaken;
         [Tooltip("Scratch cards ads gave and the player has not taken yet.")]
         [Min(0)] public int ScratchCards;
+        [Tooltip("The player's totals for the stats panel.")]
+        public JellyStatsSVO Stats = new();
 
         /// <summary>The player's entry for a booster, made when it has none yet.</summary>
         public BoosterSVO Booster(BoosterType type)

@@ -14,7 +14,10 @@ namespace Modules.GameplayModule.Controllers
         public override void Execute()
         {
             var progress = _shared.GetScriptable<SD_JellyProgress>();
-            if (progress != null) EventsFunction.Advance(progress, QuestType.UseBooster, 1);
+            if (progress == null) return;
+            EventsFunction.Advance(progress, QuestType.UseBooster, 1);
+            progress.Stats ??= new();
+            progress.Stats.BoostersUsed++;
         }
     }
 }

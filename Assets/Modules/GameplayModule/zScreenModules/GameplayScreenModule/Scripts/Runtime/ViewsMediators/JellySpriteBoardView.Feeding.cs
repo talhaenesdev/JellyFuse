@@ -6,7 +6,7 @@ using UnityEngine.UI;
 namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
 {
     /// <summary>
-    /// Feeding the board's cat: every door has a pipe, laid round the outside of the board to the fed cat's bowl.
+    /// Feeding the board's cat: every door has a pipe, laid hidden behind the board to the spout over the fed cat's bowl.
     /// A jelly going into a door sends a blob of food of its colour down that door's pipe; at the spout it drops
     /// into the bowl as a few pieces, and the cat comes to eat. When the level is won the cat sits back, full.
     /// Only for the look, like the cats themselves: nothing in the game hears of it.
@@ -108,8 +108,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
 
         /// <summary>
         /// The cat on the top wall is fed if there is one; its bowl stands in the middle of its run. Every door's pipe
-        /// goes out from the door to a box round the board, along the box the shorter way to the bowl's column, and into
-        /// the spout over the bowl. The pipes are laid on the board's own cells, so where two share a cell they are one
+        /// runs hidden behind the board: from under the door back in under the floor, across to the bowl's column and
+        /// out from behind the wall into the spout over the bowl - the only part of it that shows. The pipes are laid on the board's own cells, so where two share a cell they are one
         /// pipe, and each cell takes the one tile that joins the sides its pipes leave by - a straight, a bend, a T or a
         /// cross. No tile is stretched and no pipe lies over another.
         /// </summary>
@@ -215,16 +215,11 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             foreach (var pair in starts)
             {
                 var (start, d) = pair.Value;
-                // A door whose first cell is past a box drawn in for the screen starts inside it, under its picture,
-                // rather than poking a stub out the far side.
-                start = new Vector2Int(Mathf.Clamp(start.x, boxMinX, boxMaxX), Mathf.Clamp(start.y, boxMinY, boxMaxY));
-                var corners = new List<Vector2> { start };
-                var onEdge = d.x > 0 ? new Vector2Int(boxMaxX, start.y) : d.x < 0 ? new Vector2Int(boxMinX, start.y) : d.y > 0 ? new Vector2Int(start.x, boxMaxY) : new Vector2Int(start.x, boxMinY);
-                // A door whose first cell is outside a box drawn in for the screen comes back in to it.
-                onEdge = new Vector2Int(Mathf.Clamp(onEdge.x, boxMinX, boxMaxX), Mathf.Clamp(onEdge.y, boxMinY, boxMaxY));
-                corners.Add(onEdge);
-                AroundBox(onEdge, spoutCell, boxMinX, boxMaxX, boxMinY, boxMaxY, corners);
-                corners.Add(spoutCell);
+                // Hidden under the board: from under the door's picture the pipe turns back in under the floor, runs
+                // under it to the bowl's column and only comes out from behind the wall at the spout over the bowl.
+                var inside = start - d * 2;
+                inside = new Vector2Int(Mathf.Clamp(inside.x, minX, maxX), Mathf.Clamp(inside.y, minY, maxY));
+                var corners = new List<Vector2> { start, inside, spoutCell };
                 // Walk it cell by cell, joining each to the next.
                 var cells = new List<Vector2Int> { start };
                 // The pipe begins under the door's picture.
@@ -260,12 +255,6 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             // The spout last, over the pipes that meet it.
             SpoutTile(spoutCell, sides[spoutCell], size);
             LayCouplings(sides, size);
-            foreach (var pair in starts)
-            {
-                // The plate where the pipe leaves its door, on its first cell outside the door's picture.
-                var start = new Vector2Int(Mathf.Clamp(pair.Value.Cell.x, boxMinX, boxMaxX), Mathf.Clamp(pair.Value.Cell.y, boxMinY, boxMaxY));
-                if (Look.PipeFlange != null && start == pair.Value.Cell) PipeImage(Look.PipeFlange, PipeAt(start), size, Vector2.one);
-            }
         }
 
         /// <summary>
@@ -332,32 +321,6 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             // A pipe that comes into the spout from behind it - from above it on the top wall - gets its own piece over it.
             int back = _bowlTop ? PIPE_N : PIPE_S;
             if ((sides & back) != 0) PipeImage(Look.PipeTiles[TILE_V], PipeAt(cell) + new Vector2(0, (_bowlTop ? .25f : -.25f) * size.y), new Vector2(size.x, size.y * .5f), Vector2.one);
-        }
-
-        /// <summary>Adds the box's corners met going the shorter way round from one point on its edge to another.</summary>
-        private static void AroundBox(Vector2 from, Vector2 to, float xMin, float xMax, float yMin, float yMax, List<Vector2> path)
-        {
-            float w = xMax - xMin, h = yMax - yMin, length = 2 * (w + h);
-            float At(Vector2 p)
-            {
-                if (Mathf.Abs(p.y - yMax) < .01f) return Mathf.Clamp(p.x - xMin, 0, w);
-                if (Mathf.Abs(p.x - xMax) < .01f) return w + Mathf.Clamp(yMax - p.y, 0, h);
-                if (Mathf.Abs(p.y - yMin) < .01f) return w + h + Mathf.Clamp(xMax - p.x, 0, w);
-                return 2 * w + h + Mathf.Clamp(p.y - yMin, 0, h);
-            }
-            var corners = new[] { (w, new Vector2(xMax, yMax)), (w + h, new Vector2(xMax, yMin)), (2 * w + h, new Vector2(xMin, yMin)), (length, new Vector2(xMin, yMax)) };
-            float a = At(from), b = At(to);
-            float clockwise = (b - a + length) % length;
-            bool cw = clockwise <= length - clockwise;
-            float distance = cw ? clockwise : length - clockwise;
-            var met = new List<(float, Vector2)>();
-            foreach (var (at, point) in corners)
-            {
-                float along = cw ? (at - a + length) % length : (a - at + length) % length;
-                if (along > .01f && along < distance - .01f) met.Add((along, point));
-            }
-            met.Sort((x, y) => x.Item1.CompareTo(y.Item1));
-            foreach (var (_, point) in met) path.Add(point);
         }
 
         private void PipeImage(Sprite sprite, Vector2 at, Vector2 size, Vector2 scale)

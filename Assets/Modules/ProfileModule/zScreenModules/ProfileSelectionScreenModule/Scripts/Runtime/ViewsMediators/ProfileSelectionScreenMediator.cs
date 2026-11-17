@@ -29,13 +29,20 @@ namespace Modules.ProfileModule.ProfileSelectionScreenModule.ViewsMediators
         private void OnScreenShown(IScreenBody screen)
         {
             _view.SaveRequested += OnSaveRequested;
+            _view.StatsClicked += OnStatsClicked;
             _signals.Incoming.ProfileSaved.AddListener(_view.ApplySavedProfile);
         }
 
         private void OnScreenHidden(IScreenBody screen)
         {
             _view.SaveRequested -= OnSaveRequested;
+            _view.StatsClicked -= OnStatsClicked;
             _signals.Incoming.ProfileSaved.RemoveListener(_view.ApplySavedProfile);
+        }
+
+        private void OnStatsClicked()
+        {
+            if (_view.Data.HasState(ScreenState.AvailableToSendSignal)) _signals.Outgoing.StatsClicked.Dispatch();
         }
 
         private void OnSaveRequested(ProfileEditVO edit)

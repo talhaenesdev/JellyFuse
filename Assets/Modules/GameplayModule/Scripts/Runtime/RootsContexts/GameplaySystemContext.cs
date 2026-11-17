@@ -79,6 +79,7 @@ namespace Modules.GameplayModule.RootsContexts
                 .ToSequence<AdvanceTutorialCommand>()
                 .ToSequence<RecordTutorialStepCommand>()
                 .ToSequence<CountMergesCommand>()
+                .ToSequence<CountMoveStatsCommand>()
                 .ToSequence<CountWinCommand>()
                 .ToSequence<JudgeStarsCommand>()
                 .ToSequence<CheckWinPaymentCommand>()

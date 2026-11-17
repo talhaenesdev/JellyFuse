@@ -18,6 +18,8 @@ namespace Modules.ProfileModule.ProfileSelectionScreenModule.ViewsMediators
         [SerializeField] private Button _avatarTabButton;
         [SerializeField] private Button _frameTabButton;
         [SerializeField] private Button _saveButton;
+        [Tooltip("Opens the player's stats popup over this screen.")]
+        [SerializeField] private Button _statsButton;
         [SerializeField] private TMP_Text _avatarTabLabel;
         [SerializeField] private TMP_Text _frameTabLabel;
         [SerializeField] private TMP_InputField _nameInput;
@@ -38,6 +40,7 @@ namespace Modules.ProfileModule.ProfileSelectionScreenModule.ViewsMediators
         [SerializeField] private Color _normalTabColor = new(.18f, .13f, .28f, 1);
 
         public Action<ProfileEditVO> SaveRequested;
+        public Action StatsClicked;
 
         private readonly List<Button> _items = new();
         private readonly List<UnityEngine.Events.UnityAction> _itemActions = new();
@@ -71,6 +74,7 @@ namespace Modules.ProfileModule.ProfileSelectionScreenModule.ViewsMediators
             _avatarTabButton.onClick.AddListener(ShowAvatars);
             _frameTabButton.onClick.AddListener(ShowFrames);
             _saveButton.onClick.AddListener(Save);
+            if (_statsButton != null) _statsButton.onClick.AddListener(OnStatsClicked);
         }
 
         private void OnDisable()
@@ -80,8 +84,11 @@ namespace Modules.ProfileModule.ProfileSelectionScreenModule.ViewsMediators
             _avatarTabButton.onClick.RemoveListener(ShowAvatars);
             _frameTabButton.onClick.RemoveListener(ShowFrames);
             _saveButton.onClick.RemoveListener(Save);
+            if (_statsButton != null) _statsButton.onClick.RemoveListener(OnStatsClicked);
             UnwireItems();
         }
+
+        private void OnStatsClicked() => StatsClicked?.Invoke();
 
         public void ApplySelection(ProfileSelectionRVO selection)
         {
