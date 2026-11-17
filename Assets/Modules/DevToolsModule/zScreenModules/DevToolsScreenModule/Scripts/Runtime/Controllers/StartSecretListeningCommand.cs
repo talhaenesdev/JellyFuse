@@ -4,6 +4,7 @@ using FlowIoC.BaseModule.Injectable.Attributes;
 using FlowIoC.BaseModule.Provider.Update;
 using Modules.DevToolsModule.DevToolsScreenModule.Models;
 using Modules.DevToolsModule.DevToolsScreenModule.Signals;
+using Modules.DevToolsModule.Services;
 
 namespace Modules.DevToolsModule.DevToolsScreenModule.Controllers
 {
@@ -15,10 +16,13 @@ namespace Modules.DevToolsModule.DevToolsScreenModule.Controllers
     {
         [Inject] private SecretGestureModel _model { get; set; }
         [Inject] private IUpdateProvider _updateProvider { get; set; }
+        [Inject] private IDevToolsService _devTools { get; set; }
         [InjectSignal] private DevToolsScreenInternalSignals _signals { get; set; }
 
         public override void Execute()
         {
+            // A store build never listens for the gesture, so the PIN pad cannot be reached.
+            if (!_devTools.Available) return;
             _model.IsListening = true;
             if (_model.IsHooked) return;
             _model.IsHooked = true;

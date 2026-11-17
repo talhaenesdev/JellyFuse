@@ -25,6 +25,11 @@ namespace Modules.DevToolsModule.DevToolsScreenModule.Controllers
         public override async void Execute()
         {
             Retain();
+            if (!_devTools.Available)
+            {
+                Stop();
+                return;
+            }
             if (_devTools.EnabledInBuild)
             {
                 var signals = _signals;

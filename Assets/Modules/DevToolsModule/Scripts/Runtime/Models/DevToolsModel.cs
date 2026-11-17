@@ -19,6 +19,12 @@ namespace Modules.DevToolsModule.Models
     {
         private const string PREFS_PREFIX = "DevTools.";
         private const string UNLOCKED_PREF = PREFS_PREFIX + "Unlocked";
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+        private const bool STORE_BUILD = false;
+#else
+        // A store build carries no way into the panel: no corner gesture, no PIN, no device unlocked before.
+        private const bool STORE_BUILD = true;
+#endif
 
         [Inject(nameof(DevToolsServiceContext))] private GameObject _root { get; set; }
 
@@ -31,6 +37,8 @@ namespace Modules.DevToolsModule.Models
         public IReadOnlyList<DevToggleCVO> Toggles => _toggles;
         /// <summary>Whether the panel may open: enabled in the config, or this device was unlocked. Off, every switch is its DefaultOn.</summary>
         public bool PanelEnabled => _configEnabled || Unlocked;
+        /// <summary>Whether this build may open the panel at all: the Editor and a development build may, a store build never.</summary>
+        public bool Available => !STORE_BUILD;
         /// <summary>Whether this device was unlocked with the PIN.</summary>
         public bool Unlocked { get; private set; }
         /// <summary>CD_DevTools.PanelEnabled: the panel opens without the PIN (a development build).</summary>
@@ -43,11 +51,12 @@ namespace Modules.DevToolsModule.Models
         public void PostConstruct()
         {
             _toggles.Clear();
-            Unlocked = PlayerPrefs.GetInt(UNLOCKED_PREF, 0) == 1;
+            Unlocked = !STORE_BUILD && PlayerPrefs.GetInt(UNLOCKED_PREF, 0) == 1;
             var config = _root.GetComponent<RootAdapter>().GetScriptable<CD_DevTools>();
             if (config == null) return;
-            _configEnabled = config.PanelEnabled;
-            _pinHash = config.PinHash ?? string.Empty;
+            // A store build ignores the config's switch and has no PIN to match, so every switch stays its DefaultOn.
+            _configEnabled = !STORE_BUILD && config.PanelEnabled;
+            _pinHash = STORE_BUILD ? string.Empty : config.PinHash ?? string.Empty;
             CornerSequenceSeconds = config.CornerSequenceSeconds;
             CornerZone = config.CornerZone;
             foreach (var toggle in config.Toggles)

@@ -22,6 +22,7 @@ namespace Modules.DevToolsModule.Services
 
         public IReadOnlyList<DevToggleCVO> Toggles => _model.Toggles;
         public bool PanelEnabled => _model.PanelEnabled;
+        public bool Available => _model.Available;
         public bool Unlocked => _model.Unlocked;
         public float CornerSequenceSeconds => _model.CornerSequenceSeconds;
         public float CornerZone => _model.CornerZone;
