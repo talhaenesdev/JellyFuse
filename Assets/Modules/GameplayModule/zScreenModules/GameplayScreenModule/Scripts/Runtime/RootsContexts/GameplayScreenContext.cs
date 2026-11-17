@@ -37,6 +37,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.RootsContexts
             CommandBinder.Bind(_signals.Incoming.OpenGameplayScreen)
                 .ToSequence<OpenGameplayScreenCommand>()
                 .ToSequence<LoadBoardAnimalCommand>();
+            CommandBinder.Bind(_signals.Incoming.PrefetchBoardAnimal).ToSequence<PrefetchBoardAnimalCommand>();
             CommandBinder.Bind(_internalSignals.JellyMelting).ToSequence<PlayMeltHapticCommand>();
         }
     }

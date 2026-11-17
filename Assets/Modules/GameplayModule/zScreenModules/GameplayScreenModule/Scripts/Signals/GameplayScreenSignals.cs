@@ -38,6 +38,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.Signals
         public Signal<LivesStateRVO> ApplyLives = new();
         /// <summary>The daily events; the HUD shows the win streak.</summary>
         public Signal<EventsRVO> ApplyEvents = new();
+        /// <summary>The player's profile icon, at launch and whenever it is saved: its board animal is fetched ahead of play.</summary>
+        public Signal<string> PrefetchBoardAnimal = new();
         /// <summary>A level could not start for want of a life: seconds until the next comes back.</summary>
         public Signal<float> ApplyOutOfLives = new();
         /// <summary>Send the values of a developer tuning page, by its name (Outgoing.TuningSliders).</summary>

@@ -64,6 +64,7 @@ namespace Modules.ConnectorModule.RootsContexts
             _localizationSignals.Outgoing.LanguageChanged.Connect(_mainScreenSignals.Incoming.ApplyLanguage, LANGUAGE_GROUP);
 
             _profileSignals.Outgoing.IconChanged.Connect(_mainScreenSignals.Incoming.ApplyProfileIcon);
+            _profileSignals.Outgoing.IconChanged.Connect(icon => _gameplayScreenSignals.Incoming.PrefetchBoardAnimal.Dispatch(icon.Id));
             _profileSignals.Outgoing.FrameChanged.Connect(_mainScreenSignals.Incoming.ApplyProfileFrame);
             _profileSignals.Outgoing.SelectionRequested.Connect(_profileSelectionSignals.Incoming.Open);
             _profileSignals.Outgoing.ProfileSaved.Connect(_profileSelectionSignals.Incoming.ProfileSaved);
