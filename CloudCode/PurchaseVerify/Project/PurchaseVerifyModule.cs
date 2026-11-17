@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using DevAlerts;
 using Google;
 using Google.Apis.AndroidPublisher.v3;
 using Google.Apis.Auth.OAuth2;
@@ -46,10 +47,15 @@ namespace PurchaseVerify
             try
             {
                 var purchase = await publisher.Purchases.Products.Get(PackageName, productId, purchaseToken).ExecuteAsync();
-                if (purchase.PurchaseState != Purchased) return VerifyResult.Invalid($"purchase state {purchase.PurchaseState}");
+                if (purchase.PurchaseState != Purchased) return await Refused(context, gameApiClient, productId, $"purchase state {purchase.PurchaseState}");
                 // A consumable already consumed was granted once; the same token shown again is a replay.
-                if (consumable && purchase.ConsumptionState != NotConsumed) return VerifyResult.Invalid("already consumed");
+                if (consumable && purchase.ConsumptionState != NotConsumed) return await Refused(context, gameApiClient, productId, "already consumed");
                 _logger.LogInformation("Verified {ProductId} order {OrderId} for {PlayerId}", productId, purchase.OrderId, context.PlayerId);
+                await DevCounters.Track(context, gameApiClient, DevCounters.Purchases, _logger);
+                // A licence tester's order is free; it is told apart so a test does not read as income.
+                string test = purchase.PurchaseType == 0 ? " (test hesabı, ücretsiz)" : "";
+                await Telegram.Send(context, gameApiClient, string.Join(Environment.NewLine, $"💰 Satın alma doğrulandı{test}",
+                    $"Ürün: {productId}", $"Saat (UTC): {DateTime.UtcNow:yyyy-MM-dd HH:mm:ss}"), _logger);
                 return VerifyResult.Ok();
             }
             catch (GoogleApiException exception) when (exception.HttpStatusCode == System.Net.HttpStatusCode.BadRequest
@@ -57,8 +63,17 @@ namespace PurchaseVerify
                                                          || exception.HttpStatusCode == System.Net.HttpStatusCode.Gone)
             {
                 // Google does not know the token: forged, or for another app or product.
-                return VerifyResult.Invalid($"google answered {(int)exception.HttpStatusCode}");
+                return await Refused(context, gameApiClient, productId, $"google answered {(int)exception.HttpStatusCode}");
             }
+        }
+
+        /// <summary>A purchase the server will not grant: counted, told on Telegram, and refused.</summary>
+        private async Task<VerifyResult> Refused(IExecutionContext context, IGameApiClient gameApiClient, string productId, string reason)
+        {
+            await DevCounters.Track(context, gameApiClient, DevCounters.PurchasesRefused, _logger);
+            await Telegram.Send(context, gameApiClient, string.Join(Environment.NewLine, "⛔ Satın alma reddedildi",
+                $"Ürün: {productId}", $"Neden: {reason}", $"Saat (UTC): {DateTime.UtcNow:yyyy-MM-dd HH:mm:ss}"), _logger);
+            return VerifyResult.Invalid(reason);
         }
     }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using DevAlerts;
 using Newtonsoft.Json;
 using Unity.Services.CloudCode.Apis;
 using Unity.Services.CloudCode.Core;
@@ -70,6 +71,8 @@ namespace Leaderboard
                 new AddLeaderboardScore(points));
 
             _logger.LogInformation("Level {Level} scored {Points} for {PlayerId}, total {Total}", level, points, context.PlayerId, total);
+            // Counted for the developer's daily summary, which the first win of a new day sends.
+            await DevCounters.Track(context, api, DevCounters.Wins, _logger);
             return new SubmitResult { Accepted = true, Points = points, Best = Math.Max(points, previous), Total = total, Record = record };
         }
 

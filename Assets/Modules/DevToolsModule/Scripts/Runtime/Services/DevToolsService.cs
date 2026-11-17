@@ -36,11 +36,12 @@ namespace Modules.DevToolsModule.Services
         public void ReportPinEntry(bool accepted)
         {
 #if !UNITY_EDITOR
-            _ = SendPinEntry(accepted, SystemInfo.deviceModel, Application.version);
+            _ = SendPinEntry(accepted);
 #endif
         }
 
-        private static async Task SendPinEntry(bool accepted, string device, string version)
+        /// <summary>The PIN entry with what the device says about itself - nothing that names the player.</summary>
+        private static async Task SendPinEntry(bool accepted)
         {
             try
             {
@@ -52,8 +53,13 @@ namespace Modules.DevToolsModule.Services
                 await CloudCodeService.Instance.CallModuleEndpointAsync<bool>(ALERT_MODULE, ALERT_PIN, new Dictionary<string, object>
                 {
                     { "accepted", accepted },
-                    { "device", device },
-                    { "version", version },
+                    { "device", SystemInfo.deviceModel },
+                    { "version", Application.version },
+                    { "os", SystemInfo.operatingSystem },
+                    { "language", Application.systemLanguage.ToString() },
+                    { "region", Region() },
+                    { "memory", SystemInfo.systemMemorySize.ToString() },
+                    { "screen", $"{Screen.width}x{Screen.height}" },
                 });
             }
             catch (Exception exception)
@@ -61,6 +67,13 @@ namespace Modules.DevToolsModule.Services
                 // Offline, or the module not deployed: the panel works the same, the developer just hears nothing.
                 FlowLogger.Log($"DevToolsService - the PIN entry could not be reported: {exception.Message}");
             }
+        }
+
+        /// <summary>The country the device's own settings name; "-" where the runtime cannot tell.</summary>
+        private static string Region()
+        {
+            try { return System.Globalization.RegionInfo.CurrentRegion.TwoLetterISORegionName; }
+            catch (Exception) { return "-"; }
         }
     }
 }

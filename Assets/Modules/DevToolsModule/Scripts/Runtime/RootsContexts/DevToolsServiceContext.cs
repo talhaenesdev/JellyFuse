@@ -1,6 +1,7 @@
 using FlowIoC.BaseModule.Contexts;
 using Modules.DevToolsModule.Models;
 using Modules.DevToolsModule.Services;
+using Modules.DevToolsModule.Services.Sub;
 
 namespace Modules.DevToolsModule.RootsContexts
 {
@@ -11,6 +12,7 @@ namespace Modules.DevToolsModule.RootsContexts
             base.InjectionBindings();
             InjectionBinder.Bind<DevToolsModel>();
             InjectionBinder.Bind<DevErrorLogModel>();
+            InjectionBinder.Bind<ErrorReportSubService>();
             InjectionBinderCrossContext.Bind<IDevToolsService, DevToolsService>();
         }
 
@@ -19,6 +21,8 @@ namespace Modules.DevToolsModule.RootsContexts
             base.Setup();
             // Made now rather than when the panel first asks, so it hears the errors logged before then.
             InjectionBinder.GetInstance<DevErrorLogModel>();
+            // Likewise the reporter, so a released game's first errors reach the developer.
+            InjectionBinder.GetInstance<ErrorReportSubService>();
         }
     }
 }

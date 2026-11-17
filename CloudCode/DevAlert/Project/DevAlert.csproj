@@ -11,4 +11,7 @@
     <PackageReference Include="Com.Unity.Services.CloudCode.Apis" Version="0.0.27" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.2" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\Shared\DevAlerts.cs" Link="DevAlerts.cs" />
+  </ItemGroup>
 </Project>
