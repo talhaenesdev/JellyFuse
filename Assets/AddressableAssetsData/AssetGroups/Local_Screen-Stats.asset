@@ -14,8 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
   m_GroupName: Local_Screen-Stats
   m_GUID: 82d3f9acdcf4a6b46b54a9862a3e8c29
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: a0750f0dea133f7488ffb6d36c25bddf
+    m_Address: StatsScreen
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ScreenPrefab
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: e8e7006d7264ccd498d07c8be471d1c9, type: 2}
   m_SchemaSet:
-    m_Schemas: []
+    m_Schemas:
+    - {fileID: 11400000, guid: ba6f2636f5a880e44922fdcac9c02893, type: 2}
+    - {fileID: 11400000, guid: eb6294dc312d552499f776378b12d3c7, type: 2}
