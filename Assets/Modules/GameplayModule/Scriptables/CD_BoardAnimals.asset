@@ -12,5 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b22c6886952d87546850a9df1021197f, type: 3}
   m_Name: CD_BoardAnimals
   m_EditorClassIdentifier: Modules.Gameplay.Shared::Modules.GameplayModule.Shared.Data.UnityObjects.CD_BoardAnimals
-  Animals: []
+  Animals:
+  - IconId: pink
+    Address: Animal_Kitty
+  - IconId: orange
+    Address: Animal_Puppy
+  - IconId: purple
+    Address: Animal_Bunny
+  - IconId: green
+    Address: Animal_Panda
+  - IconId: red
+    Address: Animal_Foxy
+  - IconId: blue
+    Address: Animal_Teddy
+  - IconId: penguin
+    Address: Animal_Pengu
+  - IconId: mint
+    Address: Animal_Froggy
   LoadTimeoutSeconds: 12
