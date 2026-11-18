@@ -284,7 +284,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             if (_layout != null) _layout.Apply();
             var hud = _presentation.Hud;
             float left = _content.sizeDelta.x * hud.MapSideMargin, right = left;
-            float top = hud.MapTopSpace, bottom = hud.MapBottomSpace;
+            float top = hud.MapTopSpace + _reservedTop, bottom = hud.MapBottomSpace;
             bool aligned = hud.MapAlignToButtons && _undo != null && _settings != null;
             if (aligned)
             {
@@ -297,7 +297,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                 // Above and below, it may come as close to the buttons as the buttons are to the screen's side;
                 // a map taller than that shrinks to fit.
                 float gap = Edge(undo, parent, true) - parent.rect.xMin + hud.MapVerticalGapExtra;
-                top = parent.rect.yMax - Mathf.Min(Bottom(undo, parent), Bottom((RectTransform)_settings.transform, parent)) + gap;
+                top = parent.rect.yMax - Mathf.Min(Bottom(undo, parent), Bottom((RectTransform)_settings.transform, parent)) + gap + _reservedTop;
                 if (_boosters != null && _boosters.gameObject.activeInHierarchy) bottom = Top(_boosters, parent) - parent.rect.yMin + gap;
             }
             // Full width: the map reaches the screen's sides, a few screen pixels in.
@@ -528,6 +528,16 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             _keyedTexts.Add((label, key, label.text));
             label.text = L(key, label.text);
         }
+        private float _reservedTop;
+
+        /// <summary>Space kept free over the map - a duel's race bars - and the map laid out again under it.</summary>
+        public void ReserveTop(float space)
+        {
+            if (Mathf.Approximately(_reservedTop, space)) return;
+            _reservedTop = Mathf.Max(0, space);
+            if (_built) FitLayout();
+        }
+
         public void ShowTopBar(bool on) { if (_topBar != null) _topBar.SetActive(on); }
         public void ShowBottomBar(bool on) { if (_bottomBar != null) _bottomBar.SetActive(on); }
         private TutorialVeil _tutorialVeil;

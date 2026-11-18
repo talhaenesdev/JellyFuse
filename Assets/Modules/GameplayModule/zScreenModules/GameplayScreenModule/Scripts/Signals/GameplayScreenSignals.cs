@@ -15,6 +15,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.Signals
     public class GameplayScreenSignalsIncoming
     {
         public Signal OpenGameplayScreen = new();
+        /// <summary>Space kept free over the map, in the screen's own units; 0 gives it back.</summary>
+        public Signal<float> ReserveTop = new();
         public Signal<PuzzleTurnVO> ApplyBoard = new(hideCommandLog: true);
         public Signal<float> ApplyTime = new(hideCommandLog: true);
         public Signal<int, bool> ApplyLevel = new();

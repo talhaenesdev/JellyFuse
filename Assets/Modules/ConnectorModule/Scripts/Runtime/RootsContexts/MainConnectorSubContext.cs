@@ -21,6 +21,8 @@ namespace Modules.ConnectorModule.RootsContexts
         private const string LIVES_GROUP = nameof(MainConnectorSubContext) + ".Lives";
         private const string CONSENT_GROUP = nameof(MainConnectorSubContext) + ".Consent";
         private const string DUEL_GROUP = nameof(MainConnectorSubContext) + ".Duel";
+        /// <summary>The height the duel's two race bars take over the map, in the gameplay screen's units.</summary>
+        private const float DUEL_BARS = 230f;
         private MainSignals _mainSignals;
         private MainScreenSignals _mainScreenSignals;
         private EventsScreenSignals _eventsScreenSignals;
@@ -118,6 +120,9 @@ namespace Modules.ConnectorModule.RootsContexts
             _gameplaySignals.Outgoing.DuelProgress.Connect(_duelScreenSignals.Incoming.ApplyProgress, DUEL_GROUP);
             _gameplaySignals.Outgoing.DuelFinished.Connect(_duelScreenSignals.Incoming.ShowResult, DUEL_GROUP);
             _gameplaySignals.Outgoing.DuelEnded.Connect(_duelScreenSignals.Incoming.Close, DUEL_GROUP);
+            // The map is laid out under the race bars while a duel is played.
+            _gameplaySignals.Outgoing.DuelStarted.Connect(_ => _gameplayScreenSignals.Incoming.ReserveTop.Dispatch(DUEL_BARS), DUEL_GROUP);
+            _gameplaySignals.Outgoing.DuelEnded.Connect(() => _gameplayScreenSignals.Incoming.ReserveTop.Dispatch(0f), DUEL_GROUP);
         }
 
         public override void DestroyContext()
