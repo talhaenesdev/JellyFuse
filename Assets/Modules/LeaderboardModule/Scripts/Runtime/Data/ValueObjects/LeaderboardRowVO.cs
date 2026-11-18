@@ -17,5 +17,7 @@ namespace Modules.LeaderboardModule.Data.ValueObjects
         public string Frame { get; set; } = string.Empty;
         /// <summary>The highest level the player has won; 0 when the server could not tell.</summary>
         public int Level { get; set; }
+        /// <summary>The player's game is open now.</summary>
+        public bool Active { get; set; }
     }
 }

@@ -168,7 +168,10 @@ namespace Modules.MainModule.LeaderboardScreenModule.ViewsMediators
         {
             // The rank sits on its badge, not on the row itself.
             Set(row, "Img_Badge/Txt_Rank", data.Rank.ToString());
-            Set(row, "Txt_Name", string.IsNullOrEmpty(data.Name) ? L("leaderboard.player", "Player") : TrimName(data.Name));
+            string name = string.IsNullOrEmpty(data.Name) ? L("leaderboard.player", "Player") : TrimName(data.Name);
+            // A player whose game is open now gets a small green "Active" pill after the name: a highlight behind the text, no glyph the font may lack.
+            if (data.Active) name += "  <size=70%><mark=#2FC46A><color=#FFFFFF> " + L("leaderboard.active", "Active") + " </color></mark></size>";
+            Set(row, "Txt_Name", name);
             Set(row, "Txt_Score", data.Score.ToString("N0"));
             // The level rides on the tag line under the name, so every row and podium slot shows it without a new label.
             string level = data.Level > 0 ? string.Format(L("leaderboard.level", "Level {0}"), data.Level) : string.Empty;

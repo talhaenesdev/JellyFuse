@@ -23,6 +23,9 @@ namespace Leaderboard
         public const string Weekly = "weekly";
         private const string BestKey = "level_best";
         private const string ProfileKey = "profile";
+        private const string SeenKey = "last_seen";
+        /// <summary>A player whose game said it was open this recently shows as active.</summary>
+        private const int ActiveSeconds = 180;
         private const int MaxNameLength = 16;
 
         private const int MaxLevel = 5000;
@@ -146,26 +149,45 @@ namespace Leaderboard
             }
         }
 
-        /// <summary>The highest level the player has won, read from their level bests; 0 when none is known.</summary>
+        /// <summary>
+        /// The highest level the player has won, read from their level bests, and whether their game is open now; 0 and
+        /// not active when neither can be read.
+        /// </summary>
         private static async Task ApplyLevel(IExecutionContext context, IGameApiClient api, BoardRow row, string playerId)
         {
             try
             {
                 var response = await api.CloudSaveData.GetProtectedItemsAsync(context, context.ServiceToken, context.ProjectId, playerId,
-                    new List<string> { BestKey });
+                    new List<string> { BestKey, SeenKey });
                 var items = response.Data?.Results;
-                if (items == null || items.Count == 0 || items[0].Value == null) return;
-                var bests = JsonConvert.DeserializeObject<Dictionary<string, int>>(items[0].Value.ToString());
-                if (bests == null) return;
-                int level = 0;
-                foreach (var key in bests.Keys)
-                    if (int.TryParse(key, out int value) && value > level) level = value;
-                row.Level = level;
+                if (items == null) return;
+                foreach (var item in items)
+                {
+                    if (item?.Value == null) continue;
+                    if (item.Key == SeenKey && long.TryParse(item.Value.ToString(), out long seen))
+                        row.Active = DateTimeOffset.UtcNow.ToUnixTimeSeconds() - seen <= ActiveSeconds;
+                    if (item.Key != BestKey) continue;
+                    var bests = JsonConvert.DeserializeObject<Dictionary<string, int>>(item.Value.ToString());
+                    if (bests == null) continue;
+                    int level = 0;
+                    foreach (var key in bests.Keys)
+                        if (int.TryParse(key, out int value) && value > level) level = value;
+                    row.Level = level;
+                }
             }
             catch (Exception)
             {
-                // Bests that cannot be read leave the row without a level.
+                // Data that cannot be read leaves the row without a level, and not active.
             }
+        }
+
+        /// <summary>The game is open: called every minute or so while it is in front, so the boards can show who is active.</summary>
+        [CloudCodeFunction("Heartbeat")]
+        public async Task<bool> Heartbeat(IExecutionContext context, IGameApiClient api)
+        {
+            await api.CloudSaveData.SetProtectedItemAsync(context, context.ServiceToken, context.ProjectId, context.PlayerId,
+                new SetItemBody(SeenKey, DateTimeOffset.UtcNow.ToUnixTimeSeconds()));
+            return true;
         }
 
         /// <summary>
@@ -212,6 +234,8 @@ namespace Leaderboard
         public string Frame { get; set; } = string.Empty;
         /// <summary>The highest level the player has won; 0 when unknown.</summary>
         public int Level { get; set; }
+        /// <summary>The player's game is open now.</summary>
+        public bool Active { get; set; }
     }
 
     public class ProfileResult

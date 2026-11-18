@@ -16,6 +16,8 @@ namespace Modules.LeaderboardModule.Services
         Task<LeaderboardPageVO> GetBoardAsync(LeaderboardBoard board, int limit);
         /// <summary>The name, icon and frame every board shows for this player; false when it did not reach the server.</summary>
         Task<bool> SetProfileAsync(string name, string iconId, string frameId);
+        /// <summary>Tells the server the game is open, so the boards show this player as active; false when it did not get there.</summary>
+        Task<bool> SendHeartbeatAsync();
         /// <summary>Signed in, so a call can reach the server.</summary>
         bool IsReady { get; }
     }

@@ -16,6 +16,7 @@ namespace Modules.LeaderboardModule.Services
         private const string SUBMIT = "SubmitLevel";
         private const string BOARD = "GetBoard";
         private const string PROFILE = "SetProfile";
+        private const string HEARTBEAT = "Heartbeat";
         /// <summary>How long a call may take before the caller is told nothing came back; the server is never waited on for ever.</summary>
         private static readonly TimeSpan TIMEOUT = TimeSpan.FromSeconds(8);
         /// <summary>
@@ -115,6 +116,21 @@ namespace Modules.LeaderboardModule.Services
             catch (Exception exception)
             {
                 FlowLogger.LogError($"LeaderboardService - the profile could not be sent: {exception.Message}");
+                return false;
+            }
+        }
+
+        public async Task<bool> SendHeartbeatAsync()
+        {
+            if (!IsReady) return false;
+            try
+            {
+                var call = CloudCodeService.Instance.CallModuleEndpointAsync<object>(MODULE, HEARTBEAT, new Dictionary<string, object>());
+                return await WithTimeout(call) != null;
+            }
+            catch (Exception exception)
+            {
+                FlowLogger.Log($"LeaderboardService - the heartbeat did not reach the server: {exception.Message}");
                 return false;
             }
         }
