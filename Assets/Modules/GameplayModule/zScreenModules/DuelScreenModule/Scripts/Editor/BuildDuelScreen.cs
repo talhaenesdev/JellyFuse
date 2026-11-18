@@ -255,16 +255,19 @@ namespace Modules.GameplayModule.DuelScreenModule.Editor
                 art.sprite = Sprite("SPR_UI_Duel_EventCard");
                 art.preserveAspect = true;
                 TMP_Text name = Text("Txt_Name", card.transform, titleFont, "DUEL", 46);
-                name.rectTransform.anchorMin = new Vector2(0.5f, 0.55f);
-                name.rectTransform.anchorMax = new Vector2(0.95f, 0.85f);
+                name.rectTransform.anchorMin = new Vector2(0.52f, 0.56f);
+                name.rectTransform.anchorMax = new Vector2(0.82f, 0.84f);
+                name.enableAutoSizing = true;
+                name.fontSizeMin = 24;
+                name.fontSizeMax = 46;
                 name.rectTransform.offsetMin = name.rectTransform.offsetMax = Vector2.zero;
                 name.alignment = TextAlignmentOptions.Center;
                 name.color = GOLD;
                 name.outlineColor = SHADE;
                 name.outlineWidth = 0.25f;
-                Button play = Button("Btn_PlayDuel", card.transform, rounded, font, "PLAY", Vector2.zero, new Vector2(220, 80));
+                Button play = Button("Btn_PlayDuel", card.transform, rounded, font, "PLAY", Vector2.zero, new Vector2(200, 72));
                 RectTransform playRect = (RectTransform)play.transform;
-                playRect.anchorMin = playRect.anchorMax = new Vector2(0.725f, 0.32f);
+                playRect.anchorMin = playRect.anchorMax = new Vector2(0.67f, 0.36f);
 
                 // Found by name: the duel screen references nothing of the Events screen's assembly.
                 var view = root.GetComponent("EventsScreenView");
