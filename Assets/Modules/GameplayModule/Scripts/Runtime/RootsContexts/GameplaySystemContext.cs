@@ -78,6 +78,9 @@ namespace Modules.GameplayModule.RootsContexts
                 .ToSequence<AcceptChallengeCommand>()
                 .ToSequence<SignalDispatchCommand>(_signals.Outgoing.DuelChosen);
             CommandBinder.Bind(_signals.Incoming.DeclineChallenge).ToSequence<DeclineChallengeCommand>();
+            CommandBinder.Bind(_signals.Incoming.SpendCoins)
+                .ToSequence<SpendCoinsCommand>()
+                .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS);
             // Paced by itself: each turn waits for the one before, then starts the next.
             CommandBinder.Bind(_internalSignals.PollChallenges)
                 .ToSequence<PollChallengesCommand>()

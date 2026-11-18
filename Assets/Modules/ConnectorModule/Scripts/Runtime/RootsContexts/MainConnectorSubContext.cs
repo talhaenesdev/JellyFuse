@@ -74,6 +74,12 @@ namespace Modules.ConnectorModule.RootsContexts
             _profileSignals.Outgoing.FrameChanged.Connect(_mainScreenSignals.Incoming.ApplyProfileFrame);
             _profileSignals.Outgoing.SelectionRequested.Connect(_profileSelectionSignals.Incoming.Open);
             _profileSignals.Outgoing.ProfileSaved.Connect(_profileSelectionSignals.Incoming.ProfileSaved);
+            // A locked icon is paid for from Gameplay's purse; the answer comes back under the profile's own key.
+            _profileSelectionSignals.Outgoing.BuyRequested.Connect(_profileSignals.Incoming.BuyIcon, DUEL_GROUP);
+            _profileSignals.Outgoing.CoinsRequested.Connect(_gameplaySignals.Incoming.SpendCoins, DUEL_GROUP);
+            _gameplaySignals.Outgoing.CoinsSpent.Connect(_profileSignals.Incoming.CoinsAnswered, DUEL_GROUP);
+            _profileSignals.Outgoing.IconBought.Connect(_profileSelectionSignals.Incoming.IconBought, DUEL_GROUP);
+            _profileSignals.Outgoing.IconNotBought.Connect(_profileSelectionSignals.Incoming.IconNotBought, DUEL_GROUP);
             // The Events panel sits over the menu: closing it puts the menu's bar back on Home, and any other tab closes it.
             _eventsScreenSignals.Outgoing.BackClicked.Connect(_mainScreenSignals.Incoming.ShowHomeTab);
             _mainScreenSignals.Outgoing.NavTabClicked.Connect(_ => _eventsScreenSignals.Incoming.CloseEventsScreen.Dispatch(), DUEL_GROUP);

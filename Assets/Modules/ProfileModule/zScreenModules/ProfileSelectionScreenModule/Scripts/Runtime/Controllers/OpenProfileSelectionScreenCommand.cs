@@ -11,6 +11,7 @@ namespace Modules.ProfileModule.ProfileSelectionScreenModule.Controllers
     public sealed class OpenProfileSelectionScreenCommand : Command
     {
         [Inject] private IScreenService _screenService { get; set; }
+        [Inject] private Modules.LocalizationModule.Services.ILocalizationService _localization { get; set; }
         [SignalParam] private ProfileSelectionRVO _selection { get; set; }
 
         public override async void Execute()
@@ -20,6 +21,7 @@ namespace Modules.ProfileModule.ProfileSelectionScreenModule.Controllers
             {
                 ProfileSelectionScreenView screen = await _screenService.Open<ProfileSelectionScreenView>().Show<ProfileSelectionScreenView>();
                 if (screen == null) { Stop(); return; }
+                screen.SetLocalizer(_localization.Get);
                 screen.ApplySelection(_selection);
                 Release();
             }

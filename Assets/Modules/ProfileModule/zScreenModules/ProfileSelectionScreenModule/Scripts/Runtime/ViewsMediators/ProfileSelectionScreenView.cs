@@ -41,6 +41,50 @@ namespace Modules.ProfileModule.ProfileSelectionScreenModule.ViewsMediators
 
         public Action<ProfileEditVO> SaveRequested;
         public Action StatsClicked;
+        /// <summary>The save button was pressed on a locked icon: it is to be bought, by id.</summary>
+        public Action<string> BuyRequested;
+
+        private Func<string, string> _localize;
+        private string _saveText;
+        private string _message;
+
+        public void SetLocalizer(Func<string, string> localize) => _localize = localize;
+
+        private string L(string key, string english)
+        {
+            string text = _localize?.Invoke(key);
+            return string.IsNullOrEmpty(text) || text == key ? english : text;
+        }
+
+        /// <summary>An icon was bought: the same choices, it unlocked, the draft kept.</summary>
+        public void ApplyIconBought(ProfileSelectionRVO selection)
+        {
+            string icon = _draftIconId, frame = _draftFrameId;
+            _selection = selection;
+            _draftIconId = icon;
+            _draftFrameId = frame;
+            _message = null;
+            BuildItems();
+            RefreshPreview();
+        }
+
+        /// <summary>Not enough coins for the icon: the button says so until another icon is picked.</summary>
+        public void ApplyIconNotBought(string iconId)
+        {
+            _message = L("profile.not_enough", "Not enough coins");
+            RefreshSaveLabel();
+        }
+
+        private ProfileIconVO DraftIcon => _selection?.Icons.Find(value => value.Id == _draftIconId);
+
+        private void RefreshSaveLabel()
+        {
+            var label = _saveButton != null ? _saveButton.GetComponentInChildren<TMP_Text>(true) : null;
+            if (label == null) return;
+            _saveText ??= label.text;
+            var icon = DraftIcon;
+            label.text = _message ?? (icon != null && !icon.Owned ? string.Format(L("profile.buy", "Buy {0}"), icon.Price) : _saveText);
+        }
 
         private readonly List<Button> _items = new();
         private readonly List<UnityEngine.Events.UnityAction> _itemActions = new();
@@ -122,6 +166,12 @@ namespace Modules.ProfileModule.ProfileSelectionScreenModule.ViewsMediators
 
         private void Save()
         {
+            var icon = DraftIcon;
+            if (icon != null && !icon.Owned)
+            {
+                BuyRequested?.Invoke(icon.Id);
+                return;
+            }
             SaveRequested?.Invoke(new ProfileEditVO
             {
                 PlayerName = _nameInput != null ? _nameInput.text : "Player",
@@ -151,7 +201,18 @@ namespace Modules.ProfileModule.ProfileSelectionScreenModule.ViewsMediators
             else
             {
                 foreach (ProfileIconVO icon in _selection.Icons)
-                    CreateItem(icon.Id, icon.DisplayName, icon.Sprite, icon.FallbackColor, null, Color.white);
+                {
+                    // A locked icon shows dimmed, its price where its name would be.
+                    Color tint = icon.Owned ? icon.FallbackColor : icon.FallbackColor * new Color(1, 1, 1, .45f);
+                    string label = icon.Owned ? icon.DisplayName : string.Format(L("profile.price", "{0} coins"), icon.Price);
+                    CreateItem(icon.Id, label, icon.Sprite, tint, null, Color.white);
+                    var price = _items[_items.Count - 1].transform.Find("Txt_Price");
+                    if (price != null)
+                    {
+                        price.gameObject.SetActive(!icon.Owned);
+                        if (price.TryGetComponent(out TMP_Text priceText)) priceText.text = label;
+                    }
+                }
             }
             RefreshSelection();
             ResetItemsScroll();
@@ -189,6 +250,7 @@ namespace Modules.ProfileModule.ProfileSelectionScreenModule.ViewsMediators
         {
             if (_showingFrames) _draftFrameId = id;
             else _draftIconId = id;
+            _message = null;
             RefreshSelection();
             RefreshPreview();
         }
@@ -207,6 +269,7 @@ namespace Modules.ProfileModule.ProfileSelectionScreenModule.ViewsMediators
         private void RefreshPreview()
         {
             if (_selection == null) return;
+            RefreshSaveLabel();
             ProfileIconVO icon = _selection.Icons.Find(value => value.Id == _draftIconId);
             ProfileFrameVO frame = _selection.Frames.Find(value => value.Id == _draftFrameId);
             if (_profileAvatar == null) return;

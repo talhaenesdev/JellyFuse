@@ -16,6 +16,10 @@ namespace Modules.ProfileModule.Signals
         public Signal ReloadProfile = new();
         public Signal OpenSelection = new();
         public Signal<ProfileEditVO> SaveProfile = new();
+        /// <summary>The player asked to buy a locked icon, by id.</summary>
+        public Signal<string> BuyIcon = new();
+        /// <summary>The purse answered a CoinsRequested: the key it was asked with, and whether the coins were taken.</summary>
+        public Signal<string, bool> CoinsAnswered = new();
     }
 
     public class ProfileSignalsOutgoing
@@ -26,5 +30,11 @@ namespace Modules.ProfileModule.Signals
         public Signal<ProfileSelectionRVO> ProfileSaved = new();
         /// <summary>The saved name and icon were sent on to the leaderboard (or could not be, offline).</summary>
         public Signal ProfilePublished = new();
+        /// <summary>An icon is to be paid for: a key to answer with ("icon:" and its id) and the coins it costs.</summary>
+        public Signal<string, int> CoinsRequested = new();
+        /// <summary>An icon was bought: the selection again, with it unlocked.</summary>
+        public Signal<ProfileSelectionRVO> IconBought = new();
+        /// <summary>An icon could not be bought - not enough coins - by id.</summary>
+        public Signal<string> IconNotBought = new();
     }
 }

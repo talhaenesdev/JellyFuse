@@ -40,6 +40,10 @@ namespace Modules.ProfileModule.RootsContexts
                 .ToSequence<ReloadProfileCommand>()
                 .ToSequence<PublishCurrentProfileIconCommand>();
             CommandBinder.Bind(_signals.Incoming.OpenSelection).ToSequence<OpenProfileSelectionCommand>();
+            CommandBinder.Bind(_signals.Incoming.BuyIcon).ToSequence<BuyProfileIconCommand>();
+            CommandBinder.Bind(_signals.Incoming.CoinsAnswered)
+                .ToSequence<UnlockProfileIconCommand>()
+                .ToSequence<ILocalSaveService.Commands.Save>("SD_PlayerProfile");
             CommandBinder.Bind(_signals.Incoming.SaveProfile)
                 .ToSequence<SaveProfileCommand>()
                 .ToSequence<ILocalSaveService.Commands.Save>("SD_PlayerProfile")

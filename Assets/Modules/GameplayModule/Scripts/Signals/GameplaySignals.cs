@@ -25,6 +25,8 @@ namespace Modules.GameplayModule.Signals
         /// <summary>A challenge received, by id, was accepted: its level is raced against the sender's run.</summary>
         public Signal<string> AcceptChallenge = new();
         public Signal<string> DeclineChallenge = new();
+        /// <summary>Another module asks for coins under a key of its own; CoinsSpent answers with the same key.</summary>
+        public Signal<string, int> SpendCoins = new();
         /// <summary>The boot has begun: fetch the level list published since this build, if there is one.</summary>
         public Signal LoadRemoteLevels = new();
         public Signal<Vector2Int, Vector2Int, bool> Drag = new(hideCommandLog: true);
@@ -127,6 +129,8 @@ namespace Modules.GameplayModule.Signals
         public Signal<ChallengeInviteRVO> ChallengeReceived = new();
         /// <summary>A challenge this player sent was answered.</summary>
         public Signal<ChallengeOutcomeRVO> ChallengeOutcome = new();
+        /// <summary>The answer to SpendCoins: its key, and whether the coins were taken.</summary>
+        public Signal<string, bool> CoinsSpent = new();
         /// <summary>The coins the player now holds.</summary>
         public Signal<int> CoinsChanged = new();
         /// <summary>The once-a-day shop products already bought today, by product id.</summary>

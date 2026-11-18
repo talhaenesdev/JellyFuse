@@ -9,6 +9,12 @@ namespace Modules.ProfileModule.Shared.Data.UnityObjects
         [SerializeField] private string _selectedIconId;
         [SerializeField] private string _selectedFrameId;
 
+        [Tooltip("Icons bought with coins.")]
+        [SerializeField] private System.Collections.Generic.List<string> _ownedIconIds = new();
+
+        public System.Collections.Generic.IReadOnlyList<string> OwnedIconIds => _ownedIconIds;
+        public void AddOwnedIcon(string id) { if (!string.IsNullOrEmpty(id) && !_ownedIconIds.Contains(id)) _ownedIconIds.Add(id); }
+
         public string PlayerName => _playerName;
         public string SelectedIconId => _selectedIconId;
         public string SelectedFrameId => _selectedFrameId;

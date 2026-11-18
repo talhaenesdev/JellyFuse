@@ -62,6 +62,8 @@ namespace Modules.ProfileModule.Models
                 foreach (ProfileIconCVO icon in _icons.Values) { selected = icon; break; }
             }
 
+            // An icon picked before icons had a price stays the player's.
+            if (selected != null && selected.Price > 0) _profile?.AddOwnedIcon(selected.Id);
             CurrentIcon = selected != null ? new ProfileIconVO(selected) : null;
             string frameId = ResolveFrameId(_profile != null ? _profile.SelectedFrameId : null);
             CurrentFrame = !string.IsNullOrEmpty(frameId) ? new ProfileFrameVO(_frames[frameId]) : null;
@@ -73,6 +75,8 @@ namespace Modules.ProfileModule.Models
         public bool Save(ProfileEditVO edit)
         {
             if (edit == null || !_icons.TryGetValue(edit.IconId ?? string.Empty, out ProfileIconCVO icon)) return false;
+            // A locked icon is bought first; saving it as it is changes nothing.
+            if (!Owns(icon)) return false;
             string frameId = ResolveFrameId(edit.FrameId);
             if (_frames.Count > 0 && string.IsNullOrEmpty(frameId)) return false;
             _profile?.SetProfile(NormalizeName(edit.PlayerName), icon.Id, frameId);
@@ -89,10 +93,19 @@ namespace Modules.ProfileModule.Models
                 SelectedIconId = CurrentIcon?.Id,
                 SelectedFrameId = ResolveFrameId(_profile != null ? _profile.SelectedFrameId : null)
             };
-            foreach (ProfileIconCVO icon in _icons.Values) result.Icons.Add(new ProfileIconVO(icon));
+            foreach (ProfileIconCVO icon in _icons.Values) result.Icons.Add(new ProfileIconVO(icon, Owns(icon)));
             foreach (ProfileFrameCVO frame in _frames.Values) result.Frames.Add(new ProfileFrameVO(frame));
             return result;
         }
+
+        private bool Owns(ProfileIconCVO icon) =>
+            icon.Price <= 0 || (_profile != null && System.Linq.Enumerable.Contains(_profile.OwnedIconIds, icon.Id));
+
+        /// <summary>The coins an icon costs to unlock; 0 when it is free or already the player's, -1 when there is no such icon.</summary>
+        public int PriceToUnlock(string iconId) =>
+            !_icons.TryGetValue(iconId ?? string.Empty, out ProfileIconCVO icon) ? -1 : Owns(icon) ? 0 : icon.Price;
+
+        public void Unlock(string iconId) => _profile?.AddOwnedIcon(iconId);
 
         private string ResolveFrameId(string requested)
         {
