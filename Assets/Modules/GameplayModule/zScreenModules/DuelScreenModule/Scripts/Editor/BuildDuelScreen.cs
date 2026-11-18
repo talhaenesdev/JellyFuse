@@ -188,16 +188,14 @@ namespace Modules.GameplayModule.DuelScreenModule.Editor
             track.rectTransform.anchorMax = new Vector2(1, 1);
             track.rectTransform.offsetMin = new Vector2(70, 4);
             track.rectTransform.offsetMax = new Vector2(0, -22);
+            track.type = Image.Type.Sliced;
             Image fill = Img("Img_Fill", track.transform, Sprite(fillSprite));
             fill.preserveAspect = false;
-            fill.rectTransform.anchorMin = new Vector2(0, 0.22f);
-            fill.rectTransform.anchorMax = new Vector2(0.93f, 0.78f);
-            fill.rectTransform.offsetMin = new Vector2(24, 0);
-            fill.rectTransform.offsetMax = Vector2.zero;
-            fill.type = Image.Type.Filled;
-            fill.fillMethod = Image.FillMethod.Horizontal;
-            fill.fillOrigin = (int)Image.OriginHorizontal.Left;
-            fill.fillAmount = 0;
+            fill.type = Image.Type.Sliced;
+            fill.rectTransform.anchorMin = new Vector2(0.02f, 0.2f);
+            fill.rectTransform.anchorMax = new Vector2(0.02f, 0.8f);
+            fill.rectTransform.offsetMin = fill.rectTransform.offsetMax = Vector2.zero;
+            fill.enabled = false;
 
             Image ring = Img("Img_Ring", row.transform, Sprite(ringSprite));
             ring.rectTransform.anchorMin = ring.rectTransform.anchorMax = new Vector2(0, 0.5f);
@@ -365,6 +363,17 @@ namespace Modules.GameplayModule.DuelScreenModule.Editor
                 importer.textureCompression = TextureImporterCompression.CompressedHQ;
                 importer.SaveAndReimport();
             }
+            // The race bars stretch along the screen: only their ends keep their shape.
+            Border("SPR_UI_Duel_RaceBar", new Vector4(80, 0, 170, 0));
+            Border("SPR_UI_Duel_RaceFill_Player", new Vector4(30, 0, 30, 0));
+            Border("SPR_UI_Duel_RaceFill_Opponent", new Vector4(30, 0, 30, 0));
+        }
+
+        private static void Border(string name, Vector4 border)
+        {
+            if (AssetImporter.GetAtPath(ART + name + ".png") is not TextureImporter importer || importer.spriteBorder == border) return;
+            importer.spriteBorder = border;
+            importer.SaveAndReimport();
         }
 
         private static void RegisterAddressable()

@@ -68,8 +68,10 @@ namespace Modules.GameplayModule.Shared.Data.UnityObjects
         [Tooltip("A bot opponent finishes in this share of the level's clock, picked between the two.")]
         [Range(0.1f, 1f)] public float DuelBotMinShare = 0.45f;
         [Range(0.1f, 1f)] public float DuelBotMaxShare = 0.75f;
-        [Tooltip("Seconds of 3-2-1 before the race starts.")]
-        [Min(0)] public float DuelCountdown = 3f;
+        [Tooltip("Seconds from the opponent found to GO: what is more than 3 shows the opponent, then 3-2-1.")]
+        [Min(0)] public float DuelCountdown = 4.5f;
+        [Tooltip("The search shows at least this long, so a quick answer still reads as a search.")]
+        [Min(0)] public float DuelMinSearch = 2f;
 
         public bool IsWeekend(DateTime localDay) => WeekendMultiplier > 1 && WeekendDays.Contains(localDay.DayOfWeek);
 

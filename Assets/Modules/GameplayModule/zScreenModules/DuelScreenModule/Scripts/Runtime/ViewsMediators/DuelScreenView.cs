@@ -62,6 +62,12 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
         private float _playerProgress;
         private float _shownPlayer;
         private bool _racing;
+        private bool _counting;
+        /// <summary>Seconds of 3-2-1; any countdown longer than this shows the opponent found first.</summary>
+        private const float COUNT = 3f;
+        private const float GO_SECONDS = 0.7f;
+        /// <summary>Where on the track a full bar ends, short of the finish flag.</summary>
+        private const float FILL_END = 0.9f;
 
         private void OnEnable()
         {
@@ -81,6 +87,7 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
             _racing = false;
             _raceStart = -1;
             _countdownLeft = 0;
+            _counting = false;
             Show(search: false, countdown: false, race: false, result: false);
         }
 
@@ -104,6 +111,7 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
             if (_searchOpponentIcon != null) _searchOpponentIcon.enabled = false;
             if (_searchStatus != null) _searchStatus.text = L("duel.searching", "Finding an opponent...");
             if (_searchClose != null) _searchClose.gameObject.SetActive(false);
+            if (_searchSpinner != null) _searchSpinner.gameObject.SetActive(true);
         }
 
         public void ShowUnavailable()
@@ -113,7 +121,10 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
             if (_searchClose != null) _searchClose.gameObject.SetActive(true);
         }
 
-        /// <summary>The opponent found: the countdown runs, the board blocked, then the race bar takes over.</summary>
+        /// <summary>
+        /// The opponent found: their face shows in the search panel for whatever of the countdown is more than 3-2-1,
+        /// then the numbers run over the blocked board, then the race bar takes over.
+        /// </summary>
         public void StartRace(DuelRaceRVO race)
         {
             _opponentExits = race.OpponentExits ?? Array.Empty<float>();
@@ -122,12 +133,16 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
             SetIcon(_searchOpponentIcon, race.OpponentIcon);
             SetIcon(_raceOpponentIcon, race.OpponentIcon);
             if (_opponentName != null) _opponentName.text = race.OpponentName;
-            if (_playerFill != null) _playerFill.fillAmount = 0;
-            if (_opponentFill != null) _opponentFill.fillAmount = 0;
+            if (_searchStatus != null) _searchStatus.text = string.Format(L("duel.found", "Opponent found: {0}"), race.OpponentName);
+            if (_searchSpinner != null) _searchSpinner.gameObject.SetActive(false);
+            SetFill(_playerFill, 0);
+            SetFill(_opponentFill, 0);
             _countdownLeft = race.Countdown;
             _raceStart = Time.realtimeSinceStartup + race.Countdown;
+            _counting = race.Countdown > 0;
             _racing = true;
-            Show(search: false, countdown: race.Countdown > 0, race: true, result: false);
+            bool reveal = race.Countdown > COUNT;
+            Show(search: reveal, countdown: _counting && !reveal, race: true, result: false);
         }
 
         public void ApplyProgress(float progress) => _playerProgress = Mathf.Clamp01(progress);
@@ -151,28 +166,49 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
 
         private void Update()
         {
-            if (_searchSpinner != null && _search != null && _search.activeSelf) _searchSpinner.Rotate(0, 0, -180f * Time.unscaledDeltaTime);
+            if (_searchSpinner != null && _searchSpinner.gameObject.activeInHierarchy) _searchSpinner.Rotate(0, 0, -180f * Time.unscaledDeltaTime);
             if (_raceStart < 0) return;
             float now = Time.realtimeSinceStartup;
-            if (_countdownLeft > 0)
+            if (_counting)
             {
                 _countdownLeft = _raceStart - now;
-                int step = _countdownLeft > 0 ? Mathf.Clamp(Mathf.CeilToInt(_countdownLeft), 1, 3) : 0;
-                if (_countdown != null && _countdownSprites != null && _countdownSprites.Length >= 4)
+                bool numbers = _countdownLeft <= COUNT;
+                if (numbers && _search != null && _search.activeSelf)
                 {
+                    _search.SetActive(false);
+                    if (_countdown != null) _countdown.gameObject.SetActive(true);
+                }
+                if (numbers && _countdown != null && _countdownSprites != null && _countdownSprites.Length >= 4)
+                {
+                    int step = _countdownLeft > 0 ? Mathf.Clamp(Mathf.CeilToInt(_countdownLeft), 1, 3) : 0;
                     _countdown.sprite = _countdownSprites[step == 0 ? 3 : 3 - step];
-                    float within = _countdownLeft > 0 ? _countdownLeft - Mathf.Floor(_countdownLeft) : 1 + _countdownLeft;
+                    float within = _countdownLeft > 0 ? _countdownLeft - Mathf.Floor(_countdownLeft) : 1 + _countdownLeft / GO_SECONDS;
                     _countdown.rectTransform.localScale = Vector3.one * (0.8f + 0.4f * Mathf.Clamp01(within));
                 }
-                if (_blocker != null) _blocker.SetActive(_countdownLeft > -0.6f);
-                if (_countdownLeft <= -0.6f && _countdown != null) _countdown.gameObject.SetActive(false);
+                // GO stays a moment after the race starts, then the board is the player's.
+                if (_countdownLeft <= -GO_SECONDS)
+                {
+                    _counting = false;
+                    if (_countdown != null) _countdown.gameObject.SetActive(false);
+                    if (_blocker != null) _blocker.SetActive(false);
+                }
             }
-            if (_racing && _opponentFill != null) _opponentFill.fillAmount = OpponentProgress(now - _raceStart);
-            if (_playerFill != null && !Mathf.Approximately(_shownPlayer, _playerProgress))
+            if (_racing) SetFill(_opponentFill, OpponentProgress(now - _raceStart));
+            if (!Mathf.Approximately(_shownPlayer, _playerProgress))
             {
                 _shownPlayer = Mathf.MoveTowards(_shownPlayer, _playerProgress, Time.unscaledDeltaTime * 2f);
-                _playerFill.fillAmount = _shownPlayer;
+                SetFill(_playerFill, _shownPlayer);
             }
+        }
+
+        /// <summary>A sliced bar grown to its share of the track, so its rounded ends keep their shape; hidden while too short to draw.</summary>
+        private static void SetFill(Image fill, float share)
+        {
+            if (fill == null) return;
+            share = Mathf.Clamp01(share);
+            RectTransform rect = fill.rectTransform;
+            rect.anchorMax = new Vector2(Mathf.Lerp(rect.anchorMin.x, FILL_END, share), rect.anchorMax.y);
+            fill.enabled = share > 0.03f;
         }
 
         /// <summary>The opponent's share at this second of the race, eased between their recorded exits.</summary>

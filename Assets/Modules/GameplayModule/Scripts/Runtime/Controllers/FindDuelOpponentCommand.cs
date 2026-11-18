@@ -49,7 +49,11 @@ namespace Modules.GameplayModule.Controllers
                     return;
                 }
 
+                float searchStarted = Time.realtimeSinceStartup;
                 DuelMatchVO match = await _duelService.FindAsync(won);
+                // A quick answer still reads as a search.
+                float waited = Time.realtimeSinceStartup - searchStarted;
+                if (waited < events.DuelMinSearch) await System.Threading.Tasks.Task.Delay((int)((events.DuelMinSearch - waited) * 1000));
                 // Offline, or the server did not answer: a bot on a recent level, so the duel still plays.
                 if (match == null)
                 {
