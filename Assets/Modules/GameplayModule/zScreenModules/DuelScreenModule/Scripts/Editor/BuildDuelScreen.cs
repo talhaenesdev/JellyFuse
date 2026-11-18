@@ -60,11 +60,11 @@ namespace Modules.GameplayModule.DuelScreenModule.Editor
                 // The race bar: the opponent's row above the player's, high on the board.
                 GameObject race = Ui("Pnl_Race", root.transform);
                 RectTransform raceRect = (RectTransform)race.transform;
-                raceRect.anchorMin = new Vector2(0.08f, 1);
-                raceRect.anchorMax = new Vector2(0.92f, 1);
+                // As wide as the track's own proportions allow at its height (1024x160), plus the avatar on its left.
+                raceRect.anchorMin = raceRect.anchorMax = new Vector2(0.5f, 1);
                 raceRect.pivot = new Vector2(0.5f, 1);
                 raceRect.anchoredPosition = new Vector2(0, -300);
-                raceRect.sizeDelta = new Vector2(0, 250);
+                raceRect.sizeDelta = new Vector2(100 + 91 * 1024f / 160f, 250);
                 var opponentRow = Row(race.transform, "Pnl_OpponentRow", 0, "SPR_UI_Duel_RaceFill_Opponent", "SPR_UI_Duel_AvatarRing_Opponent", font);
                 var playerRow = Row(race.transform, "Pnl_PlayerRow", -125, "SPR_UI_Duel_RaceFill_Player", "SPR_UI_Duel_AvatarRing_Player", font);
 
