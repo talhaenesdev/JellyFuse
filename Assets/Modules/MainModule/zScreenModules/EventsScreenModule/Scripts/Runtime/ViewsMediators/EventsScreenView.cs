@@ -40,6 +40,37 @@ namespace Modules.MainModule.EventsScreenModule.ViewsMediators
             if (_eventList != null) _eventList.verticalNormalizedPosition = 1f;
         }
 
+        /// <summary>
+        /// The cards' words in the language in use: each card's name and line, its button, and the "coming soon" marks on
+        /// the events not open yet. A key with no text keeps the English the prefab was authored with.
+        /// </summary>
+        public void ApplyTexts(Func<string, string> localize)
+        {
+            if (_eventList == null || localize == null) return;
+            Transform content = _eventList.content;
+            if (content == null) return;
+            Text(content, "Pnl_Event_Duel/Txt_Name", "events.duel.name", localize);
+            Text(content, "Pnl_Event_Duel/Btn_PlayDuel/Txt_Label", "events.play", localize);
+            foreach (string key in new[] { "StarRush", "ColorCarnival", "SpeedRun" })
+            {
+                string card = "Pnl_Event_" + key;
+                string id = "events." + key.ToLowerInvariant();
+                Text(content, card + "/Txt_Name", id + ".name", localize);
+                Text(content, card + "/Txt_Description", id + ".desc", localize);
+                Text(content, card + "/Btn_PlayEvent/Txt_Play", "events.soon_button", localize);
+                Text(content, card + "/Pnl_Time/Txt_Time", "events.soon", localize);
+                Text(content, card + "/Pnl_Reward/Txt_Reward", id + ".reward", localize);
+            }
+        }
+
+        private static void Text(Transform root, string path, string key, Func<string, string> localize)
+        {
+            var text = root.Find(path)?.GetComponent<TMPro.TMP_Text>();
+            if (text == null) return;
+            string value = localize(key);
+            if (!string.IsNullOrEmpty(value) && value != key) text.text = value;
+        }
+
         private void OnBackClicked() => BackClicked?.Invoke();
         private void OnDuelClicked() => DuelClicked?.Invoke();
 

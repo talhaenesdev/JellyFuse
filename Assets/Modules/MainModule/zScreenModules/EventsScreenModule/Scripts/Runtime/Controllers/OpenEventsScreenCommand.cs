@@ -10,6 +10,7 @@ namespace Modules.MainModule.EventsScreenModule.Controllers
     internal sealed class OpenEventsScreenCommand : Command
     {
         [Inject] private IScreenService _screenService { get; set; }
+        [Inject] private Modules.LocalizationModule.Services.ILocalizationService _localization { get; set; }
 
         public override async void Execute()
         {
@@ -23,6 +24,7 @@ namespace Modules.MainModule.EventsScreenModule.Controllers
                     Stop();
                     return;
                 }
+                screen.ApplyTexts(_localization.Get);
                 Release();
             }
             catch (Exception exception)
