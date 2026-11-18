@@ -21,7 +21,7 @@ namespace Modules.DevToolsModule.DevToolsScreenModule.Controllers
 
         public override void Execute()
         {
-            // A store build never listens for the gesture, so the PIN pad cannot be reached.
+            // A build that may not open the panel never listens for the gesture.
             if (!_devTools.Available) return;
             _model.IsListening = true;
             if (_model.IsHooked) return;

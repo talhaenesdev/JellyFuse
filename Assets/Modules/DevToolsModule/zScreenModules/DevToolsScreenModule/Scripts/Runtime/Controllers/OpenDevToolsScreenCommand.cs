@@ -21,7 +21,7 @@ namespace Modules.DevToolsModule.DevToolsScreenModule.Controllers
         public override async void Execute()
         {
             Retain();
-            // A store build never opens it. Elsewhere, a build with the panel switched off opens it only once the
+            // A build with the panel switched off - every store build - opens it only once the
             // PIN is accepted - every time, not once per device.
             if (!_devTools.Available || !_devTools.TakeOpening())
             {

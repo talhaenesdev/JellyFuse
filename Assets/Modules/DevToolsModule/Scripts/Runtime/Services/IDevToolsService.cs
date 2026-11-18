@@ -15,7 +15,7 @@ namespace Modules.DevToolsModule.Services
         /// with the PIN. Off, every switch reads its DefaultOn.
         /// </summary>
         bool PanelEnabled { get; }
-        /// <summary>Whether this build may open the panel at all: never in a store build.</summary>
+        /// <summary>Whether this build may open the panel at all; a store build opens it only with the PIN.</summary>
         bool Available { get; }
         /// <summary>Whether this device was unlocked with the PIN; it stays unlocked until the app's data is cleared.</summary>
         bool Unlocked { get; }
