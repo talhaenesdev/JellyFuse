@@ -159,8 +159,9 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
             if (_resultTitle != null) _resultTitle.text = result.Won ? L("duel.won", "You won!") : L("duel.lost", "You lost!");
             if (_resultTimes != null)
             {
-                string mine = result.Seconds >= 0 ? Seconds(result.Seconds) : "-";
-                _resultTimes.text = string.Format(L("duel.times", "You {0}  ·  Rival {1}"), mine, Seconds(result.OpponentSeconds));
+                _resultTimes.text = result.Seconds >= 0
+                    ? string.Format(L("duel.times", "You {0}  ·  Rival {1}"), Seconds(result.Seconds), Seconds(result.OpponentSeconds))
+                    : string.Format(L("duel.rival_time", "Rival finished in {0}"), Seconds(result.OpponentSeconds));
             }
             if (_reward != null) _reward.SetActive(result.Coins > 0);
             if (_rewardCoins != null) _rewardCoins.text = "+" + result.Coins;
