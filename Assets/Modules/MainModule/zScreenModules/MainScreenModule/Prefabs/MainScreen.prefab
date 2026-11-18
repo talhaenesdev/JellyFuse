@@ -2249,7 +2249,7 @@ MonoBehaviour:
   m_EffectColor: {r: 0.55, g: 0.94, b: 1, a: 0.65}
   m_EffectDistance: {x: 2, y: -2}
   m_UseGraphicAlpha: 1
---- !u!1 &2191619542388910486
+--- !u!1 &2171049497556135907
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2257,9 +2257,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 6679391943732475082}
-  - component: {fileID: 3922795240108500925}
-  - component: {fileID: 9087385399633476146}
+  - component: {fileID: 1671011810543109676}
+  - component: {fileID: 8079561040076342437}
+  - component: {fileID: 8428349968824909296}
   m_Layer: 5
   m_Name: Img_ShopEmptyPanelTheme
   m_TagString: Untagged
@@ -2267,13 +2267,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &6679391943732475082
+--- !u!224 &1671011810543109676
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2191619542388910486}
+  m_GameObject: {fileID: 2171049497556135907}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -2286,21 +2286,21 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 70}
   m_SizeDelta: {x: 740, y: 1140}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &3922795240108500925
+--- !u!222 &8079561040076342437
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2191619542388910486}
+  m_GameObject: {fileID: 2171049497556135907}
   m_CullTransparentMesh: 1
---- !u!114 &9087385399633476146
+--- !u!114 &8428349968824909296
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2191619542388910486}
+  m_GameObject: {fileID: 2171049497556135907}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
@@ -2642,7 +2642,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 6679391943732475082}
+  - {fileID: 1671011810543109676}
   - {fileID: 2216171392421962709}
   - {fileID: 4220868693890897616}
   - {fileID: 5921559190576247185}
@@ -4082,7 +4082,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 0
+  m_Interactable: 1
   m_TargetGraphic: {fileID: 5538244249372660075}
   m_OnClick:
     m_PersistentCalls:
@@ -6908,7 +6908,7 @@ MonoBehaviour:
   - coins_1000
   - lives_5
   - boosters_3
-  _shopFrame: {fileID: 6679391943732475082}
+  _shopFrame: {fileID: 1671011810543109676}
   _topBar: {fileID: 2257970293549236191}
   _navBar: {fileID: 4841172069111191868}
   _shopGap: 12
@@ -11351,9 +11351,25 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5221206375771518409, guid: 0cdde45898e2a774891bcea7b4c04dff, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -3.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5221206375771518409, guid: 0cdde45898e2a774891bcea7b4c04dff, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -3.699997
+      objectReference: {fileID: 0}
     - target: {fileID: 5578041991910698704, guid: 0cdde45898e2a774891bcea7b4c04dff, type: 3}
       propertyPath: m_Name
       value: ProfileAvatar
+      objectReference: {fileID: 0}
+    - target: {fileID: 7888041025696066537, guid: 0cdde45898e2a774891bcea7b4c04dff, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -3.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7888041025696066537, guid: 0cdde45898e2a774891bcea7b4c04dff, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -3.699997
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
