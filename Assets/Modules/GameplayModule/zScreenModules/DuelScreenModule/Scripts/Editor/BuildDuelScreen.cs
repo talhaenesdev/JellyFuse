@@ -60,13 +60,13 @@ namespace Modules.GameplayModule.DuelScreenModule.Editor
                 // The race bar: the opponent's row above the player's, high on the board.
                 GameObject race = Ui("Pnl_Race", root.transform);
                 RectTransform raceRect = (RectTransform)race.transform;
-                raceRect.anchorMin = new Vector2(0.03f, 1);
-                raceRect.anchorMax = new Vector2(0.97f, 1);
+                raceRect.anchorMin = new Vector2(0.08f, 1);
+                raceRect.anchorMax = new Vector2(0.92f, 1);
                 raceRect.pivot = new Vector2(0.5f, 1);
                 raceRect.anchoredPosition = new Vector2(0, -300);
-                raceRect.sizeDelta = new Vector2(0, 190);
+                raceRect.sizeDelta = new Vector2(0, 250);
                 var opponentRow = Row(race.transform, "Pnl_OpponentRow", 0, "SPR_UI_Duel_RaceFill_Opponent", "SPR_UI_Duel_AvatarRing_Opponent", font);
-                var playerRow = Row(race.transform, "Pnl_PlayerRow", -95, "SPR_UI_Duel_RaceFill_Player", "SPR_UI_Duel_AvatarRing_Player", font);
+                var playerRow = Row(race.transform, "Pnl_PlayerRow", -125, "SPR_UI_Duel_RaceFill_Player", "SPR_UI_Duel_AvatarRing_Player", font);
 
                 // The search panel.
                 GameObject search = Ui("Pnl_Search", root.transform);
@@ -180,14 +180,14 @@ namespace Modules.GameplayModule.DuelScreenModule.Editor
             rect.anchorMax = new Vector2(1, 1);
             rect.pivot = new Vector2(0.5f, 1);
             rect.anchoredPosition = new Vector2(0, y);
-            rect.sizeDelta = new Vector2(0, 95);
+            rect.sizeDelta = new Vector2(0, 125);
 
             Image track = Img("Img_Track", row.transform, Sprite("SPR_UI_Duel_RaceBar"));
             track.preserveAspect = false;
             track.rectTransform.anchorMin = new Vector2(0, 0);
             track.rectTransform.anchorMax = new Vector2(1, 1);
-            track.rectTransform.offsetMin = new Vector2(70, 4);
-            track.rectTransform.offsetMax = new Vector2(0, -22);
+            track.rectTransform.offsetMin = new Vector2(100, 4);
+            track.rectTransform.offsetMax = new Vector2(0, -30);
             track.type = Image.Type.Sliced;
             Image fill = Img("Img_Fill", track.transform, Sprite(fillSprite));
             fill.preserveAspect = false;
@@ -201,16 +201,16 @@ namespace Modules.GameplayModule.DuelScreenModule.Editor
             ring.rectTransform.anchorMin = ring.rectTransform.anchorMax = new Vector2(0, 0.5f);
             ring.rectTransform.pivot = new Vector2(0, 0.5f);
             ring.rectTransform.anchoredPosition = new Vector2(0, -6);
-            ring.rectTransform.sizeDelta = new Vector2(92, 92);
+            ring.rectTransform.sizeDelta = new Vector2(110, 110);
             Image icon = Img("Img_Icon", ring.transform, null);
-            Place(icon.rectTransform, Vector2.zero, new Vector2(62, 62));
+            Place(icon.rectTransform, Vector2.zero, new Vector2(76, 76));
             icon.transform.SetAsFirstSibling();
 
             TMP_Text label = Text("Txt_Name", row.transform, font, "Name", 26);
             label.rectTransform.anchorMin = new Vector2(0, 1);
             label.rectTransform.anchorMax = new Vector2(1, 1);
             label.rectTransform.pivot = new Vector2(0, 1);
-            label.rectTransform.offsetMin = new Vector2(100, -30);
+            label.rectTransform.offsetMin = new Vector2(120, -32);
             label.rectTransform.offsetMax = new Vector2(0, 4);
             label.alignment = TextAlignmentOptions.Left;
             label.color = Color.white;
