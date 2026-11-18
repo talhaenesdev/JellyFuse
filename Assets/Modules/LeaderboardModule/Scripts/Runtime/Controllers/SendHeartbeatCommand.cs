@@ -15,6 +15,7 @@ namespace Modules.LeaderboardModule.Controllers
     internal class SendHeartbeatCommand : Command
     {
         private const int INTERVAL_MS = 90_000;
+        private const int RETRY_MS = 5_000;
 
         [Inject] private ILeaderboardService _leaderboard { get; set; }
 
@@ -24,8 +25,9 @@ namespace Modules.LeaderboardModule.Controllers
             var leaderboard = _leaderboard;
             try
             {
-                if (leaderboard.IsReady) await leaderboard.SendHeartbeatAsync();
-                await Task.Delay(INTERVAL_MS);
+                // Not signed in yet: try again soon, so the player shows as active from the first minute.
+                bool sent = leaderboard.IsReady && await leaderboard.SendHeartbeatAsync();
+                await Task.Delay(sent ? INTERVAL_MS : RETRY_MS);
                 Release();
             }
             catch (Exception)
