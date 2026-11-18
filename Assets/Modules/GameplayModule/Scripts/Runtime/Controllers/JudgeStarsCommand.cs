@@ -18,6 +18,7 @@ namespace Modules.GameplayModule.Controllers
         private const float THREE_STARS = .5f, TWO_STARS = .25f;
 
         [Inject] private IJellyPuzzleModel _model { get; set; }
+        [Inject] private IDuelModel _duel { get; set; }
         [Inject] private ISharedDataModel _shared { get; set; }
         [InjectSignal] private GameplaySignals _signals { get; set; }
 
@@ -30,7 +31,7 @@ namespace Modules.GameplayModule.Controllers
             int stars = left > THREE_STARS ? 3 : left > TWO_STARS ? 2 : 1;
             // The daily challenge's stars are shown, never kept: they belong to no level of the run.
             bool best = false;
-            if (!_model.Daily)
+            if (!_model.Daily && !_duel.Active)
             {
                 int index = _model.LevelIndex;
                 while (progress.Stars.Count <= index) progress.Stars.Add(0);

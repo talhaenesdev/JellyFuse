@@ -16,5 +16,7 @@ namespace Modules.MainModule.EventsScreenModule.Signals
     public class EventsScreenSignalsOutgoing
     {
         public Signal BackClicked = new();
+        /// <summary>The duel card's play button.</summary>
+        public Signal DuelClicked = new();
     }
 }

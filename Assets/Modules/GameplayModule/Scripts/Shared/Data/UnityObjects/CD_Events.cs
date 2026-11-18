@@ -60,6 +60,17 @@ namespace Modules.GameplayModule.Shared.Data.UnityObjects
         [Tooltip("What winning the daily challenge gives, once a day. Its coins are the win's coins.")]
         public RewardCVO DailyChallengeReward = new() { Coins = 150, Booster = BoosterType.Rocket, BoosterCount = 1 };
 
+        [Tooltip("Coins a duel win pays - beating the opponent's time - for the first DuelRewardedWins wins of a day.")]
+        [Min(0)] public int DuelRewardCoins = 100;
+        [Min(0)] public int DuelRewardedWins = 5;
+        [Tooltip("The fewest levels a player must have won before the duel opens.")]
+        [Min(1)] public int DuelMinLevel = 5;
+        [Tooltip("A bot opponent finishes in this share of the level's clock, picked between the two.")]
+        [Range(0.1f, 1f)] public float DuelBotMinShare = 0.45f;
+        [Range(0.1f, 1f)] public float DuelBotMaxShare = 0.75f;
+        [Tooltip("Seconds of 3-2-1 before the race starts.")]
+        [Min(0)] public float DuelCountdown = 3f;
+
         public bool IsWeekend(DateTime localDay) => WeekendMultiplier > 1 && WeekendDays.Contains(localDay.DayOfWeek);
 
         /// <summary>The tier a streak reaches: 0 for none, 1 for the first.</summary>

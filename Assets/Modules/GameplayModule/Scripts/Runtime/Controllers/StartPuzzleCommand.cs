@@ -15,6 +15,7 @@ namespace Modules.GameplayModule.Controllers
     {
         [Inject] private ISharedDataModel _shared { get; set; }
         [Inject] private IJellyPuzzleModel _model { get; set; }
+        [Inject] private IDuelModel _duel { get; set; }
         [InjectSignal] private GameplaySignals _signals { get; set; }
         public override void Execute()
         {
@@ -23,6 +24,21 @@ namespace Modules.GameplayModule.Controllers
             {
                 // The first start of a run carries on from the level the player was on last time.
                 _model.LevelIndex = levels.StartIndex(_shared.GetScriptable<SD_JellyProgress>());
+            }
+            // A duel plays the level it raced on, and leaves the run's own level where it was.
+            if (_duel.Active)
+            {
+                var duelLevel = levels.Get(_duel.LevelIndex);
+                if (duelLevel != null)
+                {
+                    _model.Start(duelLevel.CreateLevel(levels.Palette));
+                    _signals.Outgoing.LevelChanged.Dispatch(_duel.LevelIndex + 1, false);
+                    _signals.Outgoing.BoardChanged.Dispatch(new PuzzleTurnVO(new[] { _model.Snapshot() }));
+                    _signals.Outgoing.TimeChanged.Dispatch(_model.RemainingSeconds);
+                    _signals.Outgoing.ClockFrozen.Dispatch(0f);
+                    return;
+                }
+                _duel.End();
             }
             // Today's daily challenge, when it was picked and still has a level; else the run's level.
             var level = _model.Daily ? EventsFunction.DailyChallengeLevel(_shared.GetScriptable<CD_Events>()) : null;

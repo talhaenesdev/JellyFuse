@@ -34,6 +34,7 @@ namespace Modules.GameplayModule.RootsContexts
             base.InjectionBindings();
             _model = InjectionBinder.Bind<IJellyPuzzleModel, JellyPuzzleModel>();
             InjectionBinder.Bind<PuzzleFeedbackModel>();
+            InjectionBinder.Bind<IDuelModel, DuelModel>();
             InjectionBinder.Bind<ILivesModel, LivesModel>();
             InjectionBinder.Bind<IJellyTutorialModel, JellyTutorialModel>();
         }
@@ -51,6 +52,7 @@ namespace Modules.GameplayModule.RootsContexts
                 .ToSequence<RequireLifeCommand>(WaitingLevelStart.Replay)
                 .ToSequence<BreakWinStreakCommand>()
                 .ToSequence<StartPuzzleCommand>()
+                .ToSequence<StartDuelRaceCommand>()
                 .ToSequence<RecordLevelStartCommand>()
                 .ToSequence<StartTutorialCommand>()
                 .ToSequence<IAudioService.Commands.PlayMusic>(MusicTrack.Gameplay)
@@ -66,6 +68,9 @@ namespace Modules.GameplayModule.RootsContexts
                 .ToSequence<RefreshEventsCommand>()
                 .ToSequence<ChooseDailyChallengeCommand>()
                 .ToSequence<SignalDispatchCommand>(_signals.Outgoing.DailyChallengeChosen);
+            CommandBinder.Bind(_signals.Incoming.StartDuel)
+                .ToSequence<FindDuelOpponentCommand>()
+                .ToSequence<SignalDispatchCommand>(_signals.Outgoing.DuelChosen);
             CommandBinder.Bind(_signals.Incoming.LoadRemoteLevels)
                 .ToParallel<LoadRemoteLevelsCommand>()
                 .ToParallel<LoadRemoteBoardColoursCommand>();
@@ -82,6 +87,8 @@ namespace Modules.GameplayModule.RootsContexts
                 .ToSequence<CountMoveStatsCommand>()
                 .ToSequence<CountWinCommand>()
                 .ToSequence<JudgeStarsCommand>()
+                .ToSequence<RecordDuelProgressCommand>()
+                .ToSequence<FinishDuelCommand>()
                 .ToSequence<CheckWinPaymentCommand>()
                 .ToSequence<CountPuzzleComboCommand>()
                 .ToSequence<PlayPuzzleFeedbackCommand>()
@@ -102,6 +109,7 @@ namespace Modules.GameplayModule.RootsContexts
                 .ToSequence<StopPuzzleClockCommand>()
                 .ToSequence<LeaveLevelCommand>()
                 .ToSequence<EndDailyChallengeCommand>()
+                .ToSequence<EndDuelCommand>()
                 .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
                 .ToSequence<AnnounceLivesCommand>()
                 .ToSequence<ScheduleNotificationsCommand>()
@@ -246,8 +254,11 @@ namespace Modules.GameplayModule.RootsContexts
                 .ToSequence<AnnounceBoostersCommand>()
                 .ToSequence<CountWinCommand>()
                 .ToSequence<JudgeStarsCommand>()
+                .ToSequence<RecordDuelProgressCommand>()
+                .ToSequence<FinishDuelCommand>()
                 .ToSequence<CheckWinPaymentCommand>();
             CommandBinder.Bind(_internalSignals.TimeExpired)
+                .ToSequence<FinishDuelCommand>()
                 .ToSequence<IHapticService.Commands.Play>(HapticPreset.Failure)
                 .ToSequence<IAudioService.Commands.Play>(AudioCue.Lose)
                 .ToSequence<RecordTimeOutCommand>()

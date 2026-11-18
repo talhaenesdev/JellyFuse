@@ -1,5 +1,6 @@
 using FlowIoC.BaseModule.Connectors;
 using FlowIoC.BaseModule.Contexts;
+using Modules.GameplayModule.DuelScreenModule.Signals;
 using Modules.GameplayModule.GameplayScreenModule.Signals;
 using Modules.GameplayModule.Signals;
 using Modules.LoadingModule.LoadingScreenModule.Signals;
@@ -19,6 +20,7 @@ namespace Modules.ConnectorModule.RootsContexts
         private const string LANGUAGE_GROUP = nameof(MainConnectorSubContext) + ".Language";
         private const string LIVES_GROUP = nameof(MainConnectorSubContext) + ".Lives";
         private const string CONSENT_GROUP = nameof(MainConnectorSubContext) + ".Consent";
+        private const string DUEL_GROUP = nameof(MainConnectorSubContext) + ".Duel";
         private MainSignals _mainSignals;
         private MainScreenSignals _mainScreenSignals;
         private EventsScreenSignals _eventsScreenSignals;
@@ -30,6 +32,7 @@ namespace Modules.ConnectorModule.RootsContexts
         private ProfileSignals _profileSignals;
         private ProfileSelectionScreenSignals _profileSelectionSignals;
         private ConsentScreenSignals _consentScreenSignals;
+        private DuelScreenSignals _duelScreenSignals;
 
         public override void Setup()
         {
@@ -46,6 +49,7 @@ namespace Modules.ConnectorModule.RootsContexts
             _profileSignals = InjectionBinderCrossContext.GetInstance<ProfileSignals>();
             _profileSelectionSignals = InjectionBinderCrossContext.GetInstance<ProfileSelectionScreenSignals>();
             _consentScreenSignals = InjectionBinderCrossContext.GetInstance<ConsentScreenSignals>();
+            _duelScreenSignals = InjectionBinderCrossContext.GetInstance<DuelScreenSignals>();
 
             IncomingSignals();
             OutgoingSignals();
@@ -98,6 +102,18 @@ namespace Modules.ConnectorModule.RootsContexts
             _profileSelectionSignals.Outgoing.SaveRequested.Connect(_profileSignals.Incoming.SaveProfile);
             _consentScreenSignals.Outgoing.Answered.Connect(_mainSignals.Incoming.ConsentAnswered, CONSENT_GROUP);
             _leaderboardScreenSignals.Outgoing.EditProfileClicked.Connect(_profileSignals.Incoming.OpenSelection);
+
+            // The duel: the Events card asks Gameplay for an opponent while the duel screen searches; the race runs
+            // on the gameplay screen with the duel screen over it.
+            _eventsScreenSignals.Outgoing.DuelClicked.Connect(_duelScreenSignals.Incoming.OpenSearch, DUEL_GROUP);
+            _eventsScreenSignals.Outgoing.DuelClicked.Connect(_gameplaySignals.Incoming.StartDuel, DUEL_GROUP);
+            _gameplaySignals.Outgoing.DuelUnavailable.Connect(_duelScreenSignals.Incoming.ShowUnavailable, DUEL_GROUP);
+            _duelScreenSignals.Outgoing.SearchClosed.Connect(_eventsScreenSignals.Incoming.OpenEventsScreen, DUEL_GROUP);
+            _gameplaySignals.Outgoing.DuelChosen.Connect(_gameplayScreenSignals.Incoming.OpenGameplayScreen, DUEL_GROUP);
+            _gameplaySignals.Outgoing.DuelStarted.Connect(_duelScreenSignals.Incoming.StartRace, DUEL_GROUP);
+            _gameplaySignals.Outgoing.DuelProgress.Connect(_duelScreenSignals.Incoming.ApplyProgress, DUEL_GROUP);
+            _gameplaySignals.Outgoing.DuelFinished.Connect(_duelScreenSignals.Incoming.ShowResult, DUEL_GROUP);
+            _gameplaySignals.Outgoing.DuelEnded.Connect(_duelScreenSignals.Incoming.Close, DUEL_GROUP);
         }
 
         public override void DestroyContext()
@@ -136,6 +152,7 @@ namespace Modules.ConnectorModule.RootsContexts
             // Its own group, so the gameplay screen keeps hearing about the lives.
             SignalConnector.DisconnectGroup(LIVES_GROUP);
             SignalConnector.DisconnectGroup(CONSENT_GROUP);
+            SignalConnector.DisconnectGroup(DUEL_GROUP);
         }
     }
 }

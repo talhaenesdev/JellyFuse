@@ -18,6 +18,7 @@ namespace Modules.GameplayModule.Controllers
     /// </summary>
     internal class RequireLifeCommand : Command<WaitingLevelStart>
     {
+        [Inject] private IDuelModel _duel { get; set; }
         [Inject] private ISharedDataModel _shared { get; set; }
         [Inject] private ILivesModel _lives { get; set; }
         [Inject] private IAdsService _ads { get; set; }
@@ -25,6 +26,8 @@ namespace Modules.GameplayModule.Controllers
 
         public override void Execute(WaitingLevelStart start)
         {
+            // A duel is free: it neither needs nor costs a life, and leaves the run's win streak alone.
+            if (_duel.Active) return;
             var config = _shared.GetScriptable<CD_Lives>();
             var progress = _shared.GetScriptable<SD_JellyProgress>();
             if (config == null || progress == null || progress.Lives > 0)

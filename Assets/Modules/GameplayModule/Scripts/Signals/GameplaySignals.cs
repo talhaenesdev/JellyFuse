@@ -18,6 +18,8 @@ namespace Modules.GameplayModule.Signals
         public Signal Start = new();
         /// <summary>The daily challenge button was pressed: today's daily level is played, when it is not won yet.</summary>
         public Signal StartDailyChallenge = new();
+        /// <summary>The Events screen's duel card: find an opponent and race them on a level the player has won.</summary>
+        public Signal StartDuel = new();
         /// <summary>The boot has begun: fetch the level list published since this build, if there is one.</summary>
         public Signal LoadRemoteLevels = new();
         public Signal<Vector2Int, Vector2Int, bool> Drag = new(hideCommandLog: true);
@@ -104,6 +106,18 @@ namespace Modules.GameplayModule.Signals
         public Signal<int, bool> StarsEarned = new();
         /// <summary>Today's daily challenge was picked to play: the gameplay screen opens on it.</summary>
         public Signal DailyChallengeChosen = new();
+        /// <summary>An opponent was found: the gameplay screen opens on the duel level.</summary>
+        public Signal DuelChosen = new();
+        /// <summary>No opponent could be found - offline, or too few levels won yet.</summary>
+        public Signal DuelUnavailable = new();
+        /// <summary>The duel level is on the board: the race starts after the countdown it carries.</summary>
+        public Signal<DuelRaceRVO> DuelStarted = new();
+        /// <summary>How far the player is, 0 to 1, after every jelly that leaves the board.</summary>
+        public Signal<float> DuelProgress = new();
+        /// <summary>The duel level ended, won or lost.</summary>
+        public Signal<DuelResultRVO> DuelFinished = new();
+        /// <summary>The duel level was left: whatever shows the race closes.</summary>
+        public Signal DuelEnded = new();
         /// <summary>The coins the player now holds.</summary>
         public Signal<int> CoinsChanged = new();
         /// <summary>The once-a-day shop products already bought today, by product id.</summary>

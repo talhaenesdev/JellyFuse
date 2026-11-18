@@ -17,12 +17,14 @@ namespace Modules.GameplayModule.Controllers
     internal class SubmitLevelScoreCommand : Command
     {
         [Inject] private IJellyPuzzleModel _model { get; set; }
+        [Inject] private IDuelModel _duel { get; set; }
         [Inject] private ISharedDataModel _shared { get; set; }
         [Inject] private ILeaderboardService _leaderboard { get; set; }
         [InjectSignal] private GameplaySignals _signals { get; set; }
 
         public override void Execute()
         {
+            if (_duel.Active) return;
             var level = _shared.GetScriptable<CD_JellyLevels>()?.Get(_model.LevelIndex);
             if (level == null) return;
             int difficulty = level.Difficulty switch { LevelDifficulty.SuperHard => 2, LevelDifficulty.Hard => 1, _ => 0 };

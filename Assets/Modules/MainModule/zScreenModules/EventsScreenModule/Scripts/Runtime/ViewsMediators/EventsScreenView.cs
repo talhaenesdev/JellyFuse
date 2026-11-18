@@ -11,8 +11,10 @@ namespace Modules.MainModule.EventsScreenModule.ViewsMediators
     {
         [SerializeField] private Button _backButton;
         [SerializeField] private ScrollRect _eventList;
+        [SerializeField] private Button _duelButton;
 
         public Action BackClicked;
+        public Action DuelClicked;
 
         /// <summary>
         /// A screen is pooled: hiding it deactivates the GameObject and shows the same instance
@@ -23,11 +25,13 @@ namespace Modules.MainModule.EventsScreenModule.ViewsMediators
         private void OnEnable()
         {
             if (_backButton != null) _backButton.onClick.AddListener(OnBackClicked);
+            if (_duelButton != null) _duelButton.onClick.AddListener(OnDuelClicked);
         }
 
         private void OnDisable()
         {
             if (_backButton != null) _backButton.onClick.RemoveListener(OnBackClicked);
+            if (_duelButton != null) _duelButton.onClick.RemoveListener(OnDuelClicked);
         }
 
         public override void BeforeScreenActivation()
@@ -37,6 +41,7 @@ namespace Modules.MainModule.EventsScreenModule.ViewsMediators
         }
 
         private void OnBackClicked() => BackClicked?.Invoke();
+        private void OnDuelClicked() => DuelClicked?.Invoke();
 
         /// <summary>
         /// This method runs if screenData.HasShowAnimation bool is true.
