@@ -108,6 +108,83 @@ namespace Leaderboard
             return new DuelSubmitResult { Accepted = true };
         }
 
+        private const int MaxInbox = 10;
+        private const int ChallengeHours = 24;
+
+        /// <summary>
+        /// A challenge to one player: the sender's cleared run on a level, waiting in that player's inbox for a day. The
+        /// target finds it with GetChallenges, races it and answers; the sender then finds the outcome with GetChallenges.
+        /// </summary>
+        [CloudCodeFunction("SendChallenge")]
+        public async Task<DuelSubmitResult> SendChallenge(IExecutionContext context, IGameApiClient api, string targetId, int level, List<float> exits)
+        {
+            if (string.IsNullOrEmpty(targetId) || targetId == context.PlayerId) return new DuelSubmitResult { Reason = "no target" };
+            if (level < 1 || level > MaxLevel || exits == null || exits.Count == 0 || exits.Count > MaxExits) return new DuelSubmitResult { Reason = "bad run" };
+            for (int i = 1; i < exits.Count; i++) if (exits[i] < exits[i - 1]) return new DuelSubmitResult { Reason = "bad exits" };
+            float seconds = exits[exits.Count - 1];
+            if (seconds < MinSeconds || seconds > MaxSeconds) return new DuelSubmitResult { Reason = "bad time" };
+            var profile = await ReadProfile(context, api);
+            var inbox = Fresh(await Read<List<DuelChallenge>>(context, api, InboxKey(targetId)) ?? new List<DuelChallenge>());
+            // One waiting challenge a sender: a new one replaces the old.
+            inbox.RemoveAll(c => c.FromId == context.PlayerId);
+            inbox.Add(new DuelChallenge
+            {
+                Id = Guid.NewGuid().ToString("N"), FromId = context.PlayerId, FromName = profile.Name, FromIcon = profile.Icon,
+                Level = level, Exits = exits.Select(e => (float)Math.Round(e, 2)).ToList(), Seconds = seconds,
+                SentAt = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
+            });
+            if (inbox.Count > MaxInbox) inbox.RemoveRange(0, inbox.Count - MaxInbox);
+            await Write(context, api, InboxKey(targetId), inbox);
+            return new DuelSubmitResult { Accepted = true };
+        }
+
+        /// <summary>The challenges waiting for the caller, and the outcomes of the ones the caller sent; outcomes are handed out once.</summary>
+        [CloudCodeFunction("GetChallenges")]
+        public async Task<ChallengeMail> GetChallenges(IExecutionContext context, IGameApiClient api)
+        {
+            var mail = new ChallengeMail
+            {
+                Challenges = Fresh(await Read<List<DuelChallenge>>(context, api, InboxKey(context.PlayerId)) ?? new List<DuelChallenge>()),
+                Results = await Read<List<ChallengeOutcome>>(context, api, ResultsKey(context.PlayerId)) ?? new List<ChallengeOutcome>(),
+            };
+            if (mail.Results.Count > 0) await Write(context, api, ResultsKey(context.PlayerId), new List<ChallengeOutcome>());
+            return mail;
+        }
+
+        /// <summary>
+        /// The caller answered a challenge: declined, or raced it - <paramref name="seconds"/> their time, -1 when they did not
+        /// clear the board. The challenge leaves the inbox and the sender is told.
+        /// </summary>
+        [CloudCodeFunction("AnswerChallenge")]
+        public async Task<DuelSubmitResult> AnswerChallenge(IExecutionContext context, IGameApiClient api, string challengeId, bool declined, float seconds)
+        {
+            var inbox = await Read<List<DuelChallenge>>(context, api, InboxKey(context.PlayerId)) ?? new List<DuelChallenge>();
+            var challenge = inbox.FirstOrDefault(c => c.Id == challengeId);
+            if (challenge == null) return new DuelSubmitResult { Reason = "no such challenge" };
+            inbox.Remove(challenge);
+            await Write(context, api, InboxKey(context.PlayerId), inbox);
+            var profile = await ReadProfile(context, api);
+            var results = await Read<List<ChallengeOutcome>>(context, api, ResultsKey(challenge.FromId)) ?? new List<ChallengeOutcome>();
+            results.Add(new ChallengeOutcome
+            {
+                OpponentName = profile.Name, OpponentIcon = profile.Icon, Level = challenge.Level, Declined = declined,
+                OpponentSeconds = declined ? -1 : seconds, Seconds = challenge.Seconds,
+                SenderWon = declined || seconds < 0 || seconds > challenge.Seconds,
+            });
+            if (results.Count > MaxInbox) results.RemoveRange(0, results.Count - MaxInbox);
+            await Write(context, api, ResultsKey(challenge.FromId), results);
+            return new DuelSubmitResult { Accepted = true };
+        }
+
+        private static List<DuelChallenge> Fresh(List<DuelChallenge> inbox)
+        {
+            long oldest = DateTimeOffset.UtcNow.ToUnixTimeSeconds() - ChallengeHours * 3600L;
+            inbox.RemoveAll(c => c.SentAt < oldest);
+            return inbox;
+        }
+
+        private static string InboxKey(string playerId) => "inbox-" + playerId;
+        private static string ResultsKey(string playerId) => "results-" + playerId;
         private static string GhostKey(int level) => "ghosts-" + level;
 
         private static async Task<T> Read<T>(IExecutionContext context, IGameApiClient api, string key) where T : class
@@ -163,6 +240,37 @@ namespace Leaderboard
         /// <summary>The second each of the opponent's jellies left the board; empty for a bot.</summary>
         public List<float> Exits { get; set; } = new();
         public float Seconds { get; set; }
+    }
+
+    public class DuelChallenge
+    {
+        public string Id { get; set; } = string.Empty;
+        public string FromId { get; set; } = string.Empty;
+        public string FromName { get; set; } = string.Empty;
+        public string FromIcon { get; set; } = string.Empty;
+        public int Level { get; set; }
+        public List<float> Exits { get; set; } = new();
+        public float Seconds { get; set; }
+        public long SentAt { get; set; }
+    }
+
+    public class ChallengeOutcome
+    {
+        public string OpponentName { get; set; } = string.Empty;
+        public string OpponentIcon { get; set; } = string.Empty;
+        public int Level { get; set; }
+        public bool Declined { get; set; }
+        /// <summary>The challenged player's time; -1 when they declined or did not clear the board.</summary>
+        public float OpponentSeconds { get; set; }
+        /// <summary>The sender's own time on the challenge.</summary>
+        public float Seconds { get; set; }
+        public bool SenderWon { get; set; }
+    }
+
+    public class ChallengeMail
+    {
+        public List<DuelChallenge> Challenges { get; set; } = new();
+        public List<ChallengeOutcome> Results { get; set; } = new();
     }
 
     public class DuelSubmitResult

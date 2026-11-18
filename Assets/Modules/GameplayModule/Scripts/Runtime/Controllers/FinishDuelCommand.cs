@@ -33,6 +33,17 @@ namespace Modules.GameplayModule.Controllers
             float seconds = cleared ? Mathf.Max(0, Time.realtimeSinceStartup - _duel.RaceStart) : -1;
             bool won = cleared && seconds <= _duel.OpponentSeconds;
 
+            // Setting a challenge: nobody is raced, nothing is paid; a cleared run goes to the challenged player.
+            if (!string.IsNullOrEmpty(_duel.ChallengeTargetId))
+            {
+                if (cleared) _ = _duelService.SendChallengeAsync(_duel.ChallengeTargetId, _duel.LevelIndex + 1, new List<float>(_duel.Exits));
+                _signals.Outgoing.DuelFinished.Dispatch(new DuelResultRVO(cleared, 0, seconds, -1, cleared, _duel.OpponentName));
+                if (cleared) { _model.WinPaid = true; _model.WinReward = 0; }
+                return;
+            }
+            // Racing a challenge received: its sender is told how it went.
+            if (!string.IsNullOrEmpty(_duel.ChallengeId)) _ = _duelService.AnswerChallengeAsync(_duel.ChallengeId, false, seconds);
+
             int coins = 0;
             var events = _shared.GetScriptable<CD_Events>();
             var progress = _shared.GetScriptable<SD_JellyProgress>();

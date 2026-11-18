@@ -71,6 +71,17 @@ namespace Modules.GameplayModule.RootsContexts
             CommandBinder.Bind(_signals.Incoming.StartDuel)
                 .ToSequence<FindDuelOpponentCommand>()
                 .ToSequence<SignalDispatchCommand>(_signals.Outgoing.DuelChosen);
+            CommandBinder.Bind(_signals.Incoming.StartChallenge)
+                .ToSequence<ChooseChallengeTargetCommand>()
+                .ToSequence<SignalDispatchCommand>(_signals.Outgoing.DuelChosen);
+            CommandBinder.Bind(_signals.Incoming.AcceptChallenge)
+                .ToSequence<AcceptChallengeCommand>()
+                .ToSequence<SignalDispatchCommand>(_signals.Outgoing.DuelChosen);
+            CommandBinder.Bind(_signals.Incoming.DeclineChallenge).ToSequence<DeclineChallengeCommand>();
+            // Paced by itself: each turn waits for the one before, then starts the next.
+            CommandBinder.Bind(_internalSignals.PollChallenges)
+                .ToSequence<PollChallengesCommand>()
+                .ToSequence<SignalDispatchCommand>(_internalSignals.PollChallenges);
             CommandBinder.Bind(_signals.Incoming.LoadRemoteLevels)
                 .ToParallel<LoadRemoteLevelsCommand>()
                 .ToParallel<LoadRemoteBoardColoursCommand>();
@@ -375,6 +386,7 @@ namespace Modules.GameplayModule.RootsContexts
         public override void Launch()
         {
             base.Launch();
+            _internalSignals.PollChallenges.Dispatch();
         }
         public override void DestroyContext()
         {

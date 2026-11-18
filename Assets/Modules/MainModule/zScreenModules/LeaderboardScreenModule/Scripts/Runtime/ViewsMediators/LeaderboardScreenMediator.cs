@@ -38,6 +38,7 @@ namespace Modules.MainModule.LeaderboardScreenModule.ViewsMediators
             _view.BackClicked += OnBackClicked;
             _view.TabClicked += OnTabClicked;
             _view.EditProfileClicked += OnEditProfileClicked;
+            _view.ChallengeClicked += OnChallengeClicked;
         }
 
         private void OnScreenHidden(IScreenBody screen)
@@ -45,6 +46,14 @@ namespace Modules.MainModule.LeaderboardScreenModule.ViewsMediators
             _view.BackClicked -= OnBackClicked;
             _view.TabClicked -= OnTabClicked;
             _view.EditProfileClicked -= OnEditProfileClicked;
+            _view.ChallengeClicked -= OnChallengeClicked;
+        }
+
+        private void OnChallengeClicked(Modules.GameplayModule.Shared.Data.ValueObjects.DuelTargetVO target)
+        {
+            if (!_view.Data.HasState(ScreenState.AvailableToSendSignal)) return;
+            _view.Hide();
+            _signals.Outgoing.ChallengeClicked.Dispatch(target);
         }
 
         private void OnEditProfileClicked()

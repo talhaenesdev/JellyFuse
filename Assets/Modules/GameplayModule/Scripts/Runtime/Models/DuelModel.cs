@@ -17,9 +17,19 @@ namespace Modules.GameplayModule.Models
         public float RaceStart { get; private set; }
         public IReadOnlyList<float> Exits => _exits;
         public bool Finished { get; private set; }
+        public string ChallengeTargetId { get; private set; } = string.Empty;
+        public string ChallengeId { get; private set; } = string.Empty;
+        public Dictionary<string, Modules.DuelModule.Data.ValueObjects.DuelChallengeVO> Pending { get; } = new();
+        public HashSet<string> Shown { get; } = new();
+        public Queue<Modules.DuelModule.Data.ValueObjects.ChallengeOutcomeVO> Outcomes { get; } = new();
+
+        public void SetChallengeTarget(string playerId) => ChallengeTargetId = playerId ?? string.Empty;
+        public void SetChallenge(string challengeId) => ChallengeId = challengeId ?? string.Empty;
 
         public void Choose(int levelIndex, string opponentName, string opponentIcon, IReadOnlyList<float> opponentExits)
         {
+            ChallengeTargetId = string.Empty;
+            ChallengeId = string.Empty;
             Active = true;
             LevelIndex = levelIndex;
             OpponentName = opponentName ?? string.Empty;
@@ -50,6 +60,8 @@ namespace Modules.GameplayModule.Models
         {
             Active = false;
             Finished = false;
+            ChallengeTargetId = string.Empty;
+            ChallengeId = string.Empty;
             _exits.Clear();
         }
     }

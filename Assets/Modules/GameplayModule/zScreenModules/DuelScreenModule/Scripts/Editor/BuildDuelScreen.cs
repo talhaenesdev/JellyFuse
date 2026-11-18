@@ -56,6 +56,7 @@ namespace Modules.GameplayModule.DuelScreenModule.Editor
                 Stretch(blocker.rectTransform);
                 blocker.color = new Color(0.08f, 0.03f, 0.2f, 0.55f);
                 blocker.raycastTarget = true;
+                blocker.enabled = true;
 
                 // The race bar: the opponent's row above the player's, high on the board.
                 GameObject race = Ui("Pnl_Race", root.transform);
@@ -94,6 +95,57 @@ namespace Modules.GameplayModule.DuelScreenModule.Editor
                 status.outlineColor = SHADE;
                 status.outlineWidth = 0.2f;
                 Button close = Button("Btn_Close", search.transform, rounded, font, "OK", new Vector2(0, -420), new Vector2(300, 100));
+
+                // A challenge received: who sent it, on which level, Accept and Decline.
+                GameObject challenge = Ui("Pnl_Challenge", root.transform);
+                Place((RectTransform)challenge.transform, new Vector2(0, 40), new Vector2(880, 945));
+                Image challengePanel = Img("Img_Panel", challenge.transform, Sprite("SPR_UI_Duel_ChallengePopup"));
+                Stretch(challengePanel.rectTransform);
+                Image fromIcon = Img("Img_FromIcon", challenge.transform, null);
+                Place(fromIcon.rectTransform, new Vector2(-190, 40), new Vector2(200, 200));
+                fromIcon.transform.SetAsFirstSibling();
+                Image meIcon = Img("Img_MeIcon", challenge.transform, null);
+                Place(meIcon.rectTransform, new Vector2(190, 40), new Vector2(200, 200));
+                meIcon.transform.SetAsFirstSibling();
+                TMP_Text challengeTitle = Text("Txt_Title", challenge.transform, titleFont, "Challenge!", 60);
+                Place(challengeTitle.rectTransform, new Vector2(0, 300), new Vector2(520, 90));
+                challengeTitle.alignment = TextAlignmentOptions.Center;
+                challengeTitle.color = Color.white;
+                challengeTitle.outlineColor = SHADE;
+                challengeTitle.outlineWidth = 0.25f;
+                TMP_Text challengeBody = Text("Txt_Body", challenge.transform, font, "", 34);
+                Place(challengeBody.rectTransform, new Vector2(0, -145), new Vector2(680, 80));
+                challengeBody.alignment = TextAlignmentOptions.Center;
+                challengeBody.enableAutoSizing = true;
+                challengeBody.fontSizeMin = 20;
+                challengeBody.fontSizeMax = 34;
+                challengeBody.color = Color.white;
+                challengeBody.outlineColor = SHADE;
+                challengeBody.outlineWidth = 0.2f;
+                Button decline = SpriteButton("Btn_Decline", challenge.transform, Sprite("SPR_UI_Duel_Button_Decline"), font, "Later", new Vector2(-180, -350), new Vector2(320, 100));
+                Button accept = SpriteButton("Btn_Accept", challenge.transform, Sprite("SPR_UI_Duel_Button_Accept"), font, "Play", new Vector2(180, -350), new Vector2(320, 100));
+
+                // How a sent challenge went: a banner along the top that leaves by itself.
+                GameObject notice = Ui("Pnl_Notice", root.transform);
+                RectTransform noticeRect = (RectTransform)notice.transform;
+                noticeRect.anchorMin = noticeRect.anchorMax = new Vector2(0.5f, 1);
+                noticeRect.pivot = new Vector2(0.5f, 1);
+                noticeRect.anchoredPosition = new Vector2(0, -170);
+                noticeRect.sizeDelta = new Vector2(900, 281);
+                Image noticeCard = Img("Img_Card", notice.transform, Sprite("SPR_UI_Duel_ResultNotice"));
+                Stretch(noticeCard.rectTransform);
+                Image noticeIcon = Img("Img_Icon", notice.transform, null);
+                Place(noticeIcon.rectTransform, new Vector2(-325, 0), new Vector2(150, 150));
+                noticeIcon.transform.SetAsFirstSibling();
+                TMP_Text noticeText = Text("Txt_Notice", notice.transform, font, "", 32);
+                Place(noticeText.rectTransform, new Vector2(40, 0), new Vector2(520, 160));
+                noticeText.alignment = TextAlignmentOptions.Left;
+                noticeText.enableAutoSizing = true;
+                noticeText.fontSizeMin = 18;
+                noticeText.fontSizeMax = 32;
+                noticeText.color = Color.white;
+                noticeText.outlineColor = SHADE;
+                noticeText.outlineWidth = 0.2f;
 
                 // The countdown, over the board.
                 Image countdown = Img("Img_Countdown", root.transform, Sprite("SPR_UI_Duel_Countdown_3"));
@@ -162,6 +214,19 @@ namespace Modules.GameplayModule.DuelScreenModule.Editor
                 Set(so, "_resultTimes", times);
                 Set(so, "_reward", reward);
                 Set(so, "_rewardCoins", coins);
+                Set(so, "_sentSprite", Sprite("SPR_UI_Duel_ChallengeSent"));
+                Set(so, "_challenge", challenge);
+                Set(so, "_challengeFromIcon", fromIcon);
+                Set(so, "_challengeMeIcon", meIcon);
+                Set(so, "_challengeTitle", challengeTitle);
+                Set(so, "_challengeBody", challengeBody);
+                Set(so, "_challengeAccept", accept);
+                Set(so, "_challengeDecline", decline);
+                Set(so, "_notice", notice);
+                Set(so, "_noticeIcon", noticeIcon);
+                Set(so, "_noticeText", noticeText);
+                challenge.SetActive(false);
+                notice.SetActive(false);
                 so.ApplyModifiedPropertiesWithoutUndo();
 
                 search.SetActive(false);
@@ -307,6 +372,24 @@ namespace Modules.GameplayModule.DuelScreenModule.Editor
             Stretch(text.rectTransform);
             text.alignment = TextAlignmentOptions.Center;
             text.color = Color.white;
+            return button;
+        }
+
+        private static Button SpriteButton(string name, Transform parent, Sprite sprite, TMP_FontAsset font, string label, Vector2 position, Vector2 size)
+        {
+            GameObject go = Ui(name, parent, typeof(Image), typeof(UnityEngine.UI.Button));
+            Place((RectTransform)go.transform, position, size);
+            Image image = go.GetComponent<Image>();
+            image.sprite = sprite;
+            image.preserveAspect = true;
+            var button = go.GetComponent<UnityEngine.UI.Button>();
+            button.targetGraphic = image;
+            TMP_Text text = Text("Txt_Label", go.transform, font, label, 38);
+            Stretch(text.rectTransform);
+            text.alignment = TextAlignmentOptions.Center;
+            text.color = Color.white;
+            text.outlineColor = SHADE;
+            text.outlineWidth = 0.2f;
             return button;
         }
 

@@ -109,11 +109,11 @@ namespace Leaderboard
             var result = new BoardResult();
             var page = await api.Leaderboards.GetLeaderboardScoresAsync(context, context.AccessToken, project, board, null, 0, limit);
             foreach (var entry in page.Data.Results)
-                result.Top.Add(new BoardRow { Rank = entry.Rank + 1, Name = entry.PlayerName, Tag = Tag(entry.PlayerName, entry.PlayerId), Score = (long)entry.Score, IsMe = entry.PlayerId == context.PlayerId });
+                result.Top.Add(new BoardRow { Rank = entry.Rank + 1, Name = entry.PlayerName, Tag = Tag(entry.PlayerName, entry.PlayerId), Score = (long)entry.Score, IsMe = entry.PlayerId == context.PlayerId, PlayerId = entry.PlayerId });
             try
             {
                 var mine = await api.Leaderboards.GetLeaderboardPlayerScoreAsync(context, context.AccessToken, project, board, context.PlayerId, null);
-                result.Me = new BoardRow { Rank = mine.Data.Rank + 1, Name = mine.Data.PlayerName, Tag = Tag(mine.Data.PlayerName, context.PlayerId), Score = (long)mine.Data.Score, IsMe = true };
+                result.Me = new BoardRow { Rank = mine.Data.Rank + 1, Name = mine.Data.PlayerName, Tag = Tag(mine.Data.PlayerName, context.PlayerId), Score = (long)mine.Data.Score, IsMe = true, PlayerId = context.PlayerId };
             }
             catch (Exception)
             {
@@ -236,6 +236,8 @@ namespace Leaderboard
         public int Level { get; set; }
         /// <summary>The player's game is open now.</summary>
         public bool Active { get; set; }
+        /// <summary>Who the row is, so a challenge can be sent to them.</summary>
+        public string PlayerId { get; set; } = string.Empty;
     }
 
     public class ProfileResult

@@ -57,6 +57,14 @@ namespace Modules.MainModule.LeaderboardScreenModule.ViewsMediators
         public Action BackClicked;
         public Action<LeaderboardBoard> TabClicked;
         public Action EditProfileClicked;
+        /// <summary>Duel tapped on an active player's row.</summary>
+        public Action<Modules.GameplayModule.Shared.Data.ValueObjects.DuelTargetVO> ChallengeClicked;
+        /// <summary>Who each row's Duel button challenges, set as the row is filled.</summary>
+        private readonly Dictionary<Button, LeaderboardRowVO> _challengeTargets = new();
+        /// <summary>Players challenged while this screen was open: their button stays greyed until it opens again.</summary>
+        private readonly HashSet<string> _challenged = new();
+        [SerializeField] private Sprite _challengeSprite;
+        [SerializeField] private Sprite _challengeDisabledSprite;
 
         private readonly List<RectTransform> _rows = new();
         private Func<string, string> _localize;
@@ -171,6 +179,7 @@ namespace Modules.MainModule.LeaderboardScreenModule.ViewsMediators
             string name = string.IsNullOrEmpty(data.Name) ? L("leaderboard.player", "Player") : TrimName(data.Name);
             Set(row, "Txt_Name", name);
             ShowActive(row, data.Active);
+            ShowChallenge(row, data);
             Set(row, "Txt_Score", data.Score.ToString("N0"));
             // The level rides on the tag line under the name, so every row and podium slot shows it without a new label.
             string level = data.Level > 0 ? string.Format(L("leaderboard.level", "Level {0}"), data.Level) : string.Empty;
@@ -207,6 +216,30 @@ namespace Modules.MainModule.LeaderboardScreenModule.ViewsMediators
                 if (sprite != null) { image.sprite = sprite; image.color = Color.white; }
                 else image.color = data.IsMe ? _myRowColour : _rowColour;
             }
+        }
+
+        /// <summary>The Duel button, on the rows of other players whose game is open now.</summary>
+        private void ShowChallenge(Transform row, LeaderboardRowVO data)
+        {
+            var button = row.Find("Btn_Challenge")?.GetComponent<Button>();
+            if (button == null) return;
+            bool show = data.Active && !data.IsMe && !string.IsNullOrEmpty(data.PlayerId);
+            button.gameObject.SetActive(show);
+            if (!show) return;
+            if (!_challengeTargets.ContainsKey(button)) button.onClick.AddListener(() => OnChallengeTapped(button));
+            _challengeTargets[button] = data;
+            bool sent = _challenged.Contains(data.PlayerId);
+            button.interactable = !sent;
+            var image = button.GetComponent<Image>();
+            if (image != null && _challengeSprite != null) image.sprite = sent && _challengeDisabledSprite != null ? _challengeDisabledSprite : _challengeSprite;
+            Set(button.transform, "Txt_Label", L("leaderboard.challenge", "Duel"));
+        }
+
+        private void OnChallengeTapped(Button button)
+        {
+            if (!_challengeTargets.TryGetValue(button, out var data)) return;
+            _challenged.Add(data.PlayerId);
+            ChallengeClicked?.Invoke(new Modules.GameplayModule.Shared.Data.ValueObjects.DuelTargetVO(data.PlayerId, TrimName(data.Name), data.Icon, data.Level));
         }
 
         /// <summary>

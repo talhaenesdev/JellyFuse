@@ -57,6 +57,56 @@ namespace Modules.DuelModule.Services
             }
         }
 
+        public bool IsReady => UnityServices.State == ServicesInitializationState.Initialized && AuthenticationService.Instance.IsSignedIn;
+
+        public async Task<bool> SendChallengeAsync(string targetId, int level, IReadOnlyList<float> exits)
+        {
+            if (!SignedIn()) return false;
+            try
+            {
+                var result = await WithTimeout(CloudCodeService.Instance.CallModuleEndpointAsync<SubmitResult>(MODULE, "SendChallenge",
+                    new Dictionary<string, object> { { "targetId", targetId }, { "level", level }, { "exits", exits } }));
+                if (result == null || !result.Accepted) FlowLogger.Log($"DuelService - the challenge was not sent: {result?.Reason}");
+                return result != null && result.Accepted;
+            }
+            catch (Exception exception)
+            {
+                FlowLogger.Log($"DuelService - the challenge was not sent: {exception.Message}");
+                return false;
+            }
+        }
+
+        public async Task<ChallengeMailVO> GetChallengesAsync()
+        {
+            if (!IsReady) return null;
+            try
+            {
+                return await WithTimeout(CloudCodeService.Instance.CallModuleEndpointAsync<ChallengeMailVO>(MODULE, "GetChallenges",
+                    new Dictionary<string, object>()));
+            }
+            catch (Exception exception)
+            {
+                FlowLogger.Log($"DuelService - challenges could not be read: {exception.Message}");
+                return null;
+            }
+        }
+
+        public async Task<bool> AnswerChallengeAsync(string challengeId, bool declined, float seconds)
+        {
+            if (!SignedIn()) return false;
+            try
+            {
+                var result = await WithTimeout(CloudCodeService.Instance.CallModuleEndpointAsync<SubmitResult>(MODULE, "AnswerChallenge",
+                    new Dictionary<string, object> { { "challengeId", challengeId }, { "declined", declined }, { "seconds", seconds } }));
+                return result != null && result.Accepted;
+            }
+            catch (Exception exception)
+            {
+                FlowLogger.Log($"DuelService - the challenge answer did not reach the server: {exception.Message}");
+                return false;
+            }
+        }
+
         private static async Task<T> WithTimeout<T>(Task<T> call) where T : class
         {
             var finished = await Task.WhenAny(call, Task.Delay(TIMEOUT));

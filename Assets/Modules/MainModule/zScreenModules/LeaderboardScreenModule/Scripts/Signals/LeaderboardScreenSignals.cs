@@ -20,5 +20,7 @@ namespace Modules.MainModule.LeaderboardScreenModule.Signals
         public Signal BackClicked = new();
         /// <summary>The player tapped their own row to change their name or icon.</summary>
         public Signal EditProfileClicked = new();
+        /// <summary>The player tapped Duel on an active player's row: that player is to be challenged.</summary>
+        public Signal<Modules.GameplayModule.Shared.Data.ValueObjects.DuelTargetVO> ChallengeClicked = new();
     }
 }

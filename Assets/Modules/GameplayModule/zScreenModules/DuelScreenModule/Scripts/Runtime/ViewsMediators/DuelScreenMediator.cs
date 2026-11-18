@@ -32,10 +32,32 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
             _signals.Incoming.ApplyProgress.AddListener(_view.ApplyProgress);
             _signals.Incoming.ShowResult.AddListener(OnResult);
             _signals.Incoming.Close.AddListener(OnClose);
+            _view.ChallengeAccepted += OnAccepted;
+            _view.ChallengeDeclined += OnDeclined;
+            _view.Idle += OnIdle;
+        }
+
+        private void OnAccepted(string id)
+        {
+            if (_view.Data.HasState(ScreenState.AvailableToSendSignal)) _signals.Outgoing.ChallengeAccepted.Dispatch(id);
+        }
+
+        private void OnDeclined(string id)
+        {
+            if (_view.Data.HasState(ScreenState.AvailableToSendSignal)) _signals.Outgoing.ChallengeDeclined.Dispatch(id);
+        }
+
+        // Nothing of the duel left on show: the screen goes back to its pool.
+        private void OnIdle()
+        {
+            if (_view.Data.HasState(ScreenState.AvailableToSendSignal)) _view.Hide();
         }
 
         private void OnScreenHidden(IScreenBody screen)
         {
+            _view.ChallengeAccepted -= OnAccepted;
+            _view.ChallengeDeclined -= OnDeclined;
+            _view.Idle -= OnIdle;
             _view.CloseClicked -= OnCloseClicked;
             _signals.Incoming.ShowUnavailable.RemoveListener(_view.ShowUnavailable);
             _signals.Incoming.ApplyProgress.RemoveListener(_view.ApplyProgress);

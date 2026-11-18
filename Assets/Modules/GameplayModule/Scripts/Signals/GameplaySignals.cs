@@ -20,6 +20,11 @@ namespace Modules.GameplayModule.Signals
         public Signal StartDailyChallenge = new();
         /// <summary>The Events screen's duel card: find an opponent and race them on a level the player has won.</summary>
         public Signal StartDuel = new();
+        /// <summary>A player picked on the leaderboard to be challenged: this player plays the level first.</summary>
+        public Signal<DuelTargetVO> StartChallenge = new();
+        /// <summary>A challenge received, by id, was accepted: its level is raced against the sender's run.</summary>
+        public Signal<string> AcceptChallenge = new();
+        public Signal<string> DeclineChallenge = new();
         /// <summary>The boot has begun: fetch the level list published since this build, if there is one.</summary>
         public Signal LoadRemoteLevels = new();
         public Signal<Vector2Int, Vector2Int, bool> Drag = new(hideCommandLog: true);
@@ -118,6 +123,10 @@ namespace Modules.GameplayModule.Signals
         public Signal<DuelResultRVO> DuelFinished = new();
         /// <summary>The duel level was left: whatever shows the race closes.</summary>
         public Signal DuelEnded = new();
+        /// <summary>A challenge waits for this player.</summary>
+        public Signal<ChallengeInviteRVO> ChallengeReceived = new();
+        /// <summary>A challenge this player sent was answered.</summary>
+        public Signal<ChallengeOutcomeRVO> ChallengeOutcome = new();
         /// <summary>The coins the player now holds.</summary>
         public Signal<int> CoinsChanged = new();
         /// <summary>The once-a-day shop products already bought today, by product id.</summary>

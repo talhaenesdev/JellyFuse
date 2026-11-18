@@ -19,5 +19,7 @@ namespace Modules.LeaderboardModule.Data.ValueObjects
         public int Level { get; set; }
         /// <summary>The player's game is open now.</summary>
         public bool Active { get; set; }
+        /// <summary>Who the row is, so a challenge can be sent to them.</summary>
+        public string PlayerId { get; set; } = string.Empty;
     }
 }

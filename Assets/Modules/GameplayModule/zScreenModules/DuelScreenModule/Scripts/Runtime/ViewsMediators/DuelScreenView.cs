@@ -53,7 +53,32 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
         [SerializeField] private GameObject _reward;
         [SerializeField] private TMP_Text _rewardCoins;
 
+        [SerializeField] private Sprite _sentSprite;
+
+        [Header("Challenge received")]
+        [SerializeField] private GameObject _challenge;
+        [SerializeField] private Image _challengeFromIcon;
+        [SerializeField] private Image _challengeMeIcon;
+        [SerializeField] private TMP_Text _challengeTitle;
+        [SerializeField] private TMP_Text _challengeBody;
+        [SerializeField] private Button _challengeAccept;
+        [SerializeField] private Button _challengeDecline;
+
+        [Header("Challenge outcome")]
+        [SerializeField] private GameObject _notice;
+        [SerializeField] private Image _noticeIcon;
+        [SerializeField] private TMP_Text _noticeText;
+
         public Action CloseClicked;
+        public Action<string> ChallengeAccepted;
+        public Action<string> ChallengeDeclined;
+        /// <summary>The outcome notice has had its time and nothing else is on show.</summary>
+        public Action Idle;
+
+        private string _challengeId = string.Empty;
+        private string _playerIcon = string.Empty;
+        private float _noticeUntil = -1;
+        private const float NOTICE_SECONDS = 4f;
 
         private Func<string, string> _localize;
         private CD_ProfileIcons _icons;
@@ -77,12 +102,67 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
         {
             if (_searchClose != null) _searchClose.onClick.AddListener(OnCloseClicked);
             if (_resultClose != null) _resultClose.onClick.AddListener(OnResultClosed);
+            if (_challengeAccept != null) _challengeAccept.onClick.AddListener(OnAccept);
+            if (_challengeDecline != null) _challengeDecline.onClick.AddListener(OnDecline);
         }
+
+        private void OnAccept() { CloseChallenge(); ChallengeAccepted?.Invoke(_challengeId); }
+
+        private void OnDecline()
+        {
+            CloseChallenge();
+            ChallengeDeclined?.Invoke(_challengeId);
+            if (NothingElse && _noticeUntil < 0) Idle?.Invoke();
+        }
+
+        private void CloseChallenge()
+        {
+            if (_challenge != null) _challenge.SetActive(false);
+            if (_blocker != null) _blocker.SetActive(false);
+        }
+
+        /// <summary>Somebody challenged this player: who, and on which level, with Accept and Decline.</summary>
+        public void ShowChallenge(ChallengeInviteRVO invite)
+        {
+            _challengeId = invite.Id;
+            SetIcon(_challengeFromIcon, invite.FromIcon);
+            SetIcon(_challengeMeIcon, _playerIcon);
+            if (_challengeTitle != null) _challengeTitle.text = L("duel.challenge_title", "Challenge!");
+            if (_challengeBody != null) _challengeBody.text = string.Format(L("duel.challenge_body", "{0} challenged you on level {1}"), invite.FromName, invite.Level);
+            Label(_challengeAccept, L("duel.accept", "Play"));
+            Label(_challengeDecline, L("duel.decline", "Later"));
+            if (_challenge != null) _challenge.SetActive(true);
+            if (_blocker != null) _blocker.SetActive(true);
+        }
+
+        private static void Label(Button button, string text)
+        {
+            var label = button != null ? button.GetComponentInChildren<TMP_Text>(true) : null;
+            if (label != null) label.text = text;
+        }
+
+        /// <summary>How a challenge this player sent went, in a banner along the top for a few seconds.</summary>
+        public void ShowOutcome(ChallengeOutcomeRVO outcome)
+        {
+            SetIcon(_noticeIcon, outcome.OpponentIcon);
+            string text = outcome.Declined ? L("duel.outcome_declined", "{0} turned down your challenge")
+                : outcome.SenderWon ? L("duel.outcome_won", "You beat {0} in your challenge!")
+                : L("duel.outcome_lost", "{0} beat your challenge");
+            if (_noticeText != null) _noticeText.text = string.Format(text, outcome.OpponentName);
+            if (_notice != null) _notice.SetActive(true);
+            _noticeUntil = Time.realtimeSinceStartup + NOTICE_SECONDS;
+        }
+
+        /// <summary>Nothing of the duel is on show but the notice, if that.</summary>
+        private bool NothingElse => (_search == null || !_search.activeSelf) && (_race == null || !_race.activeSelf)
+            && (_challenge == null || !_challenge.activeSelf) && (_result == null || !_result.activeSelf);
 
         private void OnDisable()
         {
             if (_searchClose != null) _searchClose.onClick.RemoveListener(OnCloseClicked);
             if (_resultClose != null) _resultClose.onClick.RemoveListener(OnResultClosed);
+            if (_challengeAccept != null) _challengeAccept.onClick.RemoveListener(OnAccept);
+            if (_challengeDecline != null) _challengeDecline.onClick.RemoveListener(OnDecline);
         }
 
         public override void BeforeScreenActivation()
@@ -92,7 +172,10 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
             _raceStart = -1;
             _countdownLeft = 0;
             _counting = false;
+            _noticeUntil = -1;
             Show(search: false, countdown: false, race: false, result: false);
+            if (_challenge != null) _challenge.SetActive(false);
+            if (_notice != null) _notice.SetActive(false);
         }
 
         private void OnCloseClicked() => CloseClicked?.Invoke();
@@ -103,6 +186,7 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
         public void SetProfile(CD_ProfileIcons icons, string playerName, string playerIcon)
         {
             _icons = icons;
+            _playerIcon = playerIcon ?? string.Empty;
             SetIcon(_searchPlayerIcon, playerIcon);
             SetIcon(_racePlayerIcon, playerIcon);
             if (_playerName != null) _playerName.text = string.IsNullOrEmpty(playerName) ? L("duel.you", "You") : playerName;
@@ -155,9 +239,11 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
         {
             _racing = false;
             if (result.Seconds >= 0) _playerProgress = 1;
-            if (_resultBanner != null) _resultBanner.sprite = result.Won ? _winSprite : _loseSprite;
-            if (_resultTitle != null) _resultTitle.text = result.Won ? L("duel.won", "You won!") : L("duel.lost", "You lost!");
-            if (_resultTimes != null)
+            if (_resultBanner != null) _resultBanner.sprite = result.ChallengeSent && _sentSprite != null ? _sentSprite : result.Won ? _winSprite : _loseSprite;
+            if (_resultTitle != null) _resultTitle.text = result.ChallengeSent ? L("duel.sent", "Challenge sent!") : result.Won ? L("duel.won", "You won!") : L("duel.lost", "You lost!");
+            if (result.ChallengeSent && _resultTimes != null)
+                _resultTimes.text = string.Format(L("duel.sent_body", "Your time {0} - {1} will race it"), Seconds(result.Seconds), result.ChallengedName);
+            else if (_resultTimes != null)
             {
                 _resultTimes.text = result.Seconds >= 0
                     ? string.Format(L("duel.times", "You {0}  ·  Rival {1}"), Seconds(result.Seconds), Seconds(result.OpponentSeconds))
@@ -172,6 +258,12 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
         private void Update()
         {
             if (_searchSpinner != null && _searchSpinner.gameObject.activeInHierarchy) _searchSpinner.Rotate(0, 0, -180f * Time.unscaledDeltaTime);
+            if (_noticeUntil > 0 && Time.realtimeSinceStartup >= _noticeUntil)
+            {
+                _noticeUntil = -1;
+                if (_notice != null) _notice.SetActive(false);
+                if (NothingElse) Idle?.Invoke();
+            }
             if (_raceStart < 0) return;
             float now = Time.realtimeSinceStartup;
             if (_counting)
@@ -244,7 +336,7 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
         private void Show(bool search, bool countdown, bool race, bool result)
         {
             if (_search != null) _search.SetActive(search);
-            if (_blocker != null) _blocker.SetActive(search || countdown);
+            if (_blocker != null) _blocker.SetActive(search || countdown || (_challenge != null && _challenge.activeSelf));
             if (_countdown != null) _countdown.gameObject.SetActive(countdown);
             if (_race != null) _race.SetActive(race);
             if (_result != null) _result.SetActive(result);

@@ -22,11 +22,18 @@ namespace Modules.GameplayModule.DuelScreenModule.Signals
         public Signal<DuelResultRVO> ShowResult = new();
         /// <summary>The duel level was left.</summary>
         public Signal Close = new();
+        /// <summary>A challenge waits for this player: Accept or Decline.</summary>
+        public Signal<ChallengeInviteRVO> ShowChallenge = new();
+        /// <summary>A challenge this player sent was answered.</summary>
+        public Signal<ChallengeOutcomeRVO> ShowOutcome = new();
     }
 
     public class DuelScreenSignalsOutgoing
     {
         /// <summary>The player closed the search panel when no opponent was found.</summary>
         public Signal SearchClosed = new();
+        /// <summary>A challenge received, by id, was accepted.</summary>
+        public Signal<string> ChallengeAccepted = new();
+        public Signal<string> ChallengeDeclined = new();
     }
 }

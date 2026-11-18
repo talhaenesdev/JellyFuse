@@ -123,6 +123,17 @@ namespace Modules.ConnectorModule.RootsContexts
             // The map is laid out under the race bars while a duel is played.
             _gameplaySignals.Outgoing.DuelStarted.Connect(_ => _gameplayScreenSignals.Incoming.ReserveTop.Dispatch(DUEL_BARS), DUEL_GROUP);
             _gameplaySignals.Outgoing.DuelEnded.Connect(() => _gameplayScreenSignals.Incoming.ReserveTop.Dispatch(0f), DUEL_GROUP);
+
+            // Challenges: Duel on an active player's leaderboard row sets one; one received shows over whatever is up.
+            _leaderboardScreenSignals.Outgoing.ChallengeClicked.Connect(_ => _duelScreenSignals.Incoming.OpenSearch.Dispatch(), DUEL_GROUP);
+            _leaderboardScreenSignals.Outgoing.ChallengeClicked.Connect(_ => _mainScreenSignals.Incoming.HideMainScreen.Dispatch(), DUEL_GROUP);
+            _leaderboardScreenSignals.Outgoing.ChallengeClicked.Connect(_gameplaySignals.Incoming.StartChallenge, DUEL_GROUP);
+            _gameplaySignals.Outgoing.ChallengeReceived.Connect(_duelScreenSignals.Incoming.ShowChallenge, DUEL_GROUP);
+            _gameplaySignals.Outgoing.ChallengeOutcome.Connect(_duelScreenSignals.Incoming.ShowOutcome, DUEL_GROUP);
+            _duelScreenSignals.Outgoing.ChallengeAccepted.Connect(_ => _eventsScreenSignals.Incoming.CloseEventsScreen.Dispatch(), DUEL_GROUP);
+            _duelScreenSignals.Outgoing.ChallengeAccepted.Connect(_ => _mainScreenSignals.Incoming.HideMainScreen.Dispatch(), DUEL_GROUP);
+            _duelScreenSignals.Outgoing.ChallengeAccepted.Connect(_gameplaySignals.Incoming.AcceptChallenge, DUEL_GROUP);
+            _duelScreenSignals.Outgoing.ChallengeDeclined.Connect(_gameplaySignals.Incoming.DeclineChallenge, DUEL_GROUP);
         }
 
         public override void DestroyContext()

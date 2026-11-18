@@ -33,6 +33,8 @@ namespace Modules.GameplayModule.DuelScreenModule.RootsContexts
             base.CommandBindings();
             CommandBinder.Bind(_signals.Incoming.OpenSearch).ToSequence<OpenDuelSearchCommand>();
             CommandBinder.Bind(_signals.Incoming.StartRace).ToSequence<StartDuelRaceScreenCommand>();
+            CommandBinder.Bind(_signals.Incoming.ShowChallenge).ToSequence<ShowChallengeInviteCommand>();
+            CommandBinder.Bind(_signals.Incoming.ShowOutcome).ToSequence<ShowChallengeOutcomeCommand>();
         }
     }
 }
