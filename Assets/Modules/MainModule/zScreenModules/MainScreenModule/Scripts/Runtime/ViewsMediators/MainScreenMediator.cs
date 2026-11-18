@@ -46,6 +46,8 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
             _signals.Incoming.ApplyLanguage.AddListener(_view.ApplyLanguage);
             _signals.Incoming.ApplyCoins.AddListener(_view.ApplyCoins);
             _signals.Incoming.ApplyLives.AddListener(_view.ApplyLives);
+            _signals.Incoming.ShowHomeTab.AddListener(_view.SelectHomeTab);
+            _signals.Incoming.HideMainScreen.AddListener(OnHideRequested);
             _signals.Incoming.ApplyProfileIcon.AddListener(_view.ApplyProfileIcon);
             _signals.Incoming.ApplyProfileFrame.AddListener(_view.ApplyProfileFrame);
             _signals.Incoming.ApplyShopPrices.AddListener(_view.ApplyShopPrices);
@@ -77,6 +79,8 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
             _signals.Incoming.ApplyLanguage.RemoveListener(_view.ApplyLanguage);
             _signals.Incoming.ApplyCoins.RemoveListener(_view.ApplyCoins);
             _signals.Incoming.ApplyLives.RemoveListener(_view.ApplyLives);
+            _signals.Incoming.ShowHomeTab.RemoveListener(_view.SelectHomeTab);
+            _signals.Incoming.HideMainScreen.RemoveListener(OnHideRequested);
             _signals.Incoming.ApplyProfileIcon.RemoveListener(_view.ApplyProfileIcon);
             _signals.Incoming.ApplyProfileFrame.RemoveListener(_view.ApplyProfileFrame);
             _signals.Incoming.ApplyShopPrices.RemoveListener(_view.ApplyShopPrices);
@@ -98,13 +102,18 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
         private void OnNavTabClicked(int index)
         {
             if (!_view.Data.HasState(ScreenState.AvailableToSendSignal)) return;
+            // The Events panel opens over the menu, which stays up with its bar.
             if (index == 2)
             {
-                _view.Hide();
                 _signals.Outgoing.EventsClicked.Dispatch();
                 return;
             }
             _signals.Outgoing.NavTabClicked.Dispatch(index);
+        }
+
+        private void OnHideRequested()
+        {
+            if (_view.Data.HasState(ScreenState.AvailableToSendSignal)) _view.Hide();
         }
 
         private void OnHomeClicked()

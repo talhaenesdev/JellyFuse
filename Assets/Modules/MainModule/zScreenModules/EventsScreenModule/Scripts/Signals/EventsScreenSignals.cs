@@ -11,6 +11,8 @@ namespace Modules.MainModule.EventsScreenModule.Signals
     public class EventsScreenSignalsIncoming
     {
         public Signal OpenEventsScreen = new();
+        /// <summary>Another tab of the menu was picked: the panel closes.</summary>
+        public Signal CloseEventsScreen = new();
     }
 
     public class EventsScreenSignalsOutgoing

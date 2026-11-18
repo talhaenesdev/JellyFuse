@@ -13,6 +13,10 @@ namespace Modules.MainModule.MainScreenModule.Signals
     public class MainScreenSignalsIncoming
     {
         public Signal OpenMainScreen = new();
+        /// <summary>The panel opened over the menu closed: the bar's selector goes back to Home.</summary>
+        public Signal ShowHomeTab = new();
+        /// <summary>Something full screen opens over the menu - a duel.</summary>
+        public Signal HideMainScreen = new();
         /// <summary>The game's language changed: the code of the new one. The screen redraws its texts.</summary>
         public Signal<string> ApplyLanguage = new();
         /// <summary>The coin count shown top left.</summary>

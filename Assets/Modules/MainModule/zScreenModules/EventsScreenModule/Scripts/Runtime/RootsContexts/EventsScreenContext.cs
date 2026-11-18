@@ -12,7 +12,7 @@ namespace Modules.MainModule.EventsScreenModule.RootsContexts
         protected override ScreenCVO Screen => new()
         {
             ManagerId = 0,
-            Layer = 0,
+            Layer = 1,
             Tag = ScreenTag.Default,
             Load = ScreenLoadCVO.Addressable("EventsScreen"),
             HasShowAnimation = false,

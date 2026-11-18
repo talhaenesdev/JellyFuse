@@ -28,12 +28,14 @@ namespace Modules.MainModule.EventsScreenModule.ViewsMediators
         private void OnScreenShown(IScreenBody screen)
         {
             _view.BackClicked += OnBackClicked;
+            _signals.Incoming.CloseEventsScreen.AddListener(OnCloseRequested);
             _view.DuelClicked += OnDuelClicked;
         }
 
         private void OnScreenHidden(IScreenBody screen)
         {
             _view.BackClicked -= OnBackClicked;
+            _signals.Incoming.CloseEventsScreen.RemoveListener(OnCloseRequested);
             _view.DuelClicked -= OnDuelClicked;
         }
 
@@ -42,6 +44,11 @@ namespace Modules.MainModule.EventsScreenModule.ViewsMediators
             if (!_view.Data.HasState(ScreenState.AvailableToSendSignal)) return;
             _view.Hide();
             _signals.Outgoing.BackClicked.Dispatch();
+        }
+
+        private void OnCloseRequested()
+        {
+            if (_view.Data.HasState(ScreenState.AvailableToSendSignal)) _view.Hide();
         }
 
         private void OnDuelClicked()

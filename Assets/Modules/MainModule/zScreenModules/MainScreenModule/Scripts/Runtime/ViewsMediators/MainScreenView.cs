@@ -278,11 +278,6 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
 
         private void OnTabClicked(int index)
         {
-            if (index == 2)
-            {
-                NavTabClicked?.Invoke(index);
-                return;
-            }
             PickTab(index, true);
             NavTabClicked?.Invoke(index);
         }
@@ -368,6 +363,9 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
             if (button == null || button.targetGraphic == null || button.targetGraphic.color.a <= 0f) return;
             button.targetGraphic.color = color;
         }
+
+        /// <summary>The selector back on Home and the home page shown, as when the Home tab is tapped.</summary>
+        public void SelectHomeTab() => PickTab(_homeTab, true);
 
         private void ShowPage(int index)
         {

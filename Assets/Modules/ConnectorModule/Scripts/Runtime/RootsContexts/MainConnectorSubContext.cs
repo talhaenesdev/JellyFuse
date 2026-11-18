@@ -72,7 +72,10 @@ namespace Modules.ConnectorModule.RootsContexts
             _profileSignals.Outgoing.FrameChanged.Connect(_mainScreenSignals.Incoming.ApplyProfileFrame);
             _profileSignals.Outgoing.SelectionRequested.Connect(_profileSelectionSignals.Incoming.Open);
             _profileSignals.Outgoing.ProfileSaved.Connect(_profileSelectionSignals.Incoming.ProfileSaved);
-            _eventsScreenSignals.Outgoing.BackClicked.Connect(_mainScreenSignals.Incoming.OpenMainScreen);
+            // The Events panel sits over the menu: closing it puts the menu's bar back on Home, and any other tab closes it.
+            _eventsScreenSignals.Outgoing.BackClicked.Connect(_mainScreenSignals.Incoming.ShowHomeTab);
+            _mainScreenSignals.Outgoing.NavTabClicked.Connect(_ => _eventsScreenSignals.Incoming.CloseEventsScreen.Dispatch(), DUEL_GROUP);
+            _mainScreenSignals.Outgoing.HomeClicked.Connect(_eventsScreenSignals.Incoming.CloseEventsScreen, DUEL_GROUP);
             _leaderboardScreenSignals.Outgoing.BackClicked.Connect(_mainScreenSignals.Incoming.OpenMainScreen);
             // A changed name or icon has reached the server: the board on show fetches it again.
             _profileSignals.Outgoing.ProfilePublished.Connect(_leaderboardScreenSignals.Incoming.ReloadBoard);
@@ -108,7 +111,8 @@ namespace Modules.ConnectorModule.RootsContexts
             _eventsScreenSignals.Outgoing.DuelClicked.Connect(_duelScreenSignals.Incoming.OpenSearch, DUEL_GROUP);
             _eventsScreenSignals.Outgoing.DuelClicked.Connect(_gameplaySignals.Incoming.StartDuel, DUEL_GROUP);
             _gameplaySignals.Outgoing.DuelUnavailable.Connect(_duelScreenSignals.Incoming.ShowUnavailable, DUEL_GROUP);
-            _duelScreenSignals.Outgoing.SearchClosed.Connect(_eventsScreenSignals.Incoming.OpenEventsScreen, DUEL_GROUP);
+            _eventsScreenSignals.Outgoing.DuelClicked.Connect(_mainScreenSignals.Incoming.HideMainScreen, DUEL_GROUP);
+            _duelScreenSignals.Outgoing.SearchClosed.Connect(_mainScreenSignals.Incoming.OpenMainScreen, DUEL_GROUP);
             _gameplaySignals.Outgoing.DuelChosen.Connect(_gameplayScreenSignals.Incoming.OpenGameplayScreen, DUEL_GROUP);
             _gameplaySignals.Outgoing.DuelStarted.Connect(_duelScreenSignals.Incoming.StartRace, DUEL_GROUP);
             _gameplaySignals.Outgoing.DuelProgress.Connect(_duelScreenSignals.Incoming.ApplyProgress, DUEL_GROUP);
