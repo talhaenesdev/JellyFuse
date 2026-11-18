@@ -65,8 +65,8 @@ namespace Modules.GameplayModule.DuelScreenModule.Editor
                 raceRect.pivot = new Vector2(0.5f, 1);
                 raceRect.anchoredPosition = new Vector2(0, -300);
                 raceRect.sizeDelta = new Vector2(100 + 91 * 1024f / 160f, 250);
-                var opponentRow = Row(race.transform, "Pnl_OpponentRow", 0, "SPR_UI_Duel_RaceFill_Opponent", "SPR_UI_Duel_AvatarRing_Opponent", font);
-                var playerRow = Row(race.transform, "Pnl_PlayerRow", -125, "SPR_UI_Duel_RaceFill_Player", "SPR_UI_Duel_AvatarRing_Player", font);
+                var opponentRow = Row(race.transform, "Pnl_OpponentRow", 0, "SPR_UI_Duel_RaceFill_Opponent", "SPR_UI_Duel_AvatarRing_Opponent", "SPR_UI_Duel_RaceRunner_Opponent", font);
+                var playerRow = Row(race.transform, "Pnl_PlayerRow", -125, "SPR_UI_Duel_RaceFill_Player", "SPR_UI_Duel_AvatarRing_Player", "SPR_UI_Duel_RaceRunner_Player", font);
 
                 // The search panel.
                 GameObject search = Ui("Pnl_Search", root.transform);
@@ -146,6 +146,8 @@ namespace Modules.GameplayModule.DuelScreenModule.Editor
                 Set(so, "_race", race);
                 Set(so, "_playerFill", playerRow.fill);
                 Set(so, "_opponentFill", opponentRow.fill);
+                Set(so, "_playerRunner", playerRow.runner);
+                Set(so, "_opponentRunner", opponentRow.runner);
                 Set(so, "_racePlayerIcon", playerRow.icon);
                 Set(so, "_raceOpponentIcon", opponentRow.icon);
                 Set(so, "_playerName", playerRow.name);
@@ -172,7 +174,7 @@ namespace Modules.GameplayModule.DuelScreenModule.Editor
         }
 
         /// <summary>One runner's row: their icon in its ring on the left, the track, the fill inside it, their name above.</summary>
-        private static (Image fill, Image icon, TMP_Text name) Row(Transform parent, string name, float y, string fillSprite, string ringSprite, TMP_FontAsset font)
+        private static (Image fill, Image icon, TMP_Text name, RectTransform runner) Row(Transform parent, string name, float y, string fillSprite, string ringSprite, string runnerSprite, TMP_FontAsset font)
         {
             GameObject row = Ui(name, parent);
             RectTransform rect = (RectTransform)row.transform;
@@ -189,13 +191,24 @@ namespace Modules.GameplayModule.DuelScreenModule.Editor
             track.rectTransform.offsetMin = new Vector2(100, 4);
             track.rectTransform.offsetMax = new Vector2(0, -30);
             track.type = Image.Type.Sliced;
+            // The fill lies in the track's groove: its own padding put the jelly on the groove's band.
             Image fill = Img("Img_Fill", track.transform, Sprite(fillSprite));
             fill.preserveAspect = false;
             fill.type = Image.Type.Sliced;
-            fill.rectTransform.anchorMin = new Vector2(0.02f, 0.2f);
-            fill.rectTransform.anchorMax = new Vector2(0.02f, 0.8f);
+            fill.rectTransform.anchorMin = new Vector2(0.04f, 0.175f);
+            fill.rectTransform.anchorMax = new Vector2(0.04f, 0.845f);
             fill.rectTransform.offsetMin = fill.rectTransform.offsetMax = Vector2.zero;
             fill.enabled = false;
+            Image flag = Img("Img_Flag", track.transform, Sprite("SPR_UI_Duel_FinishFlag"));
+            flag.rectTransform.anchorMin = flag.rectTransform.anchorMax = new Vector2(0.97f, 0.5f);
+            flag.rectTransform.pivot = new Vector2(0.3f, 0.15f);
+            flag.rectTransform.anchoredPosition = Vector2.zero;
+            flag.rectTransform.sizeDelta = new Vector2(52, 66);
+            Image runner = Img("Img_Runner", track.transform, Sprite(runnerSprite));
+            runner.rectTransform.anchorMin = runner.rectTransform.anchorMax = new Vector2(0.07f, 0.51f);
+            runner.rectTransform.pivot = new Vector2(0.5f, 0.5f);
+            runner.rectTransform.anchoredPosition = Vector2.zero;
+            runner.rectTransform.sizeDelta = new Vector2(58, 58);
 
             Image ring = Img("Img_Ring", row.transform, Sprite(ringSprite));
             ring.rectTransform.anchorMin = ring.rectTransform.anchorMax = new Vector2(0, 0.5f);
@@ -216,7 +229,7 @@ namespace Modules.GameplayModule.DuelScreenModule.Editor
             label.color = Color.white;
             label.outlineColor = SHADE;
             label.outlineWidth = 0.25f;
-            return (fill, icon, label);
+            return (fill, icon, label, runner.rectTransform);
         }
 
         private static Image Avatar(Transform parent, string who, Vector2 position, float size, string ringSprite)
@@ -354,7 +367,6 @@ namespace Modules.GameplayModule.DuelScreenModule.Editor
             {
                 string path = AssetDatabase.GUIDToAssetPath(guid);
                 if (AssetImporter.GetAtPath(path) is not TextureImporter importer) continue;
-                if (importer.textureType == TextureImporterType.Sprite && importer.maxTextureSize <= 1024 && !importer.mipmapEnabled) continue;
                 importer.textureType = TextureImporterType.Sprite;
                 importer.spriteImportMode = SpriteImportMode.Single;
                 importer.alphaIsTransparency = true;
@@ -364,7 +376,7 @@ namespace Modules.GameplayModule.DuelScreenModule.Editor
                 importer.SaveAndReimport();
             }
             // The race bars stretch along the screen: only their ends keep their shape.
-            Border("SPR_UI_Duel_RaceBar", new Vector4(80, 0, 170, 0));
+            Border("SPR_UI_Duel_RaceBar", new Vector4(90, 0, 90, 0));
             Border("SPR_UI_Duel_RaceFill_Player", new Vector4(30, 0, 30, 0));
             Border("SPR_UI_Duel_RaceFill_Opponent", new Vector4(30, 0, 30, 0));
         }

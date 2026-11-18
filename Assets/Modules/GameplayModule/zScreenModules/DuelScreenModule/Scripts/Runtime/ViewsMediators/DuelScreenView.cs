@@ -35,6 +35,8 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
         [SerializeField] private GameObject _race;
         [SerializeField] private Image _playerFill;
         [SerializeField] private Image _opponentFill;
+        [SerializeField] private RectTransform _playerRunner;
+        [SerializeField] private RectTransform _opponentRunner;
         [SerializeField] private Image _raceOpponentIcon;
         [SerializeField] private Image _racePlayerIcon;
         [SerializeField] private TMP_Text _opponentName;
@@ -67,7 +69,9 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
         private const float COUNT = 3f;
         private const float GO_SECONDS = 0.7f;
         /// <summary>Where on the track a full bar ends, short of the finish flag.</summary>
-        private const float FILL_END = 0.9f;
+        private const float FILL_END = 0.956f;
+        /// <summary>The shortest a shown bar is, its two rounded ends side by side.</summary>
+        private const float FILL_MIN = 0.06f;
 
         private void OnEnable()
         {
@@ -135,8 +139,8 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
             if (_opponentName != null) _opponentName.text = race.OpponentName;
             if (_searchStatus != null) _searchStatus.text = string.Format(L("duel.found", "Opponent found: {0}"), race.OpponentName);
             if (_searchSpinner != null) _searchSpinner.gameObject.SetActive(false);
-            SetFill(_playerFill, 0);
-            SetFill(_opponentFill, 0);
+            SetFill(_playerFill, _playerRunner, 0);
+            SetFill(_opponentFill, _opponentRunner, 0);
             _countdownLeft = race.Countdown;
             _raceStart = Time.realtimeSinceStartup + race.Countdown;
             _counting = race.Countdown > 0;
@@ -193,22 +197,29 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
                     if (_blocker != null) _blocker.SetActive(false);
                 }
             }
-            if (_racing) SetFill(_opponentFill, OpponentProgress(now - _raceStart));
+            if (_racing) SetFill(_opponentFill, _opponentRunner, OpponentProgress(now - _raceStart));
             if (!Mathf.Approximately(_shownPlayer, _playerProgress))
             {
                 _shownPlayer = Mathf.MoveTowards(_shownPlayer, _playerProgress, Time.unscaledDeltaTime * 2f);
-                SetFill(_playerFill, _shownPlayer);
+                SetFill(_playerFill, _playerRunner, _shownPlayer);
             }
         }
 
-        /// <summary>A sliced bar grown to its share of the track, so its rounded ends keep their shape; hidden while too short to draw.</summary>
-        private static void SetFill(Image fill, float share)
+        /// <summary>
+        /// A sliced bar grown to its share of the groove, so its rounded ends keep their shape - hidden while too short to
+        /// draw - and the runner riding at its head.
+        /// </summary>
+        private static void SetFill(Image fill, RectTransform runner, float share)
         {
             if (fill == null) return;
             share = Mathf.Clamp01(share);
             RectTransform rect = fill.rectTransform;
-            rect.anchorMax = new Vector2(Mathf.Lerp(rect.anchorMin.x, FILL_END, share), rect.anchorMax.y);
-            fill.enabled = share > 0.03f;
+            float head = Mathf.Lerp(rect.anchorMin.x + FILL_MIN, FILL_END, share);
+            rect.anchorMax = new Vector2(head, rect.anchorMax.y);
+            fill.enabled = share > 0.02f;
+            if (runner == null) return;
+            runner.anchorMin = new Vector2(Mathf.Max(head, rect.anchorMin.x + FILL_MIN * 0.5f), runner.anchorMin.y);
+            runner.anchorMax = new Vector2(runner.anchorMin.x, runner.anchorMax.y);
         }
 
         /// <summary>The opponent's share at this second of the race, eased between their recorded exits.</summary>
