@@ -169,9 +169,8 @@ namespace Modules.MainModule.LeaderboardScreenModule.ViewsMediators
             // The rank sits on its badge, not on the row itself.
             Set(row, "Img_Badge/Txt_Rank", data.Rank.ToString());
             string name = string.IsNullOrEmpty(data.Name) ? L("leaderboard.player", "Player") : TrimName(data.Name);
-            // A player whose game is open now gets a small green "Active" pill after the name: a highlight behind the text, no glyph the font may lack.
-            if (data.Active) name += "  <size=70%><mark=#2FC46A><color=#FFFFFF> " + L("leaderboard.active", "Active") + " </color></mark></size>";
             Set(row, "Txt_Name", name);
+            ShowActive(row, data.Active);
             Set(row, "Txt_Score", data.Score.ToString("N0"));
             // The level rides on the tag line under the name, so every row and podium slot shows it without a new label.
             string level = data.Level > 0 ? string.Format(L("leaderboard.level", "Level {0}"), data.Level) : string.Empty;
@@ -208,6 +207,24 @@ namespace Modules.MainModule.LeaderboardScreenModule.ViewsMediators
                 if (sprite != null) { image.sprite = sprite; image.color = Color.white; }
                 else image.color = data.IsMe ? _myRowColour : _rowColour;
             }
+        }
+
+        /// <summary>
+        /// A player whose game is open now: the green dot on the avatar's corner, and on a list row the "Active" badge just
+        /// after the name, wherever the name ends.
+        /// </summary>
+        private void ShowActive(Transform row, bool active)
+        {
+            var dot = row.Find("Img_Avatar/Img_ActiveDot");
+            if (dot != null) dot.gameObject.SetActive(active);
+            var name = row.Find("Txt_Name")?.GetComponent<TMP_Text>();
+            var badge = name != null ? name.transform.Find("Img_ActiveBadge") as RectTransform : null;
+            if (badge == null) return;
+            badge.gameObject.SetActive(active);
+            if (!active) return;
+            Set(badge, "Txt_Active", L("leaderboard.active", "Active"));
+            float width = Mathf.Min(name.GetPreferredValues(name.text).x, name.rectTransform.rect.width - badge.sizeDelta.x - 8);
+            badge.anchoredPosition = new Vector2(width + 10, badge.anchoredPosition.y);
         }
 
         // Unity Authentication adds "#1234" to a player's name so names stay unique; the list shows the name alone.
