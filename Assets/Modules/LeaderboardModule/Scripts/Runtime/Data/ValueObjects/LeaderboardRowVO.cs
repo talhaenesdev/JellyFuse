@@ -15,5 +15,7 @@ namespace Modules.LeaderboardModule.Data.ValueObjects
         public string Icon { get; set; } = string.Empty;
         /// <summary>The profile frame the player picked, or empty.</summary>
         public string Frame { get; set; } = string.Empty;
+        /// <summary>The highest level the player has won; 0 when the server could not tell.</summary>
+        public int Level { get; set; }
     }
 }

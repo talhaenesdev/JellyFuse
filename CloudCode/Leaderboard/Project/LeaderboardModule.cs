@@ -121,6 +121,7 @@ namespace Leaderboard
                 rows.Add((result.Top[rows.Count], entry.PlayerId));
             if (result.Me != null) rows.Add((result.Me, context.PlayerId));
             await Task.WhenAll(rows.ConvertAll(item => ApplyProfile(context, api, item.row, item.playerId)));
+            await Task.WhenAll(rows.ConvertAll(item => ApplyLevel(context, api, item.row, item.playerId)));
             return result;
         }
 
@@ -142,6 +143,28 @@ namespace Leaderboard
             catch (Exception)
             {
                 // A profile that cannot be read leaves the row with its Authentication name.
+            }
+        }
+
+        /// <summary>The highest level the player has won, read from their level bests; 0 when none is known.</summary>
+        private static async Task ApplyLevel(IExecutionContext context, IGameApiClient api, BoardRow row, string playerId)
+        {
+            try
+            {
+                var response = await api.CloudSaveData.GetProtectedItemsAsync(context, context.ServiceToken, context.ProjectId, playerId,
+                    new List<string> { BestKey });
+                var items = response.Data?.Results;
+                if (items == null || items.Count == 0 || items[0].Value == null) return;
+                var bests = JsonConvert.DeserializeObject<Dictionary<string, int>>(items[0].Value.ToString());
+                if (bests == null) return;
+                int level = 0;
+                foreach (var key in bests.Keys)
+                    if (int.TryParse(key, out int value) && value > level) level = value;
+                row.Level = level;
+            }
+            catch (Exception)
+            {
+                // Bests that cannot be read leave the row without a level.
             }
         }
 
@@ -187,6 +210,8 @@ namespace Leaderboard
         public bool IsMe { get; set; }
         public string Icon { get; set; } = string.Empty;
         public string Frame { get; set; } = string.Empty;
+        /// <summary>The highest level the player has won; 0 when unknown.</summary>
+        public int Level { get; set; }
     }
 
     public class ProfileResult

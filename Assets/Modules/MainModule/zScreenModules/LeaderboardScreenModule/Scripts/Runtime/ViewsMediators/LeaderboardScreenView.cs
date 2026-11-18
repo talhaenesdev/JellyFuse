@@ -170,7 +170,10 @@ namespace Modules.MainModule.LeaderboardScreenModule.ViewsMediators
             Set(row, "Img_Badge/Txt_Rank", data.Rank.ToString());
             Set(row, "Txt_Name", string.IsNullOrEmpty(data.Name) ? L("leaderboard.player", "Player") : TrimName(data.Name));
             Set(row, "Txt_Score", data.Score.ToString("N0"));
-            Set(row, "Txt_Tag", data.Tag ?? string.Empty);
+            // The level rides on the tag line under the name, so every row and podium slot shows it without a new label.
+            string level = data.Level > 0 ? string.Format(L("leaderboard.level", "Level {0}"), data.Level) : string.Empty;
+            string tag = data.Tag ?? string.Empty;
+            Set(row, "Txt_Tag", level.Length == 0 ? tag : tag.Length == 0 ? level : tag + " · " + level);
             var avatar = row.Find("Img_Avatar")?.GetComponent<Image>();
             if (avatar != null)
             {
