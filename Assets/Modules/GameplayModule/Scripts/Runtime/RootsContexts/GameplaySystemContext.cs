@@ -156,6 +156,8 @@ namespace Modules.GameplayModule.RootsContexts
                 .ToSequence<ForcePuzzleResultCommand>()
                 .ToSequence<CountWinCommand>()
                 .ToSequence<JudgeStarsCommand>()
+                .ToSequence<RecordDuelProgressCommand>()
+                .ToSequence<FinishDuelCommand>()
                 .ToSequence<CheckWinPaymentCommand>()
                 .ToSequence<CountPuzzleComboCommand>()
                 .ToSequence<PlayPuzzleFeedbackCommand>()
