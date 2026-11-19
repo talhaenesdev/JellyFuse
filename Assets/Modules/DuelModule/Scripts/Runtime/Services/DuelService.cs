@@ -15,8 +15,8 @@ namespace Modules.DuelModule.Services
         private const string MODULE = "Leaderboard";
         private const string FIND = "FindDuel";
         private const string SUBMIT = "SubmitDuel";
-        /// <summary>A cold server answers late; the search screen waits this long before it gives up.</summary>
-        private static readonly TimeSpan TIMEOUT = TimeSpan.FromSeconds(12);
+        /// <summary>A cold server answers late - its first call after a quiet spell can take most of this - so it is waited on this long.</summary>
+        private static readonly TimeSpan TIMEOUT = TimeSpan.FromSeconds(20);
 
         private sealed class SubmitResult
         {
@@ -113,6 +113,7 @@ namespace Modules.DuelModule.Services
             public bool Ok { get; set; }
             public string Reason { get; set; }
             public string MatchId { get; set; }
+            public bool Won { get; set; }
         }
 
         private bool _listening;
