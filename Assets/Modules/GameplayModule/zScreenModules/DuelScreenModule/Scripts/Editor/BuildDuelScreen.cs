@@ -209,6 +209,10 @@ namespace Modules.GameplayModule.DuelScreenModule.Editor
                 Set(so, "_result", result);
                 Button resultContinue = SpriteButton("Btn_Continue", result.transform, AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Art/Generated/UI/Events/SPR_UI_Button_Play_Gold.png"), font, "Continue", new Vector2(0, -560), new Vector2(380, 130));
                 Set(so, "_resultClose", resultContinue);
+                Button resultRematch = SpriteButton("Btn_Rematch", result.transform, AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Art/Generated/UI/Events/SPR_UI_Button_Play_Gold.png"), font, "Play again", new Vector2(0, -705), new Vector2(380, 130));
+                resultRematch.GetComponent<Image>().color = new Color(0.75f, 1f, 0.8f, 1f);
+                resultRematch.gameObject.SetActive(false);
+                Set(so, "_resultRematch", resultRematch);
                 Set(so, "_resultBanner", banner);
                 Set(so, "_winSprite", Sprite("SPR_UI_Duel_ResultWin"));
                 Set(so, "_loseSprite", Sprite("SPR_UI_Duel_ResultLose"));

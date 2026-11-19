@@ -38,6 +38,7 @@ namespace Modules.GameplayModule.Controllers
             public string fromIcon;
             public string opponentName;
             public string opponentIcon;
+            public string opponentId;
             public int level;
             public int delayMs;
             public int done;
@@ -62,8 +63,9 @@ namespace Modules.GameplayModule.Controllers
 
         private void Invite(Message message)
         {
-            // Busy on a level or a duel: the sender hears no straight away rather than waiting.
-            if (_model.InPlay || _duel.Active || _duel.AwaitingLive)
+            // Busy on a level or a duel: the sender hears no straight away rather than waiting. A duel already
+            // judged is not busy - its result is on show, and a rematch invite lands there.
+            if (_model.InPlay || (_duel.Active && !_duel.Finished) || _duel.AwaitingLive)
             {
                 _ = _duelService.AnswerLiveAsync(message.matchId, false);
                 return;
@@ -94,6 +96,8 @@ namespace Modules.GameplayModule.Controllers
             _model.Daily = false;
             _duel.Choose(message.level - 1, message.opponentName, message.opponentIcon, null);
             _duel.StartLive(message.matchId, message.delayMs / 1000f);
+            if (!string.IsNullOrEmpty(message.opponentId))
+                _duel.SetRematchTarget(new DuelTargetVO(message.opponentId, message.opponentName, message.opponentIcon, message.level));
             _signals.Outgoing.DuelChosen.Dispatch();
         }
 
@@ -109,7 +113,7 @@ namespace Modules.GameplayModule.Controllers
             _duel.Finish();
             int coins = 0;
             if (message.youWon) coins = DuelRewardFunction.Pay(_shared.GetScriptable<CD_Events>(), _shared.GetScriptable<SD_JellyProgress>());
-            _signals.Outgoing.DuelFinished.Dispatch(new DuelResultRVO(message.youWon, coins, -1, message.opponentSeconds));
+            _signals.Outgoing.DuelFinished.Dispatch(new DuelResultRVO(message.youWon, coins, -1, message.opponentSeconds, canRematch: _duel.RematchTarget != null));
             if (coins > 0) _internalSignals.PayWin.Dispatch(coins);
         }
     }

@@ -45,6 +45,7 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
         [Header("Result")]
         [SerializeField] private GameObject _result;
         [SerializeField] private Button _resultClose;
+        [SerializeField] private Button _resultRematch;
         [SerializeField] private Image _resultBanner;
         [SerializeField] private Sprite _winSprite;
         [SerializeField] private Sprite _loseSprite;
@@ -104,6 +105,7 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
         {
             if (_searchClose != null) _searchClose.onClick.AddListener(OnCloseClicked);
             if (_resultClose != null) _resultClose.onClick.AddListener(OnResultClosed);
+            if (_resultRematch != null) _resultRematch.onClick.AddListener(OnRematchClicked);
             if (_challengeAccept != null) _challengeAccept.onClick.AddListener(OnAccept);
             if (_challengeDecline != null) _challengeDecline.onClick.AddListener(OnDecline);
         }
@@ -163,6 +165,7 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
         {
             if (_searchClose != null) _searchClose.onClick.RemoveListener(OnCloseClicked);
             if (_resultClose != null) _resultClose.onClick.RemoveListener(OnResultClosed);
+            if (_resultRematch != null) _resultRematch.onClick.RemoveListener(OnRematchClicked);
             if (_challengeAccept != null) _challengeAccept.onClick.RemoveListener(OnAccept);
             if (_challengeDecline != null) _challengeDecline.onClick.RemoveListener(OnDecline);
         }
@@ -183,6 +186,13 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
         private void OnCloseClicked() => CloseClicked?.Invoke();
         // The one way off a finished duel: back to the menu.
         private void OnResultClosed() => ResultContinued?.Invoke();
+        private void OnRematchClicked() => Rematch?.Invoke();
+
+        /// <summary>Play again was pressed on a live result.</summary>
+        public Action Rematch;
+
+        /// <summary>The search or wait panel is up: a new duel is being set up on this screen.</summary>
+        public bool Searching => _search != null && _search.activeSelf;
 
         public void SetLocalizer(Func<string, string> localize) => _localize = localize;
 
@@ -280,6 +290,11 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
             if (_reward != null) _reward.SetActive(result.Coins > 0);
             if (_rewardCoins != null) _rewardCoins.text = "+" + result.Coins;
             Label(_resultClose, L("duel.continue", "Continue"));
+            if (_resultRematch != null)
+            {
+                _resultRematch.gameObject.SetActive(result.CanRematch);
+                Label(_resultRematch, L("duel.rematch", "Play again"));
+            }
             if (_result != null) _result.SetActive(true);
             if (_blocker != null) _blocker.SetActive(false);
         }

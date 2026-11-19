@@ -37,6 +37,10 @@ namespace Modules.GameplayModule.Models
 
         public void StopAwaitingLive() => AwaitingLive = false;
 
+        public Modules.GameplayModule.Shared.Data.ValueObjects.DuelTargetVO RematchTarget { get; private set; }
+        public void SetRematchTarget(Modules.GameplayModule.Shared.Data.ValueObjects.DuelTargetVO target) => RematchTarget = target;
+        public bool RematchRequested { get; set; }
+
         private readonly Dictionary<string, float> _declinedUntil = new();
 
         public void MarkDeclined(string playerId, float until)
@@ -62,6 +66,8 @@ namespace Modules.GameplayModule.Models
         {
             ChallengeTargetId = string.Empty;
             ChallengeId = string.Empty;
+            RematchTarget = null;
+            RematchRequested = false;
             Active = true;
             LevelIndex = levelIndex;
             OpponentName = opponentName ?? string.Empty;

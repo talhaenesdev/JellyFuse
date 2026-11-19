@@ -15,8 +15,12 @@ namespace Modules.GameplayModule.Shared.Data.ValueObjects
         /// <summary>Who the challenge went to, when one was sent.</summary>
         public string ChallengedName { get; }
 
-        public DuelResultRVO(bool won, int coins, float seconds, float opponentSeconds, bool challengeSent = false, string challengedName = "")
+        /// <summary>A live race against a known player: Play again invites them once more.</summary>
+        public bool CanRematch { get; }
+
+        public DuelResultRVO(bool won, int coins, float seconds, float opponentSeconds, bool challengeSent = false, string challengedName = "", bool canRematch = false)
         {
+            CanRematch = canRematch;
             Won = won;
             Coins = coins;
             Seconds = seconds;

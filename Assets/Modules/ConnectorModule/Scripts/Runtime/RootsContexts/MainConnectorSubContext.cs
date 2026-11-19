@@ -133,6 +133,11 @@ namespace Modules.ConnectorModule.RootsContexts
             _gameplaySignals.Outgoing.DuelStarted.Connect(_ => _gameplayScreenSignals.Incoming.DuelMode.Dispatch(true), DUEL_GROUP);
             _gameplaySignals.Outgoing.DuelEnded.Connect(() => _gameplayScreenSignals.Incoming.DuelMode.Dispatch(false), DUEL_GROUP);
             _duelScreenSignals.Outgoing.ResultContinued.Connect(_gameplayScreenSignals.Incoming.Quit, DUEL_GROUP);
+            // Play again: Gameplay remembers the rival, the level is left, and the invite goes out from the Quit flow.
+            _duelScreenSignals.Outgoing.RematchClicked.Connect(_gameplaySignals.Incoming.Rematch, DUEL_GROUP);
+            _duelScreenSignals.Outgoing.RematchClicked.Connect(_gameplayScreenSignals.Incoming.Quit, DUEL_GROUP);
+            // Leaving a level opens the menu; a duel that starts covers it again.
+            _gameplaySignals.Outgoing.DuelChosen.Connect(_mainScreenSignals.Incoming.HideMainScreen, DUEL_GROUP);
             // Live duels: the invite waits on the other player; accepting shows the panel until the start comes.
             _gameplaySignals.Outgoing.LiveInviteSent.Connect(_duelScreenSignals.Incoming.ShowWaiting, DUEL_GROUP);
             _gameplaySignals.Outgoing.DuelOpponentProgress.Connect(_duelScreenSignals.Incoming.ApplyOpponentProgress, DUEL_GROUP);
@@ -147,6 +152,8 @@ namespace Modules.ConnectorModule.RootsContexts
             _duelScreenSignals.Outgoing.ChallengeAccepted.Connect(_ => _eventsScreenSignals.Incoming.CloseEventsScreen.Dispatch(), DUEL_GROUP);
             _duelScreenSignals.Outgoing.ChallengeAccepted.Connect(_ => _mainScreenSignals.Incoming.HideMainScreen.Dispatch(), DUEL_GROUP);
             _duelScreenSignals.Outgoing.ChallengeAccepted.Connect(_gameplaySignals.Incoming.AcceptChallenge, DUEL_GROUP);
+            // Accepted over a finished duel's result: that level is left first (ignored when no level is open).
+            _duelScreenSignals.Outgoing.ChallengeAccepted.Connect(_ => _gameplayScreenSignals.Incoming.Quit.Dispatch(), DUEL_GROUP);
             _duelScreenSignals.Outgoing.ChallengeDeclined.Connect(_gameplaySignals.Incoming.DeclineChallenge, DUEL_GROUP);
         }
 

@@ -38,6 +38,7 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
             _view.ChallengeDeclined += OnDeclined;
             _view.Idle += OnIdle;
             _view.ResultContinued += OnResultContinued;
+            _view.Rematch += OnRematch;
         }
 
         private void OnAccepted(string id)
@@ -57,6 +58,14 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
             _signals.Outgoing.ResultContinued.Dispatch();
         }
 
+        // The screen stays up and waits: the level is left behind it and the invite goes out from there.
+        private void OnRematch()
+        {
+            if (!_view.Data.HasState(ScreenState.AvailableToSendSignal)) return;
+            _view.ShowSearch();
+            _signals.Outgoing.RematchClicked.Dispatch();
+        }
+
         // Nothing of the duel left on show: the screen goes back to its pool.
         private void OnIdle()
         {
@@ -69,6 +78,7 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
             _view.ChallengeDeclined -= OnDeclined;
             _view.Idle -= OnIdle;
             _view.ResultContinued -= OnResultContinued;
+            _view.Rematch -= OnRematch;
             _view.CloseClicked -= OnCloseClicked;
             _signals.Incoming.ShowUnavailable.RemoveListener(_view.ShowUnavailable);
             _signals.Incoming.ApplyProgress.RemoveListener(_view.ApplyProgress);
@@ -89,7 +99,8 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
 
         private void OnClose()
         {
-            if (!_view.Data.HasState(ScreenState.AvailableToSendSignal)) return;
+            // The duel that ended is the one being left for a new one set up here - a rematch, an invite accepted.
+            if (!_view.Data.HasState(ScreenState.AvailableToSendSignal) || _view.Searching) return;
             _view.Hide();
         }
     }

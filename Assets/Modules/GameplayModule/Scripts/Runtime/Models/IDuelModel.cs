@@ -43,6 +43,11 @@ namespace Modules.GameplayModule.Models
         Dictionary<string, Modules.DuelModule.Data.ValueObjects.DuelChallengeVO> LiveInvites { get; }
         void AwaitLive(string matchId);
         void StopAwaitingLive();
+        /// <summary>The player of the last live race - kept after it ends, so Play again can invite them.</summary>
+        Modules.GameplayModule.Shared.Data.ValueObjects.DuelTargetVO RematchTarget { get; }
+        void SetRematchTarget(Modules.GameplayModule.Shared.Data.ValueObjects.DuelTargetVO target);
+        /// <summary>Play again was pressed: the invite goes out once the finished level has been left.</summary>
+        bool RematchRequested { get; set; }
         /// <summary>The player turned an invite down: no new invite goes to them until <paramref name="until"/>.</summary>
         void MarkDeclined(string playerId, float until);
         bool IsDeclined(string playerId, float now);

@@ -25,6 +25,8 @@ namespace Modules.GameplayModule.Signals
         /// <summary>A challenge received, by id, was accepted: its level is raced against the sender's run.</summary>
         public Signal<string> AcceptChallenge = new();
         public Signal<string> DeclineChallenge = new();
+        /// <summary>Play again on a finished live duel: the same player is invited once the level is left.</summary>
+        public Signal Rematch = new();
         /// <summary>Another module asks for coins under a key of its own; CoinsSpent answers with the same key.</summary>
         public Signal<string, int> SpendCoins = new();
         /// <summary>The boot has begun: fetch the level list published since this build, if there is one.</summary>

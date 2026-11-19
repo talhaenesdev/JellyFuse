@@ -38,6 +38,8 @@ namespace Modules.GameplayModule.DuelScreenModule.Signals
         public Signal SearchClosed = new();
         /// <summary>Continue on the duel result: the level is left for the menu.</summary>
         public Signal ResultContinued = new();
+        /// <summary>Play again on a live result: the same rival is invited, and the screen waits for them.</summary>
+        public Signal RematchClicked = new();
         /// <summary>A challenge received, by id, was accepted.</summary>
         public Signal<string> ChallengeAccepted = new();
         public Signal<string> ChallengeDeclined = new();

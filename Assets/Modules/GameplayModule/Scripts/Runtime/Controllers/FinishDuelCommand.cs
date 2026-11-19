@@ -39,7 +39,7 @@ namespace Modules.GameplayModule.Controllers
             {
                 _ = _duelService.FinishLiveAsync(_duel.LiveMatchId, seconds);
                 int prize = cleared ? DuelRewardFunction.Pay(_shared.GetScriptable<CD_Events>(), _shared.GetScriptable<SD_JellyProgress>()) : 0;
-                _signals.Outgoing.DuelFinished.Dispatch(new DuelResultRVO(cleared, prize, seconds, -1));
+                _signals.Outgoing.DuelFinished.Dispatch(new DuelResultRVO(cleared, prize, seconds, -1, canRematch: _duel.RematchTarget != null));
                 _model.WinPaid = true;
                 _model.WinReward = prize;
                 if (prize > 0) _internalSignals.PayWin.Dispatch(prize);
