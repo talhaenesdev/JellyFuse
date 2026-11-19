@@ -229,6 +229,9 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             base.BeforeScreenActivation();
             if (_presentation == null || _presentation.Feel == null || _presentation.Look == null || _presentation.Hud == null)
                 throw new InvalidOperationException("GameplayScreen requires CD_JellyPresentation with its Feel, Look and Hud set.");
+            // A pooled screen: a duel that ended while it was hidden never reached it, so every opening starts as a plain level.
+            _duelMode = false;
+            _reservedTop = 0;
             Build(); ApplySavedFeel(); StopPresentation(); _snapshot = null;
         }
 
