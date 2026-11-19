@@ -14,14 +14,15 @@ namespace Modules.GameplayModule.Controllers
         [Inject] private IJellyPuzzleModel _model { get; set; }
         [Inject] private IDuelModel _duel { get; set; }
         [Inject] private ISharedDataModel _shared { get; set; }
-        [Inject] private IDuelService _liveService { get; set; }
+        [InjectSignal] private Modules.GameplayModule.Signals.GameplayInternalSignals _internalSignals { get; set; }
         [SignalParam] private string _id { get; set; }
 
         public override void Execute()
         {
             if (!string.IsNullOrEmpty(_id) && _duel.LiveInvites.Remove(_id))
             {
-                _ = _liveService.AnswerLiveAsync(_id, true);
+                // A live invite: answered, and the start is waited on - with a way back if it never comes.
+                _internalSignals.AwaitLiveStart.Dispatch(_id);
                 Retain();
                 Stop();
                 return;

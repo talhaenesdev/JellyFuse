@@ -77,6 +77,7 @@ namespace Modules.GameplayModule.RootsContexts
                 .ToSequence<SendLiveInviteCommand>();
             CommandBinder.Bind(_internalSignals.ListenLive).ToSequence<ListenLiveDuelCommand>();
             CommandBinder.Bind(_internalSignals.LiveMessage).ToSequence<LiveDuelMessageCommand>();
+            CommandBinder.Bind(_internalSignals.AwaitLiveStart).ToSequence<AwaitLiveStartCommand>();
             CommandBinder.Bind(_signals.Incoming.AcceptChallenge)
                 .ToSequence<AcceptChallengeCommand>()
                 .ToSequence<SignalDispatchCommand>(_signals.Outgoing.DuelChosen);
