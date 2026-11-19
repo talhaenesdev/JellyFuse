@@ -16,5 +16,7 @@ namespace Modules.DuelModule.Data.ValueObjects
         /// <summary>The second, from GO, each of the opponent's jellies left the board, in order.</summary>
         public List<float> Exits { get; set; } = new();
         public float Seconds { get; set; }
+        /// <summary>The fingerprint of the level the run was played on.</summary>
+        public string Fp { get; set; } = string.Empty;
     }
 }

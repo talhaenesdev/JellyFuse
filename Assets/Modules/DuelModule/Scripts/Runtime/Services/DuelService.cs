@@ -41,13 +41,13 @@ namespace Modules.DuelModule.Services
             }
         }
 
-        public async Task<bool> SubmitAsync(int level, IReadOnlyList<float> exits)
+        public async Task<bool> SubmitAsync(int level, IReadOnlyList<float> exits, string fingerprint)
         {
             if (!SignedIn()) return false;
             try
             {
                 var result = await WithTimeout(CloudCodeService.Instance.CallModuleEndpointAsync<SubmitResult>(MODULE, SUBMIT,
-                    new Dictionary<string, object> { { "level", level }, { "exits", exits } }));
+                    new Dictionary<string, object> { { "level", level }, { "exits", exits }, { "fp", fingerprint ?? string.Empty } }));
                 if (result == null || !result.Accepted) FlowLogger.Log($"DuelService - the run on level {level} was not filed: {result?.Reason}");
                 return result != null && result.Accepted;
             }

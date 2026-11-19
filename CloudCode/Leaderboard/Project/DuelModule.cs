@@ -57,7 +57,7 @@ namespace Leaderboard
                     var picked = others[random.Next(others.Count)];
                     return new DuelMatch
                     {
-                        Found = true, Level = level, Name = picked.Name, Icon = picked.Icon, Exits = picked.Exits, Seconds = picked.Seconds,
+                        Found = true, Level = level, Name = picked.Name, Icon = picked.Icon, Exits = picked.Exits, Seconds = picked.Seconds, Fp = picked.Fp,
                     };
                 }
             }
@@ -78,7 +78,7 @@ namespace Leaderboard
         /// A run whose seconds are out of order or out of range is refused.
         /// </summary>
         [CloudCodeFunction("SubmitDuel")]
-        public async Task<DuelSubmitResult> SubmitDuel(IExecutionContext context, IGameApiClient api, int level, List<float> exits)
+        public async Task<DuelSubmitResult> SubmitDuel(IExecutionContext context, IGameApiClient api, int level, List<float> exits, string fp)
         {
             if (level < 1 || level > MaxLevel) return new DuelSubmitResult { Reason = "level out of range" };
             if (exits == null || exits.Count == 0 || exits.Count > MaxExits) return new DuelSubmitResult { Reason = "no exits" };
@@ -94,6 +94,7 @@ namespace Leaderboard
             ghosts.Add(new DuelGhost
             {
                 PlayerId = context.PlayerId, Name = profile.Name, Icon = profile.Icon, Exits = exits.Select(e => (float)Math.Round(e, 2)).ToList(), Seconds = seconds,
+                Fp = (fp ?? string.Empty).Length > 64 ? fp.Substring(0, 64) : fp ?? string.Empty,
             });
             if (ghosts.Count > GhostsPerLevel) ghosts.RemoveRange(0, ghosts.Count - GhostsPerLevel);
             await Write(context, api, GhostKey(level), ghosts);
@@ -227,6 +228,8 @@ namespace Leaderboard
         public string Icon { get; set; } = string.Empty;
         public List<float> Exits { get; set; } = new();
         public float Seconds { get; set; }
+        /// <summary>The fingerprint of the level as it was when this run was played.</summary>
+        public string Fp { get; set; } = string.Empty;
     }
 
     public class DuelMatch
@@ -240,6 +243,8 @@ namespace Leaderboard
         /// <summary>The second each of the opponent's jellies left the board; empty for a bot.</summary>
         public List<float> Exits { get; set; } = new();
         public float Seconds { get; set; }
+        /// <summary>The fingerprint of the level the run was played on; the game races it only on the same level.</summary>
+        public string Fp { get; set; } = string.Empty;
     }
 
     public class DuelChallenge

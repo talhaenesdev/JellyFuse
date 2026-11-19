@@ -70,7 +70,9 @@ namespace Modules.GameplayModule.Controllers
                 }
 
                 IReadOnlyList<float> exits = match.Exits;
-                if (match.Bot || exits == null || exits.Count == 0 || index != match.Level - 1)
+                // A run from another version of the level would race a different board: a bot races this one instead.
+                bool sameBoard = !string.IsNullOrEmpty(match.Fp) && match.Fp == LevelFingerprintFunction.Of(level);
+                if (match.Bot || !sameBoard || exits == null || exits.Count == 0 || index != match.Level - 1)
                     exits = BotExits(level.CreateLevel(levels.Palette), events);
                 _model.Daily = false;
                 _duel.Choose(index, match.Name, match.Icon, exits);

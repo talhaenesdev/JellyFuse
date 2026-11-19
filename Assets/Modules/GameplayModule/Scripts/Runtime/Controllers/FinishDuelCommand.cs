@@ -77,7 +77,8 @@ namespace Modules.GameplayModule.Controllers
             if (cleared)
             {
                 // Fire and forget: nothing here waits for the server, so nothing is read after this line returns.
-                _ = _duelService.SubmitAsync(_duel.LevelIndex + 1, new List<float>(_duel.Exits));
+                _ = _duelService.SubmitAsync(_duel.LevelIndex + 1, new List<float>(_duel.Exits),
+                    LevelFingerprintFunction.Of(_shared.GetScriptable<CD_JellyLevels>()?.Get(_duel.LevelIndex)));
             }
             _signals.Outgoing.DuelFinished.Dispatch(new DuelResultRVO(won, coins, seconds, _duel.OpponentSeconds));
             if (cleared)

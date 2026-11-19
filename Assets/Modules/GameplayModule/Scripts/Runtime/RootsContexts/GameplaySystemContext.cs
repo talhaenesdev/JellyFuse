@@ -84,10 +84,6 @@ namespace Modules.GameplayModule.RootsContexts
             CommandBinder.Bind(_signals.Incoming.SpendCoins)
                 .ToSequence<SpendCoinsCommand>()
                 .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS);
-            // Paced by itself: each turn waits for the one before, then starts the next.
-            CommandBinder.Bind(_internalSignals.PollChallenges)
-                .ToSequence<PollChallengesCommand>()
-                .ToSequence<SignalDispatchCommand>(_internalSignals.PollChallenges);
             CommandBinder.Bind(_signals.Incoming.LoadRemoteLevels)
                 .ToParallel<LoadRemoteLevelsCommand>()
                 .ToParallel<LoadRemoteBoardColoursCommand>();
@@ -392,7 +388,6 @@ namespace Modules.GameplayModule.RootsContexts
         public override void Launch()
         {
             base.Launch();
-            _internalSignals.PollChallenges.Dispatch();
             _internalSignals.ListenLive.Dispatch();
         }
         public override void DestroyContext()
