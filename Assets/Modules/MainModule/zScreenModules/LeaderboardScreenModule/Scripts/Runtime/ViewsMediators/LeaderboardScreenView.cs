@@ -65,6 +65,8 @@ namespace Modules.MainModule.LeaderboardScreenModule.ViewsMediators
         private readonly HashSet<string> _challenged = new();
         [SerializeField] private Sprite _challengeSprite;
         [SerializeField] private Sprite _challengeDisabledSprite;
+        [SerializeField] private Sprite _podiumChallengeSprite;
+        [SerializeField] private Sprite _podiumChallengeDisabledSprite;
 
         private readonly List<RectTransform> _rows = new();
         private Func<string, string> _localize;
@@ -231,8 +233,12 @@ namespace Modules.MainModule.LeaderboardScreenModule.ViewsMediators
             bool sent = _challenged.Contains(data.PlayerId);
             button.interactable = !sent;
             var image = button.GetComponent<Image>();
-            if (image != null && _challengeSprite != null) image.sprite = sent && _challengeDisabledSprite != null ? _challengeDisabledSprite : _challengeSprite;
-            Set(button.transform, "Txt_Label", L("leaderboard.challenge", "Duel"));
+            // A podium slot carries the round icon button, a list row the labelled one.
+            bool podium = row is RectTransform slot && IsPodium(slot);
+            Sprite on = podium ? _podiumChallengeSprite : _challengeSprite;
+            Sprite off = podium ? _podiumChallengeDisabledSprite : _challengeDisabledSprite;
+            if (image != null && on != null) image.sprite = sent && off != null ? off : on;
+            if (!podium) Set(button.transform, "Txt_Label", L("leaderboard.challenge", "Duel"));
         }
 
         private void OnChallengeTapped(Button button)
