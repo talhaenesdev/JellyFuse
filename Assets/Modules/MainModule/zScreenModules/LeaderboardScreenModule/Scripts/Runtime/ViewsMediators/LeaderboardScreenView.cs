@@ -62,7 +62,6 @@ namespace Modules.MainModule.LeaderboardScreenModule.ViewsMediators
         /// <summary>Who each row's Duel button challenges, set as the row is filled.</summary>
         private readonly Dictionary<Button, LeaderboardRowVO> _challengeTargets = new();
         /// <summary>Players challenged while this screen was open: their button stays greyed until it opens again.</summary>
-        private readonly HashSet<string> _challenged = new();
         [SerializeField] private Sprite _challengeSprite;
         [SerializeField] private Sprite _challengeDisabledSprite;
         [SerializeField] private Sprite _podiumChallengeSprite;
@@ -230,8 +229,9 @@ namespace Modules.MainModule.LeaderboardScreenModule.ViewsMediators
             if (!show) return;
             if (!_challengeTargets.ContainsKey(button)) button.onClick.AddListener(() => OnChallengeTapped(button));
             _challengeTargets[button] = data;
-            bool sent = _challenged.Contains(data.PlayerId);
-            button.interactable = !sent;
+            // Always offered: whether this player may be invited again - a recent no - is decided when the invite is made.
+            bool sent = false;
+            button.interactable = true;
             var image = button.GetComponent<Image>();
             // A podium slot carries the round icon button, a list row the labelled one.
             bool podium = row is RectTransform slot && IsPodium(slot);
@@ -244,7 +244,6 @@ namespace Modules.MainModule.LeaderboardScreenModule.ViewsMediators
         private void OnChallengeTapped(Button button)
         {
             if (!_challengeTargets.TryGetValue(button, out var data)) return;
-            _challenged.Add(data.PlayerId);
             ChallengeClicked?.Invoke(new Modules.GameplayModule.Shared.Data.ValueObjects.DuelTargetVO(data.PlayerId, TrimName(data.Name), data.Icon, data.Level));
         }
 

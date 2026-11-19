@@ -37,6 +37,16 @@ namespace Modules.GameplayModule.Models
 
         public void StopAwaitingLive() => AwaitingLive = false;
 
+        private readonly Dictionary<string, float> _declinedUntil = new();
+
+        public void MarkDeclined(string playerId, float until)
+        {
+            if (!string.IsNullOrEmpty(playerId)) _declinedUntil[playerId] = until;
+        }
+
+        public bool IsDeclined(string playerId, float now) =>
+            !string.IsNullOrEmpty(playerId) && _declinedUntil.TryGetValue(playerId, out float until) && now < until;
+
         public void StartLive(string matchId, float countdown)
         {
             LiveMatchId = matchId ?? string.Empty;

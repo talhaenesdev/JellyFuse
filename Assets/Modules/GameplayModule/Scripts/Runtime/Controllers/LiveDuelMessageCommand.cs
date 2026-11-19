@@ -20,6 +20,8 @@ namespace Modules.GameplayModule.Controllers
     /// </summary>
     internal class LiveDuelMessageCommand : Command
     {
+        private const float DECLINE_COOLDOWN_SECONDS = 300f;
+
         [Inject] private IJellyPuzzleModel _model { get; set; }
         [Inject] private IDuelModel _duel { get; set; }
         [Inject] private IDuelService _duelService { get; set; }
@@ -73,6 +75,8 @@ namespace Modules.GameplayModule.Controllers
         private void Declined(Message message)
         {
             if (!_duel.AwaitingLive || _duel.LiveMatchId != message.matchId) return;
+            // Turned down: that player is left alone for a while, so an invite cannot be sent again and again.
+            _duel.MarkDeclined(_duel.ChallengeTargetId, Time.realtimeSinceStartup + DECLINE_COOLDOWN_SECONDS);
             _duel.StopAwaitingLive();
             _signals.Outgoing.DuelUnavailable.Dispatch();
         }

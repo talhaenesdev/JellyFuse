@@ -43,6 +43,9 @@ namespace Modules.GameplayModule.Models
         Dictionary<string, Modules.DuelModule.Data.ValueObjects.DuelChallengeVO> LiveInvites { get; }
         void AwaitLive(string matchId);
         void StopAwaitingLive();
+        /// <summary>The player turned an invite down: no new invite goes to them until <paramref name="until"/>.</summary>
+        void MarkDeclined(string playerId, float until);
+        bool IsDeclined(string playerId, float now);
         /// <summary>The live start arrived: this match is raced now, after <paramref name="countdown"/> seconds.</summary>
         void StartLive(string matchId, float countdown);
         void SetChallengeTarget(string playerId);

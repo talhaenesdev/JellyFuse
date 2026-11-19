@@ -39,6 +39,14 @@ namespace Modules.GameplayModule.Controllers
                 Stop();
                 return;
             }
+            if (_duel.IsDeclined(_target.PlayerId, Time.realtimeSinceStartup))
+            {
+                FlowLogger.Log($"ChooseChallengeTargetCommand - {_target.Name} turned an invite down a moment ago.");
+                _signals.Outgoing.DuelUnavailable.Dispatch();
+                Retain();
+                Stop();
+                return;
+            }
             // Both have won it: the lower of the two levels, or a little under it.
             int top = _target.Level > 0 ? Mathf.Min(won, _target.Level) : won;
             int index = levels.PlayableFrom(Mathf.Max(0, top - 1 - Random.Range(0, SPREAD)));
