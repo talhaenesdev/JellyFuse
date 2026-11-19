@@ -71,9 +71,12 @@ namespace Modules.GameplayModule.RootsContexts
             CommandBinder.Bind(_signals.Incoming.StartDuel)
                 .ToSequence<FindDuelOpponentCommand>()
                 .ToSequence<SignalDispatchCommand>(_signals.Outgoing.DuelChosen);
+            // A player on the leaderboard is invited to race now; their yes arrives as a live start on both games.
             CommandBinder.Bind(_signals.Incoming.StartChallenge)
                 .ToSequence<ChooseChallengeTargetCommand>()
-                .ToSequence<SignalDispatchCommand>(_signals.Outgoing.DuelChosen);
+                .ToSequence<SendLiveInviteCommand>();
+            CommandBinder.Bind(_internalSignals.ListenLive).ToSequence<ListenLiveDuelCommand>();
+            CommandBinder.Bind(_internalSignals.LiveMessage).ToSequence<LiveDuelMessageCommand>();
             CommandBinder.Bind(_signals.Incoming.AcceptChallenge)
                 .ToSequence<AcceptChallengeCommand>()
                 .ToSequence<SignalDispatchCommand>(_signals.Outgoing.DuelChosen);
@@ -390,6 +393,7 @@ namespace Modules.GameplayModule.RootsContexts
         {
             base.Launch();
             _internalSignals.PollChallenges.Dispatch();
+            _internalSignals.ListenLive.Dispatch();
         }
         public override void DestroyContext()
         {

@@ -22,5 +22,19 @@ namespace Modules.DuelModule.Services
         Task<bool> AnswerChallengeAsync(string challengeId, bool declined, float seconds);
         /// <summary>Signed in, so a call can reach the server.</summary>
         bool IsReady { get; }
+
+        /// <summary>
+        /// Listens for the live duel's messages to this player - invite, start, progress, over, declined - each handed to
+        /// <paramref name="onMessage"/> as its type and JSON body, on the main thread. False when it could not listen.
+        /// </summary>
+        Task<bool> ListenAsync(System.Action<string, string> onMessage);
+        /// <summary>Invites a player whose game is open to race a level now; the match id, or null.</summary>
+        Task<string> InviteLiveAsync(string targetId, int level);
+        /// <summary>Answers a live invite; yes starts the race on both games.</summary>
+        Task<bool> AnswerLiveAsync(string matchId, bool accept);
+        /// <summary>Another jelly cleared in a live race: the other player's bar moves.</summary>
+        Task ProgressLiveAsync(string matchId, int done, int total);
+        /// <summary>This player's live race ended: cleared in <paramref name="seconds"/>, or -1 when not cleared or left.</summary>
+        Task FinishLiveAsync(string matchId, float seconds);
     }
 }

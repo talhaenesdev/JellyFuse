@@ -70,6 +70,8 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
         [SerializeField] private TMP_Text _noticeText;
 
         public Action CloseClicked;
+        /// <summary>Continue was pressed on the result: the duel is over and the menu comes back.</summary>
+        public Action ResultContinued;
         public Action<string> ChallengeAccepted;
         public Action<string> ChallengeDeclined;
         /// <summary>The outcome notice has had its time and nothing else is on show.</summary>
@@ -179,7 +181,8 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
         }
 
         private void OnCloseClicked() => CloseClicked?.Invoke();
-        private void OnResultClosed() { if (_result != null) _result.SetActive(false); }
+        // The one way off a finished duel: back to the menu.
+        private void OnResultClosed() => ResultContinued?.Invoke();
 
         public void SetLocalizer(Func<string, string> localize) => _localize = localize;
 
@@ -218,6 +221,8 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
             _opponentExits = race.OpponentExits ?? Array.Empty<float>();
             _total = Mathf.Max(1, race.Total);
             _playerProgress = _shownPlayer = 0;
+            _opponentLive = false;
+            _opponentProgress = _shownOpponent = 0;
             SetIcon(_searchOpponentIcon, race.OpponentIcon);
             SetIcon(_raceOpponentIcon, race.OpponentIcon);
             if (_opponentName != null) _opponentName.text = race.OpponentName;
@@ -235,6 +240,26 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
 
         public void ApplyProgress(float progress) => _playerProgress = Mathf.Clamp01(progress);
 
+        /// <summary>A live race: the other player's bar follows their game rather than a recorded run.</summary>
+        public void ApplyOpponentProgress(float progress)
+        {
+            _opponentLive = true;
+            _opponentProgress = Mathf.Clamp01(progress);
+        }
+
+        /// <summary>A live invite went out: the search panel waits on that player's answer.</summary>
+        public void ShowWaiting(string name)
+        {
+            Show(search: true, countdown: false, race: false, result: false);
+            if (_searchStatus != null) _searchStatus.text = string.Format(L("duel.waiting", "Waiting for {0}..."), name);
+            if (_searchSpinner != null) _searchSpinner.gameObject.SetActive(true);
+            if (_searchClose != null) _searchClose.gameObject.SetActive(false);
+        }
+
+        private bool _opponentLive;
+        private float _opponentProgress;
+        private float _shownOpponent;
+
         public void ShowResult(DuelResultRVO result)
         {
             _racing = false;
@@ -245,12 +270,16 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
                 _resultTimes.text = string.Format(L("duel.sent_body", "Your time {0} - {1} will race it"), Seconds(result.Seconds), result.ChallengedName);
             else if (_resultTimes != null)
             {
-                _resultTimes.text = result.Seconds >= 0
+                // A live race knows only the winner's time.
+                _resultTimes.text = result.Seconds >= 0 && result.OpponentSeconds >= 0
                     ? string.Format(L("duel.times", "You {0}  ·  Rival {1}"), Seconds(result.Seconds), Seconds(result.OpponentSeconds))
-                    : string.Format(L("duel.rival_time", "Rival finished in {0}"), Seconds(result.OpponentSeconds));
+                    : result.Seconds >= 0 ? string.Format(L("duel.my_time", "Your time {0}"), Seconds(result.Seconds))
+                    : result.OpponentSeconds >= 0 ? string.Format(L("duel.rival_time", "Rival finished in {0}"), Seconds(result.OpponentSeconds))
+                    : result.Won ? L("duel.rival_left", "Your rival left the race") : string.Empty;
             }
             if (_reward != null) _reward.SetActive(result.Coins > 0);
             if (_rewardCoins != null) _rewardCoins.text = "+" + result.Coins;
+            Label(_resultClose, L("duel.continue", "Continue"));
             if (_result != null) _result.SetActive(true);
             if (_blocker != null) _blocker.SetActive(false);
         }
@@ -290,7 +319,12 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
                     if (_blocker != null) _blocker.SetActive(false);
                 }
             }
-            if (_racing) SetFill(_opponentFill, _opponentRunner, OpponentProgress(now - _raceStart));
+            if (_racing && _opponentLive)
+            {
+                _shownOpponent = Mathf.MoveTowards(_shownOpponent, _opponentProgress, Time.unscaledDeltaTime * 2f);
+                SetFill(_opponentFill, _opponentRunner, _shownOpponent);
+            }
+            else if (_racing) SetFill(_opponentFill, _opponentRunner, OpponentProgress(now - _raceStart));
             if (!Mathf.Approximately(_shownPlayer, _playerProgress))
             {
                 _shownPlayer = Mathf.MoveTowards(_shownPlayer, _playerProgress, Time.unscaledDeltaTime * 2f);

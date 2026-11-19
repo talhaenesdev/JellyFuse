@@ -10,10 +10,12 @@ namespace Modules.GameplayModule.Controllers
     {
         [Inject] private IDuelModel _duel { get; set; }
         [InjectSignal] private GameplaySignals _signals { get; set; }
+        [Inject] private Modules.DuelModule.Services.IDuelService _duelService { get; set; }
 
         public override void Execute()
         {
             if (!_duel.Active) return;
+            if (_duel.Live && !_duel.Finished) _ = _duelService.FinishLiveAsync(_duel.LiveMatchId, -1);
             _duel.End();
             _signals.Outgoing.DuelEnded.Dispatch();
         }

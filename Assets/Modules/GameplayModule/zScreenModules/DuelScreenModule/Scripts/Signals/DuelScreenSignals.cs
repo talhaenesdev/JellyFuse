@@ -26,12 +26,18 @@ namespace Modules.GameplayModule.DuelScreenModule.Signals
         public Signal<ChallengeInviteRVO> ShowChallenge = new();
         /// <summary>A challenge this player sent was answered.</summary>
         public Signal<ChallengeOutcomeRVO> ShowOutcome = new();
+        /// <summary>A live invite went out: wait on this player, by name.</summary>
+        public Signal<string> ShowWaiting = new();
+        /// <summary>The other player's share of the board in a live race, 0 to 1.</summary>
+        public Signal<float> ApplyOpponentProgress = new();
     }
 
     public class DuelScreenSignalsOutgoing
     {
         /// <summary>The player closed the search panel when no opponent was found.</summary>
         public Signal SearchClosed = new();
+        /// <summary>Continue on the duel result: the level is left for the menu.</summary>
+        public Signal ResultContinued = new();
         /// <summary>A challenge received, by id, was accepted.</summary>
         public Signal<string> ChallengeAccepted = new();
         public Signal<string> ChallengeDeclined = new();

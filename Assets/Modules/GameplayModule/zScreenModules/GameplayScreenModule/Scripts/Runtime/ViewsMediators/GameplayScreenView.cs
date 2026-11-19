@@ -400,7 +400,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         }
         private void UpdatePanels()
         {
-            if (_snapshot.Status == PuzzleStatus.Playing) { HidePanels(); return; }
+            // A duel shows its own result over the board; the level's win and lose panels stay away.
+            if (_snapshot.Status == PuzzleStatus.Playing || _duelMode) { HidePanels(); return; }
             var panel = _snapshot.Status == PuzzleStatus.Won ? _winPanel : _losePanel;
             if (panel.parent.gameObject.activeSelf || _retryPanel.parent.gameObject.activeSelf || _panelDelay != null) return;
             FillPanels();
@@ -529,6 +530,14 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             label.text = L(key, label.text);
         }
         private float _reservedTop;
+        private bool _duelMode;
+
+        /// <summary>A duel is on the board: its result is the duel screen's, so the level's own panels are not shown.</summary>
+        public void SetDuelMode(bool on)
+        {
+            _duelMode = on;
+            if (on) HidePanels();
+        }
 
         /// <summary>Space kept free over the map - a duel's race bars - and the map laid out again under it.</summary>
         public void ReserveTop(float space)

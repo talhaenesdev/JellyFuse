@@ -157,7 +157,8 @@ namespace Modules.GameplayModule.DuelScreenModule.Editor
                 Image resultShade = result.GetComponent<Image>();
                 // Dark enough that the win panel under it reads as behind, until a tap puts the banner away.
                 resultShade.color = new Color(0.06f, 0.02f, 0.16f, 0.82f);
-                result.GetComponent<Button>().targetGraphic = resultShade;
+                // The shade only stops taps reaching the board; Continue is the way off.
+                result.GetComponent<Button>().interactable = false;
                 Image banner = Img("Img_Banner", result.transform, Sprite("SPR_UI_Duel_ResultWin"));
                 Place(banner.rectTransform, new Vector2(0, 120), new Vector2(960, 720));
                 TMP_Text title = Text("Txt_Title", banner.transform, titleFont, "You won!", 76);
@@ -206,7 +207,8 @@ namespace Modules.GameplayModule.DuelScreenModule.Editor
                 Set(so, "_playerName", playerRow.name);
                 Set(so, "_opponentName", opponentRow.name);
                 Set(so, "_result", result);
-                Set(so, "_resultClose", result.GetComponent<Button>());
+                Button resultContinue = SpriteButton("Btn_Continue", result.transform, AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Art/Generated/UI/Events/SPR_UI_Button_Play_Gold.png"), font, "Continue", new Vector2(0, -560), new Vector2(380, 130));
+                Set(so, "_resultClose", resultContinue);
                 Set(so, "_resultBanner", banner);
                 Set(so, "_winSprite", Sprite("SPR_UI_Duel_ResultWin"));
                 Set(so, "_loseSprite", Sprite("SPR_UI_Duel_ResultLose"));

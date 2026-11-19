@@ -131,6 +131,10 @@ namespace Modules.GameplayModule.Signals
         public Signal<ChallengeOutcomeRVO> ChallengeOutcome = new();
         /// <summary>The answer to SpendCoins: its key, and whether the coins were taken.</summary>
         public Signal<string, bool> CoinsSpent = new();
+        /// <summary>A live invite went out: the screen waits on this player's answer, by name.</summary>
+        public Signal<string> LiveInviteSent = new();
+        /// <summary>The other player's share of the board cleared in a live race, 0 to 1.</summary>
+        public Signal<float> DuelOpponentProgress = new();
         /// <summary>The coins the player now holds.</summary>
         public Signal<int> CoinsChanged = new();
         /// <summary>The once-a-day shop products already bought today, by product id.</summary>

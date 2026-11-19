@@ -17,6 +17,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.Signals
         public Signal OpenGameplayScreen = new();
         /// <summary>Space kept free over the map, in the screen's own units; 0 gives it back.</summary>
         public Signal<float> ReserveTop = new();
+        /// <summary>A duel is on the board (true) or over (false): the level's own win and lose panels stay hidden meanwhile.</summary>
+        public Signal<bool> DuelMode = new();
         public Signal<PuzzleTurnVO> ApplyBoard = new(hideCommandLog: true);
         public Signal<float> ApplyTime = new(hideCommandLog: true);
         public Signal<int, bool> ApplyLevel = new();

@@ -14,10 +14,18 @@ namespace Modules.GameplayModule.Controllers
         [Inject] private IJellyPuzzleModel _model { get; set; }
         [Inject] private IDuelModel _duel { get; set; }
         [Inject] private ISharedDataModel _shared { get; set; }
+        [Inject] private IDuelService _liveService { get; set; }
         [SignalParam] private string _id { get; set; }
 
         public override void Execute()
         {
+            if (!string.IsNullOrEmpty(_id) && _duel.LiveInvites.Remove(_id))
+            {
+                _ = _liveService.AnswerLiveAsync(_id, true);
+                Retain();
+                Stop();
+                return;
+            }
             var levels = _shared.GetScriptable<CD_JellyLevels>();
             if (string.IsNullOrEmpty(_id) || !_duel.Pending.TryGetValue(_id, out var challenge) || levels == null || levels.Get(challenge.Level - 1) == null)
             {
@@ -43,6 +51,7 @@ namespace Modules.GameplayModule.Controllers
         public override void Execute()
         {
             if (string.IsNullOrEmpty(_id)) return;
+            if (_duel.LiveInvites.Remove(_id)) { _ = _duelService.AnswerLiveAsync(_id, false); return; }
             _duel.Pending.Remove(_id);
             // Fire and forget: the step does not wait for the server.
             _ = _duelService.AnswerChallengeAsync(_id, true, -1);

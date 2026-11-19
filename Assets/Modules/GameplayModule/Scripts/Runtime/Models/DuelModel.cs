@@ -23,6 +23,28 @@ namespace Modules.GameplayModule.Models
         public HashSet<string> Shown { get; } = new();
         public Queue<Modules.DuelModule.Data.ValueObjects.ChallengeOutcomeVO> Outcomes { get; } = new();
 
+        public string LiveMatchId { get; private set; } = string.Empty;
+        public bool Live { get; private set; }
+        public float LiveCountdown { get; private set; }
+        public bool AwaitingLive { get; private set; }
+        public Dictionary<string, Modules.DuelModule.Data.ValueObjects.DuelChallengeVO> LiveInvites { get; } = new();
+
+        public void AwaitLive(string matchId)
+        {
+            LiveMatchId = matchId ?? string.Empty;
+            AwaitingLive = !string.IsNullOrEmpty(LiveMatchId);
+        }
+
+        public void StopAwaitingLive() => AwaitingLive = false;
+
+        public void StartLive(string matchId, float countdown)
+        {
+            LiveMatchId = matchId ?? string.Empty;
+            Live = true;
+            AwaitingLive = false;
+            LiveCountdown = Mathf.Max(0, countdown);
+        }
+
         public void SetChallengeTarget(string playerId) => ChallengeTargetId = playerId ?? string.Empty;
         public void SetChallenge(string challengeId) => ChallengeId = challengeId ?? string.Empty;
 
@@ -62,6 +84,9 @@ namespace Modules.GameplayModule.Models
             Finished = false;
             ChallengeTargetId = string.Empty;
             ChallengeId = string.Empty;
+            Live = false;
+            AwaitingLive = false;
+            LiveMatchId = string.Empty;
             _exits.Clear();
         }
     }

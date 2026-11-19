@@ -33,6 +33,18 @@ namespace Modules.GameplayModule.Controllers
             float seconds = cleared ? Mathf.Max(0, Time.realtimeSinceStartup - _duel.RaceStart) : -1;
             bool won = cleared && seconds <= _duel.OpponentSeconds;
 
+            // A live race: clearing first wins - had the other game cleared first, its message would have ended this race
+            // already. Not cleared (time ran out, stuck) loses. Either way the other game is told.
+            if (_duel.Live)
+            {
+                _ = _duelService.FinishLiveAsync(_duel.LiveMatchId, seconds);
+                int prize = cleared ? DuelRewardFunction.Pay(_shared.GetScriptable<CD_Events>(), _shared.GetScriptable<SD_JellyProgress>()) : 0;
+                _signals.Outgoing.DuelFinished.Dispatch(new DuelResultRVO(cleared, prize, seconds, -1));
+                _model.WinPaid = true;
+                _model.WinReward = prize;
+                if (prize > 0) _internalSignals.PayWin.Dispatch(prize);
+                return;
+            }
             // Setting a challenge: nobody is raced, nothing is paid; a cleared run goes to the challenged player.
             if (!string.IsNullOrEmpty(_duel.ChallengeTargetId))
             {

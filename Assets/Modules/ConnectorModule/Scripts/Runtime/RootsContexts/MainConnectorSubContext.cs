@@ -129,6 +129,14 @@ namespace Modules.ConnectorModule.RootsContexts
             // The map is laid out under the race bars while a duel is played.
             _gameplaySignals.Outgoing.DuelStarted.Connect(_ => _gameplayScreenSignals.Incoming.ReserveTop.Dispatch(DUEL_BARS), DUEL_GROUP);
             _gameplaySignals.Outgoing.DuelEnded.Connect(() => _gameplayScreenSignals.Incoming.ReserveTop.Dispatch(0f), DUEL_GROUP);
+            // One result on show at a time: the duel's, and Continue on it leaves the level for the menu.
+            _gameplaySignals.Outgoing.DuelStarted.Connect(_ => _gameplayScreenSignals.Incoming.DuelMode.Dispatch(true), DUEL_GROUP);
+            _gameplaySignals.Outgoing.DuelEnded.Connect(() => _gameplayScreenSignals.Incoming.DuelMode.Dispatch(false), DUEL_GROUP);
+            _duelScreenSignals.Outgoing.ResultContinued.Connect(_gameplayScreenSignals.Incoming.Quit, DUEL_GROUP);
+            // Live duels: the invite waits on the other player; accepting shows the panel until the start comes.
+            _gameplaySignals.Outgoing.LiveInviteSent.Connect(_duelScreenSignals.Incoming.ShowWaiting, DUEL_GROUP);
+            _gameplaySignals.Outgoing.DuelOpponentProgress.Connect(_duelScreenSignals.Incoming.ApplyOpponentProgress, DUEL_GROUP);
+            _duelScreenSignals.Outgoing.ChallengeAccepted.Connect(_ => _duelScreenSignals.Incoming.OpenSearch.Dispatch(), DUEL_GROUP);
 
             // Challenges: Duel on an active player's leaderboard row sets one; one received shows over whatever is up.
             _leaderboardScreenSignals.Outgoing.ChallengeClicked.Connect(_ => _duelScreenSignals.Incoming.OpenSearch.Dispatch(), DUEL_GROUP);

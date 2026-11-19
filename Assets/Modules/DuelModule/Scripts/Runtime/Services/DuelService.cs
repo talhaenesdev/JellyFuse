@@ -5,6 +5,7 @@ using FlowIoC.ConsoleModule;
 using Modules.DuelModule.Data.ValueObjects;
 using Unity.Services.Authentication;
 using Unity.Services.CloudCode;
+using Unity.Services.CloudCode.Subscriptions;
 using Unity.Services.Core;
 
 namespace Modules.DuelModule.Services
@@ -104,6 +105,71 @@ namespace Modules.DuelModule.Services
             {
                 FlowLogger.Log($"DuelService - the challenge answer did not reach the server: {exception.Message}");
                 return false;
+            }
+        }
+
+        private sealed class LiveReply
+        {
+            public bool Ok { get; set; }
+            public string Reason { get; set; }
+            public string MatchId { get; set; }
+        }
+
+        private bool _listening;
+
+        public async Task<bool> ListenAsync(Action<string, string> onMessage)
+        {
+            if (_listening) return true;
+            if (!IsReady || onMessage == null) return false;
+            try
+            {
+                var callbacks = new SubscriptionEventCallbacks();
+                // Messages arrive on the main thread already (Wire dispatches on Unity's), so they go straight on.
+                callbacks.MessageReceived += message => onMessage(message.MessageType, message.Message);
+                callbacks.Error += error => FlowLogger.Log($"DuelService - live messages: {error}");
+                callbacks.Kicked += () => _listening = false;
+                await CloudCodeService.Instance.SubscribeToPlayerMessagesAsync(callbacks);
+                _listening = true;
+                return true;
+            }
+            catch (Exception exception)
+            {
+                FlowLogger.Log($"DuelService - could not listen for live duels: {exception.Message}");
+                return false;
+            }
+        }
+
+        public async Task<string> InviteLiveAsync(string targetId, int level)
+        {
+            var reply = await Live("InviteLive", new Dictionary<string, object> { { "targetId", targetId }, { "level", level } });
+            return reply != null && reply.Ok ? reply.MatchId : null;
+        }
+
+        public async Task<bool> AnswerLiveAsync(string matchId, bool accept)
+        {
+            var reply = await Live("AnswerLive", new Dictionary<string, object> { { "matchId", matchId }, { "accept", accept } });
+            return reply != null && reply.Ok;
+        }
+
+        public Task ProgressLiveAsync(string matchId, int done, int total) =>
+            Live("ProgressLive", new Dictionary<string, object> { { "matchId", matchId }, { "done", done }, { "total", total } });
+
+        public Task FinishLiveAsync(string matchId, float seconds) =>
+            Live("FinishLive", new Dictionary<string, object> { { "matchId", matchId }, { "seconds", seconds } });
+
+        private async Task<LiveReply> Live(string function, Dictionary<string, object> arguments)
+        {
+            if (!IsReady) return null;
+            try
+            {
+                var reply = await WithTimeout(CloudCodeService.Instance.CallModuleEndpointAsync<LiveReply>(MODULE, function, arguments));
+                if (reply != null && !reply.Ok) FlowLogger.Log($"DuelService - {function}: {reply.Reason}");
+                return reply;
+            }
+            catch (Exception exception)
+            {
+                FlowLogger.Log($"DuelService - {function} did not reach the server: {exception.Message}");
+                return null;
             }
         }
 

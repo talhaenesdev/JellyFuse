@@ -20,7 +20,7 @@ namespace Modules.GameplayModule.Controllers
         public override void Execute()
         {
             if (!_duel.Active) return;
-            float countdown = _shared.GetScriptable<CD_Events>()?.DuelCountdown ?? 3f;
+            float countdown = _duel.Live ? _duel.LiveCountdown : _shared.GetScriptable<CD_Events>()?.DuelCountdown ?? 3f;
             _duel.StartRace(Time.realtimeSinceStartup, countdown);
             _signals.Outgoing.DuelStarted.Dispatch(new DuelRaceRVO(_duel.OpponentName, _duel.OpponentIcon, _duel.OpponentExits,
                 DuelProgressFunction.Total(_model.Snapshot()), countdown, _duel.LevelIndex + 1));

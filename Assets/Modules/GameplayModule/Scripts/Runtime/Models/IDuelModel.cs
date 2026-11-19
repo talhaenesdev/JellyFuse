@@ -31,6 +31,20 @@ namespace Modules.GameplayModule.Models
         HashSet<string> Shown { get; }
         /// <summary>Outcomes of sent challenges not shown yet - held while a level is played.</summary>
         Queue<Modules.DuelModule.Data.ValueObjects.ChallengeOutcomeVO> Outcomes { get; }
+        /// <summary>The live match being raced, or waited on; empty when the race is not live.</summary>
+        string LiveMatchId { get; }
+        /// <summary>The live race is on: the other player is racing the same board right now.</summary>
+        bool Live { get; }
+        /// <summary>Seconds of countdown the live start asked for.</summary>
+        float LiveCountdown { get; }
+        /// <summary>A live invite was sent and its answer is awaited.</summary>
+        bool AwaitingLive { get; }
+        /// <summary>Live invites received, by match id: who sent them and the level.</summary>
+        Dictionary<string, Modules.DuelModule.Data.ValueObjects.DuelChallengeVO> LiveInvites { get; }
+        void AwaitLive(string matchId);
+        void StopAwaitingLive();
+        /// <summary>The live start arrived: this match is raced now, after <paramref name="countdown"/> seconds.</summary>
+        void StartLive(string matchId, float countdown);
         void SetChallengeTarget(string playerId);
         void SetChallenge(string challengeId);
 
