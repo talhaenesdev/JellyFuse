@@ -42,6 +42,9 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
         [SerializeField] private TMP_Text _opponentName;
         [SerializeField] private TMP_Text _playerName;
 
+        /// <summary>The arena art behind the search and the wait; the countdown keeps the board in view.</summary>
+        [SerializeField] private GameObject _background;
+
         [Header("Result")]
         [SerializeField] private GameObject _result;
         [SerializeField] private Button _resultClose;
@@ -317,6 +320,8 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
                 if (numbers && _search != null && _search.activeSelf)
                 {
                     _search.SetActive(false);
+                    // The numbers count over the board itself.
+                    if (_background != null) _background.SetActive(false);
                     if (_countdown != null) _countdown.gameObject.SetActive(true);
                 }
                 if (numbers && _countdown != null && _countdownSprites != null && _countdownSprites.Length >= 4)
@@ -385,6 +390,7 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
         private void Show(bool search, bool countdown, bool race, bool result)
         {
             if (_search != null) _search.SetActive(search);
+            if (_background != null) _background.SetActive(search);
             if (_blocker != null) _blocker.SetActive(search || countdown || (_challenge != null && _challenge.activeSelf));
             if (_countdown != null) _countdown.gameObject.SetActive(countdown);
             if (_race != null) _race.SetActive(race);

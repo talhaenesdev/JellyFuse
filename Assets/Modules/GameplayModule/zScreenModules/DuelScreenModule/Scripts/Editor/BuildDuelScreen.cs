@@ -58,6 +58,16 @@ namespace Modules.GameplayModule.DuelScreenModule.Editor
                 blocker.raycastTarget = true;
                 blocker.enabled = true;
 
+                // The arena behind the search and the wait, filling the screen at its own proportions.
+                GameObject background = Ui("Img_Background", root.transform);
+                Stretch((RectTransform)background.transform);
+                Image backgroundArt = Img("Img_Art", background.transform, AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Art/Generated/UI/Duel/SPR_UI_Duel_Background.png"));
+                backgroundArt.preserveAspect = false;
+                AspectRatioFitter fitter = backgroundArt.gameObject.AddComponent<AspectRatioFitter>();
+                fitter.aspectMode = AspectRatioFitter.AspectMode.EnvelopeParent;
+                fitter.aspectRatio = 1080f / 1920f;
+                background.SetActive(false);
+
                 // The race bar: the opponent's row above the player's, high on the board.
                 GameObject race = Ui("Pnl_Race", root.transform);
                 RectTransform raceRect = (RectTransform)race.transform;
@@ -209,6 +219,7 @@ namespace Modules.GameplayModule.DuelScreenModule.Editor
                 Set(so, "_result", result);
                 Button resultContinue = SpriteButton("Btn_Continue", result.transform, AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Art/Generated/UI/Events/SPR_UI_Button_Play_Gold.png"), font, "Continue", new Vector2(0, -560), new Vector2(380, 130));
                 Set(so, "_resultClose", resultContinue);
+                Set(so, "_background", background);
                 Button resultRematch = SpriteButton("Btn_Rematch", result.transform, AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Art/Generated/UI/Events/SPR_UI_Button_Play_Gold.png"), font, "Play again", new Vector2(0, -705), new Vector2(380, 130));
                 resultRematch.GetComponent<Image>().color = new Color(0.75f, 1f, 0.8f, 1f);
                 resultRematch.gameObject.SetActive(false);
