@@ -32,6 +32,8 @@ namespace Modules.ProfileModule.Signals
         public Signal ProfilePublished = new();
         /// <summary>The first name the player picked earned these coins.</summary>
         public Signal<int> NameRewardEarned = new();
+        /// <summary>Whether the first-name reward still waits to be claimed - the profile button carries a dot while it does.</summary>
+        public Signal<bool> NameRewardPending = new();
         /// <summary>An icon is to be paid for: a key to answer with ("icon:" and its id) and the coins it costs.</summary>
         public Signal<string, int> CoinsRequested = new();
         /// <summary>An icon was bought: the selection again, with it unlocked.</summary>

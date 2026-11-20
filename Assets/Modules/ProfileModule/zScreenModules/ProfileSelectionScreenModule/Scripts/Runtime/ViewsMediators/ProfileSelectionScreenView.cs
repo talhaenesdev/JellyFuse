@@ -23,8 +23,6 @@ namespace Modules.ProfileModule.ProfileSelectionScreenModule.ViewsMediators
         [SerializeField] private TMP_Text _avatarTabLabel;
         [SerializeField] private TMP_Text _frameTabLabel;
         [SerializeField] private TMP_InputField _nameInput;
-        /// <summary>Under the name: the coins a first name of the player's own pays, while they are unpaid.</summary>
-        [SerializeField] private TMP_Text _nameRewardHint;
         [SerializeField] private ProfileAvatar _profileAvatar;
         [Header("Responsive Layout")]
         [SerializeField] private RectTransform _dialog;
@@ -142,12 +140,6 @@ namespace Modules.ProfileModule.ProfileSelectionScreenModule.ViewsMediators
             _draftIconId = selection?.SelectedIconId;
             _draftFrameId = selection?.SelectedFrameId;
             if (_nameInput != null) _nameInput.SetTextWithoutNotify(selection?.PlayerName ?? "Player");
-            int reward = selection?.NameReward ?? 0;
-            if (_nameRewardHint != null)
-            {
-                _nameRewardHint.gameObject.SetActive(reward > 0);
-                _nameRewardHint.text = string.Format(L("profile.name_reward", "Pick your name, win {0} coins!"), reward);
-            }
             ShowAvatars();
             RefreshPreview();
         }

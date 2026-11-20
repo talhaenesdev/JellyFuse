@@ -20,6 +20,7 @@ namespace Modules.ProfileModule.Controllers
             if (!_model.ClaimNameReward()) return;
             FlowLogger.Log($"RewardFirstNameCommand - first name picked, {ProfileModel.NAME_REWARD_COINS} coins.");
             _signals.Outgoing.NameRewardEarned.Dispatch(ProfileModel.NAME_REWARD_COINS);
+            _signals.Outgoing.NameRewardPending.Dispatch(false);
         }
     }
 }

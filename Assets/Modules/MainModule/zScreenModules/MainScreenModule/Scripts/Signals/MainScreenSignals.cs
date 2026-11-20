@@ -28,6 +28,8 @@ namespace Modules.MainModule.MainScreenModule.Signals
         /// <summary>The profile icon currently selected by the player.</summary>
         public Signal<ProfileIconVO> ApplyProfileIcon = new();
         public Signal<ProfileFrameVO> ApplyProfileFrame = new();
+        /// <summary>A reward waits behind the profile button: it carries a dot while true.</summary>
+        public Signal<bool> ApplyProfileDot = new();
         /// <summary>The store's localized price of each product, by product id.</summary>
         public Signal<IReadOnlyDictionary<string, string>> ApplyShopPrices = new();
         /// <summary>The products sold out today, by product id: their panels wait until tomorrow.</summary>

@@ -70,6 +70,7 @@ namespace Modules.ConnectorModule.RootsContexts
             _localizationSignals.Outgoing.LanguageChanged.Connect(_mainScreenSignals.Incoming.ApplyLanguage, LANGUAGE_GROUP);
 
             _profileSignals.Outgoing.IconChanged.Connect(_mainScreenSignals.Incoming.ApplyProfileIcon);
+            _profileSignals.Outgoing.NameRewardPending.Connect(_mainScreenSignals.Incoming.ApplyProfileDot);
             _profileSignals.Outgoing.IconChanged.Connect(icon => _gameplayScreenSignals.Incoming.PrefetchBoardAnimal.Dispatch(icon.Id));
             _profileSignals.Outgoing.FrameChanged.Connect(_mainScreenSignals.Incoming.ApplyProfileFrame);
             _profileSignals.Outgoing.SelectionRequested.Connect(_profileSelectionSignals.Incoming.Open);
@@ -177,6 +178,7 @@ namespace Modules.ConnectorModule.RootsContexts
             // Its own group, so the other connectors listening to LanguageChanged keep theirs.
             SignalConnector.DisconnectGroup(LANGUAGE_GROUP);
             _profileSignals.Outgoing.IconChanged.Disconnect();
+            _profileSignals.Outgoing.NameRewardPending.Disconnect();
             _profileSignals.Outgoing.FrameChanged.Disconnect();
             _profileSignals.Outgoing.SelectionRequested.Disconnect();
             _profileSignals.Outgoing.ProfileSaved.Disconnect();

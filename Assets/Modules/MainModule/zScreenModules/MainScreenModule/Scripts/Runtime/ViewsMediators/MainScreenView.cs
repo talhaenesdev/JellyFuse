@@ -65,6 +65,7 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
         [Header("Daily events")]
         [SerializeField] private Button _questsButton;
         [SerializeField] private GameObject _questsDot;
+        [SerializeField] private GameObject _profileDot;
         [SerializeField] private Button _loginRewardsButton;
         [SerializeField] private GameObject _loginRewardsDot;
         [SerializeField] private Button _wheelButton;
@@ -589,5 +590,10 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
 
         protected override void PlayShowAnimation() => ShowCompleted?.Invoke(this);
         protected override void PlayHideAnimation() => HideCompleted?.Invoke(this);
+
+        public void ApplyProfileDot(bool on)
+        {
+            if (_profileDot != null) _profileDot.SetActive(on);
+        }
     }
 }

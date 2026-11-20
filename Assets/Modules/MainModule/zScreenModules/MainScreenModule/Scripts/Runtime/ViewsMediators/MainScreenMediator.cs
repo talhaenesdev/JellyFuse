@@ -49,6 +49,7 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
             _signals.Incoming.ShowHomeTab.AddListener(_view.SelectHomeTab);
             _signals.Incoming.HideMainScreen.AddListener(OnHideRequested);
             _signals.Incoming.ApplyProfileIcon.AddListener(_view.ApplyProfileIcon);
+            _signals.Incoming.ApplyProfileDot.AddListener(_view.ApplyProfileDot);
             _signals.Incoming.ApplyProfileFrame.AddListener(_view.ApplyProfileFrame);
             _signals.Incoming.ApplyShopPrices.AddListener(_view.ApplyShopPrices);
             _signals.Incoming.ApplyShopSoldOut.AddListener(_view.ApplyShopSoldOut);
@@ -82,6 +83,7 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
             _signals.Incoming.ShowHomeTab.RemoveListener(_view.SelectHomeTab);
             _signals.Incoming.HideMainScreen.RemoveListener(OnHideRequested);
             _signals.Incoming.ApplyProfileIcon.RemoveListener(_view.ApplyProfileIcon);
+            _signals.Incoming.ApplyProfileDot.RemoveListener(_view.ApplyProfileDot);
             _signals.Incoming.ApplyProfileFrame.RemoveListener(_view.ApplyProfileFrame);
             _signals.Incoming.ApplyShopPrices.RemoveListener(_view.ApplyShopPrices);
             _signals.Incoming.ApplyShopSoldOut.RemoveListener(_view.ApplyShopSoldOut);

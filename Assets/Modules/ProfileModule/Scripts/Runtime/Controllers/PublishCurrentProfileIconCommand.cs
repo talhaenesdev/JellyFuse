@@ -14,6 +14,7 @@ namespace Modules.ProfileModule.Controllers
         {
             if (_model.CurrentIcon != null) _signals.Outgoing.IconChanged.Dispatch(_model.CurrentIcon);
             if (_model.CurrentFrame != null) _signals.Outgoing.FrameChanged.Dispatch(_model.CurrentFrame);
+            _signals.Outgoing.NameRewardPending.Dispatch(_model.NameRewardAvailable);
         }
     }
 }
