@@ -55,6 +55,11 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
         [SerializeField] private KeyedText[] _shopTexts;
         [Tooltip("Products sold once for good: sold out, they read Owned rather than Tomorrow.")]
         [SerializeField] private string[] _shopOwnedOnceIds;
+        [Tooltip("A buy button not open yet - no price, or sold out for today.")]
+        [SerializeField] private Sprite _shopBuyOffSprite;
+        [Tooltip("A buy button of a product bought for good.")]
+        [SerializeField] private Sprite _shopBuyOwnedSprite;
+        private readonly Dictionary<Image, Sprite> _shopBuySprites = new();
         [Tooltip("Leaves the shop for Home, as the Home tab does.")]
         [SerializeField] private Button _shopCloseButton;
         [Tooltip("The + by the coins: opens the Shop tab, as the tab does.")]
@@ -533,7 +538,16 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
             {
                 if (_shopBuyPanels[i] == null) continue;
                 bool priced = IsPriced(i);
-                _shopBuyPanels[i].color = priced ? _theme.ShopBuyButton : Color.Lerp(_theme.ShopBuyButton, Color.gray, .55f);
+                if (_shopBuyPanels[i] is Image buy && _shopBuyOffSprite != null)
+                {
+                    // Drawn buttons: their own sprite while open, grey while not, the owned pill once bought for good.
+                    if (!_shopBuySprites.TryGetValue(buy, out Sprite open)) _shopBuySprites[buy] = open = buy.sprite;
+                    bool owned = _shopOwnedOnceIds != null && i < _shopProductIds.Length && _shopSoldOut.Contains(_shopProductIds[i])
+                                 && Array.IndexOf(_shopOwnedOnceIds, _shopProductIds[i]) >= 0;
+                    buy.sprite = priced ? open : owned && _shopBuyOwnedSprite != null ? _shopBuyOwnedSprite : _shopBuyOffSprite;
+                    buy.color = Color.white;
+                }
+                else _shopBuyPanels[i].color = priced ? _theme.ShopBuyButton : Color.Lerp(_theme.ShopBuyButton, Color.gray, .55f);
                 if (_shopButtons != null && _shopButtons[i] != null) _shopButtons[i].interactable = priced;
             }
         }
