@@ -46,6 +46,13 @@ namespace Modules.ProfileModule.ProfileSelectionScreenModule.ViewsMediators
         [SerializeField] private Sprite _slotSelectedSprite;
         [SerializeField] private Sprite _slotLockedSprite;
         [SerializeField] private Sprite _slotPoorSprite;
+        /// <summary>Drawn over the animal: the lock on a locked item, the tick on the picked one.</summary>
+        [SerializeField] private Sprite _lockSprite;
+        [SerializeField] private Sprite _checkSprite;
+        /// <summary>The price strip's tint while the coins are not enough.</summary>
+        [SerializeField] private Color _poorStripColor = new(1f, .42f, .42f, 1f);
+        /// <summary>The slot's tint while the coins are not enough.</summary>
+        [SerializeField] private Color _poorSlotColor = new(.68f, .66f, .74f, 1f);
         /// <summary>The bottom button: save, buy with coins enough, buy without.</summary>
         [SerializeField] private Sprite _saveSprite;
         [SerializeField] private Sprite _buySprite;
@@ -297,9 +304,27 @@ namespace Modules.ProfileModule.ProfileSelectionScreenModule.ViewsMediators
                 if (marker != null) marker.gameObject.SetActive(false);
                 ProfileIconVO icon = _showingFrames ? null : _selection?.Icons.Find(value => prefix + value.Id == item.name);
                 bool locked = icon != null && !icon.Owned;
-                Sprite slot = !locked ? (selected ? _slotSelectedSprite : _slotOwnedSprite)
-                    : _coins >= icon.Price ? _slotLockedSprite : _slotPoorSprite;
-                if (slot != null && item.targetGraphic is Image background) background.sprite = slot;
+                bool poor = locked && _coins < icon.Price;
+                Sprite slot = selected && !locked ? _slotSelectedSprite : _slotOwnedSprite;
+                if (slot != null && item.targetGraphic is Image background)
+                {
+                    background.sprite = slot;
+                    background.color = poor ? _poorSlotColor : Color.white;
+                }
+                // The lock, the tick and the price strip are drawn over the animal, never behind it.
+                Image badge = item.transform.Find("Img_Badge")?.GetComponent<Image>();
+                if (badge != null)
+                {
+                    Sprite mark = locked ? _lockSprite : selected ? _checkSprite : null;
+                    badge.sprite = mark;
+                    badge.enabled = mark != null;
+                }
+                Image strip = item.transform.Find("Img_PriceStrip")?.GetComponent<Image>();
+                if (strip != null)
+                {
+                    strip.enabled = locked;
+                    strip.color = poor ? _poorStripColor : Color.white;
+                }
                 // A locked item picked to look at stands a little forward.
                 item.transform.localScale = Vector3.one * (locked && selected ? 1.06f : 1f);
             }
