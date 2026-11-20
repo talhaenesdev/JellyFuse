@@ -22,6 +22,8 @@ namespace Modules.ProfileModule.ProfileSelectionScreenModule.ViewsMediators
         [SerializeField] private Button _statsButton;
         [SerializeField] private TMP_Text _avatarTabLabel;
         [SerializeField] private TMP_Text _frameTabLabel;
+        /// <summary>The title on the ribbon.</summary>
+        [SerializeField] private TMP_Text _titleLabel;
         [SerializeField] private TMP_InputField _nameInput;
         [SerializeField] private ProfileAvatar _profileAvatar;
         [Header("Responsive Layout")]
@@ -69,7 +71,23 @@ namespace Modules.ProfileModule.ProfileSelectionScreenModule.ViewsMediators
         private string _saveText;
         private string _message;
 
-        public void SetLocalizer(Func<string, string> localize) => _localize = localize;
+        public void SetLocalizer(Func<string, string> localize)
+        {
+            _localize = localize;
+            ApplyTexts();
+        }
+
+        /// <summary>Every fixed word on the screen, in the language in use.</summary>
+        private void ApplyTexts()
+        {
+            if (_titleLabel != null) _titleLabel.text = L("profile.title", "PROFILE");
+            if (_avatarTabLabel != null) _avatarTabLabel.text = L("profile.tab_avatar", "Avatar");
+            if (_frameTabLabel != null) _frameTabLabel.text = L("profile.tab_frame", "Frame");
+            if (_nameInput != null && _nameInput.placeholder is TMP_Text placeholder)
+                placeholder.text = L("profile.name_placeholder", "Enter your name");
+            _saveText = L("profile.save", "SAVE");
+            RefreshSaveLabel();
+        }
 
         private string L(string key, string english)
         {
@@ -366,20 +384,24 @@ namespace Modules.ProfileModule.ProfileSelectionScreenModule.ViewsMediators
         {
             ApplyTab(_avatarTabButton, !_showingFrames);
             ApplyTab(_frameTabButton, _showingFrames);
-            if (_avatarTabLabel != null) _avatarTabLabel.color = Color.white;
-            if (_frameTabLabel != null) _frameTabLabel.color = Color.white;
+            // The open tab's label is bright, the other one dimmed.
+            if (_avatarTabLabel != null) _avatarTabLabel.color = !_showingFrames ? Color.white : new Color(1f, 1f, 1f, .7f);
+            if (_frameTabLabel != null) _frameTabLabel.color = _showingFrames ? Color.white : new Color(1f, 1f, 1f, .7f);
         }
 
         private void ApplyTab(Button tab, bool open)
         {
-            if (tab == null || tab.targetGraphic == null) return;
+            if (tab == null) return;
+            // The tab's own background shows which list is open - not whatever the button tints.
             Sprite sprite = open ? _tabOnSprite : _tabOffSprite;
-            if (sprite != null && tab.targetGraphic is Image image)
+            Image image = tab.GetComponent<Image>();
+            if (sprite != null && image != null)
             {
                 image.sprite = sprite;
                 image.color = Color.white;
+                tab.transform.localScale = Vector3.one * (open ? 1.06f : 0.96f);
             }
-            else tab.targetGraphic.color = open ? _selectedTabColor : _normalTabColor;
+            else if (tab.targetGraphic != null) tab.targetGraphic.color = open ? _selectedTabColor : _normalTabColor;
         }
 
         private void FitDialogToSafeArea()
