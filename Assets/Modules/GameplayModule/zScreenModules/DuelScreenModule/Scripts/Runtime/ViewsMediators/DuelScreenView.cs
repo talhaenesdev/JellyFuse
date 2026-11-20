@@ -56,6 +56,11 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
         [SerializeField] private TMP_Text _resultTimes;
         [SerializeField] private GameObject _reward;
         [SerializeField] private TMP_Text _rewardCoins;
+        /// <summary>The two faces in the result card's rings, and each one's time on the strip under it.</summary>
+        [SerializeField] private Image _resultPlayerIcon;
+        [SerializeField] private Image _resultOpponentIcon;
+        [SerializeField] private TMP_Text _resultMyTime;
+        [SerializeField] private TMP_Text _resultRivalTime;
 
         [SerializeField] private Sprite _sentSprite;
 
@@ -301,6 +306,17 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
                     : result.OpponentSeconds >= 0 ? string.Format(L("duel.rival_time", "Rival finished in {0}"), Seconds(result.OpponentSeconds))
                     : result.Won ? L("duel.rival_left", "Your rival left the race") : string.Empty;
             }
+            // The card: both faces as the race showed them, and each one's time - a dash where it is not known.
+            if (_resultPlayerIcon != null && _racePlayerIcon != null) { _resultPlayerIcon.sprite = _racePlayerIcon.sprite; _resultPlayerIcon.color = _racePlayerIcon.color; }
+            if (_resultOpponentIcon != null && _raceOpponentIcon != null) { _resultOpponentIcon.sprite = _raceOpponentIcon.sprite; _resultOpponentIcon.color = _raceOpponentIcon.color; }
+            if (_resultMyTime != null) _resultMyTime.text = result.Seconds >= 0 ? Seconds(result.Seconds) : "-";
+            if (_resultRivalTime != null) _resultRivalTime.text = result.OpponentSeconds >= 0 && !result.ChallengeSent ? Seconds(result.OpponentSeconds) : "-";
+            // The strip under the times carries the coins when there are any, and a line of its own otherwise.
+            if (_resultMyTime != null && _resultTimes != null && !result.ChallengeSent)
+                _resultTimes.text = result.Seconds < 0 && result.OpponentSeconds < 0 && result.Won ? L("duel.rival_left", "Your rival left the race") : string.Empty;
+            if (_resultTimes != null && string.IsNullOrEmpty(_resultTimes.text))
+                _resultTimes.text = result.Won ? L("duel.well_played", "Well played!") : L("duel.next_time", "Next time!");
+            if (_resultTimes != null) _resultTimes.gameObject.SetActive(result.Coins <= 0);
             if (_reward != null) _reward.SetActive(result.Coins > 0);
             if (_rewardCoins != null) _rewardCoins.text = "+" + result.Coins;
             Label(_resultClose, L("duel.continue", "Continue"));
