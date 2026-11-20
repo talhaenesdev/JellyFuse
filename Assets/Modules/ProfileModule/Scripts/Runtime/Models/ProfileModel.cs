@@ -66,6 +66,8 @@ namespace Modules.ProfileModule.Models
             if (selected != null && selected.Price > 0) _profile?.AddOwnedIcon(selected.Id);
             CurrentIcon = selected != null ? new ProfileIconVO(selected) : null;
             string frameId = ResolveFrameId(_profile != null ? _profile.SelectedFrameId : null);
+            // A frame worn before frames had a price stays the player's.
+            if (!string.IsNullOrEmpty(frameId) && _frames[frameId].Price > 0) _profile?.AddOwnedFrame(frameId);
             CurrentFrame = !string.IsNullOrEmpty(frameId) ? new ProfileFrameVO(_frames[frameId]) : null;
             _profile?.SetProfile(NormalizeName(_profile.PlayerName), CurrentIcon?.Id, frameId);
         }
@@ -79,6 +81,8 @@ namespace Modules.ProfileModule.Models
             if (!Owns(icon)) return false;
             string frameId = ResolveFrameId(edit.FrameId);
             if (_frames.Count > 0 && string.IsNullOrEmpty(frameId)) return false;
+            // So is a locked frame.
+            if (!string.IsNullOrEmpty(frameId) && !OwnsFrame(_frames[frameId])) return false;
             _profile?.SetProfile(NormalizeName(edit.PlayerName), icon.Id, frameId);
             CurrentIcon = new ProfileIconVO(icon);
             CurrentFrame = !string.IsNullOrEmpty(frameId) ? new ProfileFrameVO(_frames[frameId]) : null;
@@ -110,18 +114,33 @@ namespace Modules.ProfileModule.Models
                 SelectedFrameId = ResolveFrameId(_profile != null ? _profile.SelectedFrameId : null)
             };
             foreach (ProfileIconCVO icon in _icons.Values) result.Icons.Add(new ProfileIconVO(icon, Owns(icon)));
-            foreach (ProfileFrameCVO frame in _frames.Values) result.Frames.Add(new ProfileFrameVO(frame));
+            foreach (ProfileFrameCVO frame in _frames.Values) result.Frames.Add(new ProfileFrameVO(frame, OwnsFrame(frame)));
             return result;
         }
 
         private bool Owns(ProfileIconCVO icon) =>
             icon.Price <= 0 || (_profile != null && System.Linq.Enumerable.Contains(_profile.OwnedIconIds, icon.Id));
 
-        /// <summary>The coins an icon costs to unlock; 0 when it is free or already the player's, -1 when there is no such icon.</summary>
-        public int PriceToUnlock(string iconId) =>
-            !_icons.TryGetValue(iconId ?? string.Empty, out ProfileIconCVO icon) ? -1 : Owns(icon) ? 0 : icon.Price;
+        private bool OwnsFrame(ProfileFrameCVO frame) =>
+            frame.Price <= 0 || (_profile != null && System.Linq.Enumerable.Contains(_profile.OwnedFrameIds, frame.Id));
 
-        public void Unlock(string iconId) => _profile?.AddOwnedIcon(iconId);
+        /// <summary>A frame is bought under its id with this in front, an icon under its plain id.</summary>
+        public const string FRAME_PREFIX = "frame:";
+
+        /// <summary>The coins an icon or a frame costs to unlock; 0 when it is free or already the player's, -1 when there is no such item.</summary>
+        public int PriceToUnlock(string itemId)
+        {
+            itemId ??= string.Empty;
+            if (itemId.StartsWith(FRAME_PREFIX, StringComparison.Ordinal))
+                return !_frames.TryGetValue(itemId.Substring(FRAME_PREFIX.Length), out ProfileFrameCVO frame) ? -1 : OwnsFrame(frame) ? 0 : frame.Price;
+            return !_icons.TryGetValue(itemId, out ProfileIconCVO icon) ? -1 : Owns(icon) ? 0 : icon.Price;
+        }
+
+        public void Unlock(string itemId)
+        {
+            if (itemId != null && itemId.StartsWith(FRAME_PREFIX, StringComparison.Ordinal)) _profile?.AddOwnedFrame(itemId.Substring(FRAME_PREFIX.Length));
+            else _profile?.AddOwnedIcon(itemId);
+        }
 
         private string ResolveFrameId(string requested)
         {

@@ -97,19 +97,33 @@ namespace Modules.ProfileModule.ProfileSelectionScreenModule.ViewsMediators
         }
 
         private ProfileIconVO DraftIcon => _selection?.Icons.Find(value => value.Id == _draftIconId);
+        private ProfileFrameVO DraftFrame => _selection?.Frames.Find(value => value.Id == _draftFrameId);
+
+        /// <summary>A frame is bought under its id with this in front; the profile module reads it the same way.</summary>
+        private const string FRAME_PREFIX = "frame:";
+
+        /// <summary>The picked item that still has to be bought - the avatar first, then the frame - and its price; null when both are the player's.</summary>
+        private string LockedDraft(out int price)
+        {
+            var icon = DraftIcon;
+            if (icon != null && !icon.Owned) { price = icon.Price; return icon.Id; }
+            var frame = DraftFrame;
+            if (frame != null && !frame.Owned) { price = frame.Price; return FRAME_PREFIX + frame.Id; }
+            price = 0;
+            return null;
+        }
 
         private void RefreshSaveLabel()
         {
             var label = _saveButton != null ? _saveButton.GetComponentInChildren<TMP_Text>(true) : null;
             if (label == null) return;
             _saveText ??= label.text;
-            var icon = DraftIcon;
-            bool buying = icon != null && !icon.Owned;
-            label.text = _message ?? (buying ? string.Format(L("profile.buy", "Buy {0}"), icon.Price) : _saveText);
+            bool buying = LockedDraft(out int price) != null;
+            label.text = _message ?? (buying ? string.Format(L("profile.buy", "Buy {0}"), price) : _saveText);
             label.margin = new Vector4(buying ? _buyLabelMargin : 0, 0, 0, 0);
             if (_saveButton.targetGraphic is Image background)
             {
-                Sprite sprite = !buying ? _saveSprite : _coins >= icon.Price ? _buySprite : _buyOffSprite;
+                Sprite sprite = !buying ? _saveSprite : _coins >= price ? _buySprite : _buyOffSprite;
                 if (sprite != null) background.sprite = sprite;
             }
         }
@@ -204,10 +218,10 @@ namespace Modules.ProfileModule.ProfileSelectionScreenModule.ViewsMediators
 
         private void Save()
         {
-            var icon = DraftIcon;
-            if (icon != null && !icon.Owned)
+            string locked = LockedDraft(out _);
+            if (locked != null)
             {
-                BuyRequested?.Invoke(icon.Id);
+                BuyRequested?.Invoke(locked);
                 return;
             }
             SaveRequested?.Invoke(new ProfileEditVO
@@ -234,21 +248,18 @@ namespace Modules.ProfileModule.ProfileSelectionScreenModule.ViewsMediators
                 // Each frame is shown round the avatar picked, so the player sees what they would get.
                 ProfileIconVO icon = _selection.Icons.Find(value => value.Id == _draftIconId);
                 foreach (ProfileFrameVO frame in _selection.Frames)
+                {
                     CreateItem(frame.Id, frame.DisplayName, icon?.Sprite, icon?.FallbackColor ?? Color.white, frame.Sprite, frame.FallbackColor);
+                    ShowPrice(frame.Owned, frame.Price);
+                }
             }
             else
             {
                 foreach (ProfileIconVO icon in _selection.Icons)
                 {
                     // A locked icon carries its price on the slot's strip.
-                    string label = icon.Owned ? icon.DisplayName : icon.Price.ToString();
-                    CreateItem(icon.Id, label, icon.Sprite, icon.FallbackColor, null, Color.white);
-                    var price = _items[_items.Count - 1].transform.Find("Txt_Price");
-                    if (price != null)
-                    {
-                        price.gameObject.SetActive(!icon.Owned);
-                        if (price.TryGetComponent(out TMP_Text priceText)) priceText.text = label;
-                    }
+                    CreateItem(icon.Id, icon.DisplayName, icon.Sprite, icon.FallbackColor, null, Color.white);
+                    ShowPrice(icon.Owned, icon.Price);
                 }
             }
             RefreshSelection();
@@ -283,6 +294,15 @@ namespace Modules.ProfileModule.ProfileSelectionScreenModule.ViewsMediators
             _itemActions.Add(action);
         }
 
+        /// <summary>The item just made carries its price on the slot's strip while it is locked.</summary>
+        private void ShowPrice(bool owned, int price)
+        {
+            var strip = _items[_items.Count - 1].transform.Find("Txt_Price");
+            if (strip == null) return;
+            strip.gameObject.SetActive(!owned);
+            if (strip.TryGetComponent(out TMP_Text text)) text.text = price.ToString();
+        }
+
         private void Select(string id)
         {
             if (_showingFrames) _draftFrameId = id;
@@ -303,8 +323,9 @@ namespace Modules.ProfileModule.ProfileSelectionScreenModule.ViewsMediators
                 Transform marker = item.transform.Find("Img_Selected");
                 if (marker != null) marker.gameObject.SetActive(false);
                 ProfileIconVO icon = _showingFrames ? null : _selection?.Icons.Find(value => prefix + value.Id == item.name);
-                bool locked = icon != null && !icon.Owned;
-                bool poor = locked && _coins < icon.Price;
+                ProfileFrameVO frame = _showingFrames ? _selection?.Frames.Find(value => prefix + value.Id == item.name) : null;
+                bool locked = (icon != null && !icon.Owned) || (frame != null && !frame.Owned);
+                bool poor = locked && _coins < (icon != null ? icon.Price : frame.Price);
                 Sprite slot = selected && !locked ? _slotSelectedSprite : _slotOwnedSprite;
                 if (slot != null && item.targetGraphic is Image background)
                 {

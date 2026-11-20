@@ -19,6 +19,12 @@ namespace Modules.ProfileModule.Shared.Data.UnityObjects
         public System.Collections.Generic.IReadOnlyList<string> OwnedIconIds => _ownedIconIds;
         public void AddOwnedIcon(string id) { if (!string.IsNullOrEmpty(id) && !_ownedIconIds.Contains(id)) _ownedIconIds.Add(id); }
 
+        [Tooltip("Frames bought with coins.")]
+        [SerializeField] private System.Collections.Generic.List<string> _ownedFrameIds = new();
+
+        public System.Collections.Generic.IReadOnlyList<string> OwnedFrameIds => _ownedFrameIds;
+        public void AddOwnedFrame(string id) { if (!string.IsNullOrEmpty(id) && !_ownedFrameIds.Contains(id)) _ownedFrameIds.Add(id); }
+
         public string PlayerName => _playerName;
         public string SelectedIconId => _selectedIconId;
         public string SelectedFrameId => _selectedFrameId;
