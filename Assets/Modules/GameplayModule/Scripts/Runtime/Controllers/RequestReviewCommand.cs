@@ -12,7 +12,8 @@ namespace Modules.GameplayModule.Controllers
     /// </summary>
     public sealed class RequestReviewCommand : Command
     {
-        private readonly int[] _milestones = {10, 25, 50};
+        // Early enough that most players reach one; Play itself shows the sheet only a few times a year.
+        private readonly int[] _milestones = {6, 12, 25, 50, 100, 200};
 
         [Inject] private IJellyPuzzleModel _model { get; set; }
         [Inject] private PuzzleFeedbackModel _feedback { get; set; }
