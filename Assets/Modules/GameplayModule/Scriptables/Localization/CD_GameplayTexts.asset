@@ -148,7 +148,7 @@ MonoBehaviour:
     - Code: en
       Text: Nice!
     - Code: tr
-      Text: Güzel!
+      Text: "G\xFCzel!"
   - Key: gameplay.combo_3
     Translations:
     - Code: en
@@ -160,7 +160,7 @@ MonoBehaviour:
     - Code: en
       Text: Amazing!
     - Code: tr
-      Text: Muhteşem!
+      Text: "Muhte\u015Fem!"
   - Key: gameplay.try_again
     Translations:
     - Code: en
@@ -306,7 +306,7 @@ MonoBehaviour:
     - Code: en
       Text: If you leave now, you will lose a life.
     - Code: tr
-      Text: "\u015eimdi \xE7\u0131karsan bir can kaybedeceksin."
+      Text: "\u015Eimdi \xE7\u0131karsan bir can kaybedeceksin."
   - Key: pause.quitconfirm.stay
     Translations:
     - Code: en
@@ -342,313 +342,315 @@ MonoBehaviour:
     - Code: en
       Text: LEADERBOARD
     - Code: tr
-      Text: "SIRALAMA"
+      Text: SIRALAMA
   - Key: leaderboard.all_time
     Translations:
     - Code: en
       Text: All Time
     - Code: tr
-      Text: "Tüm Zamanlar"
+      Text: "T\xFCm Zamanlar"
   - Key: leaderboard.weekly
     Translations:
     - Code: en
       Text: Weekly
     - Code: tr
-      Text: "Haftalık"
+      Text: "Haftal\u0131k"
   - Key: leaderboard.edit
     Translations:
     - Code: en
       Text: Edit
     - Code: tr
-      Text: "Düzenle"
+      Text: "D\xFCzenle"
   - Key: leaderboard.loading
     Translations:
     - Code: en
       Text: Loading...
     - Code: tr
-      Text: "Yükleniyor..."
+      Text: "Y\xFCkleniyor..."
   - Key: leaderboard.offline
     Translations:
     - Code: en
-      Text: "Can't reach the leaderboard. Check your connection."
+      Text: Can't reach the leaderboard. Check your connection.
     - Code: tr
-      Text: "Sıralamaya ulaşılamıyor. Bağlantını kontrol et."
+      Text: "S\u0131ralamaya ula\u015F\u0131lam\u0131yor. Ba\u011Flant\u0131n\u0131
+        kontrol et."
   - Key: leaderboard.empty
     Translations:
     - Code: en
       Text: No scores yet. Win a level to be the first!
     - Code: tr
-      Text: "Henüz puan yok. İlk sen ol, bir bölüm kazan!"
+      Text: "Hen\xFCz puan yok. \u0130lk sen ol, bir b\xF6l\xFCm kazan!"
   - Key: duel.found
     Translations:
     - Code: en
-      Text: "Opponent found: {0}"
+      Text: 'Opponent found: {0}'
     - Code: tr
-      Text: "Rakip bulundu: {0}"
+      Text: 'Rakip bulundu: {0}'
   - Key: duel.rival_time
     Translations:
     - Code: en
-      Text: "Rival finished in {0}"
+      Text: Rival finished in {0}
     - Code: tr
-      Text: "Rakip {0} sürede bitirdi"
+      Text: "Rakip {0} s\xFCrede bitirdi"
   - Key: leaderboard.challenge
     Translations:
     - Code: en
-      Text: "Duel"
+      Text: Duel
     - Code: tr
-      Text: "Düello"
+      Text: "D\xFCello"
   - Key: duel.challenge_title
     Translations:
     - Code: en
-      Text: "Challenge!"
+      Text: Challenge!
     - Code: tr
-      Text: "Meydan okuma!"
+      Text: Meydan okuma!
   - Key: duel.challenge_body
     Translations:
     - Code: en
-      Text: "{0} challenged you on level {1}"
+      Text: '{0} challenged you on level {1}'
     - Code: tr
-      Text: "{0} sana {1}. bölümde meydan okudu"
+      Text: "{0} sana {1}. b\xF6l\xFCmde meydan okudu"
   - Key: duel.accept
     Translations:
     - Code: en
-      Text: "Play"
+      Text: Play
     - Code: tr
-      Text: "Oyna"
+      Text: Oyna
   - Key: duel.decline
     Translations:
     - Code: en
-      Text: "Later"
+      Text: Later
     - Code: tr
-      Text: "Sonra"
+      Text: Sonra
   - Key: duel.outcome_declined
     Translations:
     - Code: en
-      Text: "{0} turned down your challenge"
+      Text: '{0} turned down your challenge'
     - Code: tr
-      Text: "{0} meydan okumanı geri çevirdi"
+      Text: "{0} meydan okuman\u0131 geri \xE7evirdi"
   - Key: duel.outcome_won
     Translations:
     - Code: en
-      Text: "You beat {0} in your challenge!"
+      Text: You beat {0} in your challenge!
     - Code: tr
-      Text: "Meydan okumanda {0} oyuncusunu yendin!"
+      Text: Meydan okumanda {0} oyuncusunu yendin!
   - Key: duel.outcome_lost
     Translations:
     - Code: en
-      Text: "{0} beat your challenge"
+      Text: '{0} beat your challenge'
     - Code: tr
-      Text: "{0} meydan okumanı kazandı"
+      Text: "{0} meydan okuman\u0131 kazand\u0131"
   - Key: duel.sent
     Translations:
     - Code: en
-      Text: "Challenge sent!"
+      Text: Challenge sent!
     - Code: tr
-      Text: "Meydan okuma gönderildi!"
+      Text: "Meydan okuma g\xF6nderildi!"
   - Key: duel.sent_body
     Translations:
     - Code: en
-      Text: "Your time {0} - {1} will race it"
+      Text: Your time {0} - {1} will race it
     - Code: tr
-      Text: "Süren {0} - şimdi {1} yarışacak"
+      Text: "S\xFCren {0} - \u015Fimdi {1} yar\u0131\u015Facak"
   - Key: profile.buy
     Translations:
     - Code: en
-      Text: "Buy {0}"
+      Text: Buy {0}
     - Code: tr
-      Text: "Satın al {0}"
+      Text: "Sat\u0131n al {0}"
   - Key: profile.price
     Translations:
     - Code: en
-      Text: "{0} coins"
+      Text: '{0} coins'
     - Code: tr
-      Text: "{0} altın"
+      Text: "{0} alt\u0131n"
   - Key: profile.not_enough
     Translations:
     - Code: en
-      Text: "Not enough coins"
+      Text: Not enough coins
     - Code: tr
-      Text: "Yetersiz altın"
+      Text: "Yetersiz alt\u0131n"
   - Key: events.duel.name
     Translations:
     - Code: en
-      Text: "DUEL"
+      Text: DUEL
     - Code: tr
-      Text: "DÜELLO"
+      Text: "D\xDCELLO"
   - Key: events.play
     Translations:
     - Code: en
-      Text: "PLAY"
+      Text: PLAY
     - Code: tr
-      Text: "OYNA"
+      Text: OYNA
   - Key: events.soon_button
     Translations:
     - Code: en
-      Text: "SOON"
+      Text: SOON
     - Code: tr
-      Text: "YAKINDA"
+      Text: YAKINDA
   - Key: events.soon
     Translations:
     - Code: en
-      Text: "Soon"
+      Text: Soon
     - Code: tr
-      Text: "Yakında"
+      Text: "Yak\u0131nda"
   - Key: events.starrush.name
     Translations:
     - Code: en
-      Text: "Star Rush"
+      Text: Star Rush
     - Code: tr
-      Text: "Yıldız Koşusu"
+      Text: "Y\u0131ld\u0131z Ko\u015Fusu"
   - Key: events.starrush.desc
     Translations:
     - Code: en
-      Text: "Win levels and fill the golden star meter."
+      Text: Win levels and fill the golden star meter.
     - Code: tr
-      Text: "Bölüm kazan, altın yıldız çubuğunu doldur."
+      Text: "B\xF6l\xFCm kazan, alt\u0131n y\u0131ld\u0131z \xE7ubu\u011Funu doldur."
   - Key: events.colorcarnival.name
     Translations:
     - Code: en
-      Text: "Color Carnival"
+      Text: Color Carnival
     - Code: tr
-      Text: "Renk Karnavalı"
+      Text: "Renk Karnaval\u0131"
   - Key: events.colorcarnival.desc
     Translations:
     - Code: en
-      Text: "Collect colorful jellies to unlock the grand chest."
+      Text: Collect colorful jellies to unlock the grand chest.
     - Code: tr
-      Text: "Renkli jöleleri topla, büyük sandığı aç."
+      Text: "Renkli j\xF6leleri topla, b\xFCy\xFCk sand\u0131\u011F\u0131 a\xE7."
   - Key: events.colorcarnival.reward
     Translations:
     - Code: en
-      Text: "3 Chests"
+      Text: 3 Chests
     - Code: tr
-      Text: "3 Sandık"
+      Text: "3 Sand\u0131k"
   - Key: events.speedrun.name
     Translations:
     - Code: en
-      Text: "Speed Run"
+      Text: Speed Run
     - Code: tr
-      Text: "Hız Koşusu"
+      Text: "H\u0131z Ko\u015Fusu"
   - Key: events.speedrun.desc
     Translations:
     - Code: en
-      Text: "Complete five levels before the timer runs out."
+      Text: Complete five levels before the timer runs out.
     - Code: tr
-      Text: "Süre bitmeden beş bölümü tamamla."
+      Text: "S\xFCre bitmeden be\u015F b\xF6l\xFCm\xFC tamamla."
   - Key: duel.continue
     Translations:
     - Code: en
-      Text: "Main Menu"
+      Text: Main Menu
     - Code: tr
-      Text: "Ana Menü"
+      Text: "Ana Men\xFC"
   - Key: duel.rematch
     Translations:
     - Code: en
-      Text: "Keep Dueling"
+      Text: Keep Dueling
     - Code: tr
-      Text: "Düelloya Devam Et"
+      Text: "D\xFCelloya Devam Et"
   - Key: duel.cancel
     Translations:
     - Code: en
-      Text: "Cancel"
+      Text: Cancel
     - Code: tr
-      Text: "Vazgeç"
+      Text: "Vazge\xE7"
   - Key: duel.ok
     Translations:
     - Code: en
-      Text: "OK"
+      Text: OK
     - Code: tr
-      Text: "Tamam"
+      Text: Tamam
   - Key: profile.name_reward
     Translations:
     - Code: en
-      Text: "Pick your name, win {0} coins!"
+      Text: Pick your name, win {0} coins!
     - Code: tr
-      Text: "İsmini değiştir, {0} altın kazan!"
+      Text: "\u0130smini de\u011Fi\u015Ftir, {0} alt\u0131n kazan!"
   - Key: duel.well_played
     Translations:
     - Code: en
-      Text: "Well played!"
+      Text: Well played!
     - Code: tr
-      Text: "İyi oyundu!"
+      Text: "\u0130yi oyundu!"
   - Key: duel.next_time
     Translations:
     - Code: en
-      Text: "Next time!"
+      Text: Next time!
     - Code: tr
-      Text: "Bir dahaki sefere!"
+      Text: Bir dahaki sefere!
   - Key: duel.waiting
     Translations:
     - Code: en
-      Text: "Waiting for {0}..."
+      Text: Waiting for {0}...
     - Code: tr
-      Text: "{0} bekleniyor..."
+      Text: '{0} bekleniyor...'
   - Key: duel.my_time
     Translations:
     - Code: en
-      Text: "Your time {0}"
+      Text: Your time {0}
     - Code: tr
-      Text: "Süren {0}"
+      Text: "S\xFCren {0}"
   - Key: duel.rival_left
     Translations:
     - Code: en
-      Text: "Your rival left the race"
+      Text: Your rival left the race
     - Code: tr
-      Text: "Rakibin yarıştan çıktı"
+      Text: "Rakibin yar\u0131\u015Ftan \xE7\u0131kt\u0131"
   - Key: duel.you
     Translations:
     - Code: en
-      Text: "You"
+      Text: You
     - Code: tr
-      Text: "Sen"
+      Text: Sen
   - Key: duel.searching
     Translations:
     - Code: en
-      Text: "Finding an opponent..."
+      Text: Finding an opponent...
     - Code: tr
-      Text: "Rakip aranıyor..."
+      Text: "Rakip aran\u0131yor..."
   - Key: duel.unavailable
     Translations:
     - Code: en
-      Text: "No opponent found. Win more levels or check your connection."
+      Text: No opponent found. Win more levels or check your connection.
     - Code: tr
-      Text: "Rakip bulunamadı. Daha fazla bölüm kazan ya da bağlantını kontrol et."
+      Text: "Rakip bulunamad\u0131. Daha fazla b\xF6l\xFCm kazan ya da ba\u011Flant\u0131n\u0131
+        kontrol et."
   - Key: duel.won
     Translations:
     - Code: en
-      Text: "You won!"
+      Text: You won!
     - Code: tr
-      Text: "Kazandın!"
+      Text: "Kazand\u0131n!"
   - Key: duel.lost
     Translations:
     - Code: en
-      Text: "You lost!"
+      Text: You lost!
     - Code: tr
-      Text: "Kaybettin!"
+      Text: Kaybettin!
   - Key: duel.times
     Translations:
     - Code: en
-      Text: "You {0}  ·  Rival {1}"
+      Text: "You {0}  \xB7  Rival {1}"
     - Code: tr
-      Text: "Sen {0}  ·  Rakip {1}"
+      Text: "Sen {0}  \xB7  Rakip {1}"
   - Key: leaderboard.active
     Translations:
     - Code: en
-      Text: "Active"
+      Text: Active
     - Code: tr
-      Text: "Aktif"
+      Text: Aktif
   - Key: leaderboard.level
     Translations:
     - Code: en
       Text: Level {0}
     - Code: tr
-      Text: "Seviye {0}"
+      Text: Seviye {0}
   - Key: leaderboard.player
     Translations:
     - Code: en
       Text: Player
     - Code: tr
-      Text: "Oyuncu"
+      Text: Oyuncu
   - Key: gameplay.score
     Translations:
     - Code: en
@@ -660,7 +662,7 @@ MonoBehaviour:
     - Code: en
       Text: +{0} points - new best!
     - Code: tr
-      Text: "+{0} puan - yeni rekor!"
+      Text: +{0} puan - yeni rekor!
   - Key: gameplay.continue
     Translations:
     - Code: en
@@ -907,222 +909,269 @@ MonoBehaviour:
   - Key: main.shop.title
     Translations:
     - Code: en
-      Text: "SHOP"
+      Text: SHOP
     - Code: tr
       Text: "MA\u011EAZA"
   - Key: main.shop.daily_offer
     Translations:
     - Code: en
-      Text: "DAILY OFFER"
+      Text: DAILY OFFER
     - Code: tr
       Text: "G\xDCNL\xDCK TEKL\u0130F"
   - Key: main.shop.daily_value
     Translations:
     - Code: en
-      Text: "5000 COINS  +  5 LIVES"
+      Text: 5000 COINS  +  5 LIVES
     - Code: tr
-      Text: "5000 ALTIN  +  5 CAN"
+      Text: 5000 ALTIN  +  5 CAN
   - Key: main.shop.discount
     Translations:
     - Code: en
-      Text: "50% OFF"
+      Text: 50% OFF
     - Code: tr
       Text: "%50 \u0130ND\u0130R\u0130M"
   - Key: main.shop.no_ads
     Translations:
     - Code: en
-      Text: "NO ADS"
+      Text: NO ADS
     - Code: tr
-      Text: "REKLAMSIZ"
+      Text: REKLAMSIZ
   - Key: main.shop.forever
     Translations:
     - Code: en
-      Text: "FOREVER"
+      Text: FOREVER
     - Code: tr
-      Text: "KALICI"
+      Text: KALICI
   - Key: main.shop.lives
     Translations:
     - Code: en
-      Text: "LIVES"
+      Text: LIVES
     - Code: tr
-      Text: "CAN"
+      Text: CAN
   - Key: main.shop.boosters
     Translations:
     - Code: en
-      Text: "BOOSTERS"
+      Text: BOOSTERS
     - Code: tr
       Text: "G\xDC\xC7LEND\u0130R\u0130C\u0130"
   - Key: main.shop.coins
     Translations:
     - Code: en
-      Text: "COINS"
+      Text: COINS
     - Code: tr
-      Text: "ALTIN"
+      Text: ALTIN
   - Key: booster.offer.info
     Translations:
     - Code: en
-      Text: "Out of uses! Get one more."
+      Text: Out of uses! Get one more.
     - Code: tr
       Text: "Hakk\u0131n bitti! Bir tane daha al."
   - Key: slot.title
     Translations:
     - Code: en
-      Text: "Lucky Slots"
+      Text: Lucky Slots
     - Code: tr
       Text: "\u015Eans Makinesi"
   - Key: slot.spin
     Translations:
     - Code: en
-      Text: "Spin"
+      Text: Spin
     - Code: tr
-      Text: "\u00C7evir"
+      Text: "\xC7evir"
   - Key: slot.spin_many
     Translations:
     - Code: en
-      Text: "Spin ({0})"
+      Text: Spin ({0})
     - Code: tr
-      Text: "\u00C7evir ({0})"
+      Text: "\xC7evir ({0})"
   - Key: slot.ad_spin
     Translations:
     - Code: en
-      Text: "+1 Spin"
+      Text: +1 Spin
     - Code: tr
-      Text: "+1 \u00C7evirme"
+      Text: "+1 \xC7evirme"
   - Key: slot.won
     Translations:
     - Code: en
-      Text: "You won {0}!"
+      Text: You won {0}!
     - Code: tr
       Text: "{0} kazand\u0131n!"
   - Key: slot.jackpot
     Translations:
     - Code: en
-      Text: "Jackpot! {0}"
+      Text: Jackpot! {0}
     - Code: tr
-      Text: "B\u00FCy\u00FCk ikramiye! {0}"
+      Text: "B\xFCy\xFCk ikramiye! {0}"
   - Key: scratch.title
     Translations:
     - Code: en
-      Text: "Scratch & Win"
+      Text: Scratch & Win
     - Code: tr
       Text: "Kaz\u0131 Kazan"
   - Key: scratch.card
     Translations:
     - Code: en
-      Text: "New Card"
+      Text: New Card
     - Code: tr
-      Text: "Yeni Kart"
+      Text: Yeni Kart
   - Key: scratch.card_many
     Translations:
     - Code: en
-      Text: "New Card ({0})"
+      Text: New Card ({0})
     - Code: tr
-      Text: "Yeni Kart ({0})"
+      Text: Yeni Kart ({0})
   - Key: scratch.ad_card
     Translations:
     - Code: en
-      Text: "+1 Card"
+      Text: +1 Card
     - Code: tr
-      Text: "+1 Kart"
+      Text: +1 Kart
   - Key: scratch.open_all
     Translations:
     - Code: en
-      Text: "Reveal All"
+      Text: Reveal All
     - Code: tr
-      Text: "Hepsini A\u00E7"
+      Text: "Hepsini A\xE7"
   - Key: scratch.hint
     Translations:
     - Code: en
-      Text: "Scratch the cells!"
+      Text: Scratch the cells!
     - Code: tr
       Text: "Kutular\u0131 kaz\u0131!"
   - Key: scratch.won
     Translations:
     - Code: en
-      Text: "You won {0}!"
+      Text: You won {0}!
     - Code: tr
       Text: "{0} kazand\u0131n!"
   - Key: scratch.consolation
     Translations:
     - Code: en
-      Text: "No match - here's {0}"
+      Text: No match - here's {0}
     - Code: tr
       Text: "E\u015Fle\u015Fme yok - al sana {0}"
   - Key: wheel.title
     Translations:
     - Code: en
-      Text: "Lucky Wheel"
+      Text: Lucky Wheel
     - Code: tr
       Text: "\u015Eans \xC7ark\u0131"
   - Key: wheel.spin
     Translations:
     - Code: en
-      Text: "Spin"
+      Text: Spin
     - Code: tr
       Text: "\xC7evir"
   - Key: wheel.ad_spin
     Translations:
     - Code: en
-      Text: "+1 Spin"
+      Text: +1 Spin
     - Code: tr
       Text: "+1 \xC7evirme"
   - Key: wheel.spin_many
     Translations:
     - Code: en
-      Text: "Spin ({0})"
+      Text: Spin ({0})
     - Code: tr
       Text: "\xC7evir ({0})"
   - Key: wheel.come_back
     Translations:
     - Code: en
-      Text: "Come back tomorrow"
+      Text: Come back tomorrow
     - Code: tr
       Text: "Yar\u0131n tekrar gel"
   - Key: wheel.won
     Translations:
     - Code: en
-      Text: "You won {0}!"
+      Text: You won {0}!
     - Code: tr
       Text: "{0} kazand\u0131n!"
   - Key: wheel.coins
     Translations:
     - Code: en
-      Text: "{0} coins"
+      Text: '{0} coins'
     - Code: tr
       Text: "{0} alt\u0131n"
   - Key: consent.title
     Translations:
     - Code: en
-      Text: "Your Privacy"
+      Text: Your Privacy
     - Code: tr
       Text: "Gizlili\u011Fin"
   - Key: consent.body
     Translations:
     - Code: en
-      Text: "We use your device's advertising ID and gameplay data to show ads that suit you and to make the game better. You can refuse: you will still see ads, just not personalised ones."
+      Text: 'We use your device''s advertising ID and gameplay data to show ads that
+        suit you and to make the game better. You can refuse: you will still see
+        ads, just not personalised ones.'
     - Code: tr
-      Text: "Sana uygun reklamlar g\xF6stermek ve oyunu geli\u015Ftirmek i\xE7in cihaz\u0131n\u0131n reklam kimli\u011Fini ve oyun verilerini kullan\u0131yoruz. Reddedebilirsin: reklamlar yine g\xF6r\xFCn\xFCr, yaln\u0131zca sana \xF6zel olmaz."
+      Text: "Sana uygun reklamlar g\xF6stermek ve oyunu geli\u015Ftirmek i\xE7in
+        cihaz\u0131n\u0131n reklam kimli\u011Fini ve oyun verilerini kullan\u0131yoruz.
+        Reddedebilirsin: reklamlar yine g\xF6r\xFCn\xFCr, yaln\u0131zca sana \xF6zel
+        olmaz."
   - Key: consent.accept
     Translations:
     - Code: en
-      Text: "Accept"
+      Text: Accept
     - Code: tr
-      Text: "Kabul Et"
+      Text: Kabul Et
   - Key: consent.decline
     Translations:
     - Code: en
-      Text: "Refuse"
+      Text: Refuse
     - Code: tr
-      Text: "Reddet"
+      Text: Reddet
   - Key: settings.privacy
     Translations:
     - Code: en
-      Text: "Privacy"
+      Text: Privacy
     - Code: tr
-      Text: "Gizlilik"
+      Text: Gizlilik
   - Key: settings.privacy_change
     Translations:
     - Code: en
-      Text: "Change"
+      Text: Change
     - Code: tr
       Text: "De\u011Fi\u015Ftir"
+  - Key: main.shop.owned
+    Translations:
+    - Code: en
+      Text: Owned
+    - Code: tr
+      Text: "Al\u0131nd\u0131"
+  - Key: main.shop.starter
+    Translations:
+    - Code: en
+      Text: STARTER PACK
+    - Code: tr
+      Text: "BA\u015ELANGI\xC7 PAKET\u0130"
+  - Key: main.shop.starter_value
+    Translations:
+    - Code: en
+      Text: 2500 COINS + 9 BOOSTERS + 5 LIVES
+    - Code: tr
+      Text: "2500 ALTIN + 9 G\xDC\xC7LEND\u0130R\u0130C\u0130 + 5 CAN"
+  - Key: main.shop.once
+    Translations:
+    - Code: en
+      Text: ONE TIME
+    - Code: tr
+      Text: TEK SEFER
+  - Key: main.shop.best_value
+    Translations:
+    - Code: en
+      Text: BEST VALUE
+    - Code: tr
+      Text: "EN \u0130Y\u0130"
+  - Key: main.shop.popular
+    Translations:
+    - Code: en
+      Text: POPULAR
+    - Code: tr
+      Text: "POP\xDCLER"
+  - Key: main.shop.boosters_big
+    Translations:
+    - Code: en
+      Text: BOOSTER PACK
+    - Code: tr
+      Text: "G\xDC\xC7 PAKET\u0130"

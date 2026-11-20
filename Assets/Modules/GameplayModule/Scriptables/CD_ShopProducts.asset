@@ -19,16 +19,21 @@ MonoBehaviour:
     Boosters: []
     RemovesAds: 0
     OncePerDay: 1
+    OncePerAccount: 0
   - ProductId: coins_1000
     Coins: 1000
     Lives: 0
     Boosters: []
     RemovesAds: 0
+    OncePerDay: 0
+    OncePerAccount: 0
   - ProductId: lives_5
     Coins: 0
     Lives: 5
     Boosters: []
     RemovesAds: 0
+    OncePerDay: 0
+    OncePerAccount: 0
   - ProductId: boosters_3
     Coins: 0
     Lives: 0
@@ -43,8 +48,72 @@ MonoBehaviour:
       Count: 1
       Granted: 0
     RemovesAds: 0
+    OncePerDay: 0
+    OncePerAccount: 0
   - ProductId: no_ads
     Coins: 0
     Lives: 0
     Boosters: []
     RemovesAds: 1
+    OncePerDay: 0
+    OncePerAccount: 0
+  - ProductId: coins_500
+    Coins: 500
+    Lives: 0
+    Boosters: []
+    RemovesAds: 0
+    OncePerDay: 0
+    OncePerAccount: 0
+  - ProductId: coins_3000
+    Coins: 3000
+    Lives: 0
+    Boosters: []
+    RemovesAds: 0
+    OncePerDay: 0
+    OncePerAccount: 0
+  - ProductId: coins_7500
+    Coins: 7500
+    Lives: 0
+    Boosters: []
+    RemovesAds: 0
+    OncePerDay: 0
+    OncePerAccount: 0
+  - ProductId: coins_20000
+    Coins: 20000
+    Lives: 0
+    Boosters: []
+    RemovesAds: 0
+    OncePerDay: 0
+    OncePerAccount: 0
+  - ProductId: boosters_10
+    Coins: 0
+    Lives: 0
+    Boosters:
+    - Type: 0
+      Count: 4
+      Granted: 0
+    - Type: 1
+      Count: 4
+      Granted: 0
+    - Type: 2
+      Count: 4
+      Granted: 0
+    RemovesAds: 0
+    OncePerDay: 0
+    OncePerAccount: 0
+  - ProductId: starter_pack
+    Coins: 2500
+    Lives: 5
+    Boosters:
+    - Type: 0
+      Count: 3
+      Granted: 0
+    - Type: 1
+      Count: 3
+      Granted: 0
+    - Type: 2
+      Count: 3
+      Granted: 0
+    RemovesAds: 0
+    OncePerDay: 0
+    OncePerAccount: 1

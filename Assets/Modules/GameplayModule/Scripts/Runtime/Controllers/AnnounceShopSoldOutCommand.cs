@@ -22,8 +22,15 @@ namespace Modules.GameplayModule.Controllers
             {
                 int today = ShopDayFunction.Today();
                 foreach (var bought in progress.ShopPurchaseDays)
-                    if (bought != null && bought.Day == today && products.Find(bought.ProductId) is { OncePerDay: true })
-                        soldOut.Add(bought.ProductId);
+                {
+                    var product = bought != null ? products.Find(bought.ProductId) : null;
+                    if (product == null) continue;
+                    if ((product.OncePerDay && bought.Day == today) || product.OncePerAccount) soldOut.Add(bought.ProductId);
+                }
+                // Ads already gone: there is nothing left to sell.
+                if (progress.NoAds)
+                    foreach (var product in products.Products)
+                        if (product != null && product.RemovesAds && !soldOut.Contains(product.ProductId)) soldOut.Add(product.ProductId);
             }
             _signals.Outgoing.ShopSoldOutChanged.Dispatch(soldOut);
         }

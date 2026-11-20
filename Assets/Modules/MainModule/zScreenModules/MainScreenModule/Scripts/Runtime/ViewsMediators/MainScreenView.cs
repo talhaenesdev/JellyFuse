@@ -53,6 +53,8 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
         [Min(0)] [SerializeField] private float _shopGap = 12;
         [Tooltip("The shop's fixed texts - title, product names, the daily offer - each read from its key; the prefab's text is the English.")]
         [SerializeField] private KeyedText[] _shopTexts;
+        [Tooltip("Products sold once for good: sold out, they read Owned rather than Tomorrow.")]
+        [SerializeField] private string[] _shopOwnedOnceIds;
         [Tooltip("Leaves the shop for Home, as the Home tab does.")]
         [SerializeField] private Button _shopCloseButton;
         [Tooltip("The + by the coins: opens the Shop tab, as the tab does.")]
@@ -508,7 +510,8 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
                 if (_shopSoldOut.Contains(_shopProductIds[i]))
                 {
                     _keyedTexts.RemoveAll(keyed => keyed.Label == label);
-                    Keyed(label, "main.shop.tomorrow", "Tomorrow");
+                    if (_shopOwnedOnceIds != null && Array.IndexOf(_shopOwnedOnceIds, _shopProductIds[i]) >= 0) Keyed(label, "main.shop.owned", "Owned");
+                    else Keyed(label, "main.shop.tomorrow", "Tomorrow");
                     continue;
                 }
                 if (_shopPrices == null || !_shopPrices.TryGetValue(_shopProductIds[i], out string price)) continue;

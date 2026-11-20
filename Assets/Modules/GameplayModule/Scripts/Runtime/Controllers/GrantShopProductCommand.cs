@@ -45,7 +45,8 @@ namespace Modules.GameplayModule.Controllers
             foreach (var booster in product.Boosters)
                 if (booster != null && booster.Count > 0) progress.Booster(booster.Type).Count += booster.Count;
             if (product.RemovesAds) progress.NoAds = true;
-            if (product.OncePerDay) MarkBoughtToday(progress);
+            // A once-for-good product is remembered the same way; its day is never read again.
+            if (product.OncePerDay || product.OncePerAccount) MarkBoughtToday(progress);
         }
 
         private void MarkBoughtToday(SD_JellyProgress progress)

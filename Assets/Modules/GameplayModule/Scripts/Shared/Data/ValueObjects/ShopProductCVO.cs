@@ -15,5 +15,7 @@ namespace Modules.GameplayModule.Shared.Data.ValueObjects
         public bool RemovesAds;
         /// <summary>Sold once a day: bought today, the shop shows it sold out until the player's midnight.</summary>
         public bool OncePerDay;
+        /// <summary>Sold once for good: bought, the shop shows it owned from then on.</summary>
+        public bool OncePerAccount;
     }
 }
