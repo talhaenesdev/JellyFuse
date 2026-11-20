@@ -178,7 +178,8 @@ namespace Modules.MainModule.LeaderboardScreenModule.ViewsMediators
             // The rank sits on its badge, not on the row itself.
             Set(row, "Img_Badge/Txt_Rank", data.Rank.ToString());
             string name = string.IsNullOrEmpty(data.Name) ? L("leaderboard.player", "Player") : TrimName(data.Name);
-            Set(row, "Txt_Name", name);
+            // The podium is narrow: a long name is cut there, the list rows fit theirs.
+            Set(row, "Txt_Name", IsPodium(row) ? Short(name, 10) : name);
             ShowActive(row, data.Active);
             ShowChallenge(row, data);
             Set(row, "Txt_Score", data.Score.ToString("N0"));
@@ -342,5 +343,12 @@ namespace Modules.MainModule.LeaderboardScreenModule.ViewsMediators
 
         protected override void PlayShowAnimation() => ShowCompleted?.Invoke(this);
         protected override void PlayHideAnimation() => HideCompleted?.Invoke(this);
+
+        /// <summary>A name cut to <paramref name="max"/> letters with an ellipsis, so a long one never pushes a sentence or a row apart.</summary>
+        private static string Short(string name, int max)
+        {
+            if (string.IsNullOrEmpty(name) || name.Length <= max) return name;
+            return name.Substring(0, max - 1).TrimEnd() + "\u2026";
+        }
     }
 }

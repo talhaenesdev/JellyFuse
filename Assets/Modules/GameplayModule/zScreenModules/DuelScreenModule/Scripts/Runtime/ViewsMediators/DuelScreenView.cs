@@ -39,6 +39,9 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
         [SerializeField] private RectTransform _opponentRunner;
         [SerializeField] private Image _raceOpponentIcon;
         [SerializeField] private Image _racePlayerIcon;
+        /// <summary>The longest a name runs inside a sentence, and on a race bar.</summary>
+        private const int NAME_IN_TEXT = 12;
+        private const int NAME_ON_BAR = 14;
         [SerializeField] private TMP_Text _opponentName;
         [SerializeField] private TMP_Text _playerName;
 
@@ -148,7 +151,7 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
             SetIcon(_challengeFromIcon, invite.FromIcon);
             SetIcon(_challengeMeIcon, _playerIcon);
             if (_challengeTitle != null) _challengeTitle.text = L("duel.challenge_title", "Challenge!");
-            if (_challengeBody != null) _challengeBody.text = string.Format(L("duel.challenge_body", "{0} challenged you on level {1}"), invite.FromName, invite.Level);
+            if (_challengeBody != null) _challengeBody.text = string.Format(L("duel.challenge_body", "{0} challenged you on level {1}"), Short(invite.FromName, NAME_IN_TEXT), invite.Level);
             Label(_challengeAccept, L("duel.accept", "Play"));
             Label(_challengeDecline, L("duel.decline", "Later"));
             if (_challenge != null) _challenge.SetActive(true);
@@ -168,7 +171,7 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
             string text = outcome.Declined ? L("duel.outcome_declined", "{0} turned down your challenge")
                 : outcome.SenderWon ? L("duel.outcome_won", "You beat {0} in your challenge!")
                 : L("duel.outcome_lost", "{0} beat your challenge");
-            if (_noticeText != null) _noticeText.text = string.Format(text, outcome.OpponentName);
+            if (_noticeText != null) _noticeText.text = string.Format(text, Short(outcome.OpponentName, NAME_IN_TEXT));
             if (_notice != null) _notice.SetActive(true);
             _noticeUntil = Time.realtimeSinceStartup + NOTICE_SECONDS;
         }
@@ -218,7 +221,7 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
             _playerIcon = playerIcon ?? string.Empty;
             SetIcon(_searchPlayerIcon, playerIcon);
             SetIcon(_racePlayerIcon, playerIcon);
-            if (_playerName != null) _playerName.text = string.IsNullOrEmpty(playerName) ? L("duel.you", "You") : playerName;
+            if (_playerName != null) _playerName.text = string.IsNullOrEmpty(playerName) ? L("duel.you", "You") : Short(playerName, NAME_ON_BAR);
         }
 
         /// <summary>The search panel, an opponent being looked for.</summary>
@@ -252,8 +255,8 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
             _opponentProgress = _shownOpponent = 0;
             SetIcon(_searchOpponentIcon, race.OpponentIcon);
             SetIcon(_raceOpponentIcon, race.OpponentIcon);
-            if (_opponentName != null) _opponentName.text = race.OpponentName;
-            if (_searchStatus != null) _searchStatus.text = string.Format(L("duel.found", "Opponent found: {0}"), race.OpponentName);
+            if (_opponentName != null) _opponentName.text = Short(race.OpponentName, NAME_ON_BAR);
+            if (_searchStatus != null) _searchStatus.text = string.Format(L("duel.found", "Opponent found: {0}"), Short(race.OpponentName, NAME_IN_TEXT));
             if (_searchSpinner != null) _searchSpinner.gameObject.SetActive(false);
             SetFill(_playerFill, _playerRunner, 0);
             SetFill(_opponentFill, _opponentRunner, 0);
@@ -278,7 +281,7 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
         public void ShowWaiting(string name)
         {
             Show(search: true, countdown: false, race: false, result: false);
-            if (_searchStatus != null) _searchStatus.text = string.Format(L("duel.waiting", "Waiting for {0}..."), name);
+            if (_searchStatus != null) _searchStatus.text = string.Format(L("duel.waiting", "Waiting for {0}..."), Short(name, NAME_IN_TEXT));
             if (_searchSpinner != null) _searchSpinner.gameObject.SetActive(true);
             // The invite can be withdrawn while its answer is awaited.
             if (_searchClose != null) _searchClose.gameObject.SetActive(true);
@@ -296,7 +299,7 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
             if (_resultBanner != null) _resultBanner.sprite = result.ChallengeSent && _sentSprite != null ? _sentSprite : result.Won ? _winSprite : _loseSprite;
             if (_resultTitle != null) _resultTitle.text = result.ChallengeSent ? L("duel.sent", "Challenge sent!") : result.Won ? L("duel.won", "You won!") : L("duel.lost", "You lost!");
             if (result.ChallengeSent && _resultTimes != null)
-                _resultTimes.text = string.Format(L("duel.sent_body", "Your time {0} - {1} will race it"), Seconds(result.Seconds), result.ChallengedName);
+                _resultTimes.text = string.Format(L("duel.sent_body", "Your time {0} - {1} will race it"), Seconds(result.Seconds), Short(result.ChallengedName, NAME_IN_TEXT));
             else if (_resultTimes != null)
             {
                 // A live race knows only the winner's time.
@@ -449,5 +452,12 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
 
         protected override void PlayShowAnimation() => ShowCompleted?.Invoke(this);
         protected override void PlayHideAnimation() => HideCompleted?.Invoke(this);
+
+        /// <summary>A name cut to <paramref name="max"/> letters with an ellipsis, so a long one never pushes a sentence or a row apart.</summary>
+        private static string Short(string name, int max)
+        {
+            if (string.IsNullOrEmpty(name) || name.Length <= max) return name;
+            return name.Substring(0, max - 1).TrimEnd() + "\u2026";
+        }
     }
 }
