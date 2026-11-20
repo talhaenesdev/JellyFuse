@@ -124,6 +124,8 @@ namespace Modules.GameplayModule.Controllers
         {
             if (!_duel.Live || _duel.LiveMatchId != message.matchId || _duel.Finished) return;
             _duel.Finish();
+            // The race is over with this board unfinished: its clock stops with it.
+            _model.IsTicking = false;
             int coins = 0;
             if (message.youWon) coins = DuelRewardFunction.Pay(_shared.GetScriptable<CD_Events>(), _shared.GetScriptable<SD_JellyProgress>());
             _signals.Outgoing.DuelFinished.Dispatch(new DuelResultRVO(message.youWon, coins, -1, message.opponentSeconds, canRematch: _duel.RematchTarget != null));

@@ -326,7 +326,8 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
                 Label(_resultRematch, L("duel.rematch", "Play again"));
             }
             if (_result != null) _result.SetActive(true);
-            if (_blocker != null) _blocker.SetActive(false);
+            // The board behind is finished with: dimmed, and taps on it stop at the result.
+            if (_blocker != null) _blocker.SetActive(true);
         }
 
         private void Update()
