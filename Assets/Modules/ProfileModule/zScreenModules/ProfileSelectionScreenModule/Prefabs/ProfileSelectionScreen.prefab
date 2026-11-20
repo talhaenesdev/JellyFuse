@@ -525,6 +525,7 @@ GameObject:
   - component: {fileID: 1744012842098360706}
   - component: {fileID: 3241673604698675395}
   - component: {fileID: 7112483928319357366}
+  - component: {fileID: 6898579057698232251}
   m_Layer: 0
   m_Name: Img_ProfileBackground
   m_TagString: Untagged
@@ -589,6 +590,23 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &6898579057698232251
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1366219592109205484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e153dedab31d4e4eb68ee8b75db3e6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.UiWidgets::Modules.UiWidgetsModule.Entities.ScreenBleed
+  _top: 1
+  _bottom: 1
+  _left: 1
+  _right: 1
+  _coverAspect: 0.5625
 --- !u!1 &1500729829426436420
 GameObject:
   m_ObjectHideFlags: 0

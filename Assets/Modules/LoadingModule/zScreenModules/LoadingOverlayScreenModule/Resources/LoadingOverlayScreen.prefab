@@ -85,6 +85,7 @@ GameObject:
   - component: {fileID: 3112380320188934302}
   - component: {fileID: 8566421901887733820}
   - component: {fileID: 1918305003175114793}
+  - component: {fileID: 4758044950660410634}
   m_Layer: 0
   m_Name: Dim
   m_TagString: Untagged
@@ -149,6 +150,23 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &4758044950660410634
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8405855843991049787}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e153dedab31d4e4eb68ee8b75db3e6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.UiWidgets::Modules.UiWidgetsModule.Entities.ScreenBleed
+  _top: 1
+  _bottom: 1
+  _left: 1
+  _right: 1
+  _coverAspect: 0
 --- !u!1 &8602363460500603375
 GameObject:
   m_ObjectHideFlags: 0
