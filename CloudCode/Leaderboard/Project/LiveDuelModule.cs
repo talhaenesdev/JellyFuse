@@ -112,6 +112,65 @@ namespace Leaderboard
             return new LiveReply { Ok = true, MatchId = matchId, Won = match.Winner == context.PlayerId };
         }
 
+        private const string OnlineId = "duel-online";
+        private const string RosterKey = "roster";
+        /// <summary>A game that beat this recently counts as open; the heartbeat comes every 90 seconds.</summary>
+        private const int OnlineSeconds = 180;
+
+        /// <summary>
+        /// The heartbeat files the caller as open, with the highest level they have won, so a duel search can find them.
+        /// The roster is one item written under its write lock and pruned of the players who went quiet.
+        /// </summary>
+        public static async Task MarkOnline(IExecutionContext context, IGameApiClient api, int level)
+        {
+            for (int attempt = 0; attempt < 3; attempt++)
+            {
+                try
+                {
+                    var (roster, writeLock) = await ReadRoster(context, api);
+                    long now = Now();
+                    var keep = new Dictionary<string, OnlineEntry>();
+                    foreach (var pair in roster)
+                        if (now - pair.Value.At <= OnlineSeconds) keep[pair.Key] = pair.Value;
+                    keep[context.PlayerId] = new OnlineEntry { At = now, Level = level };
+                    await api.CloudSaveData.SetPrivateCustomItemAsync(context, context.ServiceToken, context.ProjectId, OnlineId,
+                        new SetItemBody(RosterKey, keep, writeLock));
+                    return;
+                }
+                catch (Exception)
+                {
+                    // Another beat wrote first: read again and retry.
+                }
+            }
+        }
+
+        /// <summary>
+        /// A player whose game is open now and who has won at least <paramref name="minLevel"/> levels, picked at random,
+        /// for the caller to invite; Ok false when nobody is.
+        /// </summary>
+        [CloudCodeFunction("FindLive")]
+        public async Task<LiveReply> FindLive(IExecutionContext context, IGameApiClient api, int minLevel)
+        {
+            var (roster, _) = await ReadRoster(context, api);
+            long now = Now();
+            var open = new List<KeyValuePair<string, OnlineEntry>>();
+            foreach (var pair in roster)
+                if (pair.Key != context.PlayerId && now - pair.Value.At <= OnlineSeconds && pair.Value.Level >= minLevel) open.Add(pair);
+            if (open.Count == 0) return LiveReply.No("nobody online");
+            var pick = open[Random.Shared.Next(open.Count)];
+            var profile = await Profile(context, api, pick.Key);
+            return new LiveReply { Ok = true, TargetId = pick.Key, Name = profile.Name, Icon = profile.Icon, Level = pick.Value.Level };
+        }
+
+        private static async Task<(Dictionary<string, OnlineEntry>, string)> ReadRoster(IExecutionContext context, IGameApiClient api)
+        {
+            var response = await api.CloudSaveData.GetPrivateCustomItemsAsync(context, context.ServiceToken, context.ProjectId, OnlineId, new List<string> { RosterKey });
+            var items = response.Data?.Results;
+            if (items == null || items.Count == 0 || items[0].Value == null) return (new Dictionary<string, OnlineEntry>(), null);
+            var roster = JsonConvert.DeserializeObject<Dictionary<string, OnlineEntry>>(items[0].Value.ToString()) ?? new Dictionary<string, OnlineEntry>();
+            return (roster, items[0].WriteLock);
+        }
+
         private static string Other(LiveMatch match, string playerId) => match.A == playerId ? match.B : match.B == playerId ? match.A : null;
 
         private async Task Send(IExecutionContext context, IPushClient push, string playerId, string type, object body)
@@ -169,9 +228,19 @@ namespace Leaderboard
         public string Winner { get; set; } = string.Empty;
     }
 
+    public class OnlineEntry
+    {
+        public long At { get; set; }
+        public int Level { get; set; }
+    }
+
     public class LiveReply
     {
         public bool Ok { get; set; }
+        public string TargetId { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
+        public string Icon { get; set; } = string.Empty;
+        public int Level { get; set; }
         public string Reason { get; set; } = string.Empty;
         public string MatchId { get; set; } = string.Empty;
         public bool Won { get; set; }

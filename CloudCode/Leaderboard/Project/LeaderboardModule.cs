@@ -206,6 +206,12 @@ namespace Leaderboard
                 await api.Leaderboards.AddLeaderboardPlayerScoreAsync(context, context.AccessToken, Guid.Parse(context.ProjectId), AllTime,
                     context.PlayerId, new AddLeaderboardScore(total));
             }
+            // Filed as open, so a duel search can invite this player.
+            int won = 0;
+            if (bests != null)
+                foreach (var key in bests.Keys)
+                    if (int.TryParse(key, out int value) && value > won) won = value;
+            await LiveDuelModule.MarkOnline(context, api, won);
             return true;
         }
 

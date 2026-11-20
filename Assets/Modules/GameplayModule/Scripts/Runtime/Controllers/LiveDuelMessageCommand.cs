@@ -66,7 +66,7 @@ namespace Modules.GameplayModule.Controllers
         {
             // Busy on a level or a duel: the sender hears no straight away rather than waiting. A duel already
             // judged is not busy - its result is on show, and a rematch invite lands there.
-            if (_model.InPlay || (_duel.Active && !_duel.Finished) || _duel.AwaitingLive)
+            if (_model.InPlay || (_duel.Active && !_duel.Finished) || _duel.AwaitingLive || _duel.Searching)
             {
                 _ = _duelService.AnswerLiveAsync(message.matchId, false);
                 return;
@@ -78,6 +78,12 @@ namespace Modules.GameplayModule.Controllers
         private void Declined(Message message)
         {
             if (!_duel.AwaitingLive || _duel.LiveMatchId != message.matchId) return;
+            // The duel card's own invite: a no only moves the search on to a bot.
+            if (_duel.Searching)
+            {
+                _duel.StopAwaitingLive();
+                return;
+            }
             // Turned down: that player is left alone for a while, so an invite cannot be sent again and again.
             _duel.MarkDeclined(_duel.ChallengeTargetId, Time.realtimeSinceStartup + DECLINE_COOLDOWN_SECONDS);
             _duel.StopAwaitingLive();
@@ -106,6 +112,7 @@ namespace Modules.GameplayModule.Controllers
                 return;
             }
             _duel.LiveInvites.Remove(message.matchId);
+            _duel.Searching = false;
             _model.Daily = false;
             _duel.Choose(message.level - 1, message.opponentName, message.opponentIcon, null);
             _duel.StartLive(message.matchId, message.delayMs / 1000f);

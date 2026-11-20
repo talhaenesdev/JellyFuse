@@ -114,6 +114,10 @@ namespace Modules.DuelModule.Services
             public string Reason { get; set; }
             public string MatchId { get; set; }
             public bool Won { get; set; }
+            public string TargetId { get; set; }
+            public string Name { get; set; }
+            public string Icon { get; set; }
+            public int Level { get; set; }
         }
 
         private bool _listening;
@@ -138,6 +142,13 @@ namespace Modules.DuelModule.Services
                 FlowLogger.Log($"DuelService - could not listen for live duels: {exception.Message}");
                 return false;
             }
+        }
+
+        public async Task<LiveOpponentVO> FindLiveAsync(int minLevel)
+        {
+            var reply = await Live("FindLive", new Dictionary<string, object> { { "minLevel", minLevel } });
+            if (reply == null || !reply.Ok || string.IsNullOrEmpty(reply.TargetId)) return null;
+            return new LiveOpponentVO { PlayerId = reply.TargetId, Name = reply.Name ?? string.Empty, Icon = reply.Icon ?? string.Empty, Level = reply.Level };
         }
 
         public async Task<string> InviteLiveAsync(string targetId, int level)

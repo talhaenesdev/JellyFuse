@@ -76,11 +76,13 @@ namespace Modules.GameplayModule.Controllers
                     exits = BotExits(level.CreateLevel(levels.Palette), events);
                 _model.Daily = false;
                 _duel.Choose(index, match.Name, match.Icon, exits);
+                _duel.Searching = false;
                 FlowLogger.Log($"FindDuelOpponentCommand - racing {match.Name}{(match.Bot ? " (bot)" : string.Empty)} on level {index + 1}, their time {_duel.OpponentSeconds:0.0}s.");
                 Release();
             }
             catch (Exception exception)
             {
+                _duel.Searching = false;
                 FlowLogger.LogError($"FindDuelOpponentCommand threw while finding an opponent: {exception}");
                 Stop();
             }
@@ -112,6 +114,7 @@ namespace Modules.GameplayModule.Controllers
 
         private void Unavailable(string why)
         {
+            _duel.Searching = false;
             FlowLogger.Log($"FindDuelOpponentCommand - no duel: {why}.");
             _signals.Outgoing.DuelUnavailable.Dispatch();
             Stop();

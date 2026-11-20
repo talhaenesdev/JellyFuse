@@ -68,7 +68,9 @@ namespace Modules.GameplayModule.RootsContexts
                 .ToSequence<RefreshEventsCommand>()
                 .ToSequence<ChooseDailyChallengeCommand>()
                 .ToSequence<SignalDispatchCommand>(_signals.Outgoing.DailyChallengeChosen);
+            // A player whose game is open is invited first; no yes within the wait, and a recorded run or a bot is raced.
             CommandBinder.Bind(_signals.Incoming.StartDuel)
+                .ToSequence<InviteOnlinePlayerCommand>()
                 .ToSequence<FindDuelOpponentCommand>()
                 .ToSequence<SignalDispatchCommand>(_signals.Outgoing.DuelChosen);
             // A player on the leaderboard is invited to race now; their yes arrives as a live start on both games.

@@ -41,6 +41,7 @@ namespace Modules.GameplayModule.Models
         public void SetRematchTarget(Modules.GameplayModule.Shared.Data.ValueObjects.DuelTargetVO target) => RematchTarget = target;
         public bool RematchRequested { get; set; }
         public string CancelledMatchId { get; set; } = string.Empty;
+        public bool Searching { get; set; }
 
         private readonly Dictionary<string, float> _declinedUntil = new();
 
@@ -99,6 +100,7 @@ namespace Modules.GameplayModule.Models
         {
             Active = false;
             Finished = false;
+            Searching = false;
             ChallengeTargetId = string.Empty;
             ChallengeId = string.Empty;
             Live = false;
