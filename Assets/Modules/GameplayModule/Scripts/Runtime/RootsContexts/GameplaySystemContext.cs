@@ -80,7 +80,10 @@ namespace Modules.GameplayModule.RootsContexts
             // Play again on a finished live race: asked here, sent once the level has been left (the Quit flow below).
             CommandBinder.Bind(_signals.Incoming.Rematch).ToSequence<RequestRematchCommand>();
             CommandBinder.Bind(_signals.Incoming.CancelInvite).ToSequence<CancelLiveInviteCommand>();
-            CommandBinder.Bind(_internalSignals.ListenLive).ToSequence<ListenLiveDuelCommand>();
+            // Paced by itself: listen if not listening, wait, and look again - a dropped connection is made again.
+            CommandBinder.Bind(_internalSignals.ListenLive)
+                .ToSequence<ListenLiveDuelCommand>()
+                .ToSequence<SignalDispatchCommand>(_internalSignals.ListenLive);
             CommandBinder.Bind(_internalSignals.LiveMessage).ToSequence<LiveDuelMessageCommand>();
             CommandBinder.Bind(_internalSignals.AwaitLiveStart).ToSequence<AwaitLiveStartCommand>();
             CommandBinder.Bind(_signals.Incoming.AcceptChallenge)

@@ -10,12 +10,15 @@ using Modules.GameplayModule.Signals;
 namespace Modules.GameplayModule.Controllers
 {
     /// <summary>
-    /// Starts listening for the live duel's messages once the player is signed in, each one handed on as LiveMessage.
-    /// Not signed in after a minute, it gives up until the next launch: live invites then simply do not arrive.
+    /// Keeps the live duel's messages coming: listens once the player is signed in, each message handed on as
+    /// LiveMessage, and listens again whenever the connection was lost - the app went to the background, the network
+    /// changed. One turn of a loop that checks again a little later.
     /// </summary>
     [LongRetain(70)]
     internal class ListenLiveDuelCommand : Command
     {
+        private const int CHECK_MS = 15000;
+
         [Inject] private IDuelService _duelService { get; set; }
         [InjectSignal] private GameplayInternalSignals _internalSignals { get; set; }
 
@@ -26,9 +29,12 @@ namespace Modules.GameplayModule.Controllers
             var signals = _internalSignals;
             try
             {
-                for (int i = 0; i < 30 && !service.IsReady; i++) await Task.Delay(2000);
-                bool listening = await service.ListenAsync((type, body) => signals.LiveMessage.Dispatch(type, body));
-                FlowLogger.Log($"ListenLiveDuelCommand - listening for live duels: {listening}");
+                if (service.IsReady && !service.IsListening)
+                {
+                    bool listening = await service.ListenAsync((type, body) => signals.LiveMessage.Dispatch(type, body));
+                    FlowLogger.Log($"ListenLiveDuelCommand - listening for live duels: {listening}");
+                }
+                await Task.Delay(CHECK_MS);
                 Release();
             }
             catch (Exception exception)

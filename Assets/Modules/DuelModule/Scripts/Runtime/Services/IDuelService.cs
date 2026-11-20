@@ -28,6 +28,8 @@ namespace Modules.DuelModule.Services
         /// <paramref name="onMessage"/> as its type and JSON body, on the main thread. False when it could not listen.
         /// </summary>
         Task<bool> ListenAsync(System.Action<string, string> onMessage);
+        /// <summary>The live duel's messages can reach this player now; false once the connection dropped or was never made.</summary>
+        bool IsListening { get; }
         /// <summary>A player whose game is open now and who has won at least <paramref name="minLevel"/> levels; null when nobody is.</summary>
         Task<LiveOpponentVO> FindLiveAsync(int minLevel);
         /// <summary>Invites a player whose game is open to race a level now; the match id, or null.</summary>

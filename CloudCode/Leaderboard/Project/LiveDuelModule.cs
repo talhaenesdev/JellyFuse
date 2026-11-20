@@ -61,8 +61,11 @@ namespace Leaderboard
             match.BIcon = profile.Icon;
             match.State = "racing";
             await Save(context, api, match);
-            await Send(context, push, match.A, "duel.start", new { matchId, level = match.Level, delayMs = StartDelayMs, opponentName = match.BName, opponentIcon = match.BIcon, opponentId = match.B });
-            await Send(context, push, match.B, "duel.start", new { matchId, level = match.Level, delayMs = StartDelayMs, opponentName = match.AName, opponentIcon = match.AIcon, opponentId = match.A });
+            // One moment for both: each game counts down to it, however long its message took to arrive.
+            long startAt = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() + StartDelayMs;
+            await Task.WhenAll(
+                Send(context, push, match.A, "duel.start", new { matchId, level = match.Level, delayMs = StartDelayMs, startAt, opponentName = match.BName, opponentIcon = match.BIcon, opponentId = match.B }),
+                Send(context, push, match.B, "duel.start", new { matchId, level = match.Level, delayMs = StartDelayMs, startAt, opponentName = match.AName, opponentIcon = match.AIcon, opponentId = match.A }));
             return new LiveReply { Ok = true, MatchId = matchId };
         }
 

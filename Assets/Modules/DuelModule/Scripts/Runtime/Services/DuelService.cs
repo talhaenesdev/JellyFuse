@@ -121,6 +121,9 @@ namespace Modules.DuelModule.Services
         }
 
         private bool _listening;
+        private ISubscriptionEvents _subscription;
+
+        public bool IsListening => _listening;
 
         public async Task<bool> ListenAsync(Action<string, string> onMessage)
         {
@@ -128,12 +131,24 @@ namespace Modules.DuelModule.Services
             if (!IsReady || onMessage == null) return false;
             try
             {
+                // A dropped connection is let go of before a new one is made, so messages never arrive twice.
+                if (_subscription != null)
+                {
+                    try { await _subscription.UnsubscribeAsync(); }
+                    catch (Exception) { /* already gone */ }
+                    _subscription = null;
+                }
                 var callbacks = new SubscriptionEventCallbacks();
                 // Messages arrive on the main thread already (Wire dispatches on Unity's), so they go straight on.
                 callbacks.MessageReceived += message => onMessage(message.MessageType, message.Message);
                 callbacks.Error += error => FlowLogger.Log($"DuelService - live messages: {error}");
                 callbacks.Kicked += () => _listening = false;
-                await CloudCodeService.Instance.SubscribeToPlayerMessagesAsync(callbacks);
+                // Lost for good, not just reconnecting: the next listen makes a new connection.
+                callbacks.ConnectionStateChanged += state =>
+                {
+                    if (state == EventConnectionState.Unsubscribed || state == EventConnectionState.Error) _listening = false;
+                };
+                _subscription = await CloudCodeService.Instance.SubscribeToPlayerMessagesAsync(callbacks);
                 _listening = true;
                 return true;
             }

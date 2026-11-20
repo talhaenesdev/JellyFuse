@@ -7,7 +7,7 @@ namespace Modules.GameplayModule.Signals
         public Signal TimeExpired = new();
         public Signal Tick = new(hideCommandLog: true);
         /// <summary>Start listening for the live duel's messages.</summary>
-        public Signal ListenLive = new();
+        public Signal ListenLive = new(hideCommandLog: true);
         /// <summary>A live duel message: its type and JSON body.</summary>
         public Signal<string, string> LiveMessage = new();
         /// <summary>A live invite was accepted, by match id: answer it and wait for the start.</summary>

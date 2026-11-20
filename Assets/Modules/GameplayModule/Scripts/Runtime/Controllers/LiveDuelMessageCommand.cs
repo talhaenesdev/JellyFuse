@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using FlowIoC.BaseModule.Controller;
 using FlowIoC.BaseModule.Injectable.Attributes;
@@ -41,6 +42,7 @@ namespace Modules.GameplayModule.Controllers
             public string opponentId;
             public int level;
             public int delayMs;
+            public long startAt;
             public int done;
             public int total;
             public bool youWon;
@@ -115,7 +117,14 @@ namespace Modules.GameplayModule.Controllers
             _duel.Searching = false;
             _model.Daily = false;
             _duel.Choose(message.level - 1, message.opponentName, message.opponentIcon, null);
-            _duel.StartLive(message.matchId, message.delayMs / 1000f);
+            // Both games start at the moment the server named, not a delay counted from when each message landed.
+            float countdown = message.delayMs / 1000f;
+            if (message.startAt > 0)
+            {
+                float untilStart = (message.startAt - DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()) / 1000f;
+                if (untilStart > .5f && untilStart < 10f) countdown = untilStart;
+            }
+            _duel.StartLive(message.matchId, countdown);
             if (!string.IsNullOrEmpty(message.opponentId))
                 _duel.SetRematchTarget(new DuelTargetVO(message.opponentId, message.opponentName, message.opponentIcon, message.level));
             _signals.Outgoing.DuelChosen.Dispatch();
