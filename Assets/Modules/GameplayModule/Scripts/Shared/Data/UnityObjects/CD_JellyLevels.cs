@@ -44,6 +44,14 @@ namespace Modules.GameplayModule.Shared.Data.UnityObjects
             int saved = progress != null ? progress.LevelIndex : -1;
             return saved >= 0 && IsPlayable(saved) ? saved : PlayableFrom(StartLevel - 1);
         }
+        /// <summary>A playable entry picked at random among the first <paramref name="count"/>, or -1 when there is none.</summary>
+        public int RandomPlayableBelow(int count)
+        {
+            var playable = new List<int>();
+            for (int i = 0; i < Mathf.Min(count, Levels.Count); i++) if (IsPlayable(i)) playable.Add(i);
+            return playable.Count == 0 ? -1 : playable[Random.Range(0, playable.Count)];
+        }
+
         /// <summary>The last playable entry at or before <paramref name="index"/>, or -1 when there is none.</summary>
         public int PlayableBefore(int index)
         {

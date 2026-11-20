@@ -22,8 +22,6 @@ namespace Modules.GameplayModule.Controllers
     internal class InviteOnlinePlayerCommand : Command
     {
         private const float ANSWER_SECONDS = 10f;
-        /// <summary>How far below the lower of the two players' levels the race level may be.</summary>
-        private const int SPREAD = 15;
 
         [Inject] private IJellyPuzzleModel _model { get; set; }
         [Inject] private IDuelModel _duel { get; set; }
@@ -48,16 +46,25 @@ namespace Modules.GameplayModule.Controllers
                     return;
                 }
                 duel.Searching = true;
+                // The one invited last time is passed over once, so the same player is not asked again and again.
                 var opponent = await service.FindLiveAsync(events.DuelMinLevel);
+                if (opponent != null && opponent.PlayerId == duel.LastInvitedId) opponent = await service.FindLiveAsync(events.DuelMinLevel);
+                if (opponent != null && opponent.PlayerId == duel.LastInvitedId)
+                {
+                    // Still the only one open: a bot this time, and that player may be asked again next time.
+                    duel.LastInvitedId = string.Empty;
+                    Release();
+                    return;
+                }
                 if (opponent == null || duel.IsDeclined(opponent.PlayerId, Time.realtimeSinceStartup))
                 {
                     Release();
                     return;
                 }
-                // Both have won it: the lower of the two levels, or a little under it.
+                duel.LastInvitedId = opponent.PlayerId;
+                // Any level both have won, picked at random.
                 int top = opponent.Level > 0 ? Mathf.Min(won, opponent.Level) : won;
-                int index = levels.PlayableFrom(Mathf.Max(0, top - 1 - Random.Range(0, SPREAD)));
-                if (index < 0 || index >= won) index = levels.PlayableFrom(Mathf.Max(0, won - 1));
+                int index = levels.RandomPlayableBelow(top);
                 string matchId = index < 0 ? null : await service.InviteLiveAsync(opponent.PlayerId, index + 1);
                 if (string.IsNullOrEmpty(matchId))
                 {

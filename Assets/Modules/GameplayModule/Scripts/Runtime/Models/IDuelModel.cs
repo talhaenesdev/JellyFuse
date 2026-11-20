@@ -52,6 +52,8 @@ namespace Modules.GameplayModule.Models
         string CancelledMatchId { get; set; }
         /// <summary>The duel card is looking for an opponent: invites to this player are turned down, and a no to its own invite moves on quietly.</summary>
         bool Searching { get; set; }
+        /// <summary>The player the duel card invited last; passed over on the next search.</summary>
+        string LastInvitedId { get; set; }
         /// <summary>The player turned an invite down: no new invite goes to them until <paramref name="until"/>.</summary>
         void MarkDeclined(string playerId, float until);
         bool IsDeclined(string playerId, float now);

@@ -42,6 +42,7 @@ namespace Modules.GameplayModule.Models
         public bool RematchRequested { get; set; }
         public string CancelledMatchId { get; set; } = string.Empty;
         public bool Searching { get; set; }
+        public string LastInvitedId { get; set; } = string.Empty;
 
         private readonly Dictionary<string, float> _declinedUntil = new();
 
