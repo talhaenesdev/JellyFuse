@@ -185,10 +185,32 @@ namespace Leaderboard
         [CloudCodeFunction("Heartbeat")]
         public async Task<bool> Heartbeat(IExecutionContext context, IGameApiClient api)
         {
+            long now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            var response = await api.CloudSaveData.GetProtectedItemsAsync(context, context.ServiceToken, context.ProjectId, context.PlayerId,
+                new List<string> { SeenKey, BestKey });
+            long seen = 0;
+            Dictionary<string, int> bests = null;
+            foreach (var item in response.Data?.Results ?? new List<Item>())
+            {
+                if (item.Key == SeenKey && long.TryParse(item.Value?.ToString(), out long at)) seen = at;
+                if (item.Key == BestKey && item.Value != null) bests = JsonConvert.DeserializeObject<Dictionary<string, int>>(item.Value.ToString());
+            }
             await api.CloudSaveData.SetProtectedItemAsync(context, context.ServiceToken, context.ProjectId, context.PlayerId,
-                new SetItemBody(SeenKey, DateTimeOffset.UtcNow.ToUnixTimeSeconds()));
+                new SetItemBody(SeenKey, now));
+            // The first beat of a session puts the all-time board in step with the records, so a total restored or
+            // corrected on the server shows when the game opens rather than after the next win.
+            if (bests != null && bests.Count > 0 && now - seen > SyncAfterSeconds)
+            {
+                long total = 0;
+                foreach (var best in bests.Values) total += best;
+                await api.Leaderboards.AddLeaderboardPlayerScoreAsync(context, context.AccessToken, Guid.Parse(context.ProjectId), AllTime,
+                    context.PlayerId, new AddLeaderboardScore(total));
+            }
             return true;
         }
+
+        /// <summary>A beat this long after the last one starts a session, and the all-time score is synced on it.</summary>
+        private const long SyncAfterSeconds = 300;
 
         /// <summary>
         /// What tells two players of one name apart: the number Authentication gives every name ("Name#1234" shows
