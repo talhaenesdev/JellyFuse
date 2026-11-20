@@ -28,6 +28,8 @@ namespace Modules.GameplayModule.DuelScreenModule.Signals
         public Signal<ChallengeOutcomeRVO> ShowOutcome = new();
         /// <summary>A live invite went out: wait on this player, by name.</summary>
         public Signal<string> ShowWaiting = new();
+        /// <summary>A challenge on show was withdrawn by its sender, by id: its popup closes.</summary>
+        public Signal<string> WithdrawChallenge = new();
         /// <summary>The other player's share of the board in a live race, 0 to 1.</summary>
         public Signal<float> ApplyOpponentProgress = new();
     }

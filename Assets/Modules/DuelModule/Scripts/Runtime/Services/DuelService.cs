@@ -152,6 +152,9 @@ namespace Modules.DuelModule.Services
             return reply != null && reply.Ok;
         }
 
+        public Task CancelLiveAsync(string matchId) =>
+            Live("CancelLive", new Dictionary<string, object> { { "matchId", matchId } });
+
         public Task ProgressLiveAsync(string matchId, int done, int total) =>
             Live("ProgressLive", new Dictionary<string, object> { { "matchId", matchId }, { "done", done }, { "total", total } });
 

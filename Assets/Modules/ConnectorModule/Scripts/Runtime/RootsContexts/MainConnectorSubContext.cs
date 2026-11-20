@@ -121,6 +121,9 @@ namespace Modules.ConnectorModule.RootsContexts
             _gameplaySignals.Outgoing.DuelUnavailable.Connect(_duelScreenSignals.Incoming.ShowUnavailable, DUEL_GROUP);
             _eventsScreenSignals.Outgoing.DuelClicked.Connect(_mainScreenSignals.Incoming.HideMainScreen, DUEL_GROUP);
             _duelScreenSignals.Outgoing.SearchClosed.Connect(_mainScreenSignals.Incoming.OpenMainScreen, DUEL_GROUP);
+            // Closed while an invite waits: the invite is withdrawn (nothing happens when none is waiting).
+            _duelScreenSignals.Outgoing.SearchClosed.Connect(_gameplaySignals.Incoming.CancelInvite, DUEL_GROUP);
+            _gameplaySignals.Outgoing.ChallengeWithdrawn.Connect(_duelScreenSignals.Incoming.WithdrawChallenge, DUEL_GROUP);
             _gameplaySignals.Outgoing.DuelChosen.Connect(_gameplayScreenSignals.Incoming.OpenGameplayScreen, DUEL_GROUP);
             _gameplaySignals.Outgoing.DuelStarted.Connect(_duelScreenSignals.Incoming.StartRace, DUEL_GROUP);
             _gameplaySignals.Outgoing.DuelProgress.Connect(_duelScreenSignals.Incoming.ApplyProgress, DUEL_GROUP);

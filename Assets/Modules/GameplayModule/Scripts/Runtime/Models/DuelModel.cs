@@ -40,6 +40,7 @@ namespace Modules.GameplayModule.Models
         public Modules.GameplayModule.Shared.Data.ValueObjects.DuelTargetVO RematchTarget { get; private set; }
         public void SetRematchTarget(Modules.GameplayModule.Shared.Data.ValueObjects.DuelTargetVO target) => RematchTarget = target;
         public bool RematchRequested { get; set; }
+        public string CancelledMatchId { get; set; } = string.Empty;
 
         private readonly Dictionary<string, float> _declinedUntil = new();
 

@@ -128,6 +128,14 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
             if (_blocker != null) _blocker.SetActive(false);
         }
 
+        /// <summary>The sender withdrew this challenge: its popup goes, if it is the one on show.</summary>
+        public void WithdrawChallenge(string id)
+        {
+            if (_challenge == null || !_challenge.activeSelf || id != _challengeId) return;
+            CloseChallenge();
+            if (NothingElse && _noticeUntil < 0) Idle?.Invoke();
+        }
+
         /// <summary>Somebody challenged this player: who, and on which level, with Accept and Decline.</summary>
         public void ShowChallenge(ChallengeInviteRVO invite)
         {
@@ -223,6 +231,7 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
             Show(search: true, countdown: false, race: false, result: false);
             if (_searchStatus != null) _searchStatus.text = L("duel.unavailable", "No opponent found. Win more levels or check your connection.");
             if (_searchClose != null) _searchClose.gameObject.SetActive(true);
+            Label(_searchClose, L("duel.ok", "OK"));
         }
 
         /// <summary>
@@ -266,7 +275,9 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
             Show(search: true, countdown: false, race: false, result: false);
             if (_searchStatus != null) _searchStatus.text = string.Format(L("duel.waiting", "Waiting for {0}..."), name);
             if (_searchSpinner != null) _searchSpinner.gameObject.SetActive(true);
-            if (_searchClose != null) _searchClose.gameObject.SetActive(false);
+            // The invite can be withdrawn while its answer is awaited.
+            if (_searchClose != null) _searchClose.gameObject.SetActive(true);
+            Label(_searchClose, L("duel.cancel", "Cancel"));
         }
 
         private bool _opponentLive;

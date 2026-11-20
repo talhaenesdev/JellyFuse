@@ -33,6 +33,7 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
             _signals.Incoming.ShowResult.AddListener(OnResult);
             _signals.Incoming.Close.AddListener(OnClose);
             _signals.Incoming.ShowWaiting.AddListener(_view.ShowWaiting);
+            _signals.Incoming.WithdrawChallenge.AddListener(_view.WithdrawChallenge);
             _signals.Incoming.ApplyOpponentProgress.AddListener(_view.ApplyOpponentProgress);
             _view.ChallengeAccepted += OnAccepted;
             _view.ChallengeDeclined += OnDeclined;
@@ -85,6 +86,7 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
             _signals.Incoming.ShowResult.RemoveListener(OnResult);
             _signals.Incoming.Close.RemoveListener(OnClose);
             _signals.Incoming.ShowWaiting.RemoveListener(_view.ShowWaiting);
+            _signals.Incoming.WithdrawChallenge.RemoveListener(_view.WithdrawChallenge);
             _signals.Incoming.ApplyOpponentProgress.RemoveListener(_view.ApplyOpponentProgress);
         }
 

@@ -66,6 +66,18 @@ namespace Leaderboard
             return new LiveReply { Ok = true, MatchId = matchId };
         }
 
+        /// <summary>The inviter changed their mind before an answer: the invite is withdrawn and its player told.</summary>
+        [CloudCodeFunction("CancelLive")]
+        public async Task<LiveReply> CancelLive(IExecutionContext context, IGameApiClient api, IPushClient push, string matchId)
+        {
+            var match = await Load(context, api, matchId);
+            if (match == null || match.A != context.PlayerId || match.State != "invited") return LiveReply.No("nothing to cancel");
+            match.State = "cancelled";
+            await Save(context, api, match);
+            await Send(context, push, match.B, "duel.cancelled", new { matchId });
+            return new LiveReply { Ok = true, MatchId = matchId };
+        }
+
         /// <summary>The caller cleared another jelly: the other player's bar moves.</summary>
         [CloudCodeFunction("ProgressLive")]
         public async Task<LiveReply> ProgressLive(IExecutionContext context, IGameApiClient api, IPushClient push, string matchId, int done, int total)

@@ -27,6 +27,8 @@ namespace Modules.GameplayModule.Signals
         public Signal<string> DeclineChallenge = new();
         /// <summary>Play again on a finished live duel: the same player is invited once the level is left.</summary>
         public Signal Rematch = new();
+        /// <summary>The player gave up waiting on a live invite they sent: it is withdrawn.</summary>
+        public Signal CancelInvite = new();
         /// <summary>Another module asks for coins under a key of its own; CoinsSpent answers with the same key.</summary>
         public Signal<string, int> SpendCoins = new();
         /// <summary>The boot has begun: fetch the level list published since this build, if there is one.</summary>
@@ -135,6 +137,8 @@ namespace Modules.GameplayModule.Signals
         public Signal<string, bool> CoinsSpent = new();
         /// <summary>A live invite went out: the screen waits on this player's answer, by name.</summary>
         public Signal<string> LiveInviteSent = new();
+        /// <summary>A live invite shown to this player was withdrawn by its sender, by match id.</summary>
+        public Signal<string> ChallengeWithdrawn = new();
         /// <summary>The other player's share of the board cleared in a live race, 0 to 1.</summary>
         public Signal<float> DuelOpponentProgress = new();
         /// <summary>The coins the player now holds.</summary>

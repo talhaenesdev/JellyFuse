@@ -55,6 +55,7 @@ namespace Modules.GameplayModule.Controllers
             {
                 case "duel.invite": Invite(message); break;
                 case "duel.declined": Declined(message); break;
+                case "duel.cancelled": Cancelled(message); break;
                 case "duel.start": Start(message); break;
                 case "duel.progress": Progress(message); break;
                 case "duel.over": Over(message); break;
@@ -83,8 +84,20 @@ namespace Modules.GameplayModule.Controllers
             _signals.Outgoing.DuelUnavailable.Dispatch();
         }
 
+        private void Cancelled(Message message)
+        {
+            if (!_duel.LiveInvites.Remove(message.matchId)) return;
+            _signals.Outgoing.ChallengeWithdrawn.Dispatch(message.matchId);
+        }
+
         private void Start(Message message)
         {
+            // Withdrawn while the yes was on its way: the other game hears this one left, and nothing starts here.
+            if (message.matchId == _duel.CancelledMatchId)
+            {
+                _ = _duelService.FinishLiveAsync(message.matchId, -1);
+                return;
+            }
             var levels = _shared.GetScriptable<CD_JellyLevels>();
             if (levels == null || levels.Get(message.level - 1) == null)
             {

@@ -32,6 +32,8 @@ namespace Modules.DuelModule.Services
         Task<string> InviteLiveAsync(string targetId, int level);
         /// <summary>Answers a live invite; yes starts the race on both games.</summary>
         Task<bool> AnswerLiveAsync(string matchId, bool accept);
+        /// <summary>Withdraws an invite this player sent and that has not been answered.</summary>
+        Task CancelLiveAsync(string matchId);
         /// <summary>Another jelly cleared in a live race: the other player's bar moves.</summary>
         Task ProgressLiveAsync(string matchId, int done, int total);
         /// <summary>This player's live race ended: cleared in <paramref name="seconds"/>, or -1 when not cleared or left.</summary>

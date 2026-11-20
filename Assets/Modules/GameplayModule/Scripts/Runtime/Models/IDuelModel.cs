@@ -48,6 +48,8 @@ namespace Modules.GameplayModule.Models
         void SetRematchTarget(Modules.GameplayModule.Shared.Data.ValueObjects.DuelTargetVO target);
         /// <summary>Play again was pressed: the invite goes out once the finished level has been left.</summary>
         bool RematchRequested { get; set; }
+        /// <summary>The live invite this player withdrew: a start that still arrives for it is not raced.</summary>
+        string CancelledMatchId { get; set; }
         /// <summary>The player turned an invite down: no new invite goes to them until <paramref name="until"/>.</summary>
         void MarkDeclined(string playerId, float until);
         bool IsDeclined(string playerId, float now);
