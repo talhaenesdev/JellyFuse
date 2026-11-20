@@ -319,11 +319,11 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
             if (_resultTimes != null) _resultTimes.gameObject.SetActive(result.Coins <= 0);
             if (_reward != null) _reward.SetActive(result.Coins > 0);
             if (_rewardCoins != null) _rewardCoins.text = "+" + result.Coins;
-            Label(_resultClose, L("duel.continue", "Continue"));
+            Label(_resultClose, L("duel.continue", "Main Menu"));
             if (_resultRematch != null)
             {
                 _resultRematch.gameObject.SetActive(result.CanRematch);
-                Label(_resultRematch, L("duel.rematch", "Play again"));
+                Label(_resultRematch, L("duel.rematch", "Keep Dueling"));
             }
             if (_result != null) _result.SetActive(true);
             // The board behind is finished with: dimmed, and taps on it stop at the result.
