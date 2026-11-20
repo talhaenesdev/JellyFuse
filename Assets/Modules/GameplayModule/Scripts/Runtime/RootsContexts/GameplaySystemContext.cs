@@ -85,6 +85,10 @@ namespace Modules.GameplayModule.RootsContexts
                 .ToSequence<AcceptChallengeCommand>()
                 .ToSequence<SignalDispatchCommand>(_signals.Outgoing.DuelChosen);
             CommandBinder.Bind(_signals.Incoming.DeclineChallenge).ToSequence<DeclineChallengeCommand>();
+            CommandBinder.Bind(_signals.Incoming.GrantCoins)
+                .ToSequence<AddCoinsCommand>()
+                .ToSequence<IAudioService.Commands.Play>(AudioCue.Coin)
+                .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS);
             CommandBinder.Bind(_signals.Incoming.SpendCoins)
                 .ToSequence<SpendCoinsCommand>()
                 .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS);

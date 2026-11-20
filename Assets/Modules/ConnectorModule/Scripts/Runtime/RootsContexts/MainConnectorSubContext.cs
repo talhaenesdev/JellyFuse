@@ -113,6 +113,8 @@ namespace Modules.ConnectorModule.RootsContexts
             _profileSelectionSignals.Outgoing.SaveRequested.Connect(_profileSignals.Incoming.SaveProfile);
             _consentScreenSignals.Outgoing.Answered.Connect(_mainSignals.Incoming.ConsentAnswered, CONSENT_GROUP);
             _leaderboardScreenSignals.Outgoing.EditProfileClicked.Connect(_profileSignals.Incoming.OpenSelection);
+            // The first name a player picks pays coins into Gameplay's purse.
+            _profileSignals.Outgoing.NameRewardEarned.Connect(_gameplaySignals.Incoming.GrantCoins);
 
             // The duel: the Events card asks Gameplay for an opponent while the duel screen searches; the race runs
             // on the gameplay screen with the duel screen over it.

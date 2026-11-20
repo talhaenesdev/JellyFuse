@@ -31,6 +31,8 @@ namespace Modules.GameplayModule.Signals
         public Signal CancelInvite = new();
         /// <summary>Another module asks for coins under a key of its own; CoinsSpent answers with the same key.</summary>
         public Signal<string, int> SpendCoins = new();
+        /// <summary>Another module pays the player coins it promised - a reward of its own.</summary>
+        public Signal<int> GrantCoins = new();
         /// <summary>The boot has begun: fetch the level list published since this build, if there is one.</summary>
         public Signal LoadRemoteLevels = new();
         public Signal<Vector2Int, Vector2Int, bool> Drag = new(hideCommandLog: true);

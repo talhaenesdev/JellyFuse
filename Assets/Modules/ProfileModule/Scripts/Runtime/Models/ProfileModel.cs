@@ -85,10 +85,26 @@ namespace Modules.ProfileModule.Models
             return true;
         }
 
+        /// <summary>Coins the first picked name pays.</summary>
+        public const int NAME_REWARD_COINS = 50;
+
+        public bool NameRewardAvailable => _profile != null && !_profile.NameRewarded;
+
+        /// <summary>The saved name is the player's own, and the reward for it was not paid yet: it is marked paid now.</summary>
+        public bool ClaimNameReward()
+        {
+            if (!NameRewardAvailable) return false;
+            string name = NormalizeName(_profile.PlayerName);
+            if (string.Equals(name, "Player", System.StringComparison.OrdinalIgnoreCase)) return false;
+            _profile.MarkNameRewarded();
+            return true;
+        }
+
         public ProfileSelectionRVO CreateSelection()
         {
             var result = new ProfileSelectionRVO
             {
+                NameReward = NameRewardAvailable ? NAME_REWARD_COINS : 0,
                 PlayerName = _profile != null ? NormalizeName(_profile.PlayerName) : "Player",
                 SelectedIconId = CurrentIcon?.Id,
                 SelectedFrameId = ResolveFrameId(_profile != null ? _profile.SelectedFrameId : null)

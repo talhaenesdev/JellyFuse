@@ -30,6 +30,8 @@ namespace Modules.ProfileModule.Signals
         public Signal<ProfileSelectionRVO> ProfileSaved = new();
         /// <summary>The saved name and icon were sent on to the leaderboard (or could not be, offline).</summary>
         public Signal ProfilePublished = new();
+        /// <summary>The first name the player picked earned these coins.</summary>
+        public Signal<int> NameRewardEarned = new();
         /// <summary>An icon is to be paid for: a key to answer with ("icon:" and its id) and the coins it costs.</summary>
         public Signal<string, int> CoinsRequested = new();
         /// <summary>An icon was bought: the selection again, with it unlocked.</summary>

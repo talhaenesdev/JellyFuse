@@ -46,6 +46,7 @@ namespace Modules.ProfileModule.RootsContexts
                 .ToSequence<ILocalSaveService.Commands.Save>("SD_PlayerProfile");
             CommandBinder.Bind(_signals.Incoming.SaveProfile)
                 .ToSequence<SaveProfileCommand>()
+                .ToSequence<RewardFirstNameCommand>()
                 .ToSequence<ILocalSaveService.Commands.Save>("SD_PlayerProfile")
                 .ToSequence<PublishProfileCommand>()
                 .ToSequence<SignalDispatchCommand>(_signals.Outgoing.ProfilePublished);

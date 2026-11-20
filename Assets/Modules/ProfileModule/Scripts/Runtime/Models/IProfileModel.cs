@@ -7,6 +7,8 @@ namespace Modules.ProfileModule.Models
         ProfileIconVO CurrentIcon { get; }
         ProfileFrameVO CurrentFrame { get; }
         ProfileSelectionRVO CreateSelection();
+        /// <summary>Marks the name reward paid when the saved name earns it; false when it does not.</summary>
+        bool ClaimNameReward();
         bool Save(ProfileEditVO edit);
 
         /// <summary>Reads the selected icon and frame from SD_PlayerProfile again, after its values were replaced.</summary>

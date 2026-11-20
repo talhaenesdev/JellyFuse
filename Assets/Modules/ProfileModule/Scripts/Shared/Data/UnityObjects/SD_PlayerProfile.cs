@@ -8,6 +8,10 @@ namespace Modules.ProfileModule.Shared.Data.UnityObjects
         [SerializeField] private string _playerName = "Player";
         [SerializeField] private string _selectedIconId;
         [SerializeField] private string _selectedFrameId;
+        /// <summary>The coins for naming the profile were paid; they are paid once.</summary>
+        [SerializeField] private bool _nameRewarded;
+        public bool NameRewarded => _nameRewarded;
+        public void MarkNameRewarded() => _nameRewarded = true;
 
         [Tooltip("Icons bought with coins.")]
         [SerializeField] private System.Collections.Generic.List<string> _ownedIconIds = new();
