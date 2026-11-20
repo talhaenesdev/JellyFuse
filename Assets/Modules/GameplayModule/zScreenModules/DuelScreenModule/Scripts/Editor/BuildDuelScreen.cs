@@ -86,13 +86,13 @@ namespace Modules.GameplayModule.DuelScreenModule.Editor
                 Stretch(panel.rectTransform);
                 // The panel art draws both rings and the VS itself: the icons sit inside its rings.
                 Image playerSearchIcon = Img("Img_PlayerIcon", search.transform, null);
-                Place(playerSearchIcon.rectTransform, new Vector2(-183, -32), new Vector2(190, 190));
+                Place(playerSearchIcon.rectTransform, new Vector2(-174, -24), new Vector2(190, 190));
                 Image opponentSearchIcon = Img("Img_OpponentIcon", search.transform, null);
-                Place(opponentSearchIcon.rectTransform, new Vector2(170, -32), new Vector2(190, 190));
+                Place(opponentSearchIcon.rectTransform, new Vector2(164, -24), new Vector2(190, 190));
                 playerSearchIcon.transform.SetSiblingIndex(0);
                 opponentSearchIcon.transform.SetSiblingIndex(0);
                 Image spinnerImage = Img("Img_Spinner", search.transform, Sprite("SPR_UI_Duel_Icon"));
-                Place(spinnerImage.rectTransform, new Vector2(170, -32), new Vector2(130, 130));
+                Place(spinnerImage.rectTransform, new Vector2(164, -24), new Vector2(130, 130));
                 RectTransform spinner = spinnerImage.rectTransform;
                 TMP_Text status = Text("Txt_Status", search.transform, font, "Finding an opponent...", 34);
                 Place(status.rectTransform, new Vector2(0, -238), new Vector2(680, 80));
