@@ -38,6 +38,20 @@ namespace Modules.ProfileModule.ProfileSelectionScreenModule.ViewsMediators
         [SerializeField] private Button _itemTemplate;
         [SerializeField] private Color _selectedTabColor = Color.white;
         [SerializeField] private Color _normalTabColor = new(.18f, .13f, .28f, 1);
+        /// <summary>The tab that is open, and the one that is not.</summary>
+        [SerializeField] private Sprite _tabOnSprite;
+        [SerializeField] private Sprite _tabOffSprite;
+        /// <summary>An item's slot: owned, owned and picked, locked with coins enough, locked without.</summary>
+        [SerializeField] private Sprite _slotOwnedSprite;
+        [SerializeField] private Sprite _slotSelectedSprite;
+        [SerializeField] private Sprite _slotLockedSprite;
+        [SerializeField] private Sprite _slotPoorSprite;
+        /// <summary>The bottom button: save, buy with coins enough, buy without.</summary>
+        [SerializeField] private Sprite _saveSprite;
+        [SerializeField] private Sprite _buySprite;
+        [SerializeField] private Sprite _buyOffSprite;
+        /// <summary>The label's left margin while the buy button's coin sits there.</summary>
+        [SerializeField] private float _buyLabelMargin = 70f;
 
         public Action<ProfileEditVO> SaveRequested;
         public Action StatsClicked;
@@ -83,7 +97,24 @@ namespace Modules.ProfileModule.ProfileSelectionScreenModule.ViewsMediators
             if (label == null) return;
             _saveText ??= label.text;
             var icon = DraftIcon;
-            label.text = _message ?? (icon != null && !icon.Owned ? string.Format(L("profile.buy", "Buy {0}"), icon.Price) : _saveText);
+            bool buying = icon != null && !icon.Owned;
+            label.text = _message ?? (buying ? string.Format(L("profile.buy", "Buy {0}"), icon.Price) : _saveText);
+            label.margin = new Vector4(buying ? _buyLabelMargin : 0, 0, 0, 0);
+            if (_saveButton.targetGraphic is Image background)
+            {
+                Sprite sprite = !buying ? _saveSprite : _coins >= icon.Price ? _buySprite : _buyOffSprite;
+                if (sprite != null) background.sprite = sprite;
+            }
+        }
+
+        private int _coins;
+
+        /// <summary>The player's coins: which locked items can be bought now.</summary>
+        public void ApplyCoins(int coins)
+        {
+            _coins = coins;
+            RefreshSelection();
+            RefreshSaveLabel();
         }
 
         private readonly List<Button> _items = new();
@@ -202,10 +233,9 @@ namespace Modules.ProfileModule.ProfileSelectionScreenModule.ViewsMediators
             {
                 foreach (ProfileIconVO icon in _selection.Icons)
                 {
-                    // A locked icon shows dimmed, its price where its name would be.
-                    Color tint = icon.Owned ? icon.FallbackColor : icon.FallbackColor * new Color(1, 1, 1, .45f);
-                    string label = icon.Owned ? icon.DisplayName : string.Format(L("profile.price", "{0} coins"), icon.Price);
-                    CreateItem(icon.Id, label, icon.Sprite, tint, null, Color.white);
+                    // A locked icon carries its price on the slot's strip.
+                    string label = icon.Owned ? icon.DisplayName : icon.Price.ToString();
+                    CreateItem(icon.Id, label, icon.Sprite, icon.FallbackColor, null, Color.white);
                     var price = _items[_items.Count - 1].transform.Find("Txt_Price");
                     if (price != null)
                     {
@@ -261,8 +291,17 @@ namespace Modules.ProfileModule.ProfileSelectionScreenModule.ViewsMediators
             string prefix = _showingFrames ? "Btn_ProfileFrame_" : "Btn_ProfileIcon_";
             foreach (Button item in _items)
             {
-                Transform marker = item != null ? item.transform.Find("Img_Selected") : null;
-                if (marker != null) marker.gameObject.SetActive(item.name == prefix + selectedId);
+                if (item == null) continue;
+                bool selected = item.name == prefix + selectedId;
+                Transform marker = item.transform.Find("Img_Selected");
+                if (marker != null) marker.gameObject.SetActive(false);
+                ProfileIconVO icon = _showingFrames ? null : _selection?.Icons.Find(value => prefix + value.Id == item.name);
+                bool locked = icon != null && !icon.Owned;
+                Sprite slot = !locked ? (selected ? _slotSelectedSprite : _slotOwnedSprite)
+                    : _coins >= icon.Price ? _slotLockedSprite : _slotPoorSprite;
+                if (slot != null && item.targetGraphic is Image background) background.sprite = slot;
+                // A locked item picked to look at stands a little forward.
+                item.transform.localScale = Vector3.one * (locked && selected ? 1.06f : 1f);
             }
         }
 
@@ -279,12 +318,22 @@ namespace Modules.ProfileModule.ProfileSelectionScreenModule.ViewsMediators
 
         private void RefreshTabs()
         {
-            if (_avatarTabButton?.targetGraphic != null)
-                _avatarTabButton.targetGraphic.color = !_showingFrames ? _selectedTabColor : _normalTabColor;
-            if (_frameTabButton?.targetGraphic != null)
-                _frameTabButton.targetGraphic.color = _showingFrames ? _selectedTabColor : _normalTabColor;
+            ApplyTab(_avatarTabButton, !_showingFrames);
+            ApplyTab(_frameTabButton, _showingFrames);
             if (_avatarTabLabel != null) _avatarTabLabel.color = Color.white;
             if (_frameTabLabel != null) _frameTabLabel.color = Color.white;
+        }
+
+        private void ApplyTab(Button tab, bool open)
+        {
+            if (tab == null || tab.targetGraphic == null) return;
+            Sprite sprite = open ? _tabOnSprite : _tabOffSprite;
+            if (sprite != null && tab.targetGraphic is Image image)
+            {
+                image.sprite = sprite;
+                image.color = Color.white;
+            }
+            else tab.targetGraphic.color = open ? _selectedTabColor : _normalTabColor;
         }
 
         private void FitDialogToSafeArea()

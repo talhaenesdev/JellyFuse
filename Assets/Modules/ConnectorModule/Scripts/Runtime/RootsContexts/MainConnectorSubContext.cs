@@ -100,6 +100,7 @@ namespace Modules.ConnectorModule.RootsContexts
             _mainSignals.Outgoing.Started.Connect(_gameplaySignals.Incoming.RefreshLives);
             _gameplayScreenSignals.Outgoing.HomeClicked.Connect(_gameplaySignals.Incoming.RefreshLives);
             _gameplaySignals.Outgoing.CoinsChanged.Connect(_mainScreenSignals.Incoming.ApplyCoins, LIVES_GROUP);
+            _gameplaySignals.Outgoing.CoinsChanged.Connect(_profileSelectionSignals.Incoming.ApplyCoins, LIVES_GROUP);
             _mainScreenSignals.Outgoing.LivesPlusClicked.Connect(_gameplaySignals.Incoming.OpenLivesOffer, LIVES_GROUP);
             _mainScreenSignals.Outgoing.DailyChallengeClicked.Connect(_gameplaySignals.Incoming.StartDailyChallenge, LIVES_GROUP);
             _gameplaySignals.Outgoing.DailyChallengeChosen.Connect(_gameplayScreenSignals.Incoming.OpenGameplayScreen, LIVES_GROUP);

@@ -34,6 +34,7 @@ namespace Modules.ProfileModule.ProfileSelectionScreenModule.ViewsMediators
             _view.BuyRequested += OnBuyRequested;
             _signals.Incoming.IconBought.AddListener(_view.ApplyIconBought);
             _signals.Incoming.IconNotBought.AddListener(_view.ApplyIconNotBought);
+            _signals.Incoming.ApplyCoins.AddListener(_view.ApplyCoins);
         }
 
         private void OnBuyRequested(string iconId)
@@ -49,6 +50,7 @@ namespace Modules.ProfileModule.ProfileSelectionScreenModule.ViewsMediators
             _view.BuyRequested -= OnBuyRequested;
             _signals.Incoming.IconBought.RemoveListener(_view.ApplyIconBought);
             _signals.Incoming.IconNotBought.RemoveListener(_view.ApplyIconNotBought);
+            _signals.Incoming.ApplyCoins.RemoveListener(_view.ApplyCoins);
         }
 
         private void OnStatsClicked()

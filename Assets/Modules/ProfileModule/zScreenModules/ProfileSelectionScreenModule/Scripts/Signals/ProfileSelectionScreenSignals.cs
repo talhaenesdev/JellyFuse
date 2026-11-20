@@ -17,6 +17,8 @@ namespace Modules.ProfileModule.ProfileSelectionScreenModule.Signals
         public Signal<ProfileSelectionRVO> IconBought = new();
         /// <summary>An icon could not be bought - not enough coins.</summary>
         public Signal<string> IconNotBought = new();
+        /// <summary>The player's coins changed while the screen is open.</summary>
+        public Signal<int> ApplyCoins = new();
     }
 
     public class ProfileSelectionScreenSignalsOutgoing
