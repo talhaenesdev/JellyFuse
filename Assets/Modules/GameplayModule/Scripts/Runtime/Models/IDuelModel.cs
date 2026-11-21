@@ -43,6 +43,8 @@ namespace Modules.GameplayModule.Models
         Dictionary<string, Modules.DuelModule.Data.ValueObjects.DuelChallengeVO> LiveInvites { get; }
         void AwaitLive(string matchId);
         void StopAwaitingLive();
+        /// <summary>When the invite now awaited was sent, in real seconds.</summary>
+        float LiveSentAt { get; }
         /// <summary>The player of the last live race - kept after it ends, so Play again can invite them.</summary>
         Modules.GameplayModule.Shared.Data.ValueObjects.DuelTargetVO RematchTarget { get; }
         void SetRematchTarget(Modules.GameplayModule.Shared.Data.ValueObjects.DuelTargetVO target);

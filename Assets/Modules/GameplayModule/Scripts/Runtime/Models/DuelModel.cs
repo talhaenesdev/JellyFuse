@@ -33,7 +33,10 @@ namespace Modules.GameplayModule.Models
         {
             LiveMatchId = matchId ?? string.Empty;
             AwaitingLive = !string.IsNullOrEmpty(LiveMatchId);
+            LiveSentAt = Time.realtimeSinceStartup;
         }
+
+        public float LiveSentAt { get; private set; }
 
         public void StopAwaitingLive() => AwaitingLive = false;
 

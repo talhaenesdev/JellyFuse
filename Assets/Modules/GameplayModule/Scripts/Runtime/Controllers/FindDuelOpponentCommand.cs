@@ -44,7 +44,7 @@ namespace Modules.GameplayModule.Controllers
                     Unavailable("the level or event config is not filed");
                     return;
                 }
-                int current = _model.LevelIndex >= 0 ? _model.LevelIndex : levels.StartIndex(progress);
+                int current = levels.StartIndex(progress);
                 // The run's level is the next one to win, so every level before it has been won.
                 int won = current;
                 if (won < events.DuelMinLevel)
@@ -79,7 +79,7 @@ namespace Modules.GameplayModule.Controllers
                     await System.Threading.Tasks.Task.Delay((int)(search * 1000));
                     match = new DuelMatchVO { Found = true, Bot = true, Name = BotName(), Icon = BotIcon(_shared.GetScriptable<CD_ProfileIcons>()) };
                 }
-                int index = levels.RandomPlayableBelow(won);
+                int index = levels.RandomPlayableBelow(won, events.DuelLevelFloor);
                 match.Level = index + 1;
                 var level = index >= 0 ? levels.Get(index) : null;
                 if (level == null)

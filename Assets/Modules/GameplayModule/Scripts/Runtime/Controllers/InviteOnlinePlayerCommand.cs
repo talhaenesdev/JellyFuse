@@ -44,7 +44,7 @@ namespace Modules.GameplayModule.Controllers
                 var levels = _shared.GetScriptable<CD_JellyLevels>();
                 var events = _shared.GetScriptable<CD_Events>();
                 var progress = _shared.GetScriptable<SD_JellyProgress>();
-                int won = levels == null ? 0 : _model.LevelIndex >= 0 ? _model.LevelIndex : levels.StartIndex(progress);
+                int won = levels == null ? 0 : levels.StartIndex(progress);
                 // Too few levels won, or offline: the next step decides.
                 if (events == null || won < events.DuelMinLevel || !service.IsReady)
                 {
@@ -69,8 +69,8 @@ namespace Modules.GameplayModule.Controllers
                 }
                 duel.LastInvitedId = opponent.PlayerId;
                 // Any level both have won, picked at random.
-                int top = opponent.Level > 0 ? Mathf.Min(won, opponent.Level) : won;
-                int index = levels.RandomPlayableBelow(top);
+                int top = opponent.Level > events.DuelLevelFloor ? Mathf.Min(won, opponent.Level) : won;
+                int index = levels.RandomPlayableBelow(top, events.DuelLevelFloor);
                 string matchId = index < 0 ? null : await service.InviteLiveAsync(opponent.PlayerId, index + 1);
                 if (string.IsNullOrEmpty(matchId))
                 {

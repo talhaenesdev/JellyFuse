@@ -22,6 +22,8 @@ namespace Modules.GameplayModule.Controllers
     internal class LiveDuelMessageCommand : Command
     {
         private const float DECLINE_COOLDOWN_SECONDS = 300f;
+        /// <summary>An answer faster than this came from the game itself, the player being busy.</summary>
+        private const float BUSY_ANSWER_SECONDS = 4f;
 
         [Inject] private IJellyPuzzleModel _model { get; set; }
         [Inject] private IDuelModel _duel { get; set; }
@@ -68,7 +70,9 @@ namespace Modules.GameplayModule.Controllers
         {
             // Busy on a level or a duel: the sender hears no straight away rather than waiting. A duel already
             // judged is not busy - its result is on show, and a rematch invite lands there.
-            if (_model.InPlay || (_duel.Active && !_duel.Finished) || _duel.AwaitingLive || _duel.Searching)
+            // A finished duel's result is on show, lost or won: the board behind it no longer counts as being played.
+            bool onResult = _duel.Active && _duel.Finished;
+            if ((_model.InPlay && !onResult) || (_duel.Active && !_duel.Finished) || _duel.AwaitingLive || _duel.Searching)
             {
                 _ = _duelService.AnswerLiveAsync(message.matchId, false);
                 return;
@@ -86,8 +90,10 @@ namespace Modules.GameplayModule.Controllers
                 _duel.StopAwaitingLive();
                 return;
             }
-            // Turned down: that player is left alone for a while, so an invite cannot be sent again and again.
-            _duel.MarkDeclined(_duel.ChallengeTargetId, Time.realtimeSinceStartup + DECLINE_COOLDOWN_SECONDS);
+            // Turned down by a person: that player is left alone for a while, so an invite cannot be sent again and
+            // again. A no within seconds is the other game answering for a busy player, not a choice - no wait then.
+            if (Time.realtimeSinceStartup - _duel.LiveSentAt > BUSY_ANSWER_SECONDS)
+                _duel.MarkDeclined(_duel.ChallengeTargetId, Time.realtimeSinceStartup + DECLINE_COOLDOWN_SECONDS);
             _duel.StopAwaitingLive();
             _signals.Outgoing.DuelUnavailable.Dispatch();
         }

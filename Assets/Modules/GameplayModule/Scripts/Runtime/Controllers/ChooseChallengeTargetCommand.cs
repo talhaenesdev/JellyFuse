@@ -16,8 +16,6 @@ namespace Modules.GameplayModule.Controllers
     /// </summary>
     internal class ChooseChallengeTargetCommand : Command
     {
-        /// <summary>How far below the lower of the two players' levels the challenge level may be.</summary>
-        private const int SPREAD = 15;
 
         [Inject] private IJellyPuzzleModel _model { get; set; }
         [Inject] private IDuelModel _duel { get; set; }
@@ -30,7 +28,8 @@ namespace Modules.GameplayModule.Controllers
             var levels = _shared.GetScriptable<CD_JellyLevels>();
             var events = _shared.GetScriptable<CD_Events>();
             var progress = _shared.GetScriptable<SD_JellyProgress>();
-            int won = levels == null ? 0 : _model.LevelIndex >= 0 ? _model.LevelIndex : levels.StartIndex(progress);
+            // The player's own progress, not whatever level was played last - a duel's level is not the run's.
+            int won = levels == null ? 0 : levels.StartIndex(progress);
             if (_target == null || string.IsNullOrEmpty(_target.PlayerId) || events == null || won < events.DuelMinLevel)
             {
                 FlowLogger.Log("ChooseChallengeTargetCommand - no challenge: no target, or too few levels won.");
@@ -47,10 +46,10 @@ namespace Modules.GameplayModule.Controllers
                 Stop();
                 return;
             }
-            // Both have won it: the lower of the two levels, or a little under it.
-            int top = _target.Level > 0 ? Mathf.Min(won, _target.Level) : won;
-            int index = levels.PlayableFrom(Mathf.Max(0, top - 1 - Random.Range(0, SPREAD)));
-            if (index < 0 || index >= won) index = levels.PlayableFrom(Mathf.Max(0, won - 1));
+            // Any level both have won, picked at random above the easy first ones. A rival whose level is unknown or
+            // below the floor does not drag the race down to level 1.
+            int top = _target.Level > events.DuelLevelFloor ? Mathf.Min(won, _target.Level) : won;
+            int index = levels.RandomPlayableBelow(top, events.DuelLevelFloor);
             if (index < 0)
             {
                 _signals.Outgoing.DuelUnavailable.Dispatch();

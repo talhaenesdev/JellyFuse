@@ -65,6 +65,8 @@ namespace Modules.GameplayModule.Shared.Data.UnityObjects
         [Min(0)] public int DuelRewardedWins = 5;
         [Tooltip("The fewest levels a player must have won before the duel opens.")]
         [Min(1)] public int DuelMinLevel = 5;
+        [Tooltip("Duels never race the first this many levels - too easy to be a race - while the player has won more than that.")]
+        [Min(0)] public int DuelLevelFloor = 10;
         [Tooltip("A bot opponent finishes in this share of the level's clock, picked between the two.")]
         [Range(0.1f, 1f)] public float DuelBotMinShare = 0.45f;
         [Range(0.1f, 1f)] public float DuelBotMaxShare = 0.75f;

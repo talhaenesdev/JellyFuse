@@ -45,10 +45,12 @@ namespace Modules.GameplayModule.Shared.Data.UnityObjects
             return saved >= 0 && IsPlayable(saved) ? saved : PlayableFrom(StartLevel - 1);
         }
         /// <summary>A playable entry picked at random among the first <paramref name="count"/>, or -1 when there is none.</summary>
-        public int RandomPlayableBelow(int count)
+        public int RandomPlayableBelow(int count, int floor = 0)
         {
             var playable = new List<int>();
-            for (int i = 0; i < Mathf.Min(count, Levels.Count); i++) if (IsPlayable(i)) playable.Add(i);
+            // The floor counts only when there is something above it to pick from.
+            int from = count > floor ? floor : 0;
+            for (int i = from; i < Mathf.Min(count, Levels.Count); i++) if (IsPlayable(i)) playable.Add(i);
             return playable.Count == 0 ? -1 : playable[Random.Range(0, playable.Count)];
         }
 
