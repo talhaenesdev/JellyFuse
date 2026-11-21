@@ -38,14 +38,31 @@ namespace Modules.GameplayModule.Controllers
             else _notifications.Cancel(GameplayNotifications.LIVES_FULL);
 
             var now = DateTime.Now;
+            // A day away: the player's own animal is hungry, by name, when an animal is chosen.
+            string animal = AnimalName();
             _notifications.Schedule(GameplayNotifications.COME_BACK_SOON,
-                Text("notification.come_back_soon.title", "The jellies miss you"),
-                Text("notification.come_back_soon.text", "A new level is waiting. Come back and play!"),
+                animal != null
+                    ? string.Format(Text("notification.hungry.title", "{0} is hungry!"), animal)
+                    : Text("notification.come_back_soon.title", "The jellies miss you"),
+                animal != null
+                    ? Text("notification.hungry.text", "Come fuse the jellies and feed them!")
+                    : Text("notification.come_back_soon.text", "A new level is waiting. Come back and play!"),
                 now.AddHours(GameplayNotifications.SOON_HOURS));
             _notifications.Schedule(GameplayNotifications.COME_BACK_LATER,
                 Text("notification.come_back_later.title", "Still there?"),
                 Text("notification.come_back_later.text", "Your jellies are getting bored. Jump back in!"),
                 now.AddHours(GameplayNotifications.LATER_HOURS));
+        }
+
+        /// <summary>The chosen avatar's animal in the player's language, or null when none is chosen or it has no name.</summary>
+        private string AnimalName()
+        {
+            var profile = _shared.GetScriptable<Modules.ProfileModule.Shared.Data.UnityObjects.SD_PlayerProfile>();
+            string id = profile != null ? profile.SelectedIconId : null;
+            if (string.IsNullOrEmpty(id)) return null;
+            string key = "animal." + id;
+            string name = _localization?.Get(key);
+            return string.IsNullOrEmpty(name) || name == key ? null : name;
         }
 
         private string Text(string key, string english)
