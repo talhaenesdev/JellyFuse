@@ -80,6 +80,8 @@ namespace Modules.GameplayModule.Controllers
                     match = new DuelMatchVO { Found = true, Bot = true, Name = BotName(), Icon = BotIcon(_shared.GetScriptable<CD_ProfileIcons>()) };
                 }
                 int index = levels.RandomPlayableBelow(won, events.DuelLevelFloor);
+                for (int retry = 0; retry < 4 && index >= 0 && index == _duel.LevelIndex; retry++)
+                    index = levels.RandomPlayableBelow(won, events.DuelLevelFloor);
                 match.Level = index + 1;
                 var level = index >= 0 ? levels.Get(index) : null;
                 if (level == null)

@@ -50,6 +50,9 @@ namespace Modules.GameplayModule.Controllers
             // below the floor does not drag the race down to level 1.
             int top = _target.Level > events.DuelLevelFloor ? Mathf.Min(won, _target.Level) : won;
             int index = levels.RandomPlayableBelow(top, events.DuelLevelFloor);
+            // A rematch races somewhere new: the level just raced is drawn again only when there is nothing else.
+            for (int retry = 0; retry < 4 && index >= 0 && index == _duel.LevelIndex; retry++)
+                index = levels.RandomPlayableBelow(top, events.DuelLevelFloor);
             if (index < 0)
             {
                 _signals.Outgoing.DuelUnavailable.Dispatch();

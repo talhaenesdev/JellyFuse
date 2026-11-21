@@ -122,6 +122,11 @@ namespace Modules.GameplayModule.Controllers
             _duel.LiveInvites.Remove(message.matchId);
             _duel.Searching = false;
             _model.Daily = false;
+            // How far the rival is known to have got: the highest level raced with them, never just the last one -
+            // each rematch picks below it, and taking the last level as their best would shrink the choice to one level.
+            int rivalBest = message.level;
+            var known = _duel.RematchTarget;
+            if (known != null && known.PlayerId == message.opponentId) rivalBest = Mathf.Max(rivalBest, known.Level);
             _duel.Choose(message.level - 1, message.opponentName, message.opponentIcon, null);
             // Both games start at the moment the server named, not a delay counted from when each message landed.
             float countdown = message.delayMs / 1000f;
@@ -133,7 +138,7 @@ namespace Modules.GameplayModule.Controllers
             }
             _duel.StartLive(message.matchId, countdown);
             if (!string.IsNullOrEmpty(message.opponentId))
-                _duel.SetRematchTarget(new DuelTargetVO(message.opponentId, message.opponentName, message.opponentIcon, message.level));
+                _duel.SetRematchTarget(new DuelTargetVO(message.opponentId, message.opponentName, message.opponentIcon, rivalBest));
             _signals.Outgoing.DuelChosen.Dispatch();
         }
 
