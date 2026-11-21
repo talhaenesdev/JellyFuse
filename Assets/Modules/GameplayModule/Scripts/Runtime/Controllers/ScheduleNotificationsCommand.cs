@@ -54,12 +54,13 @@ namespace Modules.GameplayModule.Controllers
                 now.AddHours(GameplayNotifications.LATER_HOURS));
         }
 
-        /// <summary>The chosen avatar's animal in the player's language, or null when none is chosen or it has no name.</summary>
+        /// <summary>The chosen avatar's animal in the player's language, the cat when none was ever chosen; null when it has no name.</summary>
         private string AnimalName()
         {
             var profile = _shared.GetScriptable<Modules.ProfileModule.Shared.Data.UnityObjects.SD_PlayerProfile>();
             string id = profile != null ? profile.SelectedIconId : null;
-            if (string.IsNullOrEmpty(id)) return null;
+            // No avatar ever picked: the game shows the cat, the first one, so the cat is the one hungry.
+            if (string.IsNullOrEmpty(id)) id = "pink";
             string key = "animal." + id;
             string name = _localization?.Get(key);
             return string.IsNullOrEmpty(name) || name == key ? null : name;
