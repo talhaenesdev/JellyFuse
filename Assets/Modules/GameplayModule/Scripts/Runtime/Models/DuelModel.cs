@@ -25,7 +25,9 @@ namespace Modules.GameplayModule.Models
 
         public string LiveMatchId { get; private set; } = string.Empty;
         public bool Live { get; private set; }
-        public float LiveCountdown { get; private set; }
+        /// <summary>Seconds left until the live race starts, counted from when its start arrived.</summary>
+        public float LiveCountdown => Mathf.Max(0, _liveStartsAt - Time.realtimeSinceStartup);
+        private float _liveStartsAt;
         public bool AwaitingLive { get; private set; }
         public Dictionary<string, Modules.DuelModule.Data.ValueObjects.DuelChallengeVO> LiveInvites { get; } = new();
 
@@ -66,7 +68,7 @@ namespace Modules.GameplayModule.Models
             LiveMatchId = matchId ?? string.Empty;
             Live = true;
             AwaitingLive = false;
-            LiveCountdown = Mathf.Max(0, countdown);
+            _liveStartsAt = Time.realtimeSinceStartup + Mathf.Max(0, countdown);
         }
 
         public void SetChallengeTarget(string playerId) => ChallengeTargetId = playerId ?? string.Empty;

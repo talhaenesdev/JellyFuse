@@ -30,6 +30,12 @@ namespace Modules.DuelModule.Services
         Task<bool> ListenAsync(System.Action<string, string> onMessage);
         /// <summary>The live duel's messages can reach this player now; false once the connection dropped or was never made.</summary>
         bool IsListening { get; }
+        /// <summary>Measures how far this device's clock is from the server's; kept for <see cref="ServerNowMs"/>.</summary>
+        Task SyncClockAsync();
+        /// <summary>Whether the clock has been measured against the server's.</summary>
+        bool ClockSynced { get; }
+        /// <summary>The server's time now, in unix milliseconds: this device's clock corrected by what was measured.</summary>
+        long ServerNowMs { get; }
         /// <summary>A player whose game is open now and who has won at least <paramref name="minLevel"/> levels; null when nobody is.</summary>
         Task<LiveOpponentVO> FindLiveAsync(int minLevel);
         /// <summary>Invites a player whose game is open to race a level now; the match id, or null.</summary>

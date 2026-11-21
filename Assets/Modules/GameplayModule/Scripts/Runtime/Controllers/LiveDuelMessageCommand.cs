@@ -127,7 +127,8 @@ namespace Modules.GameplayModule.Controllers
             float countdown = message.delayMs / 1000f;
             if (message.startAt > 0)
             {
-                float untilStart = (message.startAt - DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()) / 1000f;
+                // Read against the server's clock: a phone whose own clock is a second or two out still starts on time.
+                float untilStart = (message.startAt - _duelService.ServerNowMs) / 1000f;
                 if (untilStart > .5f && untilStart < 10f) countdown = untilStart;
             }
             _duel.StartLive(message.matchId, countdown);

@@ -34,6 +34,8 @@ namespace Modules.GameplayModule.Controllers
                     bool listening = await service.ListenAsync((type, body) => signals.LiveMessage.Dispatch(type, body));
                     FlowLogger.Log($"ListenLiveDuelCommand - listening for live duels: {listening}");
                 }
+                // Once: how far this phone's clock is off, so a live race starts at the server's moment on both games.
+                if (service.IsReady && !service.ClockSynced) await service.SyncClockAsync();
                 await Task.Delay(CHECK_MS);
                 Release();
             }

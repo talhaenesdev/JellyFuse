@@ -151,6 +151,10 @@ namespace Leaderboard
         /// A player whose game is open now and who has won at least <paramref name="minLevel"/> levels, picked at random,
         /// for the caller to invite; Ok false when nobody is.
         /// </summary>
+        /// <summary>The server's clock in unix milliseconds, so a game can tell how far its own clock is off.</summary>
+        [CloudCodeFunction("ServerTime")]
+        public ServerClock ServerTime() => new ServerClock { Ms = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() };
+
         [CloudCodeFunction("FindLive")]
         public async Task<LiveReply> FindLive(IExecutionContext context, IGameApiClient api, int minLevel)
         {
@@ -249,5 +253,10 @@ namespace Leaderboard
         public bool Won { get; set; }
 
         public static LiveReply No(string reason) => new() { Ok = false, Reason = reason };
+    }
+
+    public class ServerClock
+    {
+        public long Ms { get; set; }
     }
 }

@@ -125,6 +125,42 @@ namespace Modules.DuelModule.Services
 
         public bool IsListening => _listening;
 
+        private long _clockOffsetMs;
+        public bool ClockSynced { get; private set; }
+        public long ServerNowMs => DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() + _clockOffsetMs;
+
+        private sealed class ServerClock { public long Ms { get; set; } }
+
+        /// <summary>
+        /// Three round trips to the server's clock; the quickest is trusted most, and the server is taken to have read
+        /// its clock halfway through it. A phone set a few seconds wrong then still starts a live race on time.
+        /// </summary>
+        public async Task SyncClockAsync()
+        {
+            if (!IsReady) return;
+            long bestTrip = long.MaxValue, bestOffset = 0;
+            for (int i = 0; i < 3; i++)
+            {
+                try
+                {
+                    long sent = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+                    var clock = await WithTimeout(CloudCodeService.Instance.CallModuleEndpointAsync<ServerClock>(MODULE, "ServerTime", new Dictionary<string, object>()));
+                    long back = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+                    if (clock == null || clock.Ms <= 0) continue;
+                    long trip = back - sent;
+                    if (trip < bestTrip) { bestTrip = trip; bestOffset = clock.Ms - (sent + trip / 2); }
+                }
+                catch (Exception exception)
+                {
+                    FlowLogger.Log($"DuelService - the server's clock could not be read: {exception.Message}");
+                }
+            }
+            if (bestTrip == long.MaxValue) return;
+            _clockOffsetMs = bestOffset;
+            ClockSynced = true;
+            FlowLogger.Log($"DuelService - clock off by {bestOffset} ms (round trip {bestTrip} ms).");
+        }
+
         public async Task<bool> ListenAsync(Action<string, string> onMessage)
         {
             if (_listening) return true;
