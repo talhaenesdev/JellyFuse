@@ -762,7 +762,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!1 &7412925256387757361
+--- !u!1 &6683179708468434211
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -770,9 +770,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 8138386136333851940}
-  - component: {fileID: 838656131300075270}
-  - component: {fileID: 2309183894245583388}
+  - component: {fileID: 1166456415447380386}
+  - component: {fileID: 2867541827571114702}
+  - component: {fileID: 8862122111053713799}
   m_Layer: 5
   m_Name: Img_MoreLivesPanelTheme
   m_TagString: Untagged
@@ -780,13 +780,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &8138386136333851940
+--- !u!224 &1166456415447380386
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7412925256387757361}
+  m_GameObject: {fileID: 6683179708468434211}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -799,21 +799,21 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 46}
   m_SizeDelta: {x: 208, y: 360}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &838656131300075270
+--- !u!222 &2867541827571114702
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7412925256387757361}
+  m_GameObject: {fileID: 6683179708468434211}
   m_CullTransparentMesh: 1
---- !u!114 &2309183894245583388
+--- !u!114 &8862122111053713799
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7412925256387757361}
+  m_GameObject: {fileID: 6683179708468434211}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
@@ -1222,7 +1222,7 @@ PrefabInstance:
     - target: {fileID: 529928898130639860, guid: 525fc936b5c9f96418df773a99a42a8c, type: 3}
       propertyPath: _frame
       value: 
-      objectReference: {fileID: 8138386136333851940}
+      objectReference: {fileID: 1166456415447380386}
     - target: {fileID: 529928898130639860, guid: 525fc936b5c9f96418df773a99a42a8c, type: 3}
       propertyPath: _maxHeightShare
       value: 1
@@ -1616,7 +1616,7 @@ PrefabInstance:
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 3099642905608329323, guid: 525fc936b5c9f96418df773a99a42a8c, type: 3}
       insertIndex: 0
-      addedObject: {fileID: 8138386136333851940}
+      addedObject: {fileID: 1166456415447380386}
     - targetCorrespondingSourceObject: {fileID: 3099642905608329323, guid: 525fc936b5c9f96418df773a99a42a8c, type: 3}
       insertIndex: 1
       addedObject: {fileID: 4845092859589832024}
