@@ -154,7 +154,8 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
             if (_challengeBody != null) _challengeBody.text = string.Format(L("duel.challenge_body", "{0} challenged you on level {1}"), Short(invite.FromName, NAME_IN_TEXT), invite.Level);
             Label(_challengeAccept, L("duel.accept", "Play"));
             Label(_challengeDecline, L("duel.decline", "Later"));
-            if (_challenge != null) _challenge.SetActive(true);
+            // Over everything else on the screen - a rematch invite arrives while the last race's result is on show.
+            if (_challenge != null) { _challenge.SetActive(true); _challenge.transform.SetAsLastSibling(); }
             if (_blocker != null) _blocker.SetActive(true);
         }
 
