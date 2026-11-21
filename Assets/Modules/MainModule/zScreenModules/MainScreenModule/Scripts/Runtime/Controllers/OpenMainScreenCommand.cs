@@ -38,7 +38,11 @@ namespace Modules.MainModule.MainScreenModule.Controllers
             {
                 // Show<T>() rather than Show(): a typed view compares against null through Unity's
                 // own operator, and an IScreenBody does not.
-                MainScreenView screen = await _screenService.Open<MainScreenView>().Show<MainScreenView>();
+                // Already up - a hide asked for while it was still coming in is dropped, so it can still be there - it is
+                // filled again rather than opened a second time on a layer it already holds.
+                MainScreenView screen = _screenService.TryGet.Screen<MainScreenView>(out var open) && open != null
+                    ? open
+                    : await _screenService.Open<MainScreenView>().Show<MainScreenView>();
 
                 if (screen == null)
                 {
