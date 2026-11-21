@@ -29,7 +29,7 @@ namespace Modules.GameplayModule.Controllers
                 return;
             }
             var config = _shared.GetScriptable<CD_Boosters>();
-            _signals.Outgoing.ComboStruck.Dispatch(new ComboStrikeRVO(_door, pieces, _feedback.Combo, config.ComboStrikeSeconds));
+            _signals.Outgoing.ComboStruck.Dispatch(new ComboStrikeRVO(_door, pieces, UnityEngine.Mathf.Max(_feedback.Combo, config.ComboStrikeAt), config.ComboStrikeSeconds));
         }
     }
 }

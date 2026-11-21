@@ -69,6 +69,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
 #if UNITY_EDITOR
             _view.SkipLevelPressed += OnSkipLevel;
             _view.ForceResultPressed += OnForceResult;
+            _view.ForceComboPressed += OnForceCombo;
 #endif
             _signals.Incoming.ApplyLevel.AddListener(_view.ApplyLevel);
             _signals.Incoming.ApplyBoard.AddListener(_view.ApplyBoard);
@@ -119,6 +120,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
 #if UNITY_EDITOR
             _view.SkipLevelPressed -= OnSkipLevel;
             _view.ForceResultPressed -= OnForceResult;
+            _view.ForceComboPressed -= OnForceCombo;
 #endif
             _signals.Incoming.ApplyLevel.RemoveListener(_view.ApplyLevel);
             _signals.Incoming.ApplyBoard.RemoveListener(_view.ApplyBoard);
@@ -147,6 +149,10 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         private void OnForceResult(PuzzleStatus status)
         {
             if (_view.Data.HasState(ScreenState.AvailableToSendSignal)) _signals.Outgoing.ForceResult.Dispatch(status);
+        }
+        private void OnForceCombo()
+        {
+            if (_view.Data.HasState(ScreenState.AvailableToSendSignal)) _signals.Outgoing.ForceCombo.Dispatch();
         }
 #endif
         // Not guarded: the lives are brought up to date whatever state the screen is in.

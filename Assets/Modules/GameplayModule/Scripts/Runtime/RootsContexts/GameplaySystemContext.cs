@@ -195,6 +195,7 @@ namespace Modules.GameplayModule.RootsContexts
                 .ToSequence<AnnounceLivesCommand>()
                 .ToSequence<ScheduleNotificationsCommand>();
 #if UNITY_EDITOR
+            CommandBinder.Bind(_signals.Incoming.ForceComboStrike).ToSequence<ForceComboStrikeCommand>();
             CommandBinder.Bind(_signals.Incoming.ForceResult)
                 .ToSequence<CapturePuzzleFeedbackCommand>()
                 .ToSequence<ForcePuzzleResultCommand>()

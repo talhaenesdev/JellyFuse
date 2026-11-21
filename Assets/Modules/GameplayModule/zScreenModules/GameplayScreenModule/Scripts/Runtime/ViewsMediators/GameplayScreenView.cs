@@ -91,8 +91,10 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         /// <summary>Editor-only cheats: N next level, B previous level, W win, L lose.</summary>
         public event Action<int> SkipLevelPressed;
         public event Action<PuzzleStatus> ForceResultPressed;
+        /// <summary>Editor-only: C charges a door with the electric combo now.</summary>
+        public event Action ForceComboPressed;
         /// <summary>
-        /// Editor-only play shortcuts. N / B jump a level, R restarts, U undoes, W wins and L loses
+        /// Editor-only play shortcuts. N / B jump a level, R restarts, U undoes, C fires the electric combo, W wins and L loses
         /// the level at once. None of this is compiled into a build.
         /// </summary>
         private void Update()
@@ -110,6 +112,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             else if (keyboard.uKey.wasPressedThisFrame) UndoClicked?.Invoke();
             else if (keyboard.wKey.wasPressedThisFrame) ForceResultPressed?.Invoke(PuzzleStatus.Won);
             else if (keyboard.lKey.wasPressedThisFrame) ForceResultPressed?.Invoke(PuzzleStatus.Lost);
+            else if (keyboard.cKey.wasPressedThisFrame) ForceComboPressed?.Invoke();
         }
 #endif
         public CD_JellyPresentation Presentation => _presentation;

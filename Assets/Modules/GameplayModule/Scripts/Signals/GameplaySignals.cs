@@ -104,6 +104,8 @@ namespace Modules.GameplayModule.Signals
 #if UNITY_EDITOR
         /// <summary>Editor-only cheat: end this level as won or lost at once.</summary>
         public Signal<PuzzleStatus> ForceResult = new();
+        /// <summary>Editor-only cheat: charge a door with the electric combo now, whatever the combo stands at.</summary>
+        public Signal ForceComboStrike = new();
 #endif
     }
 

@@ -99,6 +99,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.Signals
         public Signal<string, IReadOnlyList<Modules.DevToolsModule.Data.ValueObjects.DevSliderVO>> TuningSliders = new();
 #if UNITY_EDITOR
         public Signal<PuzzleStatus> ForceResult = new();
+        /// <summary>Editor-only: fire the electric combo now.</summary>
+        public Signal ForceCombo = new();
 #endif
     }
 }

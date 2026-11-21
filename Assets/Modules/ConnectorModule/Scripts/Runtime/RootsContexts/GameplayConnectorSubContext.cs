@@ -38,6 +38,7 @@ namespace Modules.ConnectorModule.RootsContexts
             _screenSignals.Outgoing.BoosterOfferClicked.Connect(_gameplaySignals.Incoming.OpenBoosterOffer, GROUP);
 #if UNITY_EDITOR
             _screenSignals.Outgoing.ForceResult.Connect(_gameplaySignals.Incoming.ForceResult, GROUP);
+            _screenSignals.Outgoing.ForceCombo.Connect(_gameplaySignals.Incoming.ForceComboStrike, GROUP);
 #endif
         }
         private void OutgoingSignals()
