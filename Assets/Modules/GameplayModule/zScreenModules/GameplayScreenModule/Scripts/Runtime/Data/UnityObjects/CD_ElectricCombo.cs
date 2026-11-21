@@ -40,5 +40,19 @@ namespace Modules.GameplayModule.GameplayScreenModule.Data.UnityObjects
         [Min(.1f)] public float OrbSize = 1.3f;
         [Min(.1f)] public float SparkSize = .45f;
         [Min(1)] public int SparksAtOnce = 6;
+
+        [Header("Drama")]
+        [Tooltip("Stray arcs each charged jelly throws out at random, per frame step.")]
+        [Min(0)] public int StrayArcs = 2;
+        [Tooltip("How far a stray arc reaches, in cells.")]
+        [Min(.1f)] public float StrayArcLength = 1.4f;
+        [Tooltip("A second, wider aura round each jelly, as a share of the first's opacity. 0 draws none.")]
+        [Range(0, 1)] public float OuterAura = .55f;
+        [Tooltip("How hard the board shakes when the jellies burst together, in cells.")]
+        [Min(0)] public float Shake = .18f;
+        [Tooltip("Seconds the board shakes.")]
+        [Min(0)] public float ShakeSeconds = .3f;
+        [Tooltip("A white flash over the burst, its size in cells. 0 draws none.")]
+        [Min(0)] public float FlashSize = 9f;
     }
 }

@@ -67,7 +67,21 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                     Vector2 at = Vector2.Lerp(centres[i], middle, gather);
                     Vector2 size = Vector2.Lerp(sizes[i], Vector2.one * _cell, gather);
                     float pulse = .85f + .15f * Mathf.Sin((t + i) * 30);
+                    if (fx.OuterAura > 0) Draw(Pick(fx.Aura, frame + i + 2), at, size * pulse * 1.35f, fx.OuterAura * (.6f + .4f * Mathf.Sin((t + i) * 22)), 90);
                     Draw(Pick(fx.Aura, frame + i), at, size * pulse, 1, 0);
+                    // Stray arcs crackle out of the jelly in every direction, a new set every frame step.
+                    if (fx.Arcs.Length > 0)
+                    {
+                        var stray = new System.Random(frame * 131 + i * 17);
+                        for (int a = 0; a < fx.StrayArcs; a++)
+                        {
+                            float turn = (float)stray.NextDouble() * 360;
+                            float reach = _cell * fx.StrayArcLength * (.6f + (float)stray.NextDouble() * .7f) * (1 - gather * .7f);
+                            Vector2 dir = new Vector2(Mathf.Cos(turn * Mathf.Deg2Rad), Mathf.Sin(turn * Mathf.Deg2Rad));
+                            Vector2 from = at + Vector2.Scale(dir, size * .4f);
+                            Draw(Pick(fx.Arcs, frame + a + i), from + dir * reach * .5f, new Vector2(reach, _cell * .45f), .9f, turn);
+                        }
+                    }
                     // An arc to the next charged jelly, so they read as one charge.
                     if (centres.Count > 1 && fx.Arcs.Length > 0)
                     {
@@ -99,15 +113,23 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             foreach (var spark in sparks) Destroy(spark.Image.gameObject);
             ReleaseCharge();
             // They fuse: a burst where the charge drew in.
-            float burstTime = .24f;
+            float burstTime = Mathf.Max(.3f, fx.ShakeSeconds);
+            var shaken = (RectTransform)transform;
+            Vector2 rest = shaken.anchoredPosition;
             for (float t = 0; t < burstTime; t += Time.unscaledDeltaTime)
             {
                 _chargeUsed = 0;
                 float k = t / burstTime;
-                Draw(Pick(fx.Burst, (int)(k * fx.Burst.Length)), middle, Vector2.one * _cell * fx.BurstSize * Mathf.Lerp(.6f, 1.1f, k), 1 - k * .6f, 0);
+                if (fx.FlashSize > 0 && fx.GlowDot != null) Draw(fx.GlowDot, middle, Vector2.one * _cell * fx.FlashSize * Mathf.Lerp(.5f, 1, k), (1 - k) * .9f, 0);
+                Draw(Pick(fx.Burst, (int)(k * fx.Burst.Length)), middle, Vector2.one * _cell * fx.BurstSize * Mathf.Lerp(.6f, 1.2f, k), 1 - k * .5f, 0);
+                Draw(Pick(fx.Burst, (int)(k * fx.Burst.Length) + 1), middle, Vector2.one * _cell * fx.BurstSize * Mathf.Lerp(.4f, .9f, k), 1 - k * .5f, 45);
+                Draw(Pick(fx.Ring, (int)(k * fx.Ring.Length)), middle, Vector2.one * _cell * fx.RingSize * Mathf.Lerp(.4f, 1.6f, k), 1 - k, 0);
+                float shake = t < fx.ShakeSeconds ? fx.Shake * _cell * (1 - t / Mathf.Max(.01f, fx.ShakeSeconds)) : 0;
+                shaken.anchoredPosition = rest + Random.insideUnitCircle * shake;
                 HideUnused();
                 yield return null;
             }
+            shaken.anchoredPosition = rest;
             // The charge flies to its door with its trail behind it.
             Vector2 way = door - middle;
             float angle = Mathf.Atan2(way.y, way.x) * Mathf.Rad2Deg;
@@ -119,17 +141,21 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
                 float length = Mathf.Max(_cell, way.magnitude * Mathf.Min(k, .45f));
                 // The trail's bright head is its left end: turned to face back along the flight.
                 Draw(fx.Trail, at - way.normalized * length * .5f, new Vector2(length, _cell * .7f), 1, angle + 180);
-                Draw(fx.GlowDot, at, Vector2.one * _cell * fx.OrbSize, 1, 0);
+                Draw(fx.GlowDot, at, Vector2.one * _cell * fx.OrbSize * (1 + .15f * Mathf.Sin(t * 60)), 1, 0);
+                Draw(Pick(fx.Burst, (int)(t / fx.FrameSeconds)), at, Vector2.one * _cell * fx.OrbSize * .9f, .8f, t * 900);
+                if (fx.Arcs.Length > 0) Draw(Pick(fx.Arcs, (int)(t / fx.FrameSeconds)), at, new Vector2(_cell * 1.4f, _cell * .5f), .9f, Random.Range(0, 360f));
                 HideUnused();
                 yield return null;
             }
             // The door answers.
-            float ringTime = .3f;
+            float ringTime = .4f;
             for (float t = 0; t < ringTime; t += Time.unscaledDeltaTime)
             {
                 _chargeUsed = 0;
                 float k = t / ringTime;
-                Draw(Pick(fx.Ring, (int)(k * fx.Ring.Length)), door, Vector2.one * _cell * fx.RingSize * Mathf.Lerp(.5f, 1.2f, k), 1 - k, 0);
+                Draw(Pick(fx.Burst, (int)(k * fx.Burst.Length)), door, Vector2.one * _cell * fx.BurstSize * .8f * Mathf.Lerp(.5f, 1, k), 1 - k, 0);
+                Draw(Pick(fx.Ring, (int)(k * fx.Ring.Length)), door, Vector2.one * _cell * fx.RingSize * Mathf.Lerp(.5f, 1.3f, k), 1 - k, 0);
+                Draw(Pick(fx.Ring, (int)(k * fx.Ring.Length) + 1), door, Vector2.one * _cell * fx.RingSize * Mathf.Lerp(.2f, .9f, k), 1 - k, 30);
                 HideUnused();
                 yield return null;
             }
