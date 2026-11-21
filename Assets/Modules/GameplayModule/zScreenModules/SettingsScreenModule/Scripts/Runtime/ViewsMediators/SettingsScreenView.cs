@@ -67,6 +67,10 @@ namespace Modules.GameplayModule.SettingsScreenModule.ViewsMediators
         [SerializeField] private TMP_Text _promoMessage;
         [SerializeField] private Color _promoGood = new(.2f, .65f, .25f, 1f);
         [SerializeField] private Color _promoBad = new(.85f, .25f, .3f, 1f);
+        [Tooltip("Shown beside the message: a tick when the code paid, a warning when it did not.")]
+        [SerializeField] private Image _promoState;
+        [SerializeField] private Sprite _promoGoodIcon;
+        [SerializeField] private Sprite _promoBadIcon;
 
         public Action<string> LanguagePicked;
         public Action CloseClicked;
@@ -268,6 +272,11 @@ namespace Modules.GameplayModule.SettingsScreenModule.ViewsMediators
             if (_promoMessage == null) return;
             _promoMessage.text = text;
             _promoMessage.color = good ? _promoGood : _promoBad;
+            if (_promoState == null) return;
+            // Plain progress ("Checking...") and an empty line carry no icon; only an answer does.
+            bool answer = text.Length > 0 && !_promoWaiting;
+            _promoState.gameObject.SetActive(answer);
+            if (answer) _promoState.sprite = good ? _promoGoodIcon : _promoBadIcon;
         }
 
         private void SetPromoBusy(bool busy)
