@@ -33,6 +33,8 @@ namespace Modules.GameplayModule.Signals
         public Signal<string, int> SpendCoins = new();
         /// <summary>Another module pays the player coins it promised - a reward of its own.</summary>
         public Signal<int> GrantCoins = new();
+        /// <summary>A promo code the player typed: redeemed on the server, its coins, lives and boosters paid here.</summary>
+        public Signal<string> RedeemPromo = new();
         /// <summary>The boot has begun: fetch the level list published since this build, if there is one.</summary>
         public Signal LoadRemoteLevels = new();
         public Signal<Vector2Int, Vector2Int, bool> Drag = new(hideCommandLog: true);
@@ -145,6 +147,8 @@ namespace Modules.GameplayModule.Signals
         public Signal<float> DuelOpponentProgress = new();
         /// <summary>The coins the player now holds.</summary>
         public Signal<int> CoinsChanged = new();
+        /// <summary>A promo code's outcome; its avatars and frames are for the profile to unlock.</summary>
+        public Signal<PromoResultRVO> PromoRedeemed = new();
         /// <summary>The once-a-day shop products already bought today, by product id.</summary>
         public Signal<IReadOnlyList<string>> ShopSoldOutChanged = new();
         /// <summary>The level Play starts now, counted from 1.</summary>

@@ -13,6 +13,8 @@ namespace Modules.GameplayModule.SettingsScreenModule.Signals
         public Signal OpenSettingsScreen = new();
         /// <summary>The game's language changed: the code of the new one. The screen marks it and redraws its texts.</summary>
         public Signal<string> ApplyLanguage = new();
+        /// <summary>What the promo code typed here paid, or why it did not.</summary>
+        public Signal<Modules.GameplayModule.Shared.Data.ValueObjects.PromoResultRVO> ApplyPromoResult = new();
     }
 
     public class SettingsScreenSignalsOutgoing
@@ -23,5 +25,7 @@ namespace Modules.GameplayModule.SettingsScreenModule.Signals
         public Signal Closed = new();
         /// <summary>The player wants to change the answer to the consent question.</summary>
         public Signal PrivacyClicked = new();
+        /// <summary>A promo code typed into the code panel.</summary>
+        public Signal<string> PromoSubmitted = new();
     }
 }

@@ -53,9 +53,25 @@ namespace Modules.GameplayModule.SettingsScreenModule.ViewsMediators
         [SerializeField] private Button _privacyButton;
         [SerializeField] private TMP_Text _privacyValue;
 
+        [Header("Promo code")]
+        [SerializeField] private TMP_Text _promoLabel;
+        [SerializeField] private Button _promoButton;
+        [SerializeField] private TMP_Text _promoValue;
+        [Tooltip("The panel the code is typed into, over the settings.")]
+        [SerializeField] private GameObject _promoPanel;
+        [SerializeField] private TMP_Text _promoTitle;
+        [SerializeField] private TMP_InputField _promoInput;
+        [SerializeField] private Button _promoSubmit;
+        [SerializeField] private TMP_Text _promoSubmitLabel;
+        [SerializeField] private Button _promoClose;
+        [SerializeField] private TMP_Text _promoMessage;
+        [SerializeField] private Color _promoGood = new(.2f, .65f, .25f, 1f);
+        [SerializeField] private Color _promoBad = new(.85f, .25f, .3f, 1f);
+
         public Action<string> LanguagePicked;
         public Action CloseClicked;
         public Action PrivacyClicked;
+        public Action<string> PromoSubmitted;
         public Action<SettingsOption> OptionClicked;
 
         private Func<string, string> _localize;
@@ -72,6 +88,9 @@ namespace Modules.GameplayModule.SettingsScreenModule.ViewsMediators
             _hapticsSwitch.Requested += OnHapticsClicked;
             if (_languageButton != null) _languageButton.onClick.AddListener(OnLanguageClicked);
             if (_privacyButton != null) _privacyButton.onClick.AddListener(OnPrivacyClicked);
+            if (_promoButton != null) _promoButton.onClick.AddListener(OpenPromo);
+            if (_promoSubmit != null) _promoSubmit.onClick.AddListener(OnPromoSubmit);
+            if (_promoClose != null) _promoClose.onClick.AddListener(ClosePromo);
         }
 
         private void OnDisable()
@@ -84,6 +103,10 @@ namespace Modules.GameplayModule.SettingsScreenModule.ViewsMediators
             _hapticsSwitch.Requested -= OnHapticsClicked;
             if (_languageButton != null) _languageButton.onClick.RemoveListener(OnLanguageClicked);
             if (_privacyButton != null) _privacyButton.onClick.RemoveListener(OnPrivacyClicked);
+            if (_promoButton != null) _promoButton.onClick.RemoveListener(OpenPromo);
+            if (_promoSubmit != null) _promoSubmit.onClick.RemoveListener(OnPromoSubmit);
+            if (_promoClose != null) _promoClose.onClick.RemoveListener(ClosePromo);
+            if (_promoPanel != null) _promoPanel.SetActive(false);
         }
 
         public void ShowLanguages(IReadOnlyList<LanguageCVO> languages, string current, Func<string, string> localize)
@@ -173,6 +196,83 @@ namespace Modules.GameplayModule.SettingsScreenModule.ViewsMediators
             if (_languageValue != null) _languageValue.text = LanguageAt(IndexOf(_language))?.Name ?? _language;
             if (_privacyLabel != null) _privacyLabel.text = L("settings.privacy", "Privacy") + ":";
             if (_privacyValue != null) _privacyValue.text = L("settings.privacy_change", "Change");
+            if (_promoLabel != null) _promoLabel.text = L("settings.promo", "Promo code") + ":";
+            if (_promoValue != null) _promoValue.text = L("settings.promo_enter", "Enter");
+            if (_promoTitle != null) _promoTitle.text = L("promo.title", "Promo Code");
+            if (_promoSubmitLabel != null) _promoSubmitLabel.text = L("promo.redeem", "REDEEM");
+            if (_promoInput != null && _promoInput.placeholder is TMP_Text hint) hint.text = L("promo.hint", "Type your code");
+        }
+
+        private bool _promoWaiting;
+
+        private void OpenPromo()
+        {
+            if (_promoPanel == null) return;
+            _promoPanel.SetActive(true);
+            _promoWaiting = false;
+            if (_promoInput != null) _promoInput.SetTextWithoutNotify(string.Empty);
+            ShowPromoMessage(string.Empty, true);
+            SetPromoBusy(false);
+        }
+
+        private void ClosePromo()
+        {
+            if (_promoPanel != null) _promoPanel.SetActive(false);
+        }
+
+        private void OnPromoSubmit()
+        {
+            string code = _promoInput != null ? _promoInput.text.Trim() : string.Empty;
+            if (_promoWaiting) return;
+            if (code.Length == 0)
+            {
+                ShowPromoMessage(L("promo.empty", "Type a code first."), false);
+                return;
+            }
+            _promoWaiting = true;
+            SetPromoBusy(true);
+            ShowPromoMessage(L("promo.checking", "Checking..."), true);
+            PromoSubmitted?.Invoke(code);
+        }
+
+        /// <summary>The code's answer: what it paid, or why it paid nothing.</summary>
+        public void ShowPromoResult(Modules.GameplayModule.Shared.Data.ValueObjects.PromoResultRVO result)
+        {
+            _promoWaiting = false;
+            SetPromoBusy(false);
+            if (result == null) return;
+            if (!result.Ok)
+            {
+                string why = result.Reason switch
+                {
+                    "expired" => L("promo.expired", "This code has expired."),
+                    "used_up" => L("promo.used_up", "This code has been used up."),
+                    "already" => L("promo.already", "You have already used this code."),
+                    "offline" => L("promo.offline", "No connection. Try again."),
+                    _ => L("promo.invalid", "This code is not valid."),
+                };
+                ShowPromoMessage(why, false);
+                return;
+            }
+            var parts = new List<string>();
+            if (result.Coins > 0) parts.Add(string.Format(L("promo.coins", "{0} coins"), result.Coins));
+            if (result.Lives > 0) parts.Add(string.Format(L("promo.lives", "{0} lives"), result.Lives));
+            if (result.Boosters > 0) parts.Add(string.Format(L("promo.boosters", "{0} boosters"), result.Boosters));
+            if (result.Items.Count > 0) parts.Add(string.Format(L("promo.items", "{0} new items"), result.Items.Count));
+            ShowPromoMessage(L("promo.success", "Code redeemed!") + (parts.Count > 0 ? "\n" + string.Join(", ", parts) : string.Empty), true);
+            if (_promoInput != null) _promoInput.SetTextWithoutNotify(string.Empty);
+        }
+
+        private void ShowPromoMessage(string text, bool good)
+        {
+            if (_promoMessage == null) return;
+            _promoMessage.text = text;
+            _promoMessage.color = good ? _promoGood : _promoBad;
+        }
+
+        private void SetPromoBusy(bool busy)
+        {
+            if (_promoSubmit != null) _promoSubmit.interactable = !busy;
         }
 
         private int IndexOf(string code)

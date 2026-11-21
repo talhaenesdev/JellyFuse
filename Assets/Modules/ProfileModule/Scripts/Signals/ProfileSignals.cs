@@ -20,6 +20,8 @@ namespace Modules.ProfileModule.Signals
         public Signal<string> BuyIcon = new();
         /// <summary>The purse answered a CoinsRequested: the key it was asked with, and whether the coins were taken.</summary>
         public Signal<string, bool> CoinsAnswered = new();
+        /// <summary>Avatars and frames given away - a promo code - become the player's: icon ids, frame ids with \"frame:\" in front.</summary>
+        public Signal<System.Collections.Generic.IReadOnlyList<string>> GrantItems = new();
     }
 
     public class ProfileSignalsOutgoing

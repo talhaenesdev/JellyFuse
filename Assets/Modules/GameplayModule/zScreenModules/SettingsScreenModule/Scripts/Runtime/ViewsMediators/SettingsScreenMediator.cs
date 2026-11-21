@@ -34,7 +34,9 @@ namespace Modules.GameplayModule.SettingsScreenModule.ViewsMediators
             _internalSignals.OptionChanged.AddListener(_view.ShowOption);
             _view.CloseClicked += OnClose;
             _view.PrivacyClicked += OnPrivacy;
+            _view.PromoSubmitted += OnPromoSubmitted;
             _signals.Incoming.ApplyLanguage.AddListener(_view.ShowCurrent);
+            _signals.Incoming.ApplyPromoResult.AddListener(_view.ShowPromoResult);
         }
 
         private void OnScreenHidden(IScreenBody screen)
@@ -44,7 +46,9 @@ namespace Modules.GameplayModule.SettingsScreenModule.ViewsMediators
             _internalSignals.OptionChanged.RemoveListener(_view.ShowOption);
             _view.CloseClicked -= OnClose;
             _view.PrivacyClicked -= OnPrivacy;
+            _view.PromoSubmitted -= OnPromoSubmitted;
             _signals.Incoming.ApplyLanguage.RemoveListener(_view.ShowCurrent);
+            _signals.Incoming.ApplyPromoResult.RemoveListener(_view.ShowPromoResult);
         }
 
         private void OnOptionClicked(SettingsOption option)
@@ -61,6 +65,11 @@ namespace Modules.GameplayModule.SettingsScreenModule.ViewsMediators
         private void OnPrivacy()
         {
             if (_view.Data.HasState(ScreenState.AvailableToSendSignal)) _signals.Outgoing.PrivacyClicked.Dispatch();
+        }
+
+        private void OnPromoSubmitted(string code)
+        {
+            if (_view.Data.HasState(ScreenState.AvailableToSendSignal)) _signals.Outgoing.PromoSubmitted.Dispatch(code);
         }
 
         // Closing decides nothing, so the Mediator hides the screen itself.

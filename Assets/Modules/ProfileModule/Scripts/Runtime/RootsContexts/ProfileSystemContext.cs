@@ -44,6 +44,9 @@ namespace Modules.ProfileModule.RootsContexts
             CommandBinder.Bind(_signals.Incoming.CoinsAnswered)
                 .ToSequence<UnlockProfileIconCommand>()
                 .ToSequence<ILocalSaveService.Commands.Save>("SD_PlayerProfile");
+            CommandBinder.Bind(_signals.Incoming.GrantItems)
+                .ToSequence<GrantProfileItemsCommand>()
+                .ToSequence<ILocalSaveService.Commands.Save>("SD_PlayerProfile");
             CommandBinder.Bind(_signals.Incoming.SaveProfile)
                 .ToSequence<SaveProfileCommand>()
                 .ToSequence<RewardFirstNameCommand>()

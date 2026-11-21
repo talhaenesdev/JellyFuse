@@ -94,6 +94,11 @@ namespace Modules.GameplayModule.RootsContexts
                 .ToSequence<AddCoinsCommand>()
                 .ToSequence<IAudioService.Commands.Play>(AudioCue.Coin)
                 .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS);
+            CommandBinder.Bind(_signals.Incoming.RedeemPromo)
+                .ToSequence<RedeemPromoCommand>()
+                .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
+                .ToSequence<AnnounceBoostersCommand>()
+                .ToSequence<AnnounceLivesCommand>();
             CommandBinder.Bind(_signals.Incoming.SpendCoins)
                 .ToSequence<SpendCoinsCommand>()
                 .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS);
