@@ -284,9 +284,8 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
             Show(search: true, countdown: false, race: false, result: false);
             if (_searchStatus != null) _searchStatus.text = string.Format(L("duel.waiting", "Waiting for {0}..."), Short(name, NAME_IN_TEXT));
             if (_searchSpinner != null) _searchSpinner.gameObject.SetActive(true);
-            // The invite can be withdrawn while its answer is awaited.
+            // The invite can be withdrawn while its answer is awaited: the round X, with no word squeezed into it.
             if (_searchClose != null) _searchClose.gameObject.SetActive(true);
-            Label(_searchClose, L("duel.cancel", "Cancel"));
         }
 
         private bool _opponentLive;
