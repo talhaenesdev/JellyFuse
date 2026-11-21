@@ -9,6 +9,7 @@ using Modules.DuelModule.Services;
 using Modules.GameplayModule.Models;
 using Modules.GameplayModule.Shared.Data.UnityObjects;
 using Modules.GameplayModule.Signals;
+using Modules.ProfileModule.Shared.Data.UnityObjects;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -51,8 +52,10 @@ namespace Modules.GameplayModule.Controllers
 
                 // Nobody open took the invite: a bot races, on any level the player has won, picked at random - never the
                 // same recorded player and level again and again.
-                await System.Threading.Tasks.Task.Delay((int)(Mathf.Max(0, events.DuelMinSearch) * 1000));
-                var match = new DuelMatchVO { Found = true, Bot = true, Name = BotName(), Icon = string.Empty };
+                // The search takes as long as a real one would: never the same few seconds twice.
+                float search = Mathf.Max(0, events.DuelMinSearch) + Random.Range(0.5f, 4.5f);
+                await System.Threading.Tasks.Task.Delay((int)(search * 1000));
+                var match = new DuelMatchVO { Found = true, Bot = true, Name = BotName(), Icon = BotIcon(_shared.GetScriptable<CD_ProfileIcons>()) };
                 int index = levels.RandomPlayableBelow(won);
                 match.Level = index + 1;
                 var level = index >= 0 ? levels.Get(index) : null;
@@ -81,29 +84,81 @@ namespace Modules.GameplayModule.Controllers
             }
         }
 
-        /// <summary>A bot clears the board in a share of the level's clock, its jellies leaving at an uneven pace.</summary>
+        /// <summary>
+        /// A bot plays like a person: it takes a moment to read the board, then clears jellies in bursts with pauses to
+        /// think, now and then a long one, and speeds up as the board empties. Its whole run is a share of the level's
+        /// clock - and once in a while it is slow enough to lose.
+        /// </summary>
         private static IReadOnlyList<float> BotExits(Shared.Data.ValueObjects.JellyLevelCVO level, CD_Events events)
         {
             int total = 0;
             foreach (var gate in level.Gates) total += gate.Stages.Count;
             total = Mathf.Max(1, total);
             float share = Random.Range(Mathf.Min(events.DuelBotMinShare, events.DuelBotMaxShare), Mathf.Max(events.DuelBotMinShare, events.DuelBotMaxShare));
+            // An off day: slower than usual.
+            if (Random.value < .15f) share = Mathf.Min(.95f, share * Random.Range(1.2f, 1.45f));
             float seconds = Mathf.Max(10f, level.Seconds * share);
-            var weights = new float[total];
+            float reaction = Random.Range(1.2f, 3.2f);
+
+            var gaps = new float[total];
             float sum = 0;
-            for (int i = 0; i < total; i++) sum += weights[i] = Random.Range(0.5f, 1.5f);
-            var exits = new List<float>(total);
-            float at = 0;
             for (int i = 0; i < total; i++)
             {
-                at += seconds * weights[i] / sum;
+                // Quick moves in a row, a pause to think, sometimes a long stare; later moves come faster.
+                float gap = Random.value < .6f ? Random.Range(.35f, .9f) : Random.Range(1f, 2.2f);
+                if (Random.value < .1f) gap *= Random.Range(2f, 3.5f);
+                gap *= Mathf.Lerp(1.25f, .8f, total > 1 ? i / (float)(total - 1) : 1f);
+                sum += gaps[i] = gap;
+            }
+            float play = Mathf.Max(1f, seconds - reaction);
+            var exits = new List<float>(total);
+            float at = reaction;
+            for (int i = 0; i < total; i++)
+            {
+                at += play * gaps[i] / sum;
                 exits.Add(i == total - 1 ? seconds : at);
             }
             return exits;
         }
 
-        private static readonly string[] BOT_NAMES = { "JellyBean", "Wobbly", "Gummy", "Squishy", "Bubbles", "Fizzy", "Mochi", "Boba", "Taffy", "Noodle" };
-        private static string BotName() => BOT_NAMES[Random.Range(0, BOT_NAMES.Length)];
+        // Names people pick for themselves: plain first names, nicknames, a number or a letter added.
+        private static readonly string[] BOT_FIRST = {
+            "Elif", "Zeynep", "Ece", "Defne", "Ayşe", "Merve", "Selin", "Buse", "İrem", "Melis", "Nehir", "Duru",
+            "Mert", "Emre", "Kerem", "Burak", "Can", "Arda", "Yusuf", "Efe", "Baran", "Ali", "Ömer", "Kaan",
+            "Luna", "Mia", "Emma", "Leo", "Noah", "Alex", "Sara", "Max", "Lina", "Adam" };
+        private static readonly string[] BOT_NICK = {
+            "jellyqueen", "puzzlemaster", "jöleci", "renkli", "minnoş", "bulmacasever", "pinkie", "starboy",
+            "sugarbee", "tatlıcan", "mavişim", "gamer", "lucky", "kedicik", "panda", "sunny" };
+
+        private static string BotName()
+        {
+            if (Random.value < .3f)
+            {
+                string nick = BOT_NICK[Random.Range(0, BOT_NICK.Length)];
+                return Random.value < .5f ? nick + Random.Range(1, 100) : nick;
+            }
+            string name = BOT_FIRST[Random.Range(0, BOT_FIRST.Length)];
+            float style = Random.value;
+            if (style < .3f) return name;
+            if (style < .5f) return name.ToLowerInvariant() + Random.Range(1, 100);
+            if (style < .7f) return name + Random.Range(1990, 2012) % 100;
+            if (style < .85f) return name + " " + (char)('A' + Random.Range(0, 26)) + ".";
+            return name.ToLowerInvariant() + "_" + Random.Range(10, 1000);
+        }
+
+        /// <summary>An avatar from the catalogue, the free ones more often - the way real players' picks fall.</summary>
+        private static string BotIcon(CD_ProfileIcons icons)
+        {
+            if (icons == null || icons.Icons.Count == 0) return string.Empty;
+            var picks = new List<string>();
+            foreach (var icon in icons.Icons)
+            {
+                if (icon == null || string.IsNullOrEmpty(icon.Id)) continue;
+                int weight = icon.Price <= 0 ? 3 : 1;
+                for (int i = 0; i < weight; i++) picks.Add(icon.Id);
+            }
+            return picks.Count == 0 ? string.Empty : picks[Random.Range(0, picks.Count)];
+        }
 
         private void Unavailable(string why)
         {
