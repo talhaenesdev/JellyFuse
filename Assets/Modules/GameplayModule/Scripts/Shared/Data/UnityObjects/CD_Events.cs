@@ -61,8 +61,8 @@ namespace Modules.GameplayModule.Shared.Data.UnityObjects
         public RewardCVO DailyChallengeReward = new() { Coins = 150, Booster = BoosterType.Rocket, BoosterCount = 1 };
 
         [Tooltip("Coins a duel win pays - beating the opponent's time - for the first DuelRewardedWins wins of a day.")]
-        [Min(0)] public int DuelRewardCoins = 100;
-        [Min(0)] public int DuelRewardedWins = 5;
+        [Min(0)] public int DuelRewardCoins = 20;
+        [Min(0)] public int DuelRewardedWins = 3;
         [Tooltip("The fewest levels a player must have won before the duel opens.")]
         [Min(1)] public int DuelMinLevel = 5;
         [Tooltip("Duels never race the first this many levels - too easy to be a race - while the player has won more than that.")]

@@ -90,7 +90,7 @@ namespace Modules.ProfileModule.Models
         }
 
         /// <summary>Coins the first picked name pays.</summary>
-        public const int NAME_REWARD_COINS = 50;
+        public const int NAME_REWARD_COINS = 10;
 
         public bool NameRewardAvailable => _profile != null && !_profile.NameRewarded;
 
