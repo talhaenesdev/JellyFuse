@@ -43,6 +43,10 @@ namespace Modules.GameplayModule.Models
         public string CancelledMatchId { get; set; } = string.Empty;
         public bool Searching { get; set; }
         public string LastInvitedId { get; set; } = string.Empty;
+        public bool Bot { get; private set; }
+        public void MarkBot() => Bot = true;
+        public string BotRematchName { get; set; } = string.Empty;
+        public string BotRematchIcon { get; set; } = string.Empty;
 
         private readonly Dictionary<string, float> _declinedUntil = new();
 
@@ -71,6 +75,7 @@ namespace Modules.GameplayModule.Models
             ChallengeId = string.Empty;
             RematchTarget = null;
             RematchRequested = false;
+            Bot = false;
             Active = true;
             LevelIndex = levelIndex;
             OpponentName = opponentName ?? string.Empty;

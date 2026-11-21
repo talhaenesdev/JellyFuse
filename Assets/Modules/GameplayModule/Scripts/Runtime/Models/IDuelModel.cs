@@ -54,6 +54,12 @@ namespace Modules.GameplayModule.Models
         bool Searching { get; set; }
         /// <summary>The player the duel card invited last; passed over on the next search.</summary>
         string LastInvitedId { get; set; }
+        /// <summary>The opponent is a bot the game paces; reset by every Choose.</summary>
+        bool Bot { get; }
+        void MarkBot();
+        /// <summary>A rematch with the bot just raced was asked for: the next duel races the same name and avatar.</summary>
+        string BotRematchName { get; set; }
+        string BotRematchIcon { get; set; }
         /// <summary>The player turned an invite down: no new invite goes to them until <paramref name="until"/>.</summary>
         void MarkDeclined(string playerId, float until);
         bool IsDeclined(string playerId, float now);

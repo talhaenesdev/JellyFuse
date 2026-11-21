@@ -22,6 +22,9 @@ namespace Modules.GameplayModule.Controllers
     /// </summary>
     internal class FindDuelOpponentCommand : Command
     {
+        /// <summary>How often a bot turns a rematch down, the way some people do.</summary>
+        private const float BOT_REMATCH_NO = .15f;
+
         [Inject] private IJellyPuzzleModel _model { get; set; }
         [Inject] private IDuelModel _duel { get; set; }
         [Inject] private IDuelService _duelService { get; set; }
@@ -52,10 +55,30 @@ namespace Modules.GameplayModule.Controllers
 
                 // Nobody open took the invite: a bot races, on any level the player has won, picked at random - never the
                 // same recorded player and level again and again.
-                // The search takes as long as a real one would: never the same few seconds twice.
-                float search = Mathf.Max(0, events.DuelMinSearch) + Random.Range(0.5f, 4.5f);
-                await System.Threading.Tasks.Task.Delay((int)(search * 1000));
-                var match = new DuelMatchVO { Found = true, Bot = true, Name = BotName(), Icon = BotIcon(_shared.GetScriptable<CD_ProfileIcons>()) };
+                DuelMatchVO match;
+                string rematchName = _duel.BotRematchName;
+                if (!string.IsNullOrEmpty(rematchName))
+                {
+                    // A rematch asked of the bot just raced: it is waited on like a person, and mostly says yes.
+                    string rematchIcon = _duel.BotRematchIcon;
+                    _duel.BotRematchName = string.Empty;
+                    _duel.BotRematchIcon = string.Empty;
+                    _signals.Outgoing.LiveInviteSent.Dispatch(rematchName);
+                    await System.Threading.Tasks.Task.Delay((int)(Random.Range(2f, 5.5f) * 1000));
+                    if (Random.value < BOT_REMATCH_NO)
+                    {
+                        Unavailable($"{rematchName} (bot) turned the rematch down");
+                        return;
+                    }
+                    match = new DuelMatchVO { Found = true, Bot = true, Name = rematchName, Icon = rematchIcon };
+                }
+                else
+                {
+                    // The search takes as long as a real one would: never the same few seconds twice.
+                    float search = Mathf.Max(0, events.DuelMinSearch) + Random.Range(0.5f, 4.5f);
+                    await System.Threading.Tasks.Task.Delay((int)(search * 1000));
+                    match = new DuelMatchVO { Found = true, Bot = true, Name = BotName(), Icon = BotIcon(_shared.GetScriptable<CD_ProfileIcons>()) };
+                }
                 int index = levels.RandomPlayableBelow(won);
                 match.Level = index + 1;
                 var level = index >= 0 ? levels.Get(index) : null;
@@ -72,6 +95,7 @@ namespace Modules.GameplayModule.Controllers
                     exits = BotExits(level.CreateLevel(levels.Palette), events);
                 _model.Daily = false;
                 _duel.Choose(index, match.Name, match.Icon, exits);
+                if (match.Bot) _duel.MarkBot();
                 _duel.Searching = false;
                 FlowLogger.Log($"FindDuelOpponentCommand - racing {match.Name}{(match.Bot ? " (bot)" : string.Empty)} on level {index + 1}, their time {_duel.OpponentSeconds:0.0}s.");
                 Release();

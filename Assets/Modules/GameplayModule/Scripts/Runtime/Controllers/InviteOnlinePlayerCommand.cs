@@ -32,6 +32,12 @@ namespace Modules.GameplayModule.Controllers
         {
             Retain();
             var duel = _duel;
+            // A rematch with a bot: there is nobody to invite, the bot answers itself.
+            if (!string.IsNullOrEmpty(duel.BotRematchName))
+            {
+                Release();
+                return;
+            }
             var service = _duelService;
             try
             {

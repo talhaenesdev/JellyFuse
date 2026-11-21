@@ -80,7 +80,8 @@ namespace Modules.GameplayModule.Controllers
                 _ = _duelService.SubmitAsync(_duel.LevelIndex + 1, new List<float>(_duel.Exits),
                     LevelFingerprintFunction.Of(_shared.GetScriptable<CD_JellyLevels>()?.Get(_duel.LevelIndex)));
             }
-            _signals.Outgoing.DuelFinished.Dispatch(new DuelResultRVO(won, coins, seconds, _duel.OpponentSeconds));
+            // A bot can be asked for a rematch the way a live rival can.
+            _signals.Outgoing.DuelFinished.Dispatch(new DuelResultRVO(won, coins, seconds, _duel.OpponentSeconds, canRematch: _duel.Bot));
             if (cleared)
             {
                 _model.WinPaid = true;

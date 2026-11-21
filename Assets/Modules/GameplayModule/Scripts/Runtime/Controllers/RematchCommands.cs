@@ -17,7 +17,7 @@ namespace Modules.GameplayModule.Controllers
 
         public override void Execute()
         {
-            if (_duel.RematchTarget == null || !_duel.Finished)
+            if ((_duel.RematchTarget == null && !_duel.Bot) || !_duel.Finished)
             {
                 FlowLogger.Log("RequestRematchCommand - no live rival to invite again.");
                 _signals.Outgoing.DuelUnavailable.Dispatch();
@@ -37,7 +37,18 @@ namespace Modules.GameplayModule.Controllers
 
         public override void Execute()
         {
-            if (!_duel.RematchRequested || _duel.RematchTarget == null) return;
+            if (!_duel.RematchRequested) return;
+            if (_duel.Bot)
+            {
+                // The bot raced is asked again: the duel card's flow finds it, answering like a person would.
+                _duel.RematchRequested = false;
+                _duel.BotRematchName = _duel.OpponentName;
+                _duel.BotRematchIcon = _duel.OpponentIcon;
+                FlowLogger.Log($"SendRematchCommand - asking {_duel.OpponentName} (bot) for a rematch.");
+                _signals.Incoming.StartDuel.Dispatch();
+                return;
+            }
+            if (_duel.RematchTarget == null) return;
             var target = _duel.RematchTarget;
             _duel.RematchRequested = false;
             FlowLogger.Log($"SendRematchCommand - inviting {target.Name} again.");
