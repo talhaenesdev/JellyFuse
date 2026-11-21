@@ -986,7 +986,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         {
             // The held jelly is lifted, and so is any jelly it would fuse with if released now.
             blob.FuseReady = Contains(_snapshot.FuseReady, id);
-            blob.LiftTarget = _held == id ? Feel.GrabLift : blob.FuseReady ? Feel.FuseReadyLift : 0;
+            blob.LiftTarget = _held == id ? Feel.GrabLift : _charged.Contains(id) ? _chargeLift : blob.FuseReady ? Feel.FuseReadyLift : 0;
         }
         private void WobbleNeighbours(PuzzleSnapshotRVO snapshot)
         {

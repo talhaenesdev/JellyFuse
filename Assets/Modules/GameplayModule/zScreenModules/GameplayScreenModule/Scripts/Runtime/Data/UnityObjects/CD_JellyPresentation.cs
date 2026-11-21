@@ -12,5 +12,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.Data.UnityObjects
         public CD_JellyFeel Feel;
         public CD_JellyBoardLook Look;
         public CD_GameplayHud Hud;
+        [Tooltip("The electric combo's frames and timing.")]
+        public CD_ElectricCombo Electric;
     }
 }

@@ -726,6 +726,26 @@ namespace Modules.GameplayModule.Models
             AfterBooster();
             return true;
         }
+        public int DoorCount => _level == null ? 0 : _level.Gates.Count;
+
+        public IReadOnlyList<int> DoorJellies(int door)
+        {
+            var ids = new List<int>();
+            if (_level == null || Status != PuzzleStatus.Playing || door < 0 || door >= _level.Gates.Count || _doorFrozen[door] > 0) return ids;
+            var stage = WaitingStage(door);
+            if (stage == null) return ids;
+            _candidates.Clear();
+            foreach (var piece in _pieces)
+                if (piece.Colour == stage.Colour && FitsInside(piece.Cells, stage.Cells) && !IsFrozen(piece.Id)) _candidates.Add(piece);
+            _candidates.Sort((a, b) => b.Cells.Count.CompareTo(a.Cells.Count));
+            _picked.Clear(); _best.Clear(); _bestCells = 0;
+            bool exact = false;
+            foreach (var piece in _candidates)
+                if (piece.Cells.Count == stage.Cells.Count) { _best.Add(piece); exact = true; break; }
+            if (!exact) exact = PickCells(0, stage.Cells.Count);
+            if (exact) foreach (var piece in _best) ids.Add(piece.Id);
+            return ids;
+        }
         /// <summary>Picks candidates from <paramref name="from"/> on whose cells add up to <paramref name="left"/>; the best partial set is kept in _best.</summary>
         private bool PickCells(int from, int left)
         {

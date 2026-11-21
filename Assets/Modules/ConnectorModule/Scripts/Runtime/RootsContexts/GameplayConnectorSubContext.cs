@@ -51,6 +51,7 @@ namespace Modules.ConnectorModule.RootsContexts
             _gameplaySignals.Outgoing.CoinsChanged.Connect(_screenSignals.Incoming.ApplyCoins, GROUP);
             _gameplaySignals.Outgoing.BoostersChanged.Connect(_screenSignals.Incoming.ApplyBoosters, GROUP);
             _gameplaySignals.Outgoing.BoosterUsed.Connect(_screenSignals.Incoming.ApplyBoosterUsed, GROUP);
+            _gameplaySignals.Outgoing.ComboStruck.Connect(_screenSignals.Incoming.ApplyComboStrike, GROUP);
             _gameplaySignals.Outgoing.ClockFrozen.Connect(_screenSignals.Incoming.ApplyClockFrozen, GROUP);
             _gameplaySignals.Outgoing.LivesChanged.Connect(_screenSignals.Incoming.ApplyLives, GROUP);
             _gameplaySignals.Outgoing.EventsChanged.Connect(_screenSignals.Incoming.ApplyEvents, GROUP);

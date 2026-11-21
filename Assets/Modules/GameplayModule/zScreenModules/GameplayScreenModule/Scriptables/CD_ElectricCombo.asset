@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7519cfd44ebb7cb48a70ecf56bfa9100, type: 3}
+  m_Name: CD_ElectricCombo
+  m_EditorClassIdentifier: Modules.Gameplay.Screen::Modules.GameplayModule.GameplayScreenModule.Data.UnityObjects.CD_ElectricCombo
+  Aura:
+  - {fileID: 21300000, guid: a72f243cf419a9547a3515bd88b410ad, type: 3}
+  - {fileID: 21300000, guid: c0dfea80be2a60443a9f0ddaab282def, type: 3}
+  - {fileID: 21300000, guid: b8d1bc29de943924283a5c0d77485f22, type: 3}
+  - {fileID: 21300000, guid: c0bfbfeabe2c5bf478d5ccc9ca535219, type: 3}
+  Arcs:
+  - {fileID: 21300000, guid: 2aeed4b051722fe449c7b1a7abea90d9, type: 3}
+  - {fileID: 21300000, guid: cce37f4b247ed3c488138a26136c606e, type: 3}
+  - {fileID: 21300000, guid: 9191bb04e460da242829baa1bd0f6a4e, type: 3}
+  - {fileID: 21300000, guid: b8a2d112abf8d264c9c8dc4f811b35de, type: 3}
+  Sparks:
+  - {fileID: 21300000, guid: 88c778bb249ce27429d6d2870d26c5bc, type: 3}
+  - {fileID: 21300000, guid: 8699deacf1d588b40a1cf307ba9ec17a, type: 3}
+  - {fileID: 21300000, guid: baeccfdfaca43c5459add71786faabc3, type: 3}
+  - {fileID: 21300000, guid: 440f81d56e887674c8da20435be7f2aa, type: 3}
+  - {fileID: 21300000, guid: 1e414297aad1d8a4a8cc98812f9e38f2, type: 3}
+  - {fileID: 21300000, guid: 23070e48d8385f54e90eeb6a9fd1674e, type: 3}
+  - {fileID: 21300000, guid: 45cafcbb1b38dab42a61090f1676a412, type: 3}
+  - {fileID: 21300000, guid: 58d14b27329692d4bacc7ea7e4474955, type: 3}
+  Burst:
+  - {fileID: 21300000, guid: 985dee7679f93b04bbaeac2cb007bcf6, type: 3}
+  - {fileID: 21300000, guid: 849a0681459d09c46be50d437b2bc257, type: 3}
+  - {fileID: 21300000, guid: 64390e537f5c0c34795ad3e868cdfd94, type: 3}
+  - {fileID: 21300000, guid: 4d003e0ef1b5aef4d8303df631c55ebb, type: 3}
+  Ring:
+  - {fileID: 21300000, guid: 483701659c730ef4b8eb77efd7413f8c, type: 3}
+  - {fileID: 21300000, guid: b61b840cea1238947aeb915d80c3f921, type: 3}
+  - {fileID: 21300000, guid: d7b2d7fd04abcc347abb4f12bec41d6c, type: 3}
+  GlowDot: {fileID: 21300000, guid: cd51c93f2d5648049972d041c2faa7d8, type: 3}
+  Trail: {fileID: 21300000, guid: acc30d22ac766de46a71cfa38acc32e6, type: 3}
+  Badge: {fileID: 21300000, guid: 8ea8c2c63a149fe4f91482ee95fa1659, type: 3}
+  FrameSeconds: 0.06
+  GatherShare: 0.3
+  FlightSeconds: 0.35
+  LiftScale: 1.5
+  AuraPadding: 0.45
+  BurstSize: 3.2
+  RingSize: 2.6
+  OrbSize: 1.3
+  SparkSize: 0.45
+  SparksAtOnce: 6

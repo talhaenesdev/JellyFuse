@@ -5,6 +5,8 @@ namespace Modules.GameplayModule.Signals
     internal class GameplayInternalSignals : ISignalHolder
     {
         public Signal TimeExpired = new();
+        /// <summary>A combo earned a door finishing itself: the door.</summary>
+        public Signal<int> ComboStrike = new();
         public Signal Tick = new(hideCommandLog: true);
         /// <summary>Start listening for the live duel's messages.</summary>
         public Signal ListenLive = new(hideCommandLog: true);

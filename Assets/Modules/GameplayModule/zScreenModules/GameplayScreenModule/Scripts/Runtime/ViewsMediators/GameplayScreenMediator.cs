@@ -59,6 +59,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             _signals.Incoming.ApplyOutOfLives.AddListener(_view.ApplyOutOfLives);
             _signals.Incoming.ApplyBoosters.AddListener(_view.ApplyBoosters);
             _signals.Incoming.ApplyBoosterUsed.AddListener(_view.ApplyBoosterUsed);
+            _signals.Incoming.ApplyComboStrike.AddListener(_view.ApplyComboStrike);
             _signals.Incoming.ApplyClockFrozen.AddListener(_view.ApplyClockFrozen);
             _signals.Incoming.ApplyCoins.AddListener(_view.ApplyCoins);
             _signals.Incoming.ApplyReward.AddListener(_view.ApplyReward);
@@ -108,6 +109,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             _signals.Incoming.ApplyOutOfLives.RemoveListener(_view.ApplyOutOfLives);
             _signals.Incoming.ApplyBoosters.RemoveListener(_view.ApplyBoosters);
             _signals.Incoming.ApplyBoosterUsed.RemoveListener(_view.ApplyBoosterUsed);
+            _signals.Incoming.ApplyComboStrike.RemoveListener(_view.ApplyComboStrike);
             _signals.Incoming.ApplyClockFrozen.RemoveListener(_view.ApplyClockFrozen);
             _signals.Incoming.ApplyCoins.RemoveListener(_view.ApplyCoins);
             _signals.Incoming.ApplyReward.RemoveListener(_view.ApplyReward);

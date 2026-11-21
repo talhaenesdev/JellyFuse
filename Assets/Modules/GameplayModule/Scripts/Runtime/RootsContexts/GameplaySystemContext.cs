@@ -125,7 +125,19 @@ namespace Modules.GameplayModule.RootsContexts
                 .ToSequence<PlayPuzzleFeedbackCommand>()
                 .ToSequence<PlayPuzzleSoundCommand>()
                 .ToSequence<RecordPuzzleResultCommand>()
-                .ToSequence<RequestReviewCommand>();
+                .ToSequence<RequestReviewCommand>()
+                .ToSequence<CheckComboStrikeCommand>();
+            // A combo finishes a door by itself: its jellies crackle and rise, then go in the way a rocket sends them.
+            CommandBinder.Bind(_internalSignals.ComboStrike)
+                .ToSequence<AnnounceComboStrikeCommand>()
+                .ToSequence<WaitComboStrikeCommand>()
+                .ToSequence<StrikeComboDoorCommand>()
+                .ToSequence<AnnounceBoostersCommand>()
+                .ToSequence<CountWinCommand>()
+                .ToSequence<JudgeStarsCommand>()
+                .ToSequence<RecordDuelProgressCommand>()
+                .ToSequence<FinishDuelCommand>()
+                .ToSequence<CheckWinPaymentCommand>();
             CommandBinder.Bind(_signals.Incoming.Undo)
                 .ToSequence<UndoPuzzleCommand>()
                 .ToSequence<AnnounceBoostersCommand>()

@@ -18,10 +18,15 @@ namespace Modules.GameplayModule.Models
         public void Scored(double now)
         {
             Combo = now - _lastScored <= COMBO_WINDOW ? Combo + 1 : 1;
+            if (Combo <= 1) Struck = false;
             _lastScored = now;
         }
 
         /// <summary>An input that scored nothing leaves no combo to read; the window still runs from the last score.</summary>
-        public void NotScored() => Combo = 0;
+        public void NotScored() { Combo = 0; Struck = false; }
+
+        /// <summary>Whether this combo has already finished a door by itself; one chain finishes one.</summary>
+        public bool Struck { get; private set; }
+        public void MarkStruck() => Struck = true;
     }
 }

@@ -157,6 +157,8 @@ namespace Modules.GameplayModule.Signals
         public Signal<IReadOnlyList<BoosterStateRVO>> BoostersChanged = new();
         /// <summary>A booster was used, on its target (see Incoming.UseBooster).</summary>
         public Signal<BoosterType, int> BoosterUsed = new();
+        /// <summary>A combo charges these jellies; after its seconds they fuse and go into the door.</summary>
+        public Signal<ComboStrikeRVO> ComboStruck = new();
         /// <summary>Seconds the clock stands still for; 0 when it runs again.</summary>
         public Signal<float> ClockFrozen = new(hideCommandLog: true);
         /// <summary>The lives the player holds, and when the next comes back.</summary>

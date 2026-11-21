@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Modules.GameplayModule.Shared.Data.ValueObjects;
 using Modules.GameplayModule.Shared.Enums;
 using UnityEngine;
@@ -61,6 +62,13 @@ namespace Modules.GameplayModule.Models
         bool ClearDoor(int door, bool biggestFirst, bool withoutEnough);
         /// <summary>UFO: every jelly of the colour goes, and every door request for it is skipped. False when a frozen jelly is of the colour, or a frozen door still waits for it.</summary>
         bool ClearColour(JellyColour colour);
+        /// <summary>How many doors the level has.</summary>
+        int DoorCount { get; }
+        /// <summary>
+        /// The jellies a door would take now to finish its waiting shape exactly - the same ones ClearDoor picks
+        /// biggest first - or none when the board cannot make that shape or the door is frozen. Nothing changes.
+        /// </summary>
+        IReadOnlyList<int> DoorJellies(int door);
         /// <summary>Whether a UFO has a colour it may take: one on the board or still asked for, that no frozen jelly or frozen door holds.</summary>
         bool CanClearAnyColour();
 #if UNITY_EDITOR

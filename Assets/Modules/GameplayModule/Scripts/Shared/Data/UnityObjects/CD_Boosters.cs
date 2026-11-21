@@ -26,6 +26,12 @@ namespace Modules.GameplayModule.Shared.Data.UnityObjects
         [Tooltip("On: the door's request goes even when the board does not hold enough jellies of its colour to make its shape; whatever there is goes with it. Off: the rocket is not used then.")]
         public bool RocketWithoutEnoughJellies = true;
 
+        [Header("Electric combo")]
+        [Tooltip("Correct fuses or doors in a row, each quick after the last, that make a door finish itself with an electric charge. 0 turns it off.")]
+        [Min(0)] public int ComboStrikeAt = 3;
+        [Tooltip("Seconds the chosen jellies crackle and rise before they fuse and fly into their door.")]
+        [Min(.2f)] public float ComboStrikeSeconds = 1.1f;
+
         [Header("Freeze Time")]
         [Tooltip("Seconds the clock stands still.")]
         [Min(1)] public float FreezeSeconds = 10;

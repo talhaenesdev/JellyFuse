@@ -36,6 +36,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.Signals
         public Signal<IReadOnlyList<BoosterStateRVO>> ApplyBoosters = new();
         /// <summary>A booster was used on its target: the UFO flies over.</summary>
         public Signal<BoosterType, int> ApplyBoosterUsed = new();
+        /// <summary>A combo charges a door's jellies: they crackle, rise and fly into it.</summary>
+        public Signal<ComboStrikeRVO> ApplyComboStrike = new();
         /// <summary>Seconds the clock stands still for; 0 when it runs again.</summary>
         public Signal<float> ApplyClockFrozen = new(hideCommandLog: true);
         /// <summary>The lives the player holds, and when the next comes back.</summary>
