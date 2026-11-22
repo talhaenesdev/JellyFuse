@@ -395,8 +395,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.Editor
                 }
                 ((RectTransform)items).anchoredPosition = new Vector2(0, -32);
                 items.localScale = Vector3.one * .78f;
-                // The shop tab opens the shop; events stay closed until they have a flow of their own.
-                foreach ((string tabName, bool open) in new[] { ("Btn_Nav_Shop", true), ("Btn_Nav_Events", false) })
+                // The shop tab opens the shop and the events tab the events list: both are open.
+                foreach ((string tabName, bool open) in new[] { ("Btn_Nav_Shop", true), ("Btn_Nav_Events", true) })
                 {
                     Transform tab = FindRecursive(root.transform, tabName);
                     if (tab != null && tab.TryGetComponent(out Button navTab)) navTab.interactable = open;
