@@ -32,6 +32,10 @@ namespace Modules.MainModule.EventsScreenModule.Signals
         public Signal CarnivalOpenClicked = new();
         /// <summary>The Speed Run card's Start.</summary>
         public Signal SpeedRunStartClicked = new();
+        /// <summary>The Star Rush card's Play: a level for the meter.</summary>
+        public Signal StarRushPlayClicked = new();
+        /// <summary>The Color Carnival card's Play: a level rich in the day's colour.</summary>
+        public Signal CarnivalPlayClicked = new();
         /// <summary>The Speed Run card's ad for one more run.</summary>
         public Signal SpeedRunAdClicked = new();
     }

@@ -36,6 +36,7 @@ namespace Modules.GameplayModule.RootsContexts
             InjectionBinder.Bind<PuzzleFeedbackModel>();
             InjectionBinder.Bind<IDuelModel, DuelModel>();
             InjectionBinder.Bind<ISpeedRunModel, SpeedRunModel>();
+            InjectionBinder.Bind<IEventPlayModel, EventPlayModel>();
             InjectionBinder.Bind<ILivesModel, LivesModel>();
             InjectionBinder.Bind<IJellyTutorialModel, JellyTutorialModel>();
         }
@@ -69,6 +70,9 @@ namespace Modules.GameplayModule.RootsContexts
                 .ToSequence<ChooseSpeedRunCommand>()
                 .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
                 .ToSequence<SignalDispatchCommand>(_signals.Outgoing.SpeedRunChosen);
+            CommandBinder.Bind(_signals.Incoming.PlayEvent)
+                .ToSequence<ChooseEventLevelCommand>()
+                .ToSequence<SignalDispatchCommand>(_signals.Outgoing.EventLevelChosen);
             CommandBinder.Bind(_signals.Incoming.WatchAdForSpeedRun)
                 .ToSequence<RefreshEventsCommand>()
                 .ToSequence<IAdsService.Commands.ShowRewarded>()
@@ -168,6 +172,7 @@ namespace Modules.GameplayModule.RootsContexts
                 .ToSequence<LeaveLevelCommand>()
                 .ToSequence<EndDailyChallengeCommand>()
                 .ToSequence<EndSpeedRunCommand>()
+                .ToSequence<EndEventPlayCommand>()
                 .ToSequence<EndDuelCommand>()
                 .ToSequence<SendRematchCommand>()
                 .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)

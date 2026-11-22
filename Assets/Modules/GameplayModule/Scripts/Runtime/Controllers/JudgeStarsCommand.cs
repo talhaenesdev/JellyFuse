@@ -20,6 +20,7 @@ namespace Modules.GameplayModule.Controllers
         [Inject] private IJellyPuzzleModel _model { get; set; }
         [Inject] private IDuelModel _duel { get; set; }
         [Inject] private ISpeedRunModel _run { get; set; }
+        [Inject] private IEventPlayModel _event { get; set; }
         [Inject] private ISharedDataModel _shared { get; set; }
         [InjectSignal] private GameplaySignals _signals { get; set; }
 
@@ -34,7 +35,7 @@ namespace Modules.GameplayModule.Controllers
             bool best = false;
             if (!_model.Daily && !_duel.Active && !_run.Active)
             {
-                int index = _model.LevelIndex;
+                int index = _event.Active ? _event.LevelIndex : _model.LevelIndex;
                 while (progress.Stars.Count <= index) progress.Stars.Add(0);
                 best = stars > progress.Stars[index];
                 if (best) progress.Stars[index] = stars;

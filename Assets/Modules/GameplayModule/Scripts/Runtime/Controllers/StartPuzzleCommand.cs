@@ -17,6 +17,7 @@ namespace Modules.GameplayModule.Controllers
         [Inject] private IJellyPuzzleModel _model { get; set; }
         [Inject] private IDuelModel _duel { get; set; }
         [Inject] private ISpeedRunModel _run { get; set; }
+        [Inject] private IEventPlayModel _event { get; set; }
         [InjectSignal] private GameplaySignals _signals { get; set; }
         public override void Execute()
         {
@@ -60,6 +61,21 @@ namespace Modules.GameplayModule.Controllers
                 _run.End();
             }
             _signals.Outgoing.SpeedRunChanged.Dispatch(new SpeedRunRVO());
+            // An event's level: one the player has won, played again for the event; Next picks another.
+            if (_event.Active)
+            {
+                var eventLevel = levels.Get(_event.LevelIndex);
+                if (eventLevel != null && levels.IsPlayable(_event.LevelIndex))
+                {
+                    _model.Start(eventLevel.CreateLevel(levels.Palette));
+                    _signals.Outgoing.LevelChanged.Dispatch(_event.LevelIndex + 1, true);
+                    _signals.Outgoing.BoardChanged.Dispatch(new PuzzleTurnVO(new[] { _model.Snapshot() }));
+                    _signals.Outgoing.TimeChanged.Dispatch(_model.RemainingSeconds);
+                    _signals.Outgoing.ClockFrozen.Dispatch(0f);
+                    return;
+                }
+                _event.End();
+            }
             // Today's daily challenge, when it was picked and still has a level; else the run's level.
             var level = _model.Daily ? EventsFunction.DailyChallengeLevel(_shared.GetScriptable<CD_Events>()) : null;
             if (level == null) _model.Daily = false;

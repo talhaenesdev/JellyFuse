@@ -20,6 +20,8 @@ namespace Modules.GameplayModule.Signals
         public Signal StartDailyChallenge = new();
         /// <summary>Starts a Speed Run: five won levels on one clock.</summary>
         public Signal StartSpeedRun = new();
+        /// <summary>Plays a level for an event: Star Rush or the Color Carnival.</summary>
+        public Signal<EventPlayKind> PlayEvent = new();
         /// <summary>Watches a rewarded ad for one more Speed Run today.</summary>
         public Signal WatchAdForSpeedRun = new();
         /// <summary>The Events screen's duel card: find an opponent and race them on a level the player has won.</summary>
@@ -133,6 +135,8 @@ namespace Modules.GameplayModule.Signals
         public Signal DailyChallengeChosen = new();
         /// <summary>A Speed Run was set up: its first level is ready to open.</summary>
         public Signal SpeedRunChosen = new();
+        /// <summary>An event's level was picked and is ready to open.</summary>
+        public Signal EventLevelChosen = new();
         /// <summary>Where the Speed Run stands; inactive when none is on.</summary>
         public Signal<SpeedRunRVO> SpeedRunChanged = new();
         /// <summary>An opponent was found: the gameplay screen opens on the duel level.</summary>

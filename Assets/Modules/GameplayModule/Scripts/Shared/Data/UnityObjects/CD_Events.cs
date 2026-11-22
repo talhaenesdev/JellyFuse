@@ -64,7 +64,7 @@ namespace Modules.GameplayModule.Shared.Data.UnityObjects
         [Tooltip("The colours a day's carnival may ask for; one is drawn each day. Pick colours most levels use.")]
         public System.Collections.Generic.List<JellyColour> CarnivalColours = new()
         {
-            JellyColour.Red, JellyColour.Yellow, JellyColour.Green, JellyColour.Blue, JellyColour.Purple, JellyColour.Orange, JellyColour.Pink,
+            JellyColour.Yellow, JellyColour.Red, JellyColour.Green, JellyColour.Navy, JellyColour.Pink, JellyColour.Purple,
         };
         [Tooltip("The day's three chests, fewest points first. A point is one cell of the day's colour taken through a door.")]
         public System.Collections.Generic.List<CarnivalChestCVO> CarnivalChests = new()

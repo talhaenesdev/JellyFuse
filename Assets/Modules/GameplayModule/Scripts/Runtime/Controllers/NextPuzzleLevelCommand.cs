@@ -18,6 +18,7 @@ namespace Modules.GameplayModule.Controllers
         [Inject] private ISharedDataModel _shared { get; set; }
         [Inject] private IJellyPuzzleModel _model { get; set; }
         [Inject] private IDuelModel _duel { get; set; }
+        [Inject] private IEventPlayModel _event { get; set; }
         [InjectSignal] private GameplaySignals _signals { get; set; }
 
         public override void Execute()
@@ -27,6 +28,13 @@ namespace Modules.GameplayModule.Controllers
             // After a duel, Next goes back to the run's own level too.
             if (_duel.Active) { _duel.End(); _signals.Outgoing.DuelEnded.Dispatch(); return; }
             var levels = _shared.GetScriptable<CD_JellyLevels>();
+            // After an event level, Next plays another one for the same event.
+            if (_event.Active)
+            {
+                int again = EventLevelFunction.Pick(_event.Kind, levels, _shared.GetScriptable<SD_JellyProgress>(), _shared.GetScriptable<CD_Events>(), _event.LevelIndex);
+                if (again >= 0) { _event.Begin(_event.Kind, again); return; }
+                _event.End();
+            }
             int next = levels.PlayableFrom(_model.LevelIndex + 1);
             if (_model.Status != PuzzleStatus.Won || next < 0)
             {

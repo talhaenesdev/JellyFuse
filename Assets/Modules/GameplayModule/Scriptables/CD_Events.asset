@@ -203,3 +203,128 @@ MonoBehaviour:
     Coins: 30
     Booster: 0
     BoosterCount: 1
+  CarnivalColours: 020000006400000066000000680000000000000069000000
+  CarnivalChests:
+  - Points: 15
+    Prizes:
+    - Weight: 3
+      CoinsMin: 15
+      CoinsMax: 30
+      Rockets: 0
+      Freezes: 0
+      Ufos: 0
+      Lives: 0
+    - Weight: 1
+      CoinsMin: 0
+      CoinsMax: 0
+      Rockets: 1
+      Freezes: 0
+      Ufos: 0
+      Lives: 0
+    - Weight: 1
+      CoinsMin: 0
+      CoinsMax: 0
+      Rockets: 0
+      Freezes: 1
+      Ufos: 0
+      Lives: 0
+    - Weight: 1
+      CoinsMin: 0
+      CoinsMax: 0
+      Rockets: 0
+      Freezes: 0
+      Ufos: 1
+      Lives: 0
+  - Points: 40
+    Prizes:
+    - Weight: 3
+      CoinsMin: 30
+      CoinsMax: 60
+      Rockets: 0
+      Freezes: 0
+      Ufos: 0
+      Lives: 0
+    - Weight: 2
+      CoinsMin: 0
+      CoinsMax: 0
+      Rockets: 1
+      Freezes: 1
+      Ufos: 0
+      Lives: 0
+    - Weight: 1
+      CoinsMin: 0
+      CoinsMax: 0
+      Rockets: 0
+      Freezes: 0
+      Ufos: 2
+      Lives: 0
+    - Weight: 1
+      CoinsMin: 0
+      CoinsMax: 0
+      Rockets: 0
+      Freezes: 0
+      Ufos: 0
+      Lives: 1
+  - Points: 80
+    Prizes:
+    - Weight: 4
+      CoinsMin: 60
+      CoinsMax: 120
+      Rockets: 1
+      Freezes: 0
+      Ufos: 0
+      Lives: 0
+    - Weight: 2
+      CoinsMin: 60
+      CoinsMax: 120
+      Rockets: 0
+      Freezes: 0
+      Ufos: 1
+      Lives: 0
+    - Weight: 1
+      CoinsMin: 0
+      CoinsMax: 0
+      Rockets: 1
+      Freezes: 1
+      Ufos: 1
+      Lives: 0
+  SpeedRunLevels: 5
+  SpeedRunTimeShare: 0.7
+  SpeedRunCoins: 100
+  SpeedRunRockets: 1
+  SpeedRunFreezes: 1
+  SpeedRunFirstTryBonus: 50
+  SpeedRunAdTries: 2
+  StarRushMilestones:
+  - Stars: 10
+    Coins: 30
+    Rockets: 0
+    Freezes: 0
+    Ufos: 0
+    Lives: 0
+  - Stars: 25
+    Coins: 0
+    Rockets: 1
+    Freezes: 1
+    Ufos: 0
+    Lives: 0
+  - Stars: 45
+    Coins: 80
+    Rockets: 0
+    Freezes: 0
+    Ufos: 1
+    Lives: 0
+  - Stars: 70
+    Coins: 150
+    Rockets: 0
+    Freezes: 0
+    Ufos: 0
+    Lives: 2
+  DuelRewardCoins: 20
+  DuelRewardedWins: 3
+  DuelMinLevel: 5
+  DuelLevelFloor: 10
+  DuelBotMinShare: 0.45
+  DuelBotMaxShare: 0.75
+  DuelCountdown: 4.5
+  DuelMinSearch: 2

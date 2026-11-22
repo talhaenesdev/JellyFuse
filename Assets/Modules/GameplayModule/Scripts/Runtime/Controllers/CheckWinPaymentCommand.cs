@@ -17,6 +17,7 @@ namespace Modules.GameplayModule.Controllers
     {
         [Inject] private IJellyPuzzleModel _model { get; set; }
         [Inject] private ISpeedRunModel _run { get; set; }
+        [Inject] private IEventPlayModel _event { get; set; }
         [InjectSignal] private GameplaySignals _signals { get; set; }
         [Inject] private ISharedDataModel _shared { get; set; }
         [InjectSignal] private GameplayInternalSignals _internalSignals { get; set; }
@@ -53,7 +54,7 @@ namespace Modules.GameplayModule.Controllers
             }
             else
             {
-                reward = levels != null ? levels.CoinReward(_model.LevelIndex) : 0;
+                reward = levels != null ? levels.CoinReward(_event.Active ? _event.LevelIndex : _model.LevelIndex) : 0;
                 reward = EventsFunction.WinReward(reward, progress, events);
             }
             _model.WinReward = reward;

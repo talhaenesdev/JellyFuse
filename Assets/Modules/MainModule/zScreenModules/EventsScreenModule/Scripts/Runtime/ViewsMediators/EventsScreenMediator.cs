@@ -31,9 +31,9 @@ namespace Modules.MainModule.EventsScreenModule.ViewsMediators
             _signals.Incoming.CloseEventsScreen.AddListener(OnCloseRequested);
             _view.DuelClicked += OnDuelClicked;
             _view.StarRushClaimClicked += OnStarRushClaim;
-            _view.StarRushPlayClicked += OnBackClicked;
+            _view.StarRushPlayClicked += OnStarRushPlay;
             _view.CarnivalOpenClicked += OnCarnivalOpen;
-            _view.CarnivalPlayClicked += OnBackClicked;
+            _view.CarnivalPlayClicked += OnCarnivalPlay;
             _view.SpeedRunStartClicked += OnSpeedRunStart;
             _view.SpeedRunAdClicked += OnSpeedRunAd;
             _signals.Incoming.ApplyCarnivalPrize.AddListener(_view.ShowCarnivalPrize);
@@ -47,13 +47,23 @@ namespace Modules.MainModule.EventsScreenModule.ViewsMediators
             _signals.Incoming.CloseEventsScreen.RemoveListener(OnCloseRequested);
             _view.DuelClicked -= OnDuelClicked;
             _view.StarRushClaimClicked -= OnStarRushClaim;
-            _view.StarRushPlayClicked -= OnBackClicked;
+            _view.StarRushPlayClicked -= OnStarRushPlay;
             _view.CarnivalOpenClicked -= OnCarnivalOpen;
-            _view.CarnivalPlayClicked -= OnBackClicked;
+            _view.CarnivalPlayClicked -= OnCarnivalPlay;
             _view.SpeedRunStartClicked -= OnSpeedRunStart;
             _view.SpeedRunAdClicked -= OnSpeedRunAd;
             _signals.Incoming.ApplyCarnivalPrize.RemoveListener(_view.ShowCarnivalPrize);
             _signals.Incoming.ApplyEvents.RemoveListener(_view.ApplyEvents);
+        }
+
+        private void OnStarRushPlay()
+        {
+            if (_view.Data.HasState(ScreenState.AvailableToSendSignal)) _signals.Outgoing.StarRushPlayClicked.Dispatch();
+        }
+
+        private void OnCarnivalPlay()
+        {
+            if (_view.Data.HasState(ScreenState.AvailableToSendSignal)) _signals.Outgoing.CarnivalPlayClicked.Dispatch();
         }
 
         private void OnSpeedRunStart()

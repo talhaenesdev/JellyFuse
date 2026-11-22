@@ -125,6 +125,12 @@ namespace Modules.ConnectorModule.RootsContexts
             _gameplaySignals.Outgoing.SpeedRunChosen.Connect(_eventsScreenSignals.Incoming.CloseEventsScreen);
             _gameplaySignals.Outgoing.SpeedRunChosen.Connect(_mainScreenSignals.Incoming.HideMainScreen);
             _gameplaySignals.Outgoing.SpeedRunChanged.Connect(_gameplayScreenSignals.Incoming.ApplySpeedRun);
+            // Star Rush and the Color Carnival play levels of their own, opened over the menu like a run.
+            _eventsScreenSignals.Outgoing.StarRushPlayClicked.Connect(() => _gameplaySignals.Incoming.PlayEvent.Dispatch(Modules.GameplayModule.Shared.Enums.EventPlayKind.StarRush));
+            _eventsScreenSignals.Outgoing.CarnivalPlayClicked.Connect(() => _gameplaySignals.Incoming.PlayEvent.Dispatch(Modules.GameplayModule.Shared.Enums.EventPlayKind.ColorCarnival));
+            _gameplaySignals.Outgoing.EventLevelChosen.Connect(_gameplayScreenSignals.Incoming.OpenGameplayScreen);
+            _gameplaySignals.Outgoing.EventLevelChosen.Connect(_eventsScreenSignals.Incoming.CloseEventsScreen);
+            _gameplaySignals.Outgoing.EventLevelChosen.Connect(_mainScreenSignals.Incoming.HideMainScreen);
             _mainScreenSignals.Outgoing.LeaderboardClicked.Connect(_leaderboardScreenSignals.Incoming.OpenLeaderboardScreen);
             _profileSelectionSignals.Outgoing.SaveRequested.Connect(_profileSignals.Incoming.SaveProfile);
             _consentScreenSignals.Outgoing.Answered.Connect(_mainSignals.Incoming.ConsentAnswered, CONSENT_GROUP);
