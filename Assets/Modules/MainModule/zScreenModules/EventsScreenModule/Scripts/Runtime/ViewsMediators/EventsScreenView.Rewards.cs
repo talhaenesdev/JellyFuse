@@ -20,14 +20,15 @@ namespace Modules.MainModule.EventsScreenModule.ViewsMediators
 
         private readonly Dictionary<Transform, RectTransform> _rewardRows = new();
         private const float PILL_WIDTH = 190f;
-        private const float COUNT_SIZE = 20f;
-        private const float ICON_SIZE = 30f;
+        private const float COUNT_SIZE = 18f;
+        private const float ICON_SIZE = 26f;
 
         /// <summary>Every card's reward pill the same width, wide enough for three icons or a chest's name.</summary>
         private static void WidenPill(Transform pill)
         {
             var rect = (RectTransform)pill;
-            if (rect.sizeDelta.x < PILL_WIDTH) rect.sizeDelta = new Vector2(PILL_WIDTH, rect.sizeDelta.y);
+            // A pill stretched between its neighbours already fits the card; only a fixed one is widened.
+            if (Mathf.Approximately(rect.anchorMin.x, rect.anchorMax.x) && rect.sizeDelta.x < PILL_WIDTH) rect.sizeDelta = new Vector2(PILL_WIDTH, rect.sizeDelta.y);
         }
 
         private void ShowRewardIcons(Transform card, int coins, int rockets, int freezes, int ufos, int lives)
@@ -44,7 +45,7 @@ namespace Modules.MainModule.EventsScreenModule.ViewsMediators
                 row.offsetMin = new Vector2(10, 4); row.offsetMax = new Vector2(-10, -4);
                 var layout = row.gameObject.AddComponent<HorizontalLayoutGroup>();
                 layout.childAlignment = TextAnchor.MiddleCenter;
-                layout.spacing = 6;
+                layout.spacing = 4;
                 layout.childControlWidth = layout.childControlHeight = true;
                 layout.childForceExpandWidth = layout.childForceExpandHeight = false;
                 _rewardRows[card] = row;
