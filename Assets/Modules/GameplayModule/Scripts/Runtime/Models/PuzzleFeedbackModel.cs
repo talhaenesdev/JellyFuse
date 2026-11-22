@@ -4,7 +4,7 @@ namespace Modules.GameplayModule.Models
     public sealed class PuzzleFeedbackModel
     {
         /// <summary>A fuse or a door within this many seconds of the last one carries the combo on.</summary>
-        public const float COMBO_WINDOW = 2.5f;
+        public const float COMBO_WINDOW = 4f;
 
         public PuzzleSnapshotRVO Before { get; private set; }
         public bool WasDragging { get; private set; }
