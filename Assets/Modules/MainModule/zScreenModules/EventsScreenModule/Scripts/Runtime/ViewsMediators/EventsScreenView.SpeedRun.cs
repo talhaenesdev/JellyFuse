@@ -29,11 +29,7 @@ namespace Modules.MainModule.EventsScreenModule.ViewsMediators
             Set(card, "Txt_Description", events.SpeedRunWon
                 ? L("events.speedrun.won", "You finished today's run!")
                 : string.Format(L("events.speedrun.desc_count", "Finish {0} levels before the clock runs out."), events.SpeedRunLevels));
-            var parts = new System.Collections.Generic.List<string>();
-            if (events.SpeedRunCoins > 0) parts.Add(string.Format(L("events.starrush.coins", "{0} coins"), events.SpeedRunCoins));
-            if (events.SpeedRunRockets > 0) parts.Add(string.Format(L("events.starrush.rockets", "{0} rocket"), events.SpeedRunRockets));
-            if (events.SpeedRunFreezes > 0) parts.Add(string.Format(L("events.starrush.freezes", "{0} freeze"), events.SpeedRunFreezes));
-            Set(card, "Pnl_Reward/Txt_Reward", string.Join(" + ", parts));
+            ShowRewardIcons(card, events.SpeedRunCoins, events.SpeedRunRockets, events.SpeedRunFreezes, 0, 0);
             Set(card, "Pnl_Time/Txt_Time", TimeLeft(new DateTimeOffset(DateTime.Now.Date.AddDays(1)).ToUnixTimeSeconds()));
             Set(card, "Btn_PlayEvent/Txt_Play", _speedRunButtonMode == SpeedRunButton.Start ? L("events.start", "Start")
                 : _speedRunButtonMode == SpeedRunButton.Ad ? L("events.speedrun.ad", "Watch ad")

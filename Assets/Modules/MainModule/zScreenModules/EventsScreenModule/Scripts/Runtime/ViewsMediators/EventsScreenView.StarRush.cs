@@ -52,7 +52,8 @@ namespace Modules.MainModule.EventsScreenModule.ViewsMediators
             ShowMeter(events);
             ApplyCarnival(events);
             ApplySpeedRun(events);
-            Set(card, "Pnl_Reward/Txt_Reward", next == null ? string.Empty : Reward(next));
+            if (next != null) ShowRewardIcons(card, next.Coins, next.Rockets, next.Freezes, next.Ufos, next.Lives);
+            else ShowRewardText(card, string.Empty);
             Set(card, "Pnl_Time/Txt_Time", TimeLeft(events.StarRushEndsAt));
             Set(card, "Btn_PlayEvent/Txt_Play", _starRushClaimable ? L("events.claim", "Claim") : L("events.play", "Play"));
 

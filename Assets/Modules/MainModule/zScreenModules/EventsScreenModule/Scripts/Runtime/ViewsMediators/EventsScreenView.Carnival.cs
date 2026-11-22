@@ -34,7 +34,7 @@ namespace Modules.MainModule.EventsScreenModule.ViewsMediators
                 Set(card, "Txt_Description", done
                     ? L("events.colorcarnival.done", "All of today's chests are open!")
                     : string.Format(L("events.colorcarnival.progress", "Today's colour: {0} - {1} / {2}"), colour, Mathf.Min(events.CarnivalPoints, next.Points), next.Points));
-            Set(card, "Pnl_Reward/Txt_Reward", next == null ? string.Empty : L("events.colorcarnival.chest" + (events.CarnivalOpened + 1), "Chest " + (events.CarnivalOpened + 1)));
+            ShowRewardText(card, next == null ? string.Empty : L("events.colorcarnival.chest" + (events.CarnivalOpened + 1), "Chest " + (events.CarnivalOpened + 1)));
             Set(card, "Pnl_Time/Txt_Time", TimeLeft(events.CarnivalEndsAt));
             Set(card, "Btn_PlayEvent/Txt_Play", _carnivalClaimable ? L("events.open", "Open") : L("events.play", "Play"));
 
