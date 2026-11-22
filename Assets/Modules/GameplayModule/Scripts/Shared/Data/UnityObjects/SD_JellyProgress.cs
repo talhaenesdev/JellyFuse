@@ -44,6 +44,8 @@ namespace Modules.GameplayModule.Shared.Data.UnityObjects
         public int DuelDay = -1;
         /// <summary>Duels won and paid on DuelDay.</summary>
         [Min(0)] public int DuelWinsToday;
+        [Tooltip("The last bot duels, oldest first: 1 won, 0 lost. The bot's pace follows them.")]
+        public List<int> DuelBotResults = new();
         /// <summary>The local day Quests were picked for; -1 never.</summary>
         public int QuestDay = -1;
         /// <summary>The local day the Speed Run counts (days since 2000-01-01); -1 never.</summary>

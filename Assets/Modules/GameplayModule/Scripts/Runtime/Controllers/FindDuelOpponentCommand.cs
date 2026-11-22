@@ -94,12 +94,12 @@ namespace Modules.GameplayModule.Controllers
                 // A run from another version of the level would race a different board: a bot races this one instead.
                 bool sameBoard = !string.IsNullOrEmpty(match.Fp) && match.Fp == LevelFingerprintFunction.Of(level);
                 if (match.Bot || !sameBoard || exits == null || exits.Count == 0 || index != match.Level - 1)
-                    exits = BotExits(level.CreateLevel(levels.Palette), events);
+                    exits = BotExits(level.CreateLevel(levels.Palette), events, DuelBotPaceFunction.Shift(events, progress));
                 _model.Daily = false;
                 _duel.Choose(index, match.Name, match.Icon, exits);
                 if (match.Bot) _duel.MarkBot();
                 _duel.Searching = false;
-                FlowLogger.Log($"FindDuelOpponentCommand - racing {match.Name}{(match.Bot ? " (bot)" : string.Empty)} on level {index + 1}, their time {_duel.OpponentSeconds:0.0}s.");
+                FlowLogger.Log($"FindDuelOpponentCommand - racing {match.Name}{(match.Bot ? " (bot)" : string.Empty)} on level {index + 1}, their time {_duel.OpponentSeconds:0.0}s, pace shift {DuelBotPaceFunction.Shift(events, progress):+0.00;-0.00}.");
                 Release();
             }
             catch (Exception exception)
@@ -115,12 +115,14 @@ namespace Modules.GameplayModule.Controllers
         /// think, now and then a long one, and speeds up as the board empties. Its whole run is a share of the level's
         /// clock - and once in a while it is slow enough to lose.
         /// </summary>
-        private static IReadOnlyList<float> BotExits(Shared.Data.ValueObjects.JellyLevelCVO level, CD_Events events)
+        private static IReadOnlyList<float> BotExits(Shared.Data.ValueObjects.JellyLevelCVO level, CD_Events events, float shift)
         {
             int total = 0;
             foreach (var gate in level.Gates) total += gate.Stages.Count;
             total = Mathf.Max(1, total);
             float share = Random.Range(Mathf.Min(events.DuelBotMinShare, events.DuelBotMaxShare), Mathf.Max(events.DuelBotMinShare, events.DuelBotMaxShare));
+            // Kept close: faster after the player's wins, slower after losses.
+            share = Mathf.Clamp(share + shift, .2f, .95f);
             // An off day: slower than usual.
             if (Random.value < .15f) share = Mathf.Min(.95f, share * Random.Range(1.2f, 1.45f));
             float seconds = Mathf.Max(10f, level.Seconds * share);

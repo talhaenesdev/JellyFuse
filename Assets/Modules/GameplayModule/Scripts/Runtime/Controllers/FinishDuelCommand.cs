@@ -59,6 +59,8 @@ namespace Modules.GameplayModule.Controllers
             int coins = 0;
             var events = _shared.GetScriptable<CD_Events>();
             var progress = _shared.GetScriptable<SD_JellyProgress>();
+            // A bot race won or lost sets how fast the next bot plays.
+            if (_duel.Bot) DuelBotPaceFunction.Record(events, progress, won);
             if (won && events != null && progress != null)
             {
                 int today = ShopDayFunction.Today();

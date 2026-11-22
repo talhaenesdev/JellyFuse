@@ -114,6 +114,14 @@ namespace Modules.GameplayModule.Shared.Data.UnityObjects
         [Tooltip("A bot opponent finishes in this share of the level's clock, picked between the two.")]
         [Range(0.1f, 1f)] public float DuelBotMinShare = 0.45f;
         [Range(0.1f, 1f)] public float DuelBotMaxShare = 0.75f;
+        [Tooltip("How many of the last bot duels the bot's pace looks at.")]
+        [Min(1)] public int DuelAdaptWindow = 8;
+        [Tooltip("The share of bot duels a player should win: winning more makes the bot faster, less makes it slower.")]
+        [Range(0f, 1f)] public float DuelTargetWinRate = 0.55f;
+        [Tooltip("How far the bot's clock share moves for each point of win rate away from the target.")]
+        [Min(0)] public float DuelAdaptGain = 0.5f;
+        [Tooltip("The most the bot's clock share moves either way.")]
+        [Range(0f, 0.5f)] public float DuelAdaptMaxShift = 0.15f;
         [Tooltip("Seconds from the opponent found to GO: what is more than 3 shows the opponent, then 3-2-1.")]
         [Min(0)] public float DuelCountdown = 4.5f;
         [Tooltip("The search shows at least this long, so a quick answer still reads as a search.")]
