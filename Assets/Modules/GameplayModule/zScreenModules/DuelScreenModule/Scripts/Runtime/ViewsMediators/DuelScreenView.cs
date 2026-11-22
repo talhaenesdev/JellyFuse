@@ -375,7 +375,12 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
                 _shownOpponent = Mathf.MoveTowards(_shownOpponent, _opponentProgress, Time.unscaledDeltaTime * 2f);
                 SetFill(_opponentFill, _opponentRunner, _shownOpponent);
             }
-            else if (_racing) SetFill(_opponentFill, _opponentRunner, OpponentProgress(now - _raceStart));
+            else if (_racing)
+            {
+                // A recorded run steps the way the player's own bar does: a jelly through a door fills its share at once.
+                _shownOpponent = Mathf.MoveTowards(_shownOpponent, OpponentProgress(now - _raceStart), Time.unscaledDeltaTime * 2f);
+                SetFill(_opponentFill, _opponentRunner, _shownOpponent);
+            }
             if (!Mathf.Approximately(_shownPlayer, _playerProgress))
             {
                 _shownPlayer = Mathf.MoveTowards(_shownPlayer, _playerProgress, Time.unscaledDeltaTime * 2f);
@@ -400,22 +405,13 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
             runner.anchorMax = new Vector2(runner.anchorMin.x, runner.anchorMax.y);
         }
 
-        /// <summary>The opponent's share at this second of the race, eased between their recorded exits.</summary>
+        /// <summary>The opponent's share at this second of the race: the jellies their recorded run had sent through by then.</summary>
         private float OpponentProgress(float second)
         {
             if (second <= 0 || _opponentExits.Count == 0) return 0;
-            float previous = 0;
-            for (int i = 0; i < _opponentExits.Count; i++)
-            {
-                float at = _opponentExits[i];
-                if (second < at)
-                {
-                    float within = at > previous ? (second - previous) / (at - previous) : 1;
-                    return Mathf.Clamp01((i + within) / _opponentExits.Count);
-                }
-                previous = at;
-            }
-            return 1;
+            int done = 0;
+            while (done < _opponentExits.Count && _opponentExits[done] <= second) done++;
+            return done / (float)_opponentExits.Count;
         }
 
         private void Show(bool search, bool countdown, bool race, bool result)
