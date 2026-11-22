@@ -10,15 +10,17 @@ using Modules.GameplayModule.Signals;
 namespace Modules.GameplayModule.Controllers
 {
     /// <summary>An event card's Play: a level the player has won is picked for that event. Too few won, and nothing starts.</summary>
-    internal sealed class ChooseEventLevelCommand : Command<EventPlayKind>
+    internal sealed class ChooseEventLevelCommand : Command
     {
         [Inject] private ISharedDataModel _shared { get; set; }
         [Inject] private IEventPlayModel _event { get; set; }
         [Inject] private IJellyPuzzleModel _model { get; set; }
         [Inject] private IDuelModel _duel { get; set; }
+        [SignalParam] private EventPlayKind _kind { get; set; }
 
-        public override void Execute(EventPlayKind kind)
+        public override void Execute()
         {
+            var kind = _kind;
             var progress = _shared.GetScriptable<SD_JellyProgress>();
             var events = _shared.GetScriptable<CD_Events>();
             if (progress != null && events != null) EventsFunction.RefreshDay(progress, events);
