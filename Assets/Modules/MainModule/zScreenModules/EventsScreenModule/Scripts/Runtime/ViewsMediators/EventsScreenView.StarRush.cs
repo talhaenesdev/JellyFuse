@@ -12,6 +12,17 @@ namespace Modules.MainModule.EventsScreenModule.ViewsMediators
     /// </summary>
     public partial class EventsScreenView
     {
+        [Header("Star Rush")]
+        [Tooltip("The meter's golden fill, a horizontally filled image over the track.")]
+        [SerializeField] private Image _starFill;
+        [Tooltip("One box per reward step, in order; each is placed along the meter at its step's stars.")]
+        [SerializeField] private Image[] _starBoxes = new Image[0];
+        [SerializeField] private Sprite[] _starBoxClosed = new Sprite[0];
+        [SerializeField] private Sprite[] _starBoxReady = new Sprite[0];
+        [SerializeField] private Sprite[] _starBoxOpen = new Sprite[0];
+        [Tooltip("The card's corner mark while a step waits to be claimed.")]
+        [SerializeField] private GameObject _starBadge;
+
         public Action StarRushClaimClicked;
         public Action StarRushPlayClicked;
 
@@ -38,6 +49,7 @@ namespace Modules.MainModule.EventsScreenModule.ViewsMediators
             Set(card, "Txt_Description", done
                 ? L("events.starrush.done", "All rewards taken this week!")
                 : string.Format(L("events.starrush.progress", "{0} / {1} stars"), Mathf.Min(stars, next.Stars), next.Stars));
+            ShowMeter(events);
             Set(card, "Pnl_Reward/Txt_Reward", next == null ? string.Empty : Reward(next));
             Set(card, "Pnl_Time/Txt_Time", TimeLeft(events.StarRushEndsAt));
             Set(card, "Btn_PlayEvent/Txt_Play", _starRushClaimable ? L("events.claim", "Claim") : L("events.play", "Play"));
@@ -50,6 +62,30 @@ namespace Modules.MainModule.EventsScreenModule.ViewsMediators
                 _starRushButton.onClick.AddListener(OnStarRushClicked);
             }
             if (button != null) button.interactable = !done || _starRushClaimable;
+        }
+
+        /// <summary>The meter: filled to the week's stars against the last step, a box at each step - open once paid, glowing once reached.</summary>
+        private void ShowMeter(EventsRVO events)
+        {
+            var steps = events.StarRushMilestones;
+            int last = steps != null && steps.Count > 0 ? Mathf.Max(1, steps[steps.Count - 1].Stars) : 1;
+            if (_starFill != null) _starFill.fillAmount = Mathf.Clamp01(events.StarRushStars / (float)last);
+            for (int i = 0; i < _starBoxes.Length; i++)
+            {
+                var box = _starBoxes[i];
+                if (box == null) continue;
+                bool exists = steps != null && i < steps.Count;
+                box.gameObject.SetActive(exists);
+                if (!exists) continue;
+                float at = Mathf.Clamp01(steps[i].Stars / (float)last);
+                var rect = box.rectTransform;
+                rect.anchorMin = new Vector2(at, rect.anchorMin.y); rect.anchorMax = new Vector2(at, rect.anchorMax.y);
+                bool paid = i < events.StarRushClaimed;
+                bool reached = !paid && events.StarRushStars >= steps[i].Stars;
+                var set = paid ? _starBoxOpen : reached ? _starBoxReady : _starBoxClosed;
+                if (i < set.Length && set[i] != null) box.sprite = set[i];
+            }
+            if (_starBadge != null) _starBadge.SetActive(events.StarRushClaimable);
         }
 
         private void OnStarRushClicked()
