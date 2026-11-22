@@ -46,6 +46,14 @@ namespace Modules.GameplayModule.Shared.Data.UnityObjects
         [Min(0)] public int DuelWinsToday;
         /// <summary>The local day Quests were picked for; -1 never.</summary>
         public int QuestDay = -1;
+        /// <summary>The local day the Color Carnival counts (days since 2000-01-01); -1 never.</summary>
+        public int CarnivalDay = -1;
+        [Tooltip("The colour the day's carnival asks for, as its JellyColour number.")]
+        public int CarnivalColour;
+        [Tooltip("Cells of the day's colour taken through doors today.")]
+        [Min(0)] public int CarnivalPoints;
+        [Tooltip("The day's chests already opened, from the first.")]
+        [Min(0)] public int CarnivalOpened;
         /// <summary>The Monday-based week the Star Rush meter counts (weeks since 2000-01-03); -1 never.</summary>
         public int StarRushWeek = -1;
         [Tooltip("Stars won on normal levels in StarRushWeek.")]

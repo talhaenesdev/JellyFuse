@@ -31,6 +31,17 @@ namespace Modules.GameplayModule.Shared.Data.ValueObjects
         public bool DailyChallengeReady;
         /// <summary>What winning today's daily challenge gives.</summary>
         public RewardCVO DailyChallengeReward;
+        /// <summary>The colour today's carnival asks for.</summary>
+        public Modules.GameplayModule.Shared.Enums.JellyColour CarnivalColour;
+        /// <summary>Cells of that colour taken through doors today.</summary>
+        public int CarnivalPoints;
+        /// <summary>Today's chests already opened, from the first.</summary>
+        public int CarnivalOpened;
+        public IReadOnlyList<CarnivalChestCVO> CarnivalChests = new List<CarnivalChestCVO>();
+        /// <summary>A chest reached waits to be opened.</summary>
+        public bool CarnivalClaimable;
+        /// <summary>When today's carnival ends, unix seconds.</summary>
+        public long CarnivalEndsAt;
         /// <summary>Stars won this week on normal levels.</summary>
         public int StarRushStars;
         /// <summary>The meter's steps already paid, from the first.</summary>

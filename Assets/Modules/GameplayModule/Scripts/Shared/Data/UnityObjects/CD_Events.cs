@@ -60,6 +60,27 @@ namespace Modules.GameplayModule.Shared.Data.UnityObjects
         [Tooltip("What winning the daily challenge gives, once a day. Its coins are the win's coins.")]
         public RewardCVO DailyChallengeReward = new() { Coins = 150, Booster = BoosterType.Rocket, BoosterCount = 1 };
 
+        [Header("Color Carnival")]
+        [Tooltip("The colours a day's carnival may ask for; one is drawn each day. Pick colours most levels use.")]
+        public System.Collections.Generic.List<JellyColour> CarnivalColours = new()
+        {
+            JellyColour.Red, JellyColour.Yellow, JellyColour.Green, JellyColour.Blue, JellyColour.Purple, JellyColour.Orange, JellyColour.Pink,
+        };
+        [Tooltip("The day's three chests, fewest points first. A point is one cell of the day's colour taken through a door.")]
+        public System.Collections.Generic.List<CarnivalChestCVO> CarnivalChests = new()
+        {
+            new() { Points = 15, Prizes = new() {
+                new() { Weight = 3, CoinsMin = 15, CoinsMax = 30 },
+                new() { Weight = 1, Rockets = 1 }, new() { Weight = 1, Freezes = 1 }, new() { Weight = 1, Ufos = 1 } } },
+            new() { Points = 40, Prizes = new() {
+                new() { Weight = 3, CoinsMin = 30, CoinsMax = 60 },
+                new() { Weight = 2, Rockets = 1, Freezes = 1 }, new() { Weight = 1, Ufos = 2 }, new() { Weight = 1, Lives = 1 } } },
+            new() { Points = 80, Prizes = new() {
+                new() { Weight = 4, CoinsMin = 60, CoinsMax = 120, Rockets = 1 },
+                new() { Weight = 2, CoinsMin = 60, CoinsMax = 120, Ufos = 1 },
+                new() { Weight = 1, Rockets = 1, Freezes = 1, Ufos = 1 } } },
+        };
+
         [Header("Star Rush")]
         [Tooltip("The weekly star meter's steps, fewest stars first. Stars from normal levels fill it; it empties every Monday.")]
         public System.Collections.Generic.List<StarRushMilestoneCVO> StarRushMilestones = new()

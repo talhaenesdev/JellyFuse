@@ -89,6 +89,8 @@ namespace Modules.GameplayModule.Signals
         public Signal<int> ClaimQuest = new();
         /// <summary>Pays the Star Rush step reached first and not yet paid.</summary>
         public Signal ClaimStarRush = new();
+        /// <summary>Opens the Color Carnival chest reached first and not yet opened.</summary>
+        public Signal OpenCarnivalChest = new();
         /// <summary>A spin of the prize wheel: today's free one, else one an ad gave.</summary>
         public Signal SpinWheel = new();
         /// <summary>A rewarded ad for one more spin of the prize wheel, held until the player spins.</summary>
@@ -163,6 +165,8 @@ namespace Modules.GameplayModule.Signals
         public Signal<BoosterType, int> BoosterUsed = new();
         /// <summary>A combo charges these jellies; after its seconds they fuse and go into the door.</summary>
         public Signal<ComboStrikeRVO> ComboStruck = new();
+        /// <summary>A carnival chest was opened: what it gave, for the chest to show.</summary>
+        public Signal<CarnivalPrizeRVO> CarnivalChestOpened = new();
         /// <summary>Seconds the clock stands still for; 0 when it runs again.</summary>
         public Signal<float> ClockFrozen = new(hideCommandLog: true);
         /// <summary>The lives the player holds, and when the next comes back.</summary>

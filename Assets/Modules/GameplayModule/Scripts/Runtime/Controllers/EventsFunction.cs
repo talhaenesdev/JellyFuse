@@ -22,6 +22,15 @@ namespace Modules.GameplayModule.Controllers
             bool missedDay = progress.LoginRewardDay >= 0 && progress.LoginRewardDay < today - 1;
             bool runDone = progress.LoginRewardsTaken >= config.LoginRewards.Count && progress.LoginRewardDay < today;
             if (missedDay || runDone) progress.LoginRewardsTaken = 0;
+            if (progress.CarnivalDay != today)
+            {
+                progress.CarnivalDay = today;
+                progress.CarnivalPoints = 0;
+                progress.CarnivalOpened = 0;
+                var colours = config.CarnivalColours;
+                progress.CarnivalColour = colours != null && colours.Count > 0
+                    ? (int)colours[UnityEngine.Random.Range(0, colours.Count)] : (int)JellyColour.Blue;
+            }
             int week = StarRushWeek(today);
             if (progress.StarRushWeek != week)
             {
@@ -194,6 +203,41 @@ namespace Modules.GameplayModule.Controllers
         public static bool DailyChallengeReady(SD_JellyProgress progress, CD_Events config) =>
             progress.DailyChallengeDay != ShopDayFunction.Today() && DailyChallengeLevel(config) != null;
 
+        /// <summary>Cells of today's colour taken through doors go on the carnival's count.</summary>
+        public static void AddCarnival(SD_JellyProgress progress, CD_Events config, int cells)
+        {
+            if (progress == null || config == null || cells <= 0) return;
+            RefreshDay(progress, config);
+            progress.CarnivalPoints += cells;
+        }
+
+        /// <summary>The next chest that is reached and not yet opened; null when none waits.</summary>
+        public static CarnivalChestCVO CarnivalReady(SD_JellyProgress progress, CD_Events config)
+        {
+            if (progress == null || config == null || progress.CarnivalOpened >= config.CarnivalChests.Count) return null;
+            var next = config.CarnivalChests[progress.CarnivalOpened];
+            return next != null && progress.CarnivalPoints >= next.Points ? next : null;
+        }
+
+        /// <summary>Draws one of a chest's prizes by weight; coins fall anywhere between the prize's least and most.</summary>
+        public static CarnivalPrizeRVO DrawCarnivalPrize(CarnivalChestCVO chest, int index)
+        {
+            var result = new CarnivalPrizeRVO { Chest = index };
+            if (chest == null || chest.Prizes == null || chest.Prizes.Count == 0) return result;
+            int total = 0;
+            foreach (var prize in chest.Prizes) total += Mathf.Max(1, prize.Weight);
+            int pick = UnityEngine.Random.Range(0, total);
+            CarnivalPrizeCVO drawn = chest.Prizes[chest.Prizes.Count - 1];
+            foreach (var prize in chest.Prizes)
+            {
+                pick -= Mathf.Max(1, prize.Weight);
+                if (pick < 0) { drawn = prize; break; }
+            }
+            result.Coins = drawn.CoinsMax > drawn.CoinsMin ? UnityEngine.Random.Range(drawn.CoinsMin, drawn.CoinsMax + 1) : drawn.CoinsMin;
+            result.Rockets = drawn.Rockets; result.Freezes = drawn.Freezes; result.Ufos = drawn.Ufos; result.Lives = drawn.Lives;
+            return result;
+        }
+
         /// <summary>The Monday-based week a day falls in: day 0 (2000-01-01) was a Saturday, so Mondays start each count.</summary>
         public static int StarRushWeek(int day) => (day + 5) / 7;
 
@@ -250,6 +294,12 @@ namespace Modules.GameplayModule.Controllers
                 ScratchCards = ScratchCards(progress, config),
                 DailyChallengeReady = DailyChallengeReady(progress, config),
                 DailyChallengeReward = config.DailyChallengeReward,
+                CarnivalColour = (JellyColour)progress.CarnivalColour,
+                CarnivalPoints = progress.CarnivalPoints,
+                CarnivalOpened = progress.CarnivalOpened,
+                CarnivalChests = config.CarnivalChests,
+                CarnivalClaimable = CarnivalReady(progress, config) != null,
+                CarnivalEndsAt = new DateTimeOffset(DateTime.Now.Date.AddDays(1)).ToUnixTimeSeconds(),
                 StarRushStars = progress.StarRushStars,
                 StarRushClaimed = progress.StarRushClaimed,
                 StarRushMilestones = config.StarRushMilestones,

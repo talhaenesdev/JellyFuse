@@ -122,6 +122,7 @@ namespace Modules.GameplayModule.RootsContexts
                 .ToSequence<FinishDuelCommand>()
                 .ToSequence<CheckWinPaymentCommand>()
                 .ToSequence<CountPuzzleComboCommand>()
+                .ToSequence<CountCarnivalCommand>()
                 .ToSequence<PlayPuzzleFeedbackCommand>()
                 .ToSequence<PlayPuzzleSoundCommand>()
                 .ToSequence<RecordPuzzleResultCommand>()
@@ -233,6 +234,14 @@ namespace Modules.GameplayModule.RootsContexts
                 .ToSequence<IAudioService.Commands.Play>(AudioCue.Coin)
                 .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
                 .ToSequence<AnnounceBoostersCommand>()
+                .ToSequence<AnnounceEventsCommand>();
+            CommandBinder.Bind(_signals.Incoming.OpenCarnivalChest)
+                .ToSequence<RefreshEventsCommand>()
+                .ToSequence<OpenCarnivalChestCommand>()
+                .ToSequence<IAudioService.Commands.Play>(AudioCue.Coin)
+                .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
+                .ToSequence<AnnounceBoostersCommand>()
+                .ToSequence<AnnounceLivesCommand>()
                 .ToSequence<AnnounceEventsCommand>();
             CommandBinder.Bind(_signals.Incoming.ClaimStarRush)
                 .ToSequence<RefreshEventsCommand>()

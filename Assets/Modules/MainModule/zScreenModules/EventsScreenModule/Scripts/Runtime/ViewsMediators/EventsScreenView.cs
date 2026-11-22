@@ -54,7 +54,8 @@ namespace Modules.MainModule.EventsScreenModule.ViewsMediators
             _localize = localize;
             Text(content, "Pnl_Event_StarRush/Txt_Name", "events.starrush.name", localize);
             if (_events != null) ApplyEvents(_events);
-            foreach (string key in new[] { "ColorCarnival", "SpeedRun" })
+            Text(content, "Pnl_Event_ColorCarnival/Txt_Name", "events.colorcarnival.name", localize);
+            foreach (string key in new[] { "SpeedRun" })
             {
                 string card = "Pnl_Event_" + key;
                 string id = "events." + key.ToLowerInvariant();

@@ -115,6 +115,9 @@ namespace Modules.ConnectorModule.RootsContexts
             _eventsScreenSignals.Outgoing.EventsRequested.Connect(_gameplaySignals.Incoming.RequestEvents);
             _gameplaySignals.Outgoing.EventsChanged.Connect(_eventsScreenSignals.Incoming.ApplyEvents);
             _eventsScreenSignals.Outgoing.StarRushClaimClicked.Connect(_gameplaySignals.Incoming.ClaimStarRush);
+            // Color Carnival: a chest reached opens, and what it gave shows on the card.
+            _eventsScreenSignals.Outgoing.CarnivalOpenClicked.Connect(_gameplaySignals.Incoming.OpenCarnivalChest);
+            _gameplaySignals.Outgoing.CarnivalChestOpened.Connect(_eventsScreenSignals.Incoming.ApplyCarnivalPrize);
             _mainScreenSignals.Outgoing.LeaderboardClicked.Connect(_leaderboardScreenSignals.Incoming.OpenLeaderboardScreen);
             _profileSelectionSignals.Outgoing.SaveRequested.Connect(_profileSignals.Incoming.SaveProfile);
             _consentScreenSignals.Outgoing.Answered.Connect(_mainSignals.Incoming.ConsentAnswered, CONSENT_GROUP);

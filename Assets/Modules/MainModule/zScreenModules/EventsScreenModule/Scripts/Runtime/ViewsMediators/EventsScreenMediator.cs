@@ -32,6 +32,9 @@ namespace Modules.MainModule.EventsScreenModule.ViewsMediators
             _view.DuelClicked += OnDuelClicked;
             _view.StarRushClaimClicked += OnStarRushClaim;
             _view.StarRushPlayClicked += OnBackClicked;
+            _view.CarnivalOpenClicked += OnCarnivalOpen;
+            _view.CarnivalPlayClicked += OnBackClicked;
+            _signals.Incoming.ApplyCarnivalPrize.AddListener(_view.ShowCarnivalPrize);
             _signals.Incoming.ApplyEvents.AddListener(_view.ApplyEvents);
             _signals.Outgoing.EventsRequested.Dispatch();
         }
@@ -43,7 +46,15 @@ namespace Modules.MainModule.EventsScreenModule.ViewsMediators
             _view.DuelClicked -= OnDuelClicked;
             _view.StarRushClaimClicked -= OnStarRushClaim;
             _view.StarRushPlayClicked -= OnBackClicked;
+            _view.CarnivalOpenClicked -= OnCarnivalOpen;
+            _view.CarnivalPlayClicked -= OnBackClicked;
+            _signals.Incoming.ApplyCarnivalPrize.RemoveListener(_view.ShowCarnivalPrize);
             _signals.Incoming.ApplyEvents.RemoveListener(_view.ApplyEvents);
+        }
+
+        private void OnCarnivalOpen()
+        {
+            if (_view.Data.HasState(ScreenState.AvailableToSendSignal)) _signals.Outgoing.CarnivalOpenClicked.Dispatch();
         }
 
         private void OnStarRushClaim()
