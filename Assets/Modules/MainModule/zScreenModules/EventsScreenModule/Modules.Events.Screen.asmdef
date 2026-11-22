@@ -1,18 +1,19 @@
 {
-  "name": "Modules.Events.Screen",
-  "references": [
-    "FlowIoC",
-    "Modules.Events.Screen.Signals",
-    "Unity.TextMeshPro",
-    "Modules.Localization"
-  ],
-  "includePlatforms": [],
-  "excludePlatforms": [],
-  "allowUnsafeCode": false,
-  "overrideReferences": false,
-  "precompiledReferences": [],
-  "autoReferenced": true,
-  "defineConstraints": [],
-  "versionDefines": [],
-  "noEngineReferences": false
+    "name": "Modules.Events.Screen",
+    "references": [
+        "FlowIoC",
+        "Modules.Events.Screen.Signals",
+        "Unity.TextMeshPro",
+        "Modules.Localization",
+        "Modules.Gameplay.Shared"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

@@ -31,5 +31,14 @@ namespace Modules.GameplayModule.Shared.Data.ValueObjects
         public bool DailyChallengeReady;
         /// <summary>What winning today's daily challenge gives.</summary>
         public RewardCVO DailyChallengeReward;
+        /// <summary>Stars won this week on normal levels.</summary>
+        public int StarRushStars;
+        /// <summary>The meter's steps already paid, from the first.</summary>
+        public int StarRushClaimed;
+        public IReadOnlyList<StarRushMilestoneCVO> StarRushMilestones = new List<StarRushMilestoneCVO>();
+        /// <summary>A reached step waits to be paid.</summary>
+        public bool StarRushClaimable;
+        /// <summary>When this week's meter empties, unix seconds.</summary>
+        public long StarRushEndsAt;
     }
 }

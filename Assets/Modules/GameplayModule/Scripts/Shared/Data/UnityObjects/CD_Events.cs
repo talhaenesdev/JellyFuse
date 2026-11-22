@@ -60,6 +60,16 @@ namespace Modules.GameplayModule.Shared.Data.UnityObjects
         [Tooltip("What winning the daily challenge gives, once a day. Its coins are the win's coins.")]
         public RewardCVO DailyChallengeReward = new() { Coins = 150, Booster = BoosterType.Rocket, BoosterCount = 1 };
 
+        [Header("Star Rush")]
+        [Tooltip("The weekly star meter's steps, fewest stars first. Stars from normal levels fill it; it empties every Monday.")]
+        public System.Collections.Generic.List<StarRushMilestoneCVO> StarRushMilestones = new()
+        {
+            new() { Stars = 10, Coins = 30 },
+            new() { Stars = 25, Rockets = 1, Freezes = 1 },
+            new() { Stars = 45, Coins = 80, Ufos = 1 },
+            new() { Stars = 70, Coins = 150, Lives = 2 },
+        };
+
         [Tooltip("Coins a duel win pays - beating the opponent's time - for the first DuelRewardedWins wins of a day.")]
         [Min(0)] public int DuelRewardCoins = 20;
         [Min(0)] public int DuelRewardedWins = 3;

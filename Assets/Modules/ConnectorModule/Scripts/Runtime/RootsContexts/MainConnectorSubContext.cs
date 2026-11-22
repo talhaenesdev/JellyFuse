@@ -111,6 +111,10 @@ namespace Modules.ConnectorModule.RootsContexts
             _mainScreenSignals.Outgoing.ProfileIconRequested.Connect(_profileSignals.Incoming.RequestCurrentIcon);
             _mainScreenSignals.Outgoing.ProfileIconClicked.Connect(_profileSignals.Incoming.OpenSelection);
             _mainScreenSignals.Outgoing.EventsClicked.Connect(_eventsScreenSignals.Incoming.OpenEventsScreen);
+            // Star Rush: the panel asks for the events, shows the meter, and pays a step reached.
+            _eventsScreenSignals.Outgoing.EventsRequested.Connect(_gameplaySignals.Incoming.RequestEvents);
+            _gameplaySignals.Outgoing.EventsChanged.Connect(_eventsScreenSignals.Incoming.ApplyEvents);
+            _eventsScreenSignals.Outgoing.StarRushClaimClicked.Connect(_gameplaySignals.Incoming.ClaimStarRush);
             _mainScreenSignals.Outgoing.LeaderboardClicked.Connect(_leaderboardScreenSignals.Incoming.OpenLeaderboardScreen);
             _profileSelectionSignals.Outgoing.SaveRequested.Connect(_profileSignals.Incoming.SaveProfile);
             _consentScreenSignals.Outgoing.Answered.Connect(_mainSignals.Incoming.ConsentAnswered, CONSENT_GROUP);

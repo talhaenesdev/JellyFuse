@@ -87,6 +87,8 @@ namespace Modules.GameplayModule.Signals
         public Signal ClaimLoginReward = new();
         /// <summary>Take the reward of today's quest at this position.</summary>
         public Signal<int> ClaimQuest = new();
+        /// <summary>Pays the Star Rush step reached first and not yet paid.</summary>
+        public Signal ClaimStarRush = new();
         /// <summary>A spin of the prize wheel: today's free one, else one an ad gave.</summary>
         public Signal SpinWheel = new();
         /// <summary>A rewarded ad for one more spin of the prize wheel, held until the player spins.</summary>

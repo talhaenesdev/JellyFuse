@@ -22,6 +22,13 @@ namespace Modules.GameplayModule.Controllers
             bool missedDay = progress.LoginRewardDay >= 0 && progress.LoginRewardDay < today - 1;
             bool runDone = progress.LoginRewardsTaken >= config.LoginRewards.Count && progress.LoginRewardDay < today;
             if (missedDay || runDone) progress.LoginRewardsTaken = 0;
+            int week = StarRushWeek(today);
+            if (progress.StarRushWeek != week)
+            {
+                progress.StarRushWeek = week;
+                progress.StarRushStars = 0;
+                progress.StarRushClaimed = 0;
+            }
             if (progress.WheelDay != today)
             {
                 progress.WheelDay = today;
@@ -187,6 +194,33 @@ namespace Modules.GameplayModule.Controllers
         public static bool DailyChallengeReady(SD_JellyProgress progress, CD_Events config) =>
             progress.DailyChallengeDay != ShopDayFunction.Today() && DailyChallengeLevel(config) != null;
 
+        /// <summary>The Monday-based week a day falls in: day 0 (2000-01-01) was a Saturday, so Mondays start each count.</summary>
+        public static int StarRushWeek(int day) => (day + 5) / 7;
+
+        /// <summary>A normal level's stars go on this week's meter.</summary>
+        public static void AddStarRush(SD_JellyProgress progress, CD_Events config, int stars)
+        {
+            if (progress == null || config == null || stars <= 0) return;
+            RefreshDay(progress, config);
+            progress.StarRushStars += stars;
+        }
+
+        /// <summary>The next step that is reached and not yet paid; null when none waits.</summary>
+        public static StarRushMilestoneCVO StarRushReady(SD_JellyProgress progress, CD_Events config)
+        {
+            if (progress == null || config == null || progress.StarRushClaimed >= config.StarRushMilestones.Count) return null;
+            var next = config.StarRushMilestones[progress.StarRushClaimed];
+            return next != null && progress.StarRushStars >= next.Stars ? next : null;
+        }
+
+        /// <summary>Monday 00:00 of the next week, local time, in unix seconds.</summary>
+        public static long StarRushEndsAt()
+        {
+            var today = DateTime.Now.Date;
+            int toMonday = ((int)DayOfWeek.Monday - (int)today.DayOfWeek + 7) % 7;
+            return new DateTimeOffset(today.AddDays(toMonday == 0 ? 7 : toMonday)).ToUnixTimeSeconds();
+        }
+
         public static EventsRVO Snapshot(SD_JellyProgress progress, CD_Events config)
         {
             bool claimable = LoginClaimable(progress, config);
@@ -216,6 +250,11 @@ namespace Modules.GameplayModule.Controllers
                 ScratchCards = ScratchCards(progress, config),
                 DailyChallengeReady = DailyChallengeReady(progress, config),
                 DailyChallengeReward = config.DailyChallengeReward,
+                StarRushStars = progress.StarRushStars,
+                StarRushClaimed = progress.StarRushClaimed,
+                StarRushMilestones = config.StarRushMilestones,
+                StarRushClaimable = StarRushReady(progress, config) != null,
+                StarRushEndsAt = StarRushEndsAt(),
             };
         }
 

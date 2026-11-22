@@ -30,6 +30,10 @@ namespace Modules.MainModule.EventsScreenModule.ViewsMediators
             _view.BackClicked += OnBackClicked;
             _signals.Incoming.CloseEventsScreen.AddListener(OnCloseRequested);
             _view.DuelClicked += OnDuelClicked;
+            _view.StarRushClaimClicked += OnStarRushClaim;
+            _view.StarRushPlayClicked += OnBackClicked;
+            _signals.Incoming.ApplyEvents.AddListener(_view.ApplyEvents);
+            _signals.Outgoing.EventsRequested.Dispatch();
         }
 
         private void OnScreenHidden(IScreenBody screen)
@@ -37,6 +41,14 @@ namespace Modules.MainModule.EventsScreenModule.ViewsMediators
             _view.BackClicked -= OnBackClicked;
             _signals.Incoming.CloseEventsScreen.RemoveListener(OnCloseRequested);
             _view.DuelClicked -= OnDuelClicked;
+            _view.StarRushClaimClicked -= OnStarRushClaim;
+            _view.StarRushPlayClicked -= OnBackClicked;
+            _signals.Incoming.ApplyEvents.RemoveListener(_view.ApplyEvents);
+        }
+
+        private void OnStarRushClaim()
+        {
+            if (_view.Data.HasState(ScreenState.AvailableToSendSignal)) _signals.Outgoing.StarRushClaimClicked.Dispatch();
         }
 
         private void OnBackClicked()

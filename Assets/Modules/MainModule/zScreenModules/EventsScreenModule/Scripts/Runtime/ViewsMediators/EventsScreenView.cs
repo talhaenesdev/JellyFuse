@@ -7,7 +7,7 @@ using UnityEngine.UI;
 namespace Modules.MainModule.EventsScreenModule.ViewsMediators
 {
     [RequireComponent(typeof(ViewInjector))]
-    public class EventsScreenView : ScreenView
+    public partial class EventsScreenView : ScreenView
     {
         [SerializeField] private Button _backButton;
         [SerializeField] private ScrollRect _eventList;
@@ -51,7 +51,10 @@ namespace Modules.MainModule.EventsScreenModule.ViewsMediators
             if (content == null) return;
             Text(content, "Pnl_Event_Duel/Txt_Name", "events.duel.name", localize);
             Text(content, "Pnl_Event_Duel/Btn_PlayDuel/Txt_Label", "events.play", localize);
-            foreach (string key in new[] { "StarRush", "ColorCarnival", "SpeedRun" })
+            _localize = localize;
+            Text(content, "Pnl_Event_StarRush/Txt_Name", "events.starrush.name", localize);
+            if (_events != null) ApplyEvents(_events);
+            foreach (string key in new[] { "ColorCarnival", "SpeedRun" })
             {
                 string card = "Pnl_Event_" + key;
                 string id = "events." + key.ToLowerInvariant();

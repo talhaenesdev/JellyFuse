@@ -37,6 +37,7 @@ namespace Modules.GameplayModule.Controllers
                 while (progress.Stars.Count <= index) progress.Stars.Add(0);
                 best = stars > progress.Stars[index];
                 if (best) progress.Stars[index] = stars;
+                EventsFunction.AddStarRush(progress, _shared.GetScriptable<CD_Events>(), stars);
             }
             _signals.Outgoing.StarsEarned.Dispatch(stars, best);
         }

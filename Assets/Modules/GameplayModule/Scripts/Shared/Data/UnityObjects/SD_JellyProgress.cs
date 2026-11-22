@@ -46,6 +46,12 @@ namespace Modules.GameplayModule.Shared.Data.UnityObjects
         [Min(0)] public int DuelWinsToday;
         /// <summary>The local day Quests were picked for; -1 never.</summary>
         public int QuestDay = -1;
+        /// <summary>The Monday-based week the Star Rush meter counts (weeks since 2000-01-03); -1 never.</summary>
+        public int StarRushWeek = -1;
+        [Tooltip("Stars won on normal levels in StarRushWeek.")]
+        [Min(0)] public int StarRushStars;
+        [Tooltip("Star Rush steps already paid this week, from the first.")]
+        [Min(0)] public int StarRushClaimed;
         public List<QuestSVO> Quests = new();
         /// <summary>The local day the free spins and the free card below count for; -1 never.</summary>
         public int WheelDay = -1;
