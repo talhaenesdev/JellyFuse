@@ -117,6 +117,13 @@ namespace Modules.GameplayModule.Models
             InPlay = true;
         }
 
+        public void SetClock(float seconds)
+        {
+            if (_level == null || Status != PuzzleStatus.Playing) return;
+            RemainingSeconds = UnityEngine.Mathf.Max(1, seconds);
+            Changed();
+        }
+
         public bool ExtendTime(float seconds)
         {
             if (_level == null || Status != PuzzleStatus.Lost || RemainingSeconds > 0 || TimeExtended || seconds <= 0) return false;

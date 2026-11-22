@@ -46,6 +46,14 @@ namespace Modules.GameplayModule.Shared.Data.UnityObjects
         [Min(0)] public int DuelWinsToday;
         /// <summary>The local day Quests were picked for; -1 never.</summary>
         public int QuestDay = -1;
+        /// <summary>The local day the Speed Run counts (days since 2000-01-01); -1 never.</summary>
+        public int SpeedRunDay = -1;
+        [Tooltip("Speed Runs started today.")]
+        [Min(0)] public int SpeedRunPlayed;
+        [Tooltip("Speed Runs rewarded ads gave today.")]
+        [Min(0)] public int SpeedRunAdGranted;
+        [Tooltip("Whether a Speed Run was finished today.")]
+        public bool SpeedRunWon;
         /// <summary>The local day the Color Carnival counts (days since 2000-01-01); -1 never.</summary>
         public int CarnivalDay = -1;
         [Tooltip("The colour the day's carnival asks for, as its JellyColour number.")]

@@ -1,3 +1,4 @@
+using Modules.GameplayModule.Shared.Data.ValueObjects;
 using FlowIoC.BaseModule.Controller;
 using FlowIoC.BaseModule.Injectable.Attributes;
 using FlowIoC.BaseModule.SharedData;
@@ -15,6 +16,8 @@ namespace Modules.GameplayModule.Controllers
     internal class CheckWinPaymentCommand : Command
     {
         [Inject] private IJellyPuzzleModel _model { get; set; }
+        [Inject] private ISpeedRunModel _run { get; set; }
+        [InjectSignal] private GameplaySignals _signals { get; set; }
         [Inject] private ISharedDataModel _shared { get; set; }
         [InjectSignal] private GameplayInternalSignals _internalSignals { get; set; }
 
@@ -26,7 +29,20 @@ namespace Modules.GameplayModule.Controllers
             var progress = _shared.GetScriptable<SD_JellyProgress>();
             var events = _shared.GetScriptable<CD_Events>();
             int reward;
-            if (_model.Daily && progress != null && events != null)
+            if (_run.Active && progress != null && events != null)
+            {
+                reward = 0;
+                if (_run.IsLast)
+                {
+                    reward = events.SpeedRunCoins + (_run.FirstTry ? events.SpeedRunFirstTryBonus : 0);
+                    if (events.SpeedRunRockets > 0) progress.Booster(BoosterType.Rocket).Count += events.SpeedRunRockets;
+                    if (events.SpeedRunFreezes > 0) progress.Booster(BoosterType.FreezeTime).Count += events.SpeedRunFreezes;
+                    progress.SpeedRunWon = true;
+                    _run.End();
+                    _signals.Outgoing.SpeedRunChanged.Dispatch(new SpeedRunRVO());
+                }
+            }
+            else if (_model.Daily && progress != null && events != null)
             {
                 // The daily challenge pays its own reward, once a day: its coins as the win's, its booster on top.
                 bool first = progress.DailyChallengeDay != ShopDayFunction.Today();

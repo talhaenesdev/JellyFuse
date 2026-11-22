@@ -36,6 +36,8 @@ namespace Modules.GameplayModule.Models
         bool TimeExtended { get; }
         /// <summary>A level lost to the clock is played on with these seconds, once a level. False when it was not lost to the clock.</summary>
         bool ExtendTime(float seconds);
+        /// <summary>A level just started plays on this clock instead of its own: a Speed Run's time carried over.</summary>
+        void SetClock(float seconds);
         /// <summary>A level is on screen: set when one starts, cleared when the gameplay screen closes.</summary>
         bool InPlay { get; set; }
         /// <summary>The level in play is today's daily challenge, not the next level of the run.</summary>

@@ -118,6 +118,13 @@ namespace Modules.ConnectorModule.RootsContexts
             // Color Carnival: a chest reached opens, and what it gave shows on the card.
             _eventsScreenSignals.Outgoing.CarnivalOpenClicked.Connect(_gameplaySignals.Incoming.OpenCarnivalChest);
             _gameplaySignals.Outgoing.CarnivalChestOpened.Connect(_eventsScreenSignals.Incoming.ApplyCarnivalPrize);
+            // Speed Run: Start sets a run up, which opens the board over the menu; an ad buys one more try.
+            _eventsScreenSignals.Outgoing.SpeedRunStartClicked.Connect(_gameplaySignals.Incoming.StartSpeedRun);
+            _eventsScreenSignals.Outgoing.SpeedRunAdClicked.Connect(_gameplaySignals.Incoming.WatchAdForSpeedRun);
+            _gameplaySignals.Outgoing.SpeedRunChosen.Connect(_gameplayScreenSignals.Incoming.OpenGameplayScreen);
+            _gameplaySignals.Outgoing.SpeedRunChosen.Connect(_eventsScreenSignals.Incoming.CloseEventsScreen);
+            _gameplaySignals.Outgoing.SpeedRunChosen.Connect(_mainScreenSignals.Incoming.HideMainScreen);
+            _gameplaySignals.Outgoing.SpeedRunChanged.Connect(_gameplayScreenSignals.Incoming.ApplySpeedRun);
             _mainScreenSignals.Outgoing.LeaderboardClicked.Connect(_leaderboardScreenSignals.Incoming.OpenLeaderboardScreen);
             _profileSelectionSignals.Outgoing.SaveRequested.Connect(_profileSignals.Incoming.SaveProfile);
             _consentScreenSignals.Outgoing.Answered.Connect(_mainSignals.Incoming.ConsentAnswered, CONSENT_GROUP);

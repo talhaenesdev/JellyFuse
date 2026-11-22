@@ -35,7 +35,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.Controllers
 
             try
             {
-                GameplayScreenView screen = await _screenService.Open<GameplayScreenView>().Show<GameplayScreenView>();
+                // A panel opened over the menu on the same layer - the events list starting a Speed Run - gives way to the board.
+                GameplayScreenView screen = await _screenService.Open<GameplayScreenView>().ForceOpenAtFullLayer(true).Show<GameplayScreenView>();
 
                 if (screen == null)
                 {

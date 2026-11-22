@@ -31,6 +31,15 @@ namespace Modules.GameplayModule.Shared.Data.ValueObjects
         public bool DailyChallengeReady;
         /// <summary>What winning today's daily challenge gives.</summary>
         public RewardCVO DailyChallengeReward;
+        /// <summary>Speed Runs the player may start now.</summary>
+        public int SpeedRunTriesLeft;
+        /// <summary>More runs rewarded ads can still give today.</summary>
+        public int SpeedRunAdLeft;
+        public bool SpeedRunWon;
+        public int SpeedRunLevels;
+        public int SpeedRunCoins;
+        public int SpeedRunRockets;
+        public int SpeedRunFreezes;
         /// <summary>The colour today's carnival asks for.</summary>
         public Modules.GameplayModule.Shared.Enums.JellyColour CarnivalColour;
         /// <summary>Cells of that colour taken through doors today.</summary>

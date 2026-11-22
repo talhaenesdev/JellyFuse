@@ -45,6 +45,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             _signals.Incoming.ApplyAdOffers.AddListener(_view.ApplyAdOffers);
             _signals.Incoming.ReserveTop.AddListener(_view.ReserveTop);
             _signals.Incoming.DuelMode.AddListener(_view.SetDuelMode);
+            _signals.Incoming.ApplySpeedRun.AddListener(_view.ApplySpeedRun);
             _internalSignals.BoardAnimalLoaded.AddListener(_view.SetBoardAnimal);
             _signals.Incoming.SendTuningSliders.AddListener(OnSendTuningSliders);
             _signals.Incoming.SetTuned.AddListener(_view.SetTuned);
@@ -96,6 +97,7 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             _signals.Incoming.ApplyAdOffers.RemoveListener(_view.ApplyAdOffers);
             _signals.Incoming.ReserveTop.RemoveListener(_view.ReserveTop);
             _signals.Incoming.DuelMode.RemoveListener(_view.SetDuelMode);
+            _signals.Incoming.ApplySpeedRun.RemoveListener(_view.ApplySpeedRun);
             _internalSignals.BoardAnimalLoaded.RemoveListener(_view.SetBoardAnimal);
             _signals.Incoming.SendTuningSliders.RemoveListener(OnSendTuningSliders);
             _signals.Incoming.SetTuned.RemoveListener(_view.SetTuned);

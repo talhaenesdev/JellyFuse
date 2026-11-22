@@ -408,6 +408,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         {
             // A duel shows its own result over the board; the level's win and lose panels stay away.
             if (_snapshot.Status == PuzzleStatus.Playing || _duelMode) { HidePanels(); return; }
+            // A Speed Run's level won with more to come moves straight on: no win panel between its levels.
+            if (_snapshot.Status == PuzzleStatus.Won && _speedRun != null && _speedRun.Active && !_speedRun.Final) { HidePanels(); return; }
             var panel = _snapshot.Status == PuzzleStatus.Won ? _winPanel : _losePanel;
             if (panel.parent.gameObject.activeSelf || _retryPanel.parent.gameObject.activeSelf || _panelDelay != null) return;
             FillPanels();
@@ -517,7 +519,17 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             _difficulty.gameObject.SetActive(true);
         }
         /// <summary>The level's name over the board: its number, or the daily challenge's name for level 0.</summary>
-        private string LevelText() => _levelNumber <= 0 ? L("gameplay.daily_challenge", "Daily") : LF("gameplay.level", _levelFormat, _levelNumber);
+        private string LevelText() => _speedRun != null && _speedRun.Active
+            ? LF("gameplay.speed_run", "Run {0}/{1}", _speedRun.Step, _speedRun.Total)
+            : _levelNumber <= 0 ? L("gameplay.daily_challenge", "Daily") : LF("gameplay.level", _levelFormat, _levelNumber);
+
+        private SpeedRunRVO _speedRun;
+        /// <summary>Where the Speed Run stands; the level label counts its levels while one is on.</summary>
+        public void ApplySpeedRun(SpeedRunRVO run)
+        {
+            _speedRun = run;
+            if (_built) _levelLabel.text = LevelText();
+        }
         private string L(string key, string english)
         {
             string text = _localize?.Invoke(key);

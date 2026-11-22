@@ -22,6 +22,13 @@ namespace Modules.GameplayModule.Controllers
             bool missedDay = progress.LoginRewardDay >= 0 && progress.LoginRewardDay < today - 1;
             bool runDone = progress.LoginRewardsTaken >= config.LoginRewards.Count && progress.LoginRewardDay < today;
             if (missedDay || runDone) progress.LoginRewardsTaken = 0;
+            if (progress.SpeedRunDay != today)
+            {
+                progress.SpeedRunDay = today;
+                progress.SpeedRunPlayed = 0;
+                progress.SpeedRunAdGranted = 0;
+                progress.SpeedRunWon = false;
+            }
             if (progress.CarnivalDay != today)
             {
                 progress.CarnivalDay = today;
@@ -203,6 +210,9 @@ namespace Modules.GameplayModule.Controllers
         public static bool DailyChallengeReady(SD_JellyProgress progress, CD_Events config) =>
             progress.DailyChallengeDay != ShopDayFunction.Today() && DailyChallengeLevel(config) != null;
 
+        /// <summary>Speed Runs the player may start now: the day's free one and those ads gave, less those played.</summary>
+        public static int SpeedRunTriesLeft(SD_JellyProgress progress) => Mathf.Max(0, 1 + progress.SpeedRunAdGranted - progress.SpeedRunPlayed);
+
         /// <summary>Cells of today's colour taken through doors go on the carnival's count.</summary>
         public static void AddCarnival(SD_JellyProgress progress, CD_Events config, int cells)
         {
@@ -294,6 +304,13 @@ namespace Modules.GameplayModule.Controllers
                 ScratchCards = ScratchCards(progress, config),
                 DailyChallengeReady = DailyChallengeReady(progress, config),
                 DailyChallengeReward = config.DailyChallengeReward,
+                SpeedRunTriesLeft = SpeedRunTriesLeft(progress),
+                SpeedRunAdLeft = Mathf.Max(0, config.SpeedRunAdTries - progress.SpeedRunAdGranted),
+                SpeedRunWon = progress.SpeedRunWon,
+                SpeedRunLevels = config.SpeedRunLevels,
+                SpeedRunCoins = config.SpeedRunCoins,
+                SpeedRunRockets = config.SpeedRunRockets,
+                SpeedRunFreezes = config.SpeedRunFreezes,
                 CarnivalColour = (JellyColour)progress.CarnivalColour,
                 CarnivalPoints = progress.CarnivalPoints,
                 CarnivalOpened = progress.CarnivalOpened,

@@ -51,6 +51,7 @@ namespace Modules.MainModule.EventsScreenModule.ViewsMediators
                 : string.Format(L("events.starrush.progress", "{0} / {1} stars"), Mathf.Min(stars, next.Stars), next.Stars));
             ShowMeter(events);
             ApplyCarnival(events);
+            ApplySpeedRun(events);
             Set(card, "Pnl_Reward/Txt_Reward", next == null ? string.Empty : Reward(next));
             Set(card, "Pnl_Time/Txt_Time", TimeLeft(events.StarRushEndsAt));
             Set(card, "Btn_PlayEvent/Txt_Play", _starRushClaimable ? L("events.claim", "Claim") : L("events.play", "Play"));

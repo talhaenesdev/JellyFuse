@@ -18,6 +18,10 @@ namespace Modules.GameplayModule.Signals
         public Signal Start = new();
         /// <summary>The daily challenge button was pressed: today's daily level is played, when it is not won yet.</summary>
         public Signal StartDailyChallenge = new();
+        /// <summary>Starts a Speed Run: five won levels on one clock.</summary>
+        public Signal StartSpeedRun = new();
+        /// <summary>Watches a rewarded ad for one more Speed Run today.</summary>
+        public Signal WatchAdForSpeedRun = new();
         /// <summary>The Events screen's duel card: find an opponent and race them on a level the player has won.</summary>
         public Signal StartDuel = new();
         /// <summary>A player picked on the leaderboard to be challenged: this player plays the level first.</summary>
@@ -127,6 +131,10 @@ namespace Modules.GameplayModule.Signals
         public Signal<int, bool> StarsEarned = new();
         /// <summary>Today's daily challenge was picked to play: the gameplay screen opens on it.</summary>
         public Signal DailyChallengeChosen = new();
+        /// <summary>A Speed Run was set up: its first level is ready to open.</summary>
+        public Signal SpeedRunChosen = new();
+        /// <summary>Where the Speed Run stands; inactive when none is on.</summary>
+        public Signal<SpeedRunRVO> SpeedRunChanged = new();
         /// <summary>An opponent was found: the gameplay screen opens on the duel level.</summary>
         public Signal DuelChosen = new();
         /// <summary>No opponent could be found - offline, or too few levels won yet.</summary>

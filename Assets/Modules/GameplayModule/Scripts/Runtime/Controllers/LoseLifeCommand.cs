@@ -12,6 +12,7 @@ namespace Modules.GameplayModule.Controllers
     internal class LoseLifeCommand : Command
     {
         [Inject] private IDuelModel _duel { get; set; }
+        [Inject] private ISpeedRunModel _run { get; set; }
         [Inject] private ISharedDataModel _shared { get; set; }
         [Inject] private ILivesModel _lives { get; set; }
         [Inject] private IJellyPuzzleModel _model { get; set; }
@@ -19,7 +20,7 @@ namespace Modules.GameplayModule.Controllers
         public override void Execute()
         {
             // A duel is free: it neither needs nor costs a life, and leaves the run's win streak alone.
-            if (_duel.Active) return;
+            if (_duel.Active || _run.Active) return;
             var config = _shared.GetScriptable<CD_Lives>();
             var progress = _shared.GetScriptable<SD_JellyProgress>();
             if (config == null || progress == null || _model.Status != Shared.Enums.PuzzleStatus.Lost || _model.LifeTaken) return;

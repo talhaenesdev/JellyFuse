@@ -16,6 +16,7 @@ namespace Modules.GameplayModule.Controllers
         [Inject] private ISharedDataModel _shared { get; set; }
         [Inject] private IJellyPuzzleModel _model { get; set; }
         [Inject] private IDuelModel _duel { get; set; }
+        [Inject] private ISpeedRunModel _run { get; set; }
         [InjectSignal] private GameplaySignals _signals { get; set; }
         public override void Execute()
         {
@@ -40,6 +41,25 @@ namespace Modules.GameplayModule.Controllers
                 }
                 _duel.End();
             }
+            // A Speed Run plays its own levels on its own clock; a run whose last level was lost is over.
+            if (_run.Active && _model.Status == PuzzleStatus.Lost) _run.End();
+            if (_run.Active)
+            {
+                var runLevel = levels.Get(_run.CurrentLevel);
+                if (runLevel != null)
+                {
+                    _model.Start(runLevel.CreateLevel(levels.Palette));
+                    _model.SetClock(_run.Seconds);
+                    _signals.Outgoing.LevelChanged.Dispatch(_run.CurrentLevel + 1, false);
+                    _signals.Outgoing.SpeedRunChanged.Dispatch(new SpeedRunRVO { Active = true, Step = _run.Step + 1, Total = _run.Levels.Count });
+                    _signals.Outgoing.BoardChanged.Dispatch(new PuzzleTurnVO(new[] { _model.Snapshot() }));
+                    _signals.Outgoing.TimeChanged.Dispatch(_model.RemainingSeconds);
+                    _signals.Outgoing.ClockFrozen.Dispatch(0f);
+                    return;
+                }
+                _run.End();
+            }
+            _signals.Outgoing.SpeedRunChanged.Dispatch(new SpeedRunRVO());
             // Today's daily challenge, when it was picked and still has a level; else the run's level.
             var level = _model.Daily ? EventsFunction.DailyChallengeLevel(_shared.GetScriptable<CD_Events>()) : null;
             if (level == null) _model.Daily = false;

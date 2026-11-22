@@ -19,6 +19,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.Signals
         public Signal<float> ReserveTop = new();
         /// <summary>A duel is on the board (true) or over (false): the level's own win and lose panels stay hidden meanwhile.</summary>
         public Signal<bool> DuelMode = new();
+        /// <summary>Where a Speed Run stands: its levels' wins move straight on, and the level label counts the run.</summary>
+        public Signal<SpeedRunRVO> ApplySpeedRun = new();
         public Signal<PuzzleTurnVO> ApplyBoard = new(hideCommandLog: true);
         public Signal<float> ApplyTime = new(hideCommandLog: true);
         public Signal<int, bool> ApplyLevel = new();

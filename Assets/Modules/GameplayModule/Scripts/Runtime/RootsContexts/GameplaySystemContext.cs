@@ -35,6 +35,7 @@ namespace Modules.GameplayModule.RootsContexts
             _model = InjectionBinder.Bind<IJellyPuzzleModel, JellyPuzzleModel>();
             InjectionBinder.Bind<PuzzleFeedbackModel>();
             InjectionBinder.Bind<IDuelModel, DuelModel>();
+            InjectionBinder.Bind<ISpeedRunModel, SpeedRunModel>();
             InjectionBinder.Bind<ILivesModel, LivesModel>();
             InjectionBinder.Bind<IJellyTutorialModel, JellyTutorialModel>();
         }
@@ -63,6 +64,17 @@ namespace Modules.GameplayModule.RootsContexts
                 .ToSequence<AnnounceBoostersCommand>()
                 .ToSequence<AnnounceLivesCommand>()
                 .ToSequence<ScheduleNotificationsCommand>()
+                .ToSequence<AnnounceEventsCommand>();
+            CommandBinder.Bind(_signals.Incoming.StartSpeedRun)
+                .ToSequence<ChooseSpeedRunCommand>()
+                .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
+                .ToSequence<SignalDispatchCommand>(_signals.Outgoing.SpeedRunChosen);
+            CommandBinder.Bind(_signals.Incoming.WatchAdForSpeedRun)
+                .ToSequence<RefreshEventsCommand>()
+                .ToSequence<IAdsService.Commands.ShowRewarded>()
+                .ToSequence<RecordAdWatchedCommand>("speed_run")
+                .ToSequence<GrantSpeedRunTryCommand>()
+                .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
                 .ToSequence<AnnounceEventsCommand>();
             CommandBinder.Bind(_signals.Incoming.StartDailyChallenge)
                 .ToSequence<RefreshEventsCommand>()
@@ -127,7 +139,8 @@ namespace Modules.GameplayModule.RootsContexts
                 .ToSequence<PlayPuzzleSoundCommand>()
                 .ToSequence<RecordPuzzleResultCommand>()
                 .ToSequence<RequestReviewCommand>()
-                .ToSequence<CheckComboStrikeCommand>();
+                .ToSequence<CheckComboStrikeCommand>()
+                .ToSequence<AdvanceSpeedRunCommand>();
             // A combo finishes a door by itself: its jellies crackle and rise, then go in the way a rocket sends them.
             CommandBinder.Bind(_internalSignals.ComboStrike)
                 .ToSequence<AnnounceComboStrikeCommand>()
@@ -138,7 +151,8 @@ namespace Modules.GameplayModule.RootsContexts
                 .ToSequence<JudgeStarsCommand>()
                 .ToSequence<RecordDuelProgressCommand>()
                 .ToSequence<FinishDuelCommand>()
-                .ToSequence<CheckWinPaymentCommand>();
+                .ToSequence<CheckWinPaymentCommand>()
+                .ToSequence<AdvanceSpeedRunCommand>();
             CommandBinder.Bind(_signals.Incoming.Undo)
                 .ToSequence<UndoPuzzleCommand>()
                 .ToSequence<AnnounceBoostersCommand>()
@@ -153,6 +167,7 @@ namespace Modules.GameplayModule.RootsContexts
                 .ToSequence<StopPuzzleClockCommand>()
                 .ToSequence<LeaveLevelCommand>()
                 .ToSequence<EndDailyChallengeCommand>()
+                .ToSequence<EndSpeedRunCommand>()
                 .ToSequence<EndDuelCommand>()
                 .ToSequence<SendRematchCommand>()
                 .ToSequence<ILocalSaveService.Commands.Save>(PROGRESS)
@@ -205,6 +220,7 @@ namespace Modules.GameplayModule.RootsContexts
                 .ToSequence<RecordDuelProgressCommand>()
                 .ToSequence<FinishDuelCommand>()
                 .ToSequence<CheckWinPaymentCommand>()
+                .ToSequence<AdvanceSpeedRunCommand>()
                 .ToSequence<CountPuzzleComboCommand>()
                 .ToSequence<PlayPuzzleFeedbackCommand>()
                 .ToSequence<PlayPuzzleSoundCommand>()
@@ -320,7 +336,8 @@ namespace Modules.GameplayModule.RootsContexts
                 .ToSequence<JudgeStarsCommand>()
                 .ToSequence<RecordDuelProgressCommand>()
                 .ToSequence<FinishDuelCommand>()
-                .ToSequence<CheckWinPaymentCommand>();
+                .ToSequence<CheckWinPaymentCommand>()
+                .ToSequence<AdvanceSpeedRunCommand>();
             CommandBinder.Bind(_internalSignals.TimeExpired)
                 .ToSequence<FinishDuelCommand>()
                 .ToSequence<IHapticService.Commands.Play>(HapticPreset.Failure)

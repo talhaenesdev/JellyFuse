@@ -81,6 +81,19 @@ namespace Modules.GameplayModule.Shared.Data.UnityObjects
                 new() { Weight = 1, Rockets = 1, Freezes = 1, Ufos = 1 } } },
         };
 
+        [Header("Speed Run")]
+        [Tooltip("Levels in a Speed Run, picked at random from those the player has won (above the duel floor).")]
+        [Min(1)] public int SpeedRunLevels = 5;
+        [Tooltip("The run's clock: this share of the levels' own times added up.")]
+        [Range(.2f, 1.5f)] public float SpeedRunTimeShare = .7f;
+        [Min(0)] public int SpeedRunCoins = 100;
+        [Min(0)] public int SpeedRunRockets = 1;
+        [Min(0)] public int SpeedRunFreezes = 1;
+        [Tooltip("Extra coins for finishing the day's first run.")]
+        [Min(0)] public int SpeedRunFirstTryBonus = 50;
+        [Tooltip("Extra runs a day that a rewarded ad gives, beyond the free one.")]
+        [Min(0)] public int SpeedRunAdTries = 2;
+
         [Header("Star Rush")]
         [Tooltip("The weekly star meter's steps, fewest stars first. Stars from normal levels fill it; it empties every Monday.")]
         public System.Collections.Generic.List<StarRushMilestoneCVO> StarRushMilestones = new()
