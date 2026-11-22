@@ -26,6 +26,10 @@ namespace Modules.GameplayModule.Shared.Data.UnityObjects
         [Tooltip("On: the door's request goes even when the board does not hold enough jellies of its colour to make its shape; whatever there is goes with it. Off: the rocket is not used then.")]
         public bool RocketWithoutEnoughJellies = true;
 
+        [Header("Combo")]
+        [Tooltip("Seconds a fuse or a door may come after the last one and still carry the combo on - for the combo words and the electric combo alike.")]
+        [Min(.5f)] public float ComboWindowSeconds = 4f;
+
         [Header("Electric combo")]
         [Tooltip("Correct fuses or doors in a row, each quick after the last, that make a door finish itself with an electric charge. 0 turns it off.")]
         [Min(0)] public int ComboStrikeAt = 3;

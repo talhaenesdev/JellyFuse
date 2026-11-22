@@ -1,3 +1,4 @@
+using Modules.GameplayModule.Shared.Data.UnityObjects;
 using FlowIoC.BaseModule.Controller;
 using FlowIoC.BaseModule.Injectable.Attributes;
 using Modules.GameplayModule.Models;
@@ -14,13 +15,14 @@ namespace Modules.GameplayModule.Controllers
     {
         [Inject] private IJellyPuzzleModel _model { get; set; }
         [Inject] private PuzzleFeedbackModel _feedback { get; set; }
+        [Inject] private FlowIoC.BaseModule.SharedData.ISharedDataModel _shared { get; set; }
 
         public override void Execute()
         {
             var before = _feedback.Before;
             var after = _model.Snapshot();
             bool playing = before != null && before.Level != null && before.Level == after.Level && before.Status == PuzzleStatus.Playing;
-            if (playing && (after.Exited > before.Exited || after.Pieces.Count < before.Pieces.Count)) _feedback.Scored(Time.realtimeSinceStartupAsDouble);
+            if (playing && (after.Exited > before.Exited || after.Pieces.Count < before.Pieces.Count)) _feedback.Scored(Time.realtimeSinceStartupAsDouble, _shared.GetScriptable<CD_Boosters>()?.ComboWindowSeconds ?? PuzzleFeedbackModel.DEFAULT_COMBO_WINDOW);
             else _feedback.NotScored();
         }
     }

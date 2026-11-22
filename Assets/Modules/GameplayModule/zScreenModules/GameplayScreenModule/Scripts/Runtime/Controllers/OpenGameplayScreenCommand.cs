@@ -44,6 +44,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.Controllers
                     Stop();
                     return;
                 }
+                var boosters = _shared.GetScriptable<Modules.GameplayModule.Shared.Data.UnityObjects.CD_Boosters>();
+                if (boosters != null) screen.SetComboWindow(boosters.ComboWindowSeconds);
 
                 screen.ConfigurePresentation();
                 screen.SetLocalizer(_localization.Get);

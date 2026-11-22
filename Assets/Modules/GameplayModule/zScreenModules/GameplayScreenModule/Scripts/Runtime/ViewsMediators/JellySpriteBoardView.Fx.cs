@@ -22,7 +22,8 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             public Color Colour;
             public float Delay, Age, Life, From, To, Alpha;
         }
-        private const float COMBO_WINDOW = 2.5f;
+        /// <summary>Seconds a fuse or door may follow the last and carry the combo words on; set from CD_Boosters when the screen opens.</summary>
+        public float ComboWindow { get; set; } = 4f;
         private const bool FLARES = false;
         private static readonly int GLOW_STRENGTH = Shader.PropertyToID("_UIGlowStrength");
 
@@ -122,10 +123,10 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
             }
         }
 
-        /// <summary>One more fuse or door: the combo grows when it comes within COMBO_WINDOW of the last. Returns how far past one it is.</summary>
+        /// <summary>One more fuse or door: the combo grows when it comes within ComboWindow of the last. Returns how far past one it is.</summary>
         private float CountCombo(Color colour)
         {
-            _combo = _comboClock <= COMBO_WINDOW ? _combo + 1 : 1;
+            _combo = _comboClock <= ComboWindow ? _combo + 1 : 1;
             _comboClock = 0;
             if (_combo >= 2) ComboReached?.Invoke(_combo, colour);
             return Mathf.Min(4, _combo - 1);

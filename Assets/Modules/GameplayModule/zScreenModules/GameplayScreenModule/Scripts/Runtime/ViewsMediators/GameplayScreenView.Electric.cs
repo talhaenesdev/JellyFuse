@@ -16,6 +16,9 @@ namespace Modules.GameplayModule.GameplayScreenModule.ViewsMediators
         private TMP_Text _strikeText;
         private Coroutine _strikeShow;
 
+        /// <summary>The combo window from the game's config, so the combo words count the way the game does.</summary>
+        public void SetComboWindow(float seconds) { if (_spriteBoard != null && seconds > 0) _spriteBoard.ComboWindow = seconds; }
+
         public void ApplyComboStrike(ComboStrikeRVO strike)
         {
             if (strike == null) return;
