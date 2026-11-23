@@ -70,6 +70,24 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.Editor
             ("Toy_Top", PetHomeCategory.Toy, 220, .14f, new Vector2(.5f, .25f)),
             ("Toy_Drum", PetHomeCategory.Toy, 260, .14f, new Vector2(.3f, .15f)),
             ("Toy_JellyCube", PetHomeCategory.Toy, 300, .13f, new Vector2(.7f, .15f)),
+            ("Toy_Tennis", PetHomeCategory.Toy, 80, .11f, new Vector2(.45f, .18f)),
+            ("Toy_PaperBag", PetHomeCategory.Toy, 90, .14f, new Vector2(.3f, .3f)),
+            ("Toy_Soccer", PetHomeCategory.Toy, 100, .12f, new Vector2(.55f, .12f)),
+            ("Toy_Catnip", PetHomeCategory.Toy, 120, .11f, new Vector2(.4f, .3f)),
+            ("Toy_PlushFish", PetHomeCategory.Toy, 140, .12f, new Vector2(.6f, .3f)),
+            ("Toy_PlushStar", PetHomeCategory.Toy, 140, .13f, new Vector2(.35f, .2f)),
+            ("Toy_BellBall", PetHomeCategory.Toy, 160, .12f, new Vector2(.5f, .2f)),
+            ("Toy_Donut", PetHomeCategory.Toy, 160, .11f, new Vector2(.65f, .18f)),
+            ("Toy_JellyRing", PetHomeCategory.Toy, 180, .1f, new Vector2(.45f, .1f)),
+            ("Toy_TreatBall", PetHomeCategory.Toy, 200, .12f, new Vector2(.55f, .28f)),
+            ("Toy_Cloud", PetHomeCategory.Toy, 220, .13f, new Vector2(.3f, .25f)),
+            ("Toy_Car", PetHomeCategory.Toy, 240, .12f, new Vector2(.7f, .22f)),
+            ("Toy_Scratcher", PetHomeCategory.Toy, 260, .13f, new Vector2(.25f, .35f)),
+            ("Toy_Butterfly", PetHomeCategory.Toy, 280, .2f, new Vector2(.6f, .4f)),
+            ("Toy_Laser", PetHomeCategory.Toy, 300, .2f, new Vector2(.75f, .35f)),
+            ("Toy_Puzzle", PetHomeCategory.Toy, 320, .1f, new Vector2(.4f, .4f)),
+            ("Toy_JellyBear", PetHomeCategory.Toy, 350, .18f, new Vector2(.35f, .45f)),
+            ("Toy_Tunnel", PetHomeCategory.Toy, 400, .16f, new Vector2(.65f, .45f)),
 
             ("Decor_Rug", PetHomeCategory.Decor, 200, .14f, new Vector2(.5f, .35f)),
             ("Decor_Cushion", PetHomeCategory.Decor, 150, .13f, new Vector2(.6f, .5f)),
@@ -267,7 +285,7 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.Editor
                 tabsLayout.childControlWidth = tabsLayout.childControlHeight = true;
                 tabsLayout.childForceExpandWidth = tabsLayout.childForceExpandHeight = true;
                 var tabs = new List<Button>();
-                foreach (string tab in new[] { "Tab_Bowl", "Tab_Bed", "Tab_Toy", "Tab_Decor", "Room_Garden" })
+                foreach (string tab in new[] { "Tab_Bowl", "Tab_Bed", "Tab_Toy", "Tab_Decor", "Tab_Room" })
                 {
                     var t = Ui("Btn_" + tab, tabsRow.transform, typeof(Image), typeof(Button));
                     var image = t.GetComponent<Image>();
