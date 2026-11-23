@@ -233,8 +233,63 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
         private void LayOut(PetHomeItemView view)
         {
             var rect = (RectTransform)view.transform;
-            rect.anchoredPosition = FloorToLocal(view.Floor);
+            // A ball turns about its middle as it rolls; everything else stands on its bottom edge.
+            rect.pivot = new Vector2(.5f, ROLLS.Contains(view.Id) ? .5f : 0);
             view.Size(FloorHeight * DepthScale(view.Floor.y));
+            rect.anchoredPosition = FloorToLocal(view.Floor) + new Vector2(0, rect.sizeDelta.y * rect.pivot.y);
+        }
+
+        /// <summary>Where a thing on the floor touches it, whatever point it turns about.</summary>
+        private static Vector2 Foot(RectTransform rect) => rect.anchoredPosition - new Vector2(0, rect.sizeDelta.y * rect.pivot.y);
+
+        // ---- kicked toys ----
+
+        /// <summary>The toys that roll when the pet swats them.</summary>
+        private static readonly HashSet<string> ROLLS = new()
+            { "Toy_Ball", "Toy_Yarn", "Toy_Tennis", "Toy_Soccer", "Toy_BellBall", "Toy_TreatBall" };
+
+        internal bool Rolls(string id) => ROLLS.Contains(id);
+
+        /// <summary>The pet swatted a toy: it rolls away from the pet and comes to rest where it stops.</summary>
+        internal void Kick(string id, bool left)
+        {
+            if (_editing || !_items.TryGetValue(id, out var view) || !view.gameObject.activeSelf) return;
+            StartCoroutine(Roll(view, left));
+        }
+
+        private IEnumerator Roll(PetHomeItemView view, bool left)
+        {
+            var rect = (RectTransform)view.transform;
+            var dir = new Vector2(left ? -1 : 1, UnityEngine.Random.Range(-.35f, .35f)).normalized;
+            float speed = FloorHeight * UnityEngine.Random.Range(1.4f, 2f);
+            bool bounced = false;
+            while (speed > FloorHeight * .05f && !_editing && view.gameObject.activeSelf)
+            {
+                var before = view.Floor;
+                var floor = LocalToFloor(FloorToLocal(before) + dir * speed * Time.deltaTime);
+                // The room's edge sends it back the way it came.
+                if (floor.x < 0 || floor.x > 1) { dir.x = -dir.x; floor.x = Mathf.Clamp01(floor.x); }
+                if (floor.y < 0 || floor.y > 1) { dir.y = -dir.y; floor.y = Mathf.Clamp01(floor.y); }
+                view.Floor = floor;
+                LayOut(view);
+                // So does anything standing in its way, and it loses half its speed doing so.
+                if (Overlaps(view))
+                {
+                    view.Floor = before;
+                    LayOut(view);
+                    if (bounced) break;
+                    dir = -dir;
+                    speed *= .5f;
+                    bounced = true;
+                }
+                float turn = speed * Time.deltaTime / Mathf.Max(1, rect.sizeDelta.y * .5f) * Mathf.Rad2Deg;
+                rect.localRotation *= Quaternion.Euler(0, 0, dir.x > 0 ? -turn : turn);
+                speed *= Mathf.Pow(.2f, Time.deltaTime);
+                yield return null;
+            }
+            view.Committed = view.Floor;
+            Placed?.Invoke(new PlacedItemSVO(view.Id, view.Floor.x, view.Floor.y));
+            TellPet();
         }
 
         // ---- shadows ----
@@ -293,7 +348,7 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
                 if (!shows) continue;
                 // The pet's frames carry empty space around the body; furniture fills its picture.
                 float width = pet ? child.sizeDelta.y * .7f : child.sizeDelta.x * .85f;
-                shadow.rectTransform.anchoredPosition = child.anchoredPosition + new Vector2(0, width * .04f);
+                shadow.rectTransform.anchoredPosition = Foot(child) + new Vector2(0, width * .04f);
                 shadow.rectTransform.sizeDelta = new Vector2(width, width * .3f);
                 shadow.color = _shadowColor;
             }
@@ -308,7 +363,7 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
             {
                 var a = (RectTransform)_floor.GetChild(i - 1);
                 var b = (RectTransform)_floor.GetChild(i);
-                if (b.anchoredPosition.y > a.anchoredPosition.y + .5f) b.SetSiblingIndex(i - 1);
+                if (Foot(b).y > Foot(a).y + .5f) b.SetSiblingIndex(i - 1);
             }
         }
 
@@ -371,7 +426,7 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
                 if (other == item || !other.gameObject.activeSelf || FLAT.Contains(other.Id)) continue;
                 var b = (RectTransform)other.transform;
                 float bw = b.sizeDelta.x * .4f;
-                var d = b.anchoredPosition - a.anchoredPosition;
+                var d = Foot(b) - Foot(a);
                 float x = d.x / (aw + bw), y = d.y / ((aw + bw) * .35f);
                 if (x * x + y * y < 1) return true;
             }

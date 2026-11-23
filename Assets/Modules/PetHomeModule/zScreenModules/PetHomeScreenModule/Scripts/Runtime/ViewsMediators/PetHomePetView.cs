@@ -130,6 +130,16 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
                 case PetHomeCategory.Bed:
                     Play(_animal.Frames, SIT_DOWN, 1, () => Loop(_animal.Frames, SLEEP, 7f, () => Play(_animal.Frames, STRETCH, 1, () => Sit(1.5f))));
                     break;
+                case PetHomeCategory.Toy when _screen.Rolls(goal.Value.Id):
+                    // One swat sends a ball off the way it is facing, and it hops after it for joy.
+                    string toy = goal.Value.Id;
+                    bool left = _facingLeft;
+                    Play(_animal.TouchFrames, SWAT, 1, () =>
+                    {
+                        _screen.Kick(toy, left);
+                        Play(_animal.TouchFrames, HOP, 1, () => Sit(1.2f));
+                    });
+                    break;
                 case PetHomeCategory.Toy:
                     Loop(_animal.TouchFrames, SWAT, 3f, () => Play(_animal.TouchFrames, HOP, 1, () => Sit(1.5f)));
                     break;
