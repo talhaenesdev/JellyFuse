@@ -18,5 +18,11 @@ namespace Modules.PetHomeModule.Models
         void Empty(string id);
         void Refill(string id);
         PetHomeRVO Snapshot();
+        /// <summary>Something done for the pet: happier, up to full - and a full pet is owed a reward.</summary>
+        void Care(Shared.Enums.PetHomeCare care);
+        /// <summary>The coins a full pet is owed, once; 0 when none are.</summary>
+        int TakeReward();
+        /// <summary>The time since the home was last seen: happiness wears off, and the pet eats from its bowls.</summary>
+        void PassTime(System.DateTime nowUtc);
     }
 }

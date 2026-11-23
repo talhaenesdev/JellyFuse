@@ -38,6 +38,7 @@ namespace Modules.ConnectorModule.RootsContexts
             _screenSignals.Outgoing.Stored.Connect(_petHomeSignals.Incoming.Store, GROUP);
             _screenSignals.Outgoing.Ate.Connect(_petHomeSignals.Incoming.Eat, GROUP);
             _screenSignals.Outgoing.RefillClicked.Connect(_petHomeSignals.Incoming.Refill, GROUP);
+            _screenSignals.Outgoing.Cared.Connect(_petHomeSignals.Incoming.Care, GROUP);
             _gameplaySignals.Outgoing.CoinsSpent.Connect(_petHomeSignals.Incoming.CoinsAnswered, GROUP);
         }
 
@@ -47,6 +48,8 @@ namespace Modules.ConnectorModule.RootsContexts
             _petHomeSignals.Outgoing.Changed.Connect(_screenSignals.Incoming.Apply, GROUP);
             _petHomeSignals.Outgoing.NotBought.Connect(_screenSignals.Incoming.NotBought, GROUP);
             _petHomeSignals.Outgoing.CoinsRequested.Connect(_gameplaySignals.Incoming.SpendCoins, GROUP);
+            _petHomeSignals.Outgoing.GrantCoins.Connect(_gameplaySignals.Incoming.GrantCoins, GROUP);
+            _petHomeSignals.Outgoing.Rewarded.Connect(_screenSignals.Incoming.Rewarded, GROUP);
             _gameplaySignals.Outgoing.CoinsChanged.Connect(_screenSignals.Incoming.ApplyCoins, GROUP);
         }
 

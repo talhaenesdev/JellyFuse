@@ -105,6 +105,88 @@ namespace Modules.PetHomeModule.Models
             Placed = Save != null ? Save.Placed.ConvertAll(p => new PlacedItemSVO(p.Id, p.X, p.Y)) : new List<PlacedItemSVO>(),
             Room = Save != null ? Save.Room : null,
             Empty = Save != null ? new HashSet<string>(Save.EmptyBowls) : new HashSet<string>(),
+            Happiness = Happiness,
         };
+
+        // ---- happiness ----
+
+        private int _reward;
+        private readonly Dictionary<PetHomeCare, float> _lastCare = new();
+
+        /// <summary>
+        /// How long the same kind of care waits before it counts again, in seconds: a pat every half minute, a game
+        /// every quarter. Without it a player tapping the pet would fill it - and take its coins - in a minute.
+        /// </summary>
+        private static float Rest(PetHomeCare care) => care switch
+        {
+            PetHomeCare.Petted => 30f,
+            PetHomeCare.Played => 15f,
+            _ => 0f,
+        };
+
+        private int Happiness
+        {
+            get
+            {
+                if (Save == null) return 0;
+                if (Save.Happiness < 0) Save.Happiness = Config != null ? Config.StartHappiness : 50;
+                return Save.Happiness;
+            }
+        }
+
+        public void Care(PetHomeCare care)
+        {
+            var config = Config;
+            if (Save == null || config == null) return;
+            float now = Time.realtimeSinceStartup;
+            if (_lastCare.TryGetValue(care, out float last) && now - last < Rest(care)) return;
+            _lastCare[care] = now;
+            int gain = care switch
+            {
+                PetHomeCare.Ate => config.HappyAte,
+                PetHomeCare.Played => config.HappyPlayed,
+                PetHomeCare.Petted => config.HappyPetted,
+                PetHomeCare.Slept => config.HappySlept,
+                _ => 0,
+            };
+            int happiness = Happiness + gain;
+            if (happiness >= 100)
+            {
+                // Full: the player is owed coins, and the pet starts filling up again.
+                _reward += config.HappyReward;
+                happiness = config.HappyAfterReward;
+            }
+            Save.Happiness = Mathf.Clamp(happiness, 0, 100);
+        }
+
+        public int TakeReward()
+        {
+            int reward = _reward;
+            _reward = 0;
+            return reward;
+        }
+
+        public void PassTime(System.DateTime nowUtc)
+        {
+            var save = Save;
+            var config = Config;
+            if (save == null || config == null) return;
+            long now = nowUtc.Ticks;
+            if (save.LastSeen <= 0 || save.LastSeen > now) { save.LastSeen = now; return; }
+            double hours = (now - save.LastSeen) / (double)System.TimeSpan.TicksPerHour;
+            if (hours < .05) return;
+            save.Happiness = Mathf.Clamp(Happiness - Mathf.RoundToInt((float)(hours * config.HappyLossPerHour)), 0, 100);
+            // Meals eaten while away: one full bowl for each stretch, emptied in the order they stand.
+            int meals = config.HoursPerMeal > 0 ? (int)(hours / config.HoursPerMeal) : 0;
+            foreach (var placed in save.Placed)
+            {
+                if (meals <= 0) break;
+                var item = Item(placed.Id);
+                if (item == null || item.Category != PetHomeCategory.Bowl || save.EmptyBowls.Contains(placed.Id)) continue;
+                save.EmptyBowls.Add(placed.Id);
+                meals--;
+            }
+            save.LastSeen = now;
+        }
     }
 }

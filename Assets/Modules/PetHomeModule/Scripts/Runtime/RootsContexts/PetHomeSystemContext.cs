@@ -31,6 +31,7 @@ namespace Modules.PetHomeModule.RootsContexts
             base.CommandBindings();
             CommandBinder.Bind(_signals.Incoming.Open)
                 .ToSequence<GivePetHomeStartersCommand>()
+                .ToSequence<PassPetHomeTimeCommand>()
                 .ToSequence<ILocalSaveService.Commands.Save>(SAVE)
                 .ToSequence<OpenPetHomeCommand>();
             CommandBinder.Bind(_signals.Incoming.Pick)
@@ -50,6 +51,11 @@ namespace Modules.PetHomeModule.RootsContexts
                 .ToSequence<AnnouncePetHomeCommand>();
             CommandBinder.Bind(_signals.Incoming.Refill)
                 .ToSequence<RefillPetHomeBowlCommand>()
+                .ToSequence<ILocalSaveService.Commands.Save>(SAVE)
+                .ToSequence<AnnouncePetHomeCommand>();
+            CommandBinder.Bind(_signals.Incoming.Care)
+                .ToSequence<CarePetHomeCommand>()
+                .ToSequence<RewardPetHomeCommand>()
                 .ToSequence<ILocalSaveService.Commands.Save>(SAVE)
                 .ToSequence<AnnouncePetHomeCommand>();
             CommandBinder.Bind(_signals.Incoming.Store)

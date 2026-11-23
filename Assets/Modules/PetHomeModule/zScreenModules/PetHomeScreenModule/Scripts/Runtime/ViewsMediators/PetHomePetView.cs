@@ -178,6 +178,7 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
                 // Home with the ball: it drops it at the player's feet and is very pleased with itself.
                 LetGo();
                 _screen.Hearts(2);
+                _screen.Care(PetHomeCare.Played);
                 Play(_animal.TouchFrames, HOP, 1, () => Sit(2f));
                 return;
             }
@@ -202,7 +203,11 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
                     });
                     break;
                 case PetHomeCategory.Bed:
-                    Play(_animal.Frames, SIT_DOWN, 1, () => Loop(_animal.Frames, SLEEP, 7f, () => Play(_animal.Frames, STRETCH, 1, () => Sit(1.5f))));
+                    Play(_animal.Frames, SIT_DOWN, 1, () => Loop(_animal.Frames, SLEEP, 7f, () =>
+                    {
+                        _screen.Care(PetHomeCare.Slept);
+                        Play(_animal.Frames, STRETCH, 1, () => Sit(1.5f));
+                    }));
                     break;
                 case PetHomeCategory.Toy when _screen.Rolls(goal.Value.Id):
                     // One swat sends a ball off the way it is facing, and it hops after it for joy.
@@ -211,6 +216,7 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
                     Play(_animal.TouchFrames, SWAT, 1, () =>
                     {
                         _screen.Kick(toy, left);
+                        _screen.Care(PetHomeCare.Played);
                         Play(_animal.TouchFrames, HOP, 1, () => Sit(1.2f));
                     });
                     break;

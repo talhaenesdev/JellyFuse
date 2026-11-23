@@ -15,5 +15,9 @@ namespace Modules.PetHomeModule.Shared.Data.UnityObjects
         public string Room;
         [Tooltip("Bowls the pet has eaten empty, waiting to be filled.")]
         public List<string> EmptyBowls = new();
+        [Tooltip("How happy the pet is, out of 100.")]
+        public int Happiness = -1;
+        [Tooltip("When the pet home was last looked at, as UTC ticks: time away is counted from here.")]
+        public long LastSeen;
     }
 }

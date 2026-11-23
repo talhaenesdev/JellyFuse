@@ -38,6 +38,11 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
         [SerializeField] private Sprite _validMark;
         [SerializeField] private Sprite _invalidMark;
 
+        [Header("Happiness")]
+        [Tooltip("The bar's fill: its width is the pet's happiness.")]
+        [SerializeField] private RectTransform _happyFill;
+        [SerializeField] private RectTransform _happyBar;
+
         [Header("Top bar")]
         [SerializeField] private Button _closeButton;
         [SerializeField] private TMP_Text _coinsText;
@@ -66,6 +71,8 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
         public Action<string> RefillClicked;
         /// <summary>Something the player should hear and feel: a bounce, a pick-up, a meal.</summary>
         public Action<PetHomeFeel> Felt;
+        /// <summary>Something was done for the pet that makes it happier.</summary>
+        public Action<PetHomeCare> Cared;
 
         private readonly Dictionary<string, PetHomeItemView> _items = new();
         private readonly List<PetHomeCardView> _cards = new();
@@ -139,11 +146,53 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
             foreach (var item in home.Items) if (item != null && !string.IsNullOrEmpty(item.Id)) _catalogue[item.Id] = item;
 
             if (home.Room != null && _catalogue.TryGetValue(home.Room, out var room) && room.Sprite != null) ShowRoom(room);
+            ShowHappiness(home.Happiness);
             PlaceItems(home.Placed);
             RefreshCards();
         }
 
         public void ApplyCoins(int coins) => _coinsText.text = coins.ToString("N0");
+
+        // ---- happiness ----
+
+        private float _happyShown = -1;
+        private Coroutine _happyFilling;
+
+        private void ShowHappiness(int happiness)
+        {
+            float target = Mathf.Clamp01(happiness / 100f);
+            if (_happyShown < 0 || !isActiveAndEnabled) { _happyShown = target; SetHappyFill(target); return; }
+            if (_happyFilling != null) StopCoroutine(_happyFilling);
+            _happyFilling = StartCoroutine(FillHappiness(target));
+        }
+
+        private IEnumerator FillHappiness(float target)
+        {
+            float from = _happyShown;
+            for (float t = 0; t < .5f; t += Time.deltaTime)
+            {
+                _happyShown = Mathf.Lerp(from, target, Mathf.SmoothStep(0, 1, t / .5f));
+                SetHappyFill(_happyShown);
+                yield return null;
+            }
+            _happyShown = target;
+            SetHappyFill(target);
+            if (target > from) Wobble(_happyBar, .08f);
+        }
+
+        private void SetHappyFill(float share) => _happyFill.anchorMax = new Vector2(Mathf.Max(.06f, share), 1);
+
+        /// <summary>The pet's happiness filled up and earned coins: hearts, a cheer, and the coins said out loud.</summary>
+        public void ShowReward(int coins)
+        {
+            Hearts(6);
+            Wobble(_happyBar, .2f);
+            Felt?.Invoke(PetHomeFeel.Happy);
+            Toast(string.Format(L("pethome.happy_reward", "Your pet is so happy! +{0} coins"), coins));
+        }
+
+        /// <summary>The pet tells the screen it was cared for.</summary>
+        internal void Care(PetHomeCare care) => Cared?.Invoke(care);
 
         public void ShowNotBought(string id) => Toast(L("pethome.not_enough", "Not enough coins!"));
 
@@ -615,6 +664,7 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
             _pet.Pet();
             Hearts(3);
             Felt?.Invoke(PetHomeFeel.Petted);
+            Cared?.Invoke(PetHomeCare.Petted);
         }
 
         // ---- hearts ----
@@ -708,6 +758,7 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
         {
             Ate?.Invoke(id);
             Felt?.Invoke(PetHomeFeel.Ate);
+            Cared?.Invoke(PetHomeCare.Ate);
             if (_items.TryGetValue(id, out var bowl)) Wobble(bowl.transform, .1f);
         }
 

@@ -263,6 +263,35 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.Editor
                 Anchor(coinsText.rectTransform, new Vector2(.3f, 0), new Vector2(.95f, 1));
                 coinsText.text = "0";
 
+                // Happiness: a pink bar under the purse, a heart at its left end.
+                var happy = Ui("Pnl_Happy", root.transform, typeof(Image));
+                var happyRect = (RectTransform)happy.transform;
+                happyRect.anchorMin = happyRect.anchorMax = happyRect.pivot = new Vector2(.5f, 1);
+                happyRect.anchoredPosition = new Vector2(20, -218);
+                happyRect.sizeDelta = new Vector2(300, 46);
+                var happyBack = happy.GetComponent<Image>();
+                happyBack.sprite = AssetDatabase.LoadAssetAtPath<Sprite>(ROUNDED);
+                happyBack.type = Image.Type.Sliced;
+                happyBack.color = new Color32(0x6E, 0x4A, 0x9E, 0xC0);
+                happyBack.raycastTarget = false;
+                var happyFill = Ui("Img_Fill", happy.transform, typeof(Image)).GetComponent<Image>();
+                Anchor(happyFill.rectTransform, Vector2.zero, new Vector2(.5f, 1));
+                happyFill.rectTransform.offsetMin = new Vector2(6, 6);
+                happyFill.rectTransform.offsetMax = new Vector2(-6, -6);
+                happyFill.sprite = AssetDatabase.LoadAssetAtPath<Sprite>(ROUNDED);
+                happyFill.type = Image.Type.Sliced;
+                happyFill.color = new Color32(0xFF, 0x7E, 0xB6, 0xFF);
+                happyFill.raycastTarget = false;
+                var heart = Ui("Img_Heart", happy.transform, typeof(Image)).GetComponent<Image>();
+                heart.rectTransform.anchorMin = heart.rectTransform.anchorMax = new Vector2(0, .5f);
+                heart.rectTransform.anchoredPosition = new Vector2(-6, 2);
+                heart.rectTransform.sizeDelta = new Vector2(84, 84);
+                heart.sprite = Art("Icon_Heart");
+                heart.preserveAspect = true;
+                heart.raycastTarget = false;
+                Set(view, "_happyBar", happyRect);
+                Set(view, "_happyFill", happyFill.rectTransform);
+
                 var edit = RoundButton("Btn_Edit", root.transform, Art("Btn_Move"), new Vector2(1, 1), new Vector2(-100, -150), 140);
                 var done = RoundButton("Btn_Done", root.transform, Art("Btn_Confirm"), new Vector2(1, 1), new Vector2(-100, -150), 140);
                 var shop = RoundButton("Btn_Shop", root.transform, Art("Btn_Store"), new Vector2(1, 0), new Vector2(-130, 170), 190);

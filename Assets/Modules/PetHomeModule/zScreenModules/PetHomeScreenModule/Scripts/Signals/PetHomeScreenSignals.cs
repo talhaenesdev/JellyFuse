@@ -1,5 +1,6 @@
 using FlowIoC.BaseModule.Signals;
 using Modules.PetHomeModule.Shared.Data.ValueObjects;
+using Modules.PetHomeModule.Shared.Enums;
 
 namespace Modules.PetHomeModule.PetHomeScreenModule.Signals
 {
@@ -13,6 +14,8 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.Signals
     {
         /// <summary>Open the pet home as it stands.</summary>
         public Signal<PetHomeRVO> Open = new();
+        /// <summary>The pet's happiness filled up and earned these coins.</summary>
+        public Signal<int> Rewarded = new();
         /// <summary>The pet home changed - bought, stored, a new room.</summary>
         public Signal<PetHomeRVO> Apply = new();
         /// <summary>The coins the player holds now.</summary>
@@ -33,6 +36,8 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.Signals
         public Signal<string> Ate = new();
         /// <summary>An empty bowl was tapped to fill it, by id.</summary>
         public Signal<string> RefillClicked = new();
+        /// <summary>Something was done for the pet that makes it happier.</summary>
+        public Signal<PetHomeCare> Cared = new();
         /// <summary>The screen was closed.</summary>
         public Signal Closed = new();
     }

@@ -11,5 +11,7 @@ namespace Modules.PetHomeModule.Shared.Data.ValueObjects
         public string Room;
         /// <summary>Bowls the pet has eaten empty, by id.</summary>
         public IReadOnlyCollection<string> Empty;
+        /// <summary>How happy the pet is, out of 100.</summary>
+        public int Happiness;
     }
 }
