@@ -246,9 +246,9 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
                 ? h * .45f + spot.Width * .45f
                 : h * Mouths.eat.x - spot.Width * .12f;
             float side = _screen.FloorToLocal(_floor).x <= at.x ? -1 : 1;
-            // Just behind the item, so the bowl's rim is drawn over the mouth dipping into it.
-            var stand = _screen.LocalToFloor(at + new Vector2(side * reach, 2));
-            if (stand.x < 0 || stand.x > 1) stand = _screen.LocalToFloor(at + new Vector2(-side * reach, 2));
+            // Just in front of the item, so the pet is drawn over it and its mouth comes down onto the bowl.
+            var stand = _screen.LocalToFloor(at + new Vector2(side * reach, -6));
+            if (stand.x < 0 || stand.x > 1) stand = _screen.LocalToFloor(at + new Vector2(-side * reach, -6));
             return new Vector2(Mathf.Clamp01(stand.x), Mathf.Clamp01(stand.y));
         }
 
