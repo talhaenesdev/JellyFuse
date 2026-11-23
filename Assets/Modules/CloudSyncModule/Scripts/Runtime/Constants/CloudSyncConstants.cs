@@ -8,6 +8,7 @@ namespace Modules.CloudSyncModule.Constants
         /// <summary>The saved assets kept in the cloud, by the name they are filed under - which is also their cloud key.</summary>
         public const string PROGRESS = "SD_JellyProgress";
         public const string PROFILE = "SD_PlayerProfile";
+        public const string PET_HOME = "SD_PetHome";
 
         /// <summary>
         /// How long the boot waits for the sign-in before playing on without the cloud. Long enough

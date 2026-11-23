@@ -8,13 +8,14 @@ using Modules.AccountModule.Services;
 using Modules.CloudSaveModule.Services;
 using Modules.CloudSyncModule.Constants;
 using Modules.GameplayModule.Shared.Data.UnityObjects;
+using Modules.PetHomeModule.Shared.Data.UnityObjects;
 using Modules.ProfileModule.Shared.Data.UnityObjects;
 using UnityEngine;
 
 namespace Modules.CloudSyncModule.Controllers
 {
     /// <summary>
-    /// Sends the progress and the profile to the cloud as they are now. Signed out or offline it does
+    /// Sends the progress, the profile and the pet home to the cloud as they are now. Signed out or offline it does
     /// nothing: the local save already holds the same values, and the next upload sends them.
     /// </summary>
     internal sealed class UploadCloudProgressCommand : Command
@@ -39,6 +40,9 @@ namespace Modules.CloudSyncModule.Controllers
                 var records = new Dictionary<string, string> { [CloudSyncConstants.PROGRESS] = JsonUtility.ToJson(progress) };
                 var profile = _shared.GetScriptable<SD_PlayerProfile>();
                 if (profile != null) records[CloudSyncConstants.PROFILE] = JsonUtility.ToJson(profile);
+                // The pet home holds what the player paid coins for, so it is kept as carefully as the progress.
+                var petHome = _shared.GetScriptable<SD_PetHome>();
+                if (petHome != null && petHome.Started) records[CloudSyncConstants.PET_HOME] = JsonUtility.ToJson(petHome);
 
                 await _cloud.SaveAsync(records);
                 Release();

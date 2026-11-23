@@ -4,7 +4,7 @@
 Keeps the player's progress and profile on their cloud account: uploads the saved assets when they change or the app goes to the background, and on launch restores the cloud copy when it is further ahead than this device.
 
 ## Concepts
-cloud sync, restore progress, backup, new phone, reinstall, SD_JellyProgress, SD_PlayerProfile
+cloud sync, restore progress, backup, new phone, reinstall, SD_JellyProgress, SD_PlayerProfile, SD_PetHome
 
 ## Decisions
 - **The local save stays the game's save; the cloud is its copy.** Nothing reads the cloud during
@@ -17,7 +17,11 @@ cloud sync, restore progress, backup, new phone, reinstall, SD_JellyProgress, SD
 - **The higher level wins; a tie keeps this device's.** A new phone or a reinstall has a lower
   level than the cloud and gets it back; a device played offline that got further keeps its own and
   uploads it. Coins and boosters travel with the level they were saved beside.
-- **The cloud keys are the asset names** (`SD_JellyProgress`, `SD_PlayerProfile`), and the values are
+- **The pet home is restored on its own terms.** It is uploaded beside the progress once the home has
+  been opened, and the cloud's copy is taken when the progress came back with it or when it owns more
+  items than this device - a reinstall never loses what was bought with coins, and a device that
+  bought more keeps its own.
+- **The cloud keys are the asset names** (`SD_JellyProgress`, `SD_PlayerProfile`, `SD_PetHome`), and the values are
   `JsonUtility` text of the assets, so what is kept is what the local save keeps.
 
 ## Known gaps

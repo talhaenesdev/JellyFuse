@@ -9,6 +9,7 @@ using Modules.CloudSaveModule.Services;
 using Modules.CloudSyncModule.Constants;
 using Modules.CloudSyncModule.Signals;
 using Modules.GameplayModule.Shared.Data.UnityObjects;
+using Modules.PetHomeModule.Shared.Data.UnityObjects;
 using Modules.LoadingModule.Services;
 using Modules.ProfileModule.Shared.Data.UnityObjects;
 using UnityEngine;
@@ -46,7 +47,7 @@ namespace Modules.CloudSyncModule.Controllers
                     return;
                 }
 
-                var cloud = await _cloud.LoadAsync(new[] { CloudSyncConstants.PROGRESS, CloudSyncConstants.PROFILE });
+                var cloud = await _cloud.LoadAsync(new[] { CloudSyncConstants.PROGRESS, CloudSyncConstants.PROFILE, CloudSyncConstants.PET_HOME });
                 if (cloud == null || !cloud.TryGetValue(CloudSyncConstants.PROGRESS, out string progressJson))
                 {
                     step.Skip();
@@ -58,6 +59,11 @@ namespace Modules.CloudSyncModule.Controllers
                 JsonUtility.FromJsonOverwrite(progressJson, cloudProgress);
                 bool cloudAhead = cloudProgress.LevelIndex > progress.LevelIndex;
                 UnityEngine.Object.Destroy(cloudProgress);
+
+                // The pet home comes back on its own terms as well: a copy that owns more than this device
+                // is a reinstall or a new phone, whatever the levels say.
+                // It is read again each time the home opens, so nothing else needs telling.
+                RestorePetHome(cloud, cloudAhead);
 
                 if (!cloudAhead)
                 {
@@ -85,6 +91,26 @@ namespace Modules.CloudSyncModule.Controllers
                 step.Skip();
                 Stop();
             }
+        }
+
+        /// <summary>
+        /// Takes the cloud's pet home over this device's when the progress was restored with it, or when it owns
+        /// more - bought items are never lost to a fresh install. Otherwise this device's stands.
+        /// </summary>
+        private bool RestorePetHome(System.Collections.Generic.IReadOnlyDictionary<string, string> cloud, bool cloudAhead)
+        {
+            var petHome = _shared.GetScriptable<SD_PetHome>();
+            if (petHome == null || !cloud.TryGetValue(CloudSyncConstants.PET_HOME, out string json) || string.IsNullOrEmpty(json))
+                return false;
+            var cloudPetHome = ScriptableObject.CreateInstance<SD_PetHome>();
+            JsonUtility.FromJsonOverwrite(json, cloudPetHome);
+            bool take = cloudPetHome.Started && (cloudAhead || cloudPetHome.Owned.Count > petHome.Owned.Count);
+            int owned = cloudPetHome.Owned.Count;
+            UnityEngine.Object.Destroy(cloudPetHome);
+            if (!take) return false;
+            JsonUtility.FromJsonOverwrite(json, petHome);
+            FlowLogger.Log($"Restored the cloud's pet home: {owned} items.");
+            return true;
         }
 
         // The sign-in runs beside the boot already; this only waits on the one in flight, and gives
