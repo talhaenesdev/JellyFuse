@@ -122,6 +122,8 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
         public Action LoginRewardsClicked;
         public Action WheelClicked;
         public Action SlotClicked;
+        public Action PetHomeClicked;
+        [SerializeField] private Button _petHomeButton;
         public Action LeaderboardClicked;
         public Action ScratchClicked;
         public Action DailyChallengeClicked;
@@ -153,6 +155,7 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
             if (_loginRewardsButton != null) _loginRewardsButton.onClick.AddListener(OnLoginRewardsClicked);
             if (_wheelButton != null) _wheelButton.onClick.AddListener(OnWheelClicked);
             if (_slotButton != null) _slotButton.onClick.AddListener(OnSlotClicked);
+            if (_petHomeButton != null) _petHomeButton.onClick.AddListener(OnPetHomeClicked);
             if (_leaderboardButton != null) _leaderboardButton.onClick.AddListener(OnLeaderboardClicked);
             if (_scratchButton != null) _scratchButton.onClick.AddListener(OnScratchClicked);
             if (_dailyChallengeButton != null) _dailyChallengeButton.onClick.AddListener(OnDailyChallengeClicked);
@@ -174,6 +177,7 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
             if (_loginRewardsButton != null) _loginRewardsButton.onClick.RemoveListener(OnLoginRewardsClicked);
             if (_wheelButton != null) _wheelButton.onClick.RemoveListener(OnWheelClicked);
             if (_slotButton != null) _slotButton.onClick.RemoveListener(OnSlotClicked);
+            if (_petHomeButton != null) _petHomeButton.onClick.RemoveListener(OnPetHomeClicked);
             if (_leaderboardButton != null) _leaderboardButton.onClick.RemoveListener(OnLeaderboardClicked);
             if (_scratchButton != null) _scratchButton.onClick.RemoveListener(OnScratchClicked);
             if (_dailyChallengeButton != null) _dailyChallengeButton.onClick.RemoveListener(OnDailyChallengeClicked);
@@ -193,6 +197,7 @@ namespace Modules.MainModule.MainScreenModule.ViewsMediators
         private void OnLoginRewardsClicked() => LoginRewardsClicked?.Invoke();
         private void OnWheelClicked() => WheelClicked?.Invoke();
         private void OnSlotClicked() => SlotClicked?.Invoke();
+        private void OnPetHomeClicked() => PetHomeClicked?.Invoke();
         private void OnLeaderboardClicked() => LeaderboardClicked?.Invoke();
         private void OnScratchClicked() => ScratchClicked?.Invoke();
         private void OnDailyChallengeClicked() => DailyChallengeClicked?.Invoke();

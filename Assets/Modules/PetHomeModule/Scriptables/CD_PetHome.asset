@@ -1,0 +1,307 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e895510fe9cb59d478ef10530e947099, type: 3}
+  m_Name: CD_PetHome
+  m_EditorClassIdentifier: Modules.PetHome.Shared::Modules.PetHomeModule.Shared.Data.UnityObjects.CD_PetHome
+  Items:
+  - Id: Room_Bedroom
+    Category: 4
+    Sprite: {fileID: 21300000, guid: c9706efe087572d428497e515aa648d8, type: 3}
+    Price: 0
+    Height: 1
+    Spot: {x: 0, y: 0}
+  - Id: Room_Garden
+    Category: 4
+    Sprite: {fileID: 21300000, guid: 78881a6f9bd42f34fab74baa22ba0e36, type: 3}
+    Price: 1500
+    Height: 1
+    Spot: {x: 0, y: 0}
+  - Id: Room_Candy
+    Category: 4
+    Sprite: {fileID: 21300000, guid: c3b5daef47e755d4f8aaeddeaeb3a138, type: 3}
+    Price: 2500
+    Height: 1
+    Spot: {x: 0, y: 0}
+  - Id: Bowl_Ceramic
+    Category: 0
+    Sprite: {fileID: 21300000, guid: 9a0da1dd16789a44881a990a2606032e, type: 3}
+    Price: 0
+    Height: 0.15
+    Spot: {x: 0.75, y: 0.3}
+  - Id: Bowl_Paw
+    Category: 0
+    Sprite: {fileID: 21300000, guid: a492e066ac125ae4882640c870e7d638, type: 3}
+    Price: 120
+    Height: 0.15
+    Spot: {x: 0.75, y: 0.3}
+  - Id: Bowl_Fish
+    Category: 0
+    Sprite: {fileID: 21300000, guid: 81f975f311f877c44864193126767958, type: 3}
+    Price: 180
+    Height: 0.15
+    Spot: {x: 0.75, y: 0.3}
+  - Id: Bowl_Wooden
+    Category: 0
+    Sprite: {fileID: 21300000, guid: 21f538875a63be8478c23122c5a4f7dd, type: 3}
+    Price: 200
+    Height: 0.15
+    Spot: {x: 0.75, y: 0.3}
+  - Id: Bowl_Double
+    Category: 0
+    Sprite: {fileID: 21300000, guid: a8046fa8c9f1ee947bad2ee9bb5ba5cc, type: 3}
+    Price: 250
+    Height: 0.15
+    Spot: {x: 0.75, y: 0.3}
+  - Id: Bowl_Bone
+    Category: 0
+    Sprite: {fileID: 21300000, guid: a4f9dfec71d63004f85694796fd1c664, type: 3}
+    Price: 300
+    Height: 0.15
+    Spot: {x: 0.75, y: 0.3}
+  - Id: Bowl_Flower
+    Category: 0
+    Sprite: {fileID: 21300000, guid: 08568f8257ecd0e408c955dc1890824c, type: 3}
+    Price: 350
+    Height: 0.15
+    Spot: {x: 0.75, y: 0.3}
+  - Id: Bowl_Candy
+    Category: 0
+    Sprite: {fileID: 21300000, guid: 0fa412ccd56d7ab4e98fed5496996730, type: 3}
+    Price: 400
+    Height: 0.15
+    Spot: {x: 0.75, y: 0.3}
+  - Id: Bowl_Star
+    Category: 0
+    Sprite: {fileID: 21300000, guid: c48d19f30c64f3a4b9a21a5a6b00d111, type: 3}
+    Price: 450
+    Height: 0.15
+    Spot: {x: 0.75, y: 0.3}
+  - Id: Bowl_Jelly
+    Category: 0
+    Sprite: {fileID: 21300000, guid: ef3353109f5232044b96992e54241349, type: 3}
+    Price: 500
+    Height: 0.15
+    Spot: {x: 0.75, y: 0.3}
+  - Id: Bowl_Golden
+    Category: 0
+    Sprite: {fileID: 21300000, guid: 8567f47be6225224ebf5baa886477a0a, type: 3}
+    Price: 800
+    Height: 0.15
+    Spot: {x: 0.75, y: 0.3}
+  - Id: Bowl_Crown
+    Category: 0
+    Sprite: {fileID: 21300000, guid: e8159dfcf855ec948b1bc77b9788b053, type: 3}
+    Price: 1200
+    Height: 0.17
+    Spot: {x: 0.75, y: 0.3}
+  - Id: Bed_Cushion
+    Category: 1
+    Sprite: {fileID: 21300000, guid: 469f49ee20fae964eac3b02de8d1a50c, type: 3}
+    Price: 0
+    Height: 0.26
+    Spot: {x: 0.25, y: 0.62}
+  - Id: Bed_Basket
+    Category: 1
+    Sprite: {fileID: 21300000, guid: 2b6b02e2584368b4f9b8d65ee5fddcd0, type: 3}
+    Price: 300
+    Height: 0.3
+    Spot: {x: 0.25, y: 0.62}
+  - Id: Bed_Box
+    Category: 1
+    Sprite: {fileID: 21300000, guid: 0f6a91c4f6c2fd74aa951346293df8f6, type: 3}
+    Price: 350
+    Height: 0.34
+    Spot: {x: 0.25, y: 0.62}
+  - Id: Bed_Cloud
+    Category: 1
+    Sprite: {fileID: 21300000, guid: 73a3b38b8081f714b9f3e93b31510671, type: 3}
+    Price: 600
+    Height: 0.3
+    Spot: {x: 0.25, y: 0.62}
+  - Id: Bed_Hut
+    Category: 1
+    Sprite: {fileID: 21300000, guid: 3d8315427feb9604f8bfcbc82bfa6a0a, type: 3}
+    Price: 700
+    Height: 0.42
+    Spot: {x: 0.25, y: 0.62}
+  - Id: Bed_Mushroom
+    Category: 1
+    Sprite: {fileID: 21300000, guid: 1f897ff3154aafc4b96b0e7ebb00fad6, type: 3}
+    Price: 900
+    Height: 0.44
+    Spot: {x: 0.25, y: 0.62}
+  - Id: Bed_Igloo
+    Category: 1
+    Sprite: {fileID: 21300000, guid: 6e1b810630d6ae2438dbc2a46d0058da, type: 3}
+    Price: 1000
+    Height: 0.38
+    Spot: {x: 0.25, y: 0.62}
+  - Id: Bed_Jelly
+    Category: 1
+    Sprite: {fileID: 21300000, guid: 70b3b7d5ae627e847a14a039bbd0ccc9, type: 3}
+    Price: 1400
+    Height: 0.4
+    Spot: {x: 0.25, y: 0.62}
+  - Id: Bed_Castle
+    Category: 1
+    Sprite: {fileID: 21300000, guid: eeb27d122b580e244bb6a7c368033ef2, type: 3}
+    Price: 2500
+    Height: 0.52
+    Spot: {x: 0.25, y: 0.62}
+  - Id: Toy_Ball
+    Category: 2
+    Sprite: {fileID: 21300000, guid: b2cd31f1465fc4544bc02dfb61d696c4, type: 3}
+    Price: 80
+    Height: 0.12
+    Spot: {x: 0.5, y: 0.15}
+  - Id: Toy_Yarn
+    Category: 2
+    Sprite: {fileID: 21300000, guid: 5d99a1894e0d7ba43b9286568e2d7803, type: 3}
+    Price: 80
+    Height: 0.12
+    Spot: {x: 0.4, y: 0.2}
+  - Id: Toy_Bone
+    Category: 2
+    Sprite: {fileID: 21300000, guid: 62f13281acdbbde4a8f59774d4838293, type: 3}
+    Price: 100
+    Height: 0.1
+    Spot: {x: 0.6, y: 0.18}
+  - Id: Toy_Duck
+    Category: 2
+    Sprite: {fileID: 21300000, guid: 0b50a9c3675266742aedb1139e05325c, type: 3}
+    Price: 120
+    Height: 0.13
+    Spot: {x: 0.35, y: 0.25}
+  - Id: Toy_Carrot
+    Category: 2
+    Sprite: {fileID: 21300000, guid: 6303a3861f56ec84ebe55124bf2b93a5, type: 3}
+    Price: 120
+    Height: 0.13
+    Spot: {x: 0.55, y: 0.22}
+  - Id: Toy_Mouse
+    Category: 2
+    Sprite: {fileID: 21300000, guid: 0785203552096b5478615fd56302fc8a, type: 3}
+    Price: 150
+    Height: 0.1
+    Spot: {x: 0.45, y: 0.12}
+  - Id: Toy_Frisbee
+    Category: 2
+    Sprite: {fileID: 21300000, guid: a1df86f1f5b6ffa43aa7539da10ac81b, type: 3}
+    Price: 150
+    Height: 0.09
+    Spot: {x: 0.6, y: 0.1}
+  - Id: Toy_Rope
+    Category: 2
+    Sprite: {fileID: 21300000, guid: 200370f602fdbb044874abd264caa33f, type: 3}
+    Price: 180
+    Height: 0.1
+    Spot: {x: 0.4, y: 0.1}
+  - Id: Toy_Feather
+    Category: 2
+    Sprite: {fileID: 21300000, guid: d4071a460401a134eac4c11ac4fc014a, type: 3}
+    Price: 200
+    Height: 0.17
+    Spot: {x: 0.65, y: 0.25}
+  - Id: Toy_Top
+    Category: 2
+    Sprite: {fileID: 21300000, guid: a95c562b62effb74cb4065bbf340fe24, type: 3}
+    Price: 220
+    Height: 0.14
+    Spot: {x: 0.5, y: 0.25}
+  - Id: Toy_Drum
+    Category: 2
+    Sprite: {fileID: 21300000, guid: ff7ef9e49dff89b40af062289bab795c, type: 3}
+    Price: 260
+    Height: 0.14
+    Spot: {x: 0.3, y: 0.15}
+  - Id: Toy_JellyCube
+    Category: 2
+    Sprite: {fileID: 21300000, guid: 36e95858e8fc01849abfb2cec05de594, type: 3}
+    Price: 300
+    Height: 0.13
+    Spot: {x: 0.7, y: 0.15}
+  - Id: Decor_Rug
+    Category: 3
+    Sprite: {fileID: 21300000, guid: 5b2a15ab7f77d8447a605c18d8ddf3a6, type: 3}
+    Price: 200
+    Height: 0.14
+    Spot: {x: 0.5, y: 0.35}
+  - Id: Decor_Cushion
+    Category: 3
+    Sprite: {fileID: 21300000, guid: 0d24179de8cd60d4bb5133b4bc7ab495, type: 3}
+    Price: 150
+    Height: 0.13
+    Spot: {x: 0.6, y: 0.5}
+  - Id: Decor_Plant
+    Category: 3
+    Sprite: {fileID: 21300000, guid: 10590c88c6d3e314988ca3adaf97950b, type: 3}
+    Price: 250
+    Height: 0.32
+    Spot: {x: 0.9, y: 0.85}
+  - Id: Decor_Vase
+    Category: 3
+    Sprite: {fileID: 21300000, guid: 2efe37cfc70e06c419df66fcb972516a, type: 3}
+    Price: 280
+    Height: 0.28
+    Spot: {x: 0.1, y: 0.85}
+  - Id: Decor_Lamp
+    Category: 3
+    Sprite: {fileID: 21300000, guid: 7e21bbf4ebba44f4986606036ca1672d, type: 3}
+    Price: 350
+    Height: 0.5
+    Spot: {x: 0.1, y: 0.9}
+  - Id: Decor_Table
+    Category: 3
+    Sprite: {fileID: 21300000, guid: ba78b6c93621a4c4b81dfcbbf95d0fca, type: 3}
+    Price: 400
+    Height: 0.26
+    Spot: {x: 0.6, y: 0.75}
+  - Id: Decor_Chest
+    Category: 3
+    Sprite: {fileID: 21300000, guid: a3f6447bbd29e6549831c50e970cd718, type: 3}
+    Price: 450
+    Height: 0.26
+    Spot: {x: 0.85, y: 0.7}
+  - Id: Decor_Frame
+    Category: 3
+    Sprite: {fileID: 21300000, guid: 506c8dbfd9bc7b6469f1a12c42eb41a1, type: 3}
+    Price: 300
+    Height: 0.3
+    Spot: {x: 0.5, y: 0.95}
+  - Id: Decor_Lights
+    Category: 3
+    Sprite: {fileID: 21300000, guid: 8cbf542165e96da4b988260189a88e42, type: 3}
+    Price: 350
+    Height: 0.2
+    Spot: {x: 0.5, y: 0.98}
+  - Id: Decor_ScratchPost
+    Category: 3
+    Sprite: {fileID: 21300000, guid: 278c5639c5c4bd54eb10093489f562b3, type: 3}
+    Price: 500
+    Height: 0.45
+    Spot: {x: 0.85, y: 0.45}
+  - Id: Decor_Shelf
+    Category: 3
+    Sprite: {fileID: 21300000, guid: 4d751f80ecf7ab7429b89349dd607db0, type: 3}
+    Price: 600
+    Height: 0.48
+    Spot: {x: 0.15, y: 0.95}
+  - Id: Decor_Fountain
+    Category: 3
+    Sprite: {fileID: 21300000, guid: 6e7cfc8255536dd4fb58ffa4952cf3a4, type: 3}
+    Price: 1200
+    Height: 0.42
+    Spot: {x: 0.5, y: 0.85}
+  StarterItems:
+  - Bowl_Ceramic
+  - Bed_Cushion
+  StarterRoom: Room_Bedroom

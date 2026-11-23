@@ -69,6 +69,8 @@ namespace Modules.MainModule.MainScreenModule.Signals
         public Signal WheelClicked = new();
         /// <summary>The slot machine button was pressed.</summary>
         public Signal SlotClicked = new();
+        /// <summary>The pet home button was pressed.</summary>
+        public Signal PetHomeClicked = new();
         public Signal LeaderboardClicked = new();
         /// <summary>The scratch card button was pressed.</summary>
         public Signal ScratchClicked = new();
