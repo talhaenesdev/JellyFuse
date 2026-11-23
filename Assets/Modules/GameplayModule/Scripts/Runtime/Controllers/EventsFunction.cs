@@ -308,6 +308,10 @@ namespace Modules.GameplayModule.Controllers
                 SpeedRunAdLeft = Mathf.Max(0, config.SpeedRunAdTries - progress.SpeedRunAdGranted),
                 SpeedRunWon = progress.SpeedRunWon,
                 SpeedRunLevels = config.SpeedRunLevels,
+                // The same bars the event levels' pickers hold: more levels won than the easy first ones (and a run's worth).
+                Level = progress.LevelIndex + 1,
+                EventsUnlockLevel = config.DuelLevelFloor + 2,
+                SpeedRunUnlockLevel = config.DuelLevelFloor + config.SpeedRunLevels + 2,
                 SpeedRunCoins = config.SpeedRunCoins,
                 SpeedRunRockets = config.SpeedRunRockets,
                 SpeedRunFreezes = config.SpeedRunFreezes,

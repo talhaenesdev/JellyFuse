@@ -65,6 +65,8 @@ namespace Modules.MainModule.EventsScreenModule.ViewsMediators
                 _starRushButton.onClick.AddListener(OnStarRushClicked);
             }
             if (button != null) button.interactable = !done || _starRushClaimable;
+            // Stars count before the event opens, so a box reached can still be claimed.
+            if (!_starRushClaimable) ShowLocked(card, button, events.Level, events.EventsUnlockLevel);
         }
 
         /// <summary>The meter: filled to the week's stars against the last step, a box at each step - open once paid, glowing once reached.</summary>
@@ -114,6 +116,16 @@ namespace Modules.MainModule.EventsScreenModule.ViewsMediators
             return left.TotalDays >= 1
                 ? string.Format(L("events.time_days", "{0}d {1}h"), (int)left.TotalDays, left.Hours)
                 : string.Format(L("events.time_hours", "{0}h {1}m"), left.Hours, left.Minutes);
+        }
+
+        /// <summary>A card whose event opens at a later level: its button says which, and cannot be pressed.</summary>
+        private bool ShowLocked(Transform card, Button button, int level, int unlockAt)
+        {
+            if (level >= unlockAt) return false;
+            Set(card, "Txt_Description", string.Format(L("events.unlocks_at", "Unlocks at level {0}."), unlockAt));
+            Set(card, "Btn_PlayEvent/Txt_Play", string.Format(L("events.locked_button", "LEVEL {0}"), unlockAt));
+            if (button != null) button.interactable = false;
+            return true;
         }
 
         private string L(string key, string english)

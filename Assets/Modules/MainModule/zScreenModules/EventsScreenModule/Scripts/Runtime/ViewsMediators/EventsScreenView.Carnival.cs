@@ -46,6 +46,7 @@ namespace Modules.MainModule.EventsScreenModule.ViewsMediators
                 _carnivalButton.onClick.AddListener(OnCarnivalClicked);
             }
             if (button != null) button.interactable = !done || _carnivalClaimable;
+            if (!_carnivalClaimable) ShowLocked(card, button, events.Level, events.EventsUnlockLevel);
         }
 
         /// <summary>What a chest just gave, on the card for a few seconds.</summary>

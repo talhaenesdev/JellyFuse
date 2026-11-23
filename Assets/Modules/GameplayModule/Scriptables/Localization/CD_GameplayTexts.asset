@@ -1508,9 +1508,21 @@ MonoBehaviour:
   - Key: events.start
     Translations:
     - Code: en
-      Text: "Start"
+      Text: START
     - Code: tr
-      Text: "Ba\u015fla"
+      Text: "BAŞLA"
+  - Key: events.unlocks_at
+    Translations:
+    - Code: en
+      Text: "Unlocks at level {0}."
+    - Code: tr
+      Text: "B\u00f6l\u00fcm {0} ile a\u00e7\u0131l\u0131r."
+  - Key: events.locked_button
+    Translations:
+    - Code: en
+      Text: "LEVEL {0}"
+    - Code: tr
+      Text: "B\u00d6L\u00dcM {0}"
   - Key: events.tomorrow
     Translations:
     - Code: en

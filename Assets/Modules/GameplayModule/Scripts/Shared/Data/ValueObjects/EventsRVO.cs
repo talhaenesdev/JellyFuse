@@ -37,6 +37,12 @@ namespace Modules.GameplayModule.Shared.Data.ValueObjects
         public int SpeedRunAdLeft;
         public bool SpeedRunWon;
         public int SpeedRunLevels;
+        /// <summary>The level the player is on, counted from 1.</summary>
+        public int Level;
+        /// <summary>The level Star Rush and Color Carnival can be played from.</summary>
+        public int EventsUnlockLevel;
+        /// <summary>The level the Speed Run can be played from.</summary>
+        public int SpeedRunUnlockLevel;
         public int SpeedRunCoins;
         public int SpeedRunRockets;
         public int SpeedRunFreezes;

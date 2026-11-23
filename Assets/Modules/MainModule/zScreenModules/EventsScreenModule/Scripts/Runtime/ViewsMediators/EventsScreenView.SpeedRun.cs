@@ -43,6 +43,7 @@ namespace Modules.MainModule.EventsScreenModule.ViewsMediators
                 _speedRunButton.onClick.AddListener(OnSpeedRunClicked);
             }
             if (button != null) button.interactable = _speedRunButtonMode != SpeedRunButton.None;
+            if (ShowLocked(card, button, events.Level, events.SpeedRunUnlockLevel)) _speedRunButtonMode = SpeedRunButton.None;
         }
 
         private void OnSpeedRunClicked()
