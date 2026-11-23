@@ -26,7 +26,6 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.Editor
         private const string TITLE_FONT = "Assets/Modules/UiWidgetsModule/Fonts/LuckiestGuy SDF.asset";
         private const string CLOSE = "Assets/Art/Generated/UI/Buttons/Kit/SPR_UI_Round_Close.png";
         private const string ROUNDED = "Assets/Modules/GameplayModule/zScreenModules/GameplayScreenModule/Sprites/UI/SPR_UI_Rounded.png";
-        private static readonly Color32 CREAM = new(0xFF, 0xF4, 0xE6, 0xFF);
         private const string CLOSE_SMALL = "Assets/Art/Generated/UI/Buttons/Kit/SPR_UI_Round_Close_Small.png";
 
         // id, category, price, height (share of the floor's height), spot on the floor
@@ -236,14 +235,14 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.Editor
                 store.gameObject.SetActive(false);
 
                 // Shop sheet.
-                // The kit's panel and card are frames with nothing inside: a cream fill goes under each.
+                // The kit's panel and card carry their own fill; the image under each only catches taps.
                 var panel = Ui("Pnl_Shop", root.transform);
                 Anchor((RectTransform)panel.transform, new Vector2(.02f, 0), new Vector2(.98f, .47f));
                 var panelFill = Ui("Img_Fill", panel.transform, typeof(Image)).GetComponent<Image>();
                 Anchor(panelFill.rectTransform, new Vector2(.04f, .03f), new Vector2(.96f, .8f));
                 panelFill.sprite = AssetDatabase.LoadAssetAtPath<Sprite>(ROUNDED);
                 panelFill.type = Image.Type.Sliced;
-                panelFill.color = CREAM;
+                panelFill.color = new Color(1, 1, 1, 0);
                 var panelFrame = Ui("Img_Frame", panel.transform, typeof(Image)).GetComponent<Image>();
                 Stretch(panelFrame.rectTransform);
                 panelFrame.sprite = Art("Panel_Shop");
@@ -291,7 +290,7 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.Editor
                 var cardFill = card.GetComponent<Image>();
                 cardFill.sprite = AssetDatabase.LoadAssetAtPath<Sprite>(ROUNDED);
                 cardFill.type = Image.Type.Sliced;
-                cardFill.color = Color.white;
+                cardFill.color = new Color(1, 1, 1, 0);
                 var cardFrame = Ui("Img_Frame", card.transform, typeof(Image)).GetComponent<Image>();
                 Stretch(cardFrame.rectTransform);
                 cardFrame.sprite = Art("Card_Item");
