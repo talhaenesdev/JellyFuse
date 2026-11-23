@@ -17,25 +17,25 @@ MonoBehaviour:
   StreakTierWins: 020000000400000006000000
   StreakTierBonusPercent: 02000000050000000a000000
   LoginRewards:
-  - Coins: 5
+  - Coins: 3
     Booster: 0
     BoosterCount: 0
-  - Coins: 10
+  - Coins: 5
     Booster: 0
     BoosterCount: 0
   - Coins: 0
     Booster: 0
     BoosterCount: 1
-  - Coins: 10
+  - Coins: 5
     Booster: 0
     BoosterCount: 0
   - Coins: 0
     Booster: 1
     BoosterCount: 1
-  - Coins: 15
+  - Coins: 8
     Booster: 0
     BoosterCount: 0
-  - Coins: 30
+  - Coins: 15
     Booster: 2
     BoosterCount: 1
   QuestsPerDay: 3
@@ -43,42 +43,42 @@ MonoBehaviour:
   - Type: 0
     Target: 3
     Reward:
-      Coins: 10
+      Coins: 5
       Booster: 0
       BoosterCount: 0
   - Type: 0
     Target: 5
     Reward:
-      Coins: 15
+      Coins: 8
       Booster: 0
       BoosterCount: 0
   - Type: 1
     Target: 1
     Reward:
-      Coins: 5
+      Coins: 3
       Booster: 0
       BoosterCount: 0
   - Type: 1
     Target: 2
     Reward:
-      Coins: 10
+      Coins: 5
       Booster: 0
       BoosterCount: 0
   - Type: 2
     Target: 20
     Reward:
-      Coins: 5
+      Coins: 3
       Booster: 0
       BoosterCount: 0
   - Type: 2
     Target: 40
     Reward:
-      Coins: 10
+      Coins: 5
       Booster: 0
       BoosterCount: 0
   Wheel:
   - Reward:
-      Coins: 10
+      Coins: 5
       Booster: 0
       BoosterCount: 0
     Weight: 3
@@ -88,7 +88,7 @@ MonoBehaviour:
       BoosterCount: 1
     Weight: 2
   - Reward:
-      Coins: 20
+      Coins: 10
       Booster: 0
       BoosterCount: 0
     Weight: 2.5
@@ -98,7 +98,7 @@ MonoBehaviour:
       BoosterCount: 1
     Weight: 2
   - Reward:
-      Coins: 40
+      Coins: 20
       Booster: 0
       BoosterCount: 0
     Weight: 1.2
@@ -108,23 +108,23 @@ MonoBehaviour:
       BoosterCount: 1
     Weight: 1.5
   - Reward:
-      Coins: 5
+      Coins: 3
       Booster: 0
       BoosterCount: 0
     Weight: 3
   - Reward:
-      Coins: 100
+      Coins: 50
       Booster: 0
       BoosterCount: 0
     Weight: 0.3
   SlotSymbols:
   - Reward:
-      Coins: 10
+      Coins: 5
       Booster: 0
       BoosterCount: 0
     Weight: 1.5
   - Reward:
-      Coins: 20
+      Coins: 10
       Booster: 0
       BoosterCount: 0
     Weight: 1
@@ -139,18 +139,18 @@ MonoBehaviour:
       BoosterCount: 1
     Weight: 0.6
   - Reward:
-      Coins: 100
+      Coins: 50
       Booster: 0
       BoosterCount: 0
     Weight: 0.15
   - Reward:
-      Coins: 60
+      Coins: 30
       Booster: 0
       BoosterCount: 0
     Weight: 0.25
   SlotPairWeight: 5
   SlotPairReward:
-    Coins: 4
+    Coins: 2
     Booster: 0
     BoosterCount: 0
   SlotMissWeight: 6
@@ -160,12 +160,12 @@ MonoBehaviour:
     BoosterCount: 0
   ScratchPrizes:
   - Reward:
-      Coins: 10
+      Coins: 5
       Booster: 0
       BoosterCount: 0
     Weight: 3
   - Reward:
-      Coins: 50
+      Coins: 25
       Booster: 0
       BoosterCount: 0
     Weight: 0.6
@@ -181,7 +181,7 @@ MonoBehaviour:
     Weight: 1
   ScratchMissWeight: 3
   ScratchMissReward:
-    Coins: 2
+    Coins: 1
     Booster: 0
     BoosterCount: 0
   DailyChallengeLevels:
@@ -200,7 +200,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4e70d2647765676449de04a1d7d48555, type: 2}
   - {fileID: 11400000, guid: aef7d4fda2cbde145a2bdd3b0da28edc, type: 2}
   DailyChallengeReward:
-    Coins: 30
+    Coins: 15
     Booster: 0
     BoosterCount: 1
   CarnivalColours: 020000006400000066000000680000000000000069000000
@@ -208,8 +208,8 @@ MonoBehaviour:
   - Points: 15
     Prizes:
     - Weight: 3
-      CoinsMin: 15
-      CoinsMax: 30
+      CoinsMin: 8
+      CoinsMax: 15
       Rockets: 0
       Freezes: 0
       Ufos: 0
@@ -238,8 +238,8 @@ MonoBehaviour:
   - Points: 40
     Prizes:
     - Weight: 3
-      CoinsMin: 30
-      CoinsMax: 60
+      CoinsMin: 15
+      CoinsMax: 30
       Rockets: 0
       Freezes: 0
       Ufos: 0
@@ -268,15 +268,15 @@ MonoBehaviour:
   - Points: 80
     Prizes:
     - Weight: 4
-      CoinsMin: 60
-      CoinsMax: 120
+      CoinsMin: 30
+      CoinsMax: 60
       Rockets: 1
       Freezes: 0
       Ufos: 0
       Lives: 0
     - Weight: 2
-      CoinsMin: 60
-      CoinsMax: 120
+      CoinsMin: 30
+      CoinsMax: 60
       Rockets: 0
       Freezes: 0
       Ufos: 1
@@ -290,14 +290,14 @@ MonoBehaviour:
       Lives: 0
   SpeedRunLevels: 5
   SpeedRunTimeShare: 0.7
-  SpeedRunCoins: 100
+  SpeedRunCoins: 50
   SpeedRunRockets: 1
   SpeedRunFreezes: 1
-  SpeedRunFirstTryBonus: 50
+  SpeedRunFirstTryBonus: 25
   SpeedRunAdTries: 2
   StarRushMilestones:
   - Stars: 10
-    Coins: 30
+    Coins: 15
     Rockets: 0
     Freezes: 0
     Ufos: 0
@@ -309,18 +309,18 @@ MonoBehaviour:
     Ufos: 0
     Lives: 0
   - Stars: 45
-    Coins: 80
+    Coins: 40
     Rockets: 0
     Freezes: 0
     Ufos: 1
     Lives: 0
   - Stars: 70
-    Coins: 150
+    Coins: 75
     Rockets: 0
     Freezes: 0
     Ufos: 0
     Lives: 2
-  DuelRewardCoins: 20
+  DuelRewardCoins: 10
   DuelRewardedWins: 3
   DuelMinLevel: 5
   DuelLevelFloor: 10

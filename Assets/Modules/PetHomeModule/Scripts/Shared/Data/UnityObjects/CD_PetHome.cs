@@ -31,7 +31,7 @@ namespace Modules.PetHomeModule.Shared.Data.UnityObjects
         [Tooltip("Happiness lost for every hour the player is away.")]
         public float HappyLossPerHour = 2;
         [Tooltip("Coins given each time the pet's happiness fills up.")]
-        public int HappyReward = 50;
+        public int HappyReward = 20;
         [Tooltip("Where happiness starts again after a reward.")]
         public int HappyAfterReward = 40;
         [Tooltip("While the player is away the pet eats a full bowl this often, in hours, leaving it empty.")]
