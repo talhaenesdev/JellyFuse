@@ -20,6 +20,7 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.Editor
     {
         private const string PREFAB = "Assets/Modules/PetHomeModule/zScreenModules/PetHomeScreenModule/Prefabs/PetHomeScreen.prefab";
         private const string ART = "Assets/Art/Generated/UI/PetHome/Sprites/";
+        private const string ROOMS = "Assets/Art/Generated/UI/PetHome/Rooms/";
         private const string CONFIG = "Assets/Modules/PetHomeModule/Scriptables/CD_PetHome.asset";
         private const string SAVE = "Assets/Modules/PetHomeModule/Scriptables/SD_PetHome.asset";
         private const string FONT = "Assets/Modules/UiWidgetsModule/Fonts/Baloo2-ExtraBold SDF.asset";
@@ -115,21 +116,24 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.Editor
             Debug.Log("BuildPetHomeScreen - pet home built.");
         }
 
-        private static Sprite Art(string name) => AssetDatabase.LoadAssetAtPath<Sprite>(ART + "SPR_PetHome_" + name + ".png");
+        /// <summary>A big scrollable room in Rooms/ wins over the small one cut from the kit sheet.</summary>
+        private static Sprite Art(string name) =>
+            AssetDatabase.LoadAssetAtPath<Sprite>(ROOMS + "SPR_PetHome_" + name + ".png")
+            ?? AssetDatabase.LoadAssetAtPath<Sprite>(ART + "SPR_PetHome_" + name + ".png");
 
         private static void ImportSprites()
         {
-            foreach (string guid in AssetDatabase.FindAssets("t:Texture2D", new[] { ART.TrimEnd('/') }))
+            foreach (string guid in AssetDatabase.FindAssets("t:Texture2D", new[] { ART.TrimEnd('/'), ROOMS.TrimEnd('/') }))
             {
                 string path = AssetDatabase.GUIDToAssetPath(guid);
                 if (AssetImporter.GetAtPath(path) is not TextureImporter importer) continue;
-                bool room = path.Contains("_Room_");
-                if (importer.textureType == TextureImporterType.Sprite && importer.maxTextureSize == (room ? 1024 : 512)) continue;
+                int size = path.StartsWith(ROOMS) ? 2048 : path.Contains("_Room_") ? 1024 : 512;
+                if (importer.textureType == TextureImporterType.Sprite && importer.maxTextureSize == size) continue;
                 importer.textureType = TextureImporterType.Sprite;
                 importer.spriteImportMode = SpriteImportMode.Single;
                 importer.alphaIsTransparency = true;
                 importer.mipmapEnabled = false;
-                importer.maxTextureSize = room ? 1024 : 512;
+                importer.maxTextureSize = size;
                 importer.textureCompression = TextureImporterCompression.CompressedHQ;
                 importer.SaveAndReimport();
             }
@@ -190,13 +194,21 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.Editor
                 var backdrop = Ui("Img_Backdrop", root.transform, typeof(Image)).GetComponent<Image>();
                 Stretch(backdrop.rectTransform);
                 backdrop.color = new Color32(0xF6, 0xD9, 0xC4, 0xFF);
-                var room = Ui("Img_Room", root.transform, typeof(Image), typeof(AspectRatioFitter)).GetComponent<Image>();
-                Stretch(room.rectTransform);
+                // The room is bigger than the screen and slides under the finger; the view sizes it to its picture.
+                var roomScroll = Ui("Scroll_Room", root.transform, typeof(Image), typeof(ScrollRect)).GetComponent<ScrollRect>();
+                Stretch((RectTransform)roomScroll.transform);
+                roomScroll.GetComponent<Image>().color = Color.clear;
+                var room = Ui("Img_Room", roomScroll.transform, typeof(Image)).GetComponent<Image>();
+                room.rectTransform.anchorMin = room.rectTransform.anchorMax = room.rectTransform.pivot = new Vector2(.5f, .5f);
+                room.rectTransform.sizeDelta = new Vector2(2400, 2400);
                 room.sprite = Art("Room_Bedroom");
                 room.raycastTarget = false;
-                var fitter = room.GetComponent<AspectRatioFitter>();
-                fitter.aspectMode = AspectRatioFitter.AspectMode.EnvelopeParent;
-                fitter.aspectRatio = room.sprite != null ? room.sprite.rect.width / room.sprite.rect.height : .72f;
+                roomScroll.content = room.rectTransform;
+                roomScroll.viewport = (RectTransform)roomScroll.transform;
+                roomScroll.horizontal = roomScroll.vertical = true;
+                roomScroll.movementType = ScrollRect.MovementType.Clamped;
+                roomScroll.inertia = true;
+                roomScroll.decelerationRate = .1f;
 
                 // The floor lives on the room picture, so it stays on the painted floor whatever the screen's shape;
                 // each room says where its floor is (CD_PetHome, Floor).
@@ -353,6 +365,7 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.Editor
                 panel.SetActive(false);
 
                 Set(view, "_room", room);
+                Set(view, "_roomScroll", roomScroll);
                 Set(view, "_floor", floor);
                 Set(view, "_itemTemplate", itemGo.GetComponent<PetHomeItemView>());
                 Set(view, "_pet", pet);

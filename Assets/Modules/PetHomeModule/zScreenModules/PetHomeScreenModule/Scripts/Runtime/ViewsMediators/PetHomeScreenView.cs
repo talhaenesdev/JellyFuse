@@ -23,6 +23,11 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
     {
         [Header("Room")]
         [SerializeField] private Image _room;
+        [SerializeField] private ScrollRect _roomScroll;
+        [Tooltip("How much bigger than the screen the room is drawn, so there is room to slide it about.")]
+        [SerializeField] private float _roomZoom = 1.25f;
+        [Tooltip("How tall things are drawn, as a share of the screen's height - the same in every room.")]
+        [SerializeField] private float _itemScale = .42f;
         [SerializeField] private RectTransform _floor;
         [SerializeField] private PetHomeItemView _itemTemplate;
         [SerializeField] private PetHomePetView _pet;
@@ -104,6 +109,8 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
             Select(null);
             _floorMark.gameObject.SetActive(false);
             _toastText.gameObject.SetActive(false);
+            _roomScroll.StopMovement();
+            _room.rectTransform.anchoredPosition = Vector2.zero;
             _itemTemplate.gameObject.SetActive(false);
             _cardTemplate.gameObject.SetActive(false);
             RefreshButtons();
@@ -143,14 +150,43 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
         private void ShowRoom(PetHomeItemCVO room)
         {
             _room.sprite = room.Sprite;
-            var fitter = _room.GetComponent<AspectRatioFitter>();
-            if (fitter != null && room.Sprite.rect.height > 0) fitter.aspectRatio = room.Sprite.rect.width / room.Sprite.rect.height;
+            SizeRoom();
             var floor = room.Floor;
             _floor.anchorMin = new Vector2(floor.xMin, floor.yMin);
             _floor.anchorMax = new Vector2(floor.xMax, floor.yMax);
             _floor.offsetMin = _floor.offsetMax = Vector2.zero;
             Canvas.ForceUpdateCanvases();
             foreach (var view in _items.Values) if (view.gameObject.activeSelf) LayOut(view);
+        }
+
+        /// <summary>The picture keeps its shape and covers the screen with some to spare on every side, centred.</summary>
+        private void SizeRoom()
+        {
+            var sprite = _room.sprite;
+            var screen = ((RectTransform)_roomScroll.transform).rect.size;
+            float aspect = sprite != null && sprite.rect.height > 0 ? sprite.rect.width / sprite.rect.height : 1;
+            float height = Mathf.Max(screen.y * _roomZoom, screen.x * _roomZoom / aspect);
+            _room.rectTransform.sizeDelta = new Vector2(height * aspect, height);
+            _roomScroll.StopMovement();
+            _room.rectTransform.anchoredPosition = Vector2.zero;
+        }
+
+        /// <summary>While something is dragged near the screen's edge, the room slides that way.</summary>
+        private void SlideAtEdge(Vector2 screen)
+        {
+            var size = new Vector2(Screen.width, Screen.height);
+            Vector2 push = Vector2.zero;
+            const float EDGE = .12f;
+            float x = screen.x / size.x, y = screen.y / size.y;
+            if (x < EDGE) push.x = 1 - x / EDGE; else if (x > 1 - EDGE) push.x = -(1 - (1 - x) / EDGE);
+            if (y < EDGE) push.y = 1 - y / EDGE; else if (y > 1 - EDGE) push.y = -(1 - (1 - y) / EDGE);
+            if (push == Vector2.zero) return;
+            var content = _room.rectTransform;
+            var view = ((RectTransform)_roomScroll.transform).rect.size;
+            var room = content.rect.size;
+            var half = new Vector2(Mathf.Max(0, room.x - view.x), Mathf.Max(0, room.y - view.y)) / 2;
+            var pos = content.anchoredPosition + push * (view.y * .02f);
+            content.anchoredPosition = new Vector2(Mathf.Clamp(pos.x, -half.x, half.x), Mathf.Clamp(pos.y, -half.y, half.y));
         }
 
         private void PlaceItems(IReadOnlyList<PlacedItemSVO> placed)
@@ -182,7 +218,8 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
         /// <summary>Where on the floor's rectangle a floor point falls, and how big things are drawn there - smaller at the back.</summary>
         public Vector2 FloorToLocal(Vector2 floor) => new(floor.x * _floor.rect.width, floor.y * _floor.rect.height);
         public float DepthScale(float y) => Mathf.Lerp(1f, .72f, y);
-        public float FloorHeight => _floor.rect.height;
+        /// <summary>The height things are sized from: the screen's, so a bigger room is more floor rather than bigger furniture.</summary>
+        public float FloorHeight => ((RectTransform)_roomScroll.transform).rect.height * _itemScale;
 
         private void LayOut(PetHomeItemView view)
         {
@@ -229,6 +266,7 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
         internal void ItemDragged(PetHomeItemView item, Vector2 screen, Camera camera)
         {
             Select(null);
+            SlideAtEdge(screen);
             RectTransformUtility.ScreenPointToLocalPointInRectangle(_floor, screen, camera, out var local);
             var rect = _floor.rect;
             var floor = new Vector2((local.x - rect.xMin) / rect.width, (local.y - rect.yMin) / rect.height);

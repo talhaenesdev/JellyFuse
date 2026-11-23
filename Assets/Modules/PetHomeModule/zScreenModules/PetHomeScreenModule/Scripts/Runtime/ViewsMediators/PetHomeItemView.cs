@@ -65,11 +65,12 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
         public void OnDrag(PointerEventData eventData)
         {
             if (_dragging) _screen.ItemDragged(this, eventData.position, eventData.pressEventCamera);
+            else PassToParent(eventData, ExecuteEvents.dragHandler);
         }
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            if (!_dragging) return;
+            if (!_dragging) { PassToParent(eventData, ExecuteEvents.endDragHandler); return; }
             _dragging = false;
             _screen.ItemDropped(this);
         }
