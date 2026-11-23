@@ -150,11 +150,13 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.Editor
             // What was tuned in the asset is kept: prices, and where each room's floor is.
             var prices = new Dictionary<string, int>();
             var floors = new Dictionary<string, Rect>();
+            var shadows = new Dictionary<string, Color>();
             foreach (var item in config.Items)
             {
                 if (item == null || item.Id == null) continue;
                 prices[item.Id] = item.Price;
                 floors[item.Id] = item.Floor;
+                shadows[item.Id] = item.Shadow;
             }
             config.Items.Clear();
             foreach (var (id, cat, price, height, spot) in ITEMS)
@@ -165,6 +167,7 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.Editor
                     Price = prices.TryGetValue(id, out int kept) ? kept : price,
                     EmptySprite = cat == PetHomeCategory.Bowl ? Art(id + "_Empty") : null,
                     Floor = floors.TryGetValue(id, out var floor) ? floor : new Rect(.3f, .08f, .4f, .42f),
+                    Shadow = shadows.TryGetValue(id, out var shadow) ? shadow : new Color(.22f, .1f, .32f, .3f),
                 });
             }
             config.StarterItems = new List<string> { "Bowl_Ceramic", "Bed_Cushion" };
@@ -212,6 +215,10 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.Editor
 
                 // The floor lives on the room picture, so it stays on the painted floor whatever the screen's shape;
                 // each room says where its floor is (CD_PetHome, Floor).
+                // Shadows lie on the floor under everything, so they sit in a layer of their own drawn before it.
+                var shadows = (RectTransform)Ui("Pnl_Shadows", room.transform).transform;
+                Anchor(shadows, new Vector2(.3f, .08f), new Vector2(.7f, .5f));
+                Set(view, "_shadows", shadows);
                 var floor = (RectTransform)Ui("Pnl_Floor", room.transform).transform;
                 Anchor(floor, new Vector2(.3f, .08f), new Vector2(.7f, .5f));
 

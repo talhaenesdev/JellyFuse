@@ -29,6 +29,8 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
         [Tooltip("How tall things are drawn, as a share of the screen's height - the same in every room.")]
         [SerializeField] private float _itemScale = .42f;
         [SerializeField] private RectTransform _floor;
+        [Tooltip("Same place as the floor, drawn before it: the soft shadow under each thing and the pet.")]
+        [SerializeField] private RectTransform _shadows;
         [SerializeField] private PetHomeItemView _itemTemplate;
         [SerializeField] private PetHomePetView _pet;
         [SerializeField] private Image _floorMark;
@@ -155,6 +157,10 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
             _floor.anchorMin = new Vector2(floor.xMin, floor.yMin);
             _floor.anchorMax = new Vector2(floor.xMax, floor.yMax);
             _floor.offsetMin = _floor.offsetMax = Vector2.zero;
+            _shadows.anchorMin = _floor.anchorMin;
+            _shadows.anchorMax = _floor.anchorMax;
+            _shadows.offsetMin = _shadows.offsetMax = Vector2.zero;
+            _shadowColor = room.Shadow;
             Canvas.ForceUpdateCanvases();
             foreach (var view in _items.Values) if (view.gameObject.activeSelf) LayOut(view);
         }
@@ -228,8 +234,71 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
             view.Size(FloorHeight * DepthScale(view.Floor.y));
         }
 
+        // ---- shadows ----
+
+        /// <summary>Things that lie flat on the floor or hang on the wall cast nothing on it.</summary>
+        private static readonly HashSet<string> FLAT = new() { "Decor_Rug", "Decor_Frame", "Decor_Lights" };
+        private readonly Dictionary<Transform, Image> _shadowOf = new();
+        private Color _shadowColor = new(.22f, .1f, .32f, .3f);
+        private Sprite _shadowSprite;
+
+        /// <summary>A soft round blot, made once: dark in the middle, gone at the rim.</summary>
+        private Sprite ShadowSprite()
+        {
+            if (_shadowSprite != null) return _shadowSprite;
+            const int W = 128, H = 64;
+            var texture = new Texture2D(W, H, TextureFormat.RGBA32, false) { wrapMode = TextureWrapMode.Clamp };
+            var pixels = new Color32[W * H];
+            for (int y = 0; y < H; y++)
+            for (int x = 0; x < W; x++)
+            {
+                float dx = (x + .5f) / W * 2 - 1, dy = (y + .5f) / H * 2 - 1;
+                float d = Mathf.Sqrt(dx * dx + dy * dy);
+                float a = Mathf.Clamp01(1 - d);
+                pixels[y * W + x] = new Color32(255, 255, 255, (byte)(a * a * (3 - 2 * a) * 255));
+            }
+            texture.SetPixels32(pixels);
+            texture.Apply();
+            _shadowSprite = Sprite.Create(texture, new Rect(0, 0, W, H), new Vector2(.5f, .5f));
+            return _shadowSprite;
+        }
+
+        /// <summary>Each thing on the floor, and the pet, gets a blot under its feet that follows it about.</summary>
+        private void DrawShadows()
+        {
+            for (int i = 0; i < _floor.childCount; i++)
+            {
+                var child = (RectTransform)_floor.GetChild(i);
+                bool pet = child == _pet.transform;
+                var item = pet ? null : child.GetComponent<PetHomeItemView>();
+                bool shows = child.gameObject.activeSelf && (pet ? _pet.GetComponent<Image>().enabled : item != null && !FLAT.Contains(item.Id));
+                if (!_shadowOf.TryGetValue(child, out var shadow))
+                {
+                    if (!shows) continue;
+                    var go = new GameObject("Shadow_" + child.name, typeof(RectTransform), typeof(Image));
+                    go.layer = gameObject.layer;
+                    shadow = go.GetComponent<Image>();
+                    shadow.sprite = ShadowSprite();
+                    shadow.raycastTarget = false;
+                    var r = shadow.rectTransform;
+                    r.SetParent(_shadows, false);
+                    r.anchorMin = r.anchorMax = Vector2.zero;
+                    r.pivot = new Vector2(.5f, .5f);
+                    _shadowOf[child] = shadow;
+                }
+                shadow.gameObject.SetActive(shows);
+                if (!shows) continue;
+                // The pet's frames carry empty space around the body; furniture fills its picture.
+                float width = pet ? child.sizeDelta.y * .7f : child.sizeDelta.x * .85f;
+                shadow.rectTransform.anchoredPosition = child.anchoredPosition + new Vector2(0, width * .04f);
+                shadow.rectTransform.sizeDelta = new Vector2(width, width * .3f);
+                shadow.color = _shadowColor;
+            }
+        }
+
         private void LateUpdate()
         {
+            DrawShadows();
             // Things further back are drawn first: sort the floor's children by how far back they stand.
             int count = _floor.childCount;
             for (int i = 1; i < count; i++)
