@@ -307,6 +307,7 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.Editor
                 var coin = Ui("Img_Coin", panel.transform, typeof(Image)).GetComponent<Image>();
                 coin.sprite = Art("Panel_Coin");
                 coin.raycastTarget = false;
+                coin.preserveAspect = true;
                 coin.rectTransform.anchorMin = coin.rectTransform.anchorMax = new Vector2(.5f, 1);
                 coin.rectTransform.pivot = new Vector2(.5f, .5f);
                 coin.rectTransform.anchoredPosition = new Vector2(0, -73);
