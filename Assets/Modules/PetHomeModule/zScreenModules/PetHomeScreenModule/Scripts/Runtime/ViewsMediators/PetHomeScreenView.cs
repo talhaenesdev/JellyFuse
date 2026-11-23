@@ -254,14 +254,82 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
         internal void Kick(string id, bool left)
         {
             if (_editing || !_items.TryGetValue(id, out var view) || !view.gameObject.activeSelf) return;
-            StartCoroutine(Roll(view, left));
+            var dir = new Vector2(left ? -1 : 1, UnityEngine.Random.Range(-.35f, .35f)).normalized;
+            StartRoll(view, dir, FloorHeight * UnityEngine.Random.Range(1.4f, 2f), false);
         }
 
-        private IEnumerator Roll(PetHomeItemView view, bool left)
+        // ---- thrown by the player, fetched by the pet ----
+
+        private readonly Dictionary<PetHomeItemView, Coroutine> _rolling = new();
+        private string _carried;
+
+        internal bool CanFlick(PetHomeItemView item) => !_editing && ROLLS.Contains(item.Id) && item.Id != _carried;
+
+        /// <summary>A ball let go of mid-swipe flies off with the finger's speed; the pet then runs to bring it back.</summary>
+        internal void Flick(PetHomeItemView item, Vector2 screenVelocity)
+        {
+            var canvas = _floor.GetComponentInParent<Canvas>();
+            float scale = canvas != null ? canvas.rootCanvas.scaleFactor : 1;
+            var velocity = screenVelocity / Mathf.Max(.01f, scale);
+            float speed = Mathf.Min(velocity.magnitude, FloorHeight * 4f);
+            if (speed < FloorHeight * .3f) return;
+            StartRoll(item, velocity.normalized, speed, true);
+        }
+
+        private void StartRoll(PetHomeItemView view, Vector2 dir, float speed, bool thrown)
+        {
+            if (_rolling.TryGetValue(view, out var running) && running != null) StopCoroutine(running);
+            _rolling[view] = StartCoroutine(Roll(view, dir, speed, thrown));
+        }
+
+        /// <summary>The pet picked a ball up: from now on it is drawn in the pet's mouth.</summary>
+        internal void PickUp(string id) => _carried = _items.ContainsKey(id) ? id : null;
+
+        /// <summary>The pet let go of what it carried: the ball lies where its mouth was, and is saved there.</summary>
+        internal void DropCarried()
+        {
+            if (_carried == null || !_items.TryGetValue(_carried, out var view)) { _carried = null; return; }
+            _carried = null;
+            LayOut(view);
+            Settle(view);
+            if (Overlaps(view)) Kick(view.Id, ((RectTransform)_pet.transform).localScale.x < 0);
+        }
+
+        /// <summary>The front of what the player sees of the room: where the pet brings a ball back to.</summary>
+        internal Vector2 FetchPoint()
+        {
+            var viewport = (RectTransform)_roomScroll.transform;
+            var r = viewport.rect;
+            var world = viewport.TransformPoint(new Vector2(r.center.x, r.yMin + r.height * .3f));
+            var local = (Vector2)_floor.InverseTransformPoint(world) - _floor.rect.min;
+            var floor = LocalToFloor(local);
+            return new Vector2(Mathf.Clamp(floor.x, .05f, .95f), Mathf.Clamp(floor.y, .03f, .9f));
+        }
+
+        /// <summary>A carried ball sits in the pet's mouth, drawn in front of it.</summary>
+        private void DrawCarried()
+        {
+            if (_carried == null || !_items.TryGetValue(_carried, out var view)) return;
+            var pet = (RectTransform)_pet.transform;
+            float h = pet.sizeDelta.y;
+            float side = pet.localScale.x < 0 ? -1 : 1;
+            var foot = Foot(pet);
+            view.Floor = LocalToFloor(foot + new Vector2(side * h * .37f, -2));
+            var rect = (RectTransform)view.transform;
+            rect.anchoredPosition = foot + new Vector2(side * h * .37f, h * .3f);
+            rect.SetSiblingIndex(Mathf.Min(_floor.childCount - 1, pet.GetSiblingIndex() + 1));
+        }
+
+        private void Settle(PetHomeItemView view)
+        {
+            view.Committed = view.Floor;
+            Placed?.Invoke(new PlacedItemSVO(view.Id, view.Floor.x, view.Floor.y));
+            TellPet();
+        }
+
+        private IEnumerator Roll(PetHomeItemView view, Vector2 dir, float speed, bool thrown)
         {
             var rect = (RectTransform)view.transform;
-            var dir = new Vector2(left ? -1 : 1, UnityEngine.Random.Range(-.35f, .35f)).normalized;
-            float speed = FloorHeight * UnityEngine.Random.Range(1.4f, 2f);
             bool bounced = false;
             while (speed > FloorHeight * .05f && !_editing && view.gameObject.activeSelf)
             {
@@ -287,9 +355,10 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
                 speed *= Mathf.Pow(.2f, Time.deltaTime);
                 yield return null;
             }
-            view.Committed = view.Floor;
-            Placed?.Invoke(new PlacedItemSVO(view.Id, view.Floor.x, view.Floor.y));
-            TellPet();
+            _rolling.Remove(view);
+            Settle(view);
+            if (thrown && !_editing && view.gameObject.activeSelf)
+                _pet.Fetch(new PetHomePetView.Spot { Id = view.Id, Floor = view.Floor, Category = PetHomeCategory.Toy, Width = rect.sizeDelta.x });
         }
 
         // ---- shadows ----
@@ -365,6 +434,7 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
                 var b = (RectTransform)_floor.GetChild(i);
                 if (Foot(b).y > Foot(a).y + .5f) b.SetSiblingIndex(i - 1);
             }
+            DrawCarried();
         }
 
         private void TellPet()
@@ -483,6 +553,7 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
 
         private void StartEditing()
         {
+            _pet.LetGo();
             _editing = true;
             CloseShop();
             RefreshButtons();

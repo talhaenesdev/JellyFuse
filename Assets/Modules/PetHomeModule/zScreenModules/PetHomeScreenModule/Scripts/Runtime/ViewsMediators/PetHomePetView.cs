@@ -24,6 +24,10 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
             public bool Empty;
             /// <summary>How wide the item is drawn, so the pet stands at its edge rather than in it.</summary>
             public float Width;
+            /// <summary>A ball the player threw: the pet picks it up.</summary>
+            public bool Fetch;
+            /// <summary>On its way back with the ball in its mouth.</summary>
+            public bool Back;
         }
 
         private const int ROW = 16;
@@ -55,6 +59,7 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
         private Vector2 _floor = new(.5f, .3f);
         private Vector2 _target;
         private Spot? _goal;
+        private string _carrying;
         private bool _facingLeft;
         private Act _act;
         private Sprite[] _clip;
@@ -77,12 +82,40 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
         }
 
         /// <summary>Called over to a spot - the item the player tapped.</summary>
-        public void GoTo(Spot spot) => Walk(Beside(spot), spot);
+        public void GoTo(Spot spot)
+        {
+            LetGo();
+            Walk(Beside(spot), spot);
+        }
 
         /// <summary>Walked over to a point the player tapped on the floor, to sit there a while.</summary>
-        public void WalkTo(Vector2 floor) => Walk(new Vector2(Mathf.Clamp01(floor.x), Mathf.Clamp01(floor.y)), null);
+        public void WalkTo(Vector2 floor)
+        {
+            LetGo();
+            Walk(new Vector2(Mathf.Clamp01(floor.x), Mathf.Clamp01(floor.y)), null);
+        }
 
-        public void Pet() => Play(_animal?.TouchFrames, PETTED, 2, () => Sit(2f));
+        /// <summary>The player threw a ball: it runs over to pick it up and bring it back.</summary>
+        public void Fetch(Spot ball)
+        {
+            LetGo();
+            ball.Fetch = true;
+            Walk(Beside(ball), ball);
+        }
+
+        /// <summary>Drops whatever it carries where it stands - called over, petted, or the room being edited.</summary>
+        public void LetGo()
+        {
+            if (_carrying == null) return;
+            _carrying = null;
+            _screen.DropCarried();
+        }
+
+        public void Pet()
+        {
+            LetGo();
+            Play(_animal?.TouchFrames, PETTED, 2, () => Sit(2f));
+        }
 
         public void OnPointerClick(PointerEventData eventData) => Tapped?.Invoke();
 
@@ -113,7 +146,21 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
         {
             var goal = _goal;
             // Whatever it came for, it turns to face it.
-            if (goal.HasValue && goal.Value.Category != PetHomeCategory.Bed) _facingLeft = goal.Value.Floor.x < _floor.x;
+            if (goal.HasValue && goal.Value.Category != PetHomeCategory.Bed && !goal.Value.Back) _facingLeft = goal.Value.Floor.x < _floor.x;
+            if (goal.HasValue && goal.Value.Back)
+            {
+                // Home with the ball: it drops it at the player's feet and is very pleased with itself.
+                LetGo();
+                Play(_animal.TouchFrames, HOP, 1, () => Sit(2f));
+                return;
+            }
+            if (goal.HasValue && goal.Value.Fetch)
+            {
+                _carrying = goal.Value.Id;
+                _screen.PickUp(_carrying);
+                Walk(_screen.FetchPoint(), new Spot { Id = _carrying, Category = PetHomeCategory.Toy, Back = true });
+                return;
+            }
             switch (goal?.Category)
             {
                 case PetHomeCategory.Bowl when goal.Value.Empty:

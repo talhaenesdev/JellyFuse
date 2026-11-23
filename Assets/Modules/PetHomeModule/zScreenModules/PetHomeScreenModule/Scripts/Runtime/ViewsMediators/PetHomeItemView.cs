@@ -13,6 +13,10 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
         private PetHomeScreenView _screen;
         private float _height;
         private bool _dragging;
+        private bool _flicking;
+        private Vector2 _lastPosition;
+        private float _lastTime;
+        private Vector2 _velocity;
 
         public string Id { get; private set; }
         /// <summary>Where it is drawn now, on the floor from 0,0 front left to 1,1 back right.</summary>
@@ -58,18 +62,41 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
         public void OnBeginDrag(PointerEventData eventData)
         {
             _dragging = _screen.CanDrag;
+            _flicking = !_dragging && _screen.CanFlick(this);
             if (_dragging) Committed = Floor;
+            else if (_flicking)
+            {
+                _velocity = Vector2.zero;
+                _lastPosition = eventData.position;
+                _lastTime = Time.unscaledTime;
+            }
             else PassToParent(eventData, ExecuteEvents.beginDragHandler);
         }
 
         public void OnDrag(PointerEventData eventData)
         {
             if (_dragging) _screen.ItemDragged(this, eventData.position, eventData.pressEventCamera);
+            else if (_flicking)
+            {
+                // How fast the finger is going as it lets go, smoothed over the last few moves.
+                float dt = Time.unscaledTime - _lastTime;
+                if (dt > 0) _velocity = Vector2.Lerp(_velocity, (eventData.position - _lastPosition) / dt, .6f);
+                _lastPosition = eventData.position;
+                _lastTime = Time.unscaledTime;
+            }
             else PassToParent(eventData, ExecuteEvents.dragHandler);
         }
 
         public void OnEndDrag(PointerEventData eventData)
         {
+            if (_flicking)
+            {
+                _flicking = false;
+                // A finger held still before letting go throws nothing.
+                if (Time.unscaledTime - _lastTime > .12f) _velocity = Vector2.zero;
+                _screen.Flick(this, _velocity);
+                return;
+            }
             if (!_dragging) { PassToParent(eventData, ExecuteEvents.endDragHandler); return; }
             _dragging = false;
             _screen.ItemDropped(this);
