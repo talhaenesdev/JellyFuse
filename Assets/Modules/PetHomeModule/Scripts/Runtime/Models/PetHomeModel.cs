@@ -12,7 +12,15 @@ namespace Modules.PetHomeModule.Models
     {
         [Inject] private ISharedDataModel _shared { get; set; }
 
-        private CD_PetHome Config => _shared.GetScriptable<CD_PetHome>();
+        /// <summary>
+        /// The shop's items, rooms and rules - loaded from the pet home's bundle the first time the home opens, not
+        /// filed in the scene, so its pictures are not in memory for a player who never visits.
+        /// </summary>
+        private CD_PetHome _config;
+        private CD_PetHome Config => _config;
+
+        public bool HasConfig => _config != null;
+        public void UseConfig(CD_PetHome config) => _config = config;
         private SD_PetHome Save => _shared.GetScriptable<SD_PetHome>();
 
         public PetHomeItemCVO Item(string id) => Config != null ? Config.Get(id) : null;

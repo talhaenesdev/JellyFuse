@@ -5,6 +5,9 @@ namespace Modules.PetHomeModule.Models
     /// <summary>The player's pet home and the rules that keep it valid: only owned items stand in the room, once each.</summary>
     internal interface IPetHomeModel
     {
+        /// <summary>Whether the shop's config has been loaded yet.</summary>
+        bool HasConfig { get; }
+        void UseConfig(Shared.Data.UnityObjects.CD_PetHome config);
         PetHomeItemCVO Item(string id);
         bool Owns(string id);
         /// <summary>A new player's starter items, given once.</summary>

@@ -30,6 +30,7 @@ namespace Modules.PetHomeModule.RootsContexts
         {
             base.CommandBindings();
             CommandBinder.Bind(_signals.Incoming.Open)
+                .ToSequence<LoadPetHomeConfigCommand>()
                 .ToSequence<GivePetHomeStartersCommand>()
                 .ToSequence<PassPetHomeTimeCommand>()
                 .ToSequence<ILocalSaveService.Commands.Save>(SAVE)

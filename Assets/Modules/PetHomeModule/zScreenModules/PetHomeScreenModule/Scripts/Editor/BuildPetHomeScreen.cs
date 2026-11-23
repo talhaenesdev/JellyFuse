@@ -209,7 +209,9 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.Editor
                 var room = Ui("Img_Room", roomScroll.transform, typeof(Image)).GetComponent<Image>();
                 room.rectTransform.anchorMin = room.rectTransform.anchorMax = room.rectTransform.pivot = new Vector2(.5f, .5f);
                 room.rectTransform.sizeDelta = new Vector2(2400, 2400);
-                room.sprite = Art("Room_Bedroom");
+                // No picture of its own: the room the player lives in is set when the home opens, and a default here
+                // would keep a 2048 px room in memory for as long as the screen is pooled.
+                room.sprite = null;
                 room.raycastTarget = false;
                 roomScroll.content = room.rectTransform;
                 roomScroll.viewport = (RectTransform)roomScroll.transform;
