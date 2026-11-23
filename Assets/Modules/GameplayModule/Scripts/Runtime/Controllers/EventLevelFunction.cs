@@ -16,7 +16,6 @@ namespace Modules.GameplayModule.Controllers
         {
             if (levels == null || progress == null || events == null) return -1;
             int won = levels.StartIndex(progress);
-            if (won <= events.DuelLevelFloor) return -1;
             if (kind != EventPlayKind.ColorCarnival) return Draw(levels, won, events.DuelLevelFloor, last);
             var colour = (JellyColour)progress.CarnivalColour;
             int best = -1, bestCells = -1;
@@ -34,9 +33,11 @@ namespace Modules.GameplayModule.Controllers
 
         private static int Draw(CD_JellyLevels levels, int won, int floor, int last)
         {
+            // A level the player has won - above the easy first ones once there are more - and for a player who has won
+            // none yet, the level they are on, so an event always has something to play.
             int index = levels.RandomPlayableBelow(won, floor);
             for (int retry = 0; retry < 4 && index >= 0 && index == last; retry++) index = levels.RandomPlayableBelow(won, floor);
-            return index;
+            return index >= 0 ? index : levels.PlayableBefore(won);
         }
     }
 }

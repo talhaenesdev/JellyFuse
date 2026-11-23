@@ -9,7 +9,7 @@ using Modules.GameplayModule.Signals;
 
 namespace Modules.GameplayModule.Controllers
 {
-    /// <summary>An event card's Play: a level the player has won is picked for that event. Too few won, and nothing starts.</summary>
+    /// <summary>An event card's Play: a level the player has won is picked for that event. A new player plays the level they are on.</summary>
     internal sealed class ChooseEventLevelCommand : Command
     {
         [Inject] private ISharedDataModel _shared { get; set; }
@@ -27,7 +27,7 @@ namespace Modules.GameplayModule.Controllers
             int index = _duel.Active ? -1 : EventLevelFunction.Pick(kind, _shared.GetScriptable<CD_JellyLevels>(), progress, events, _event.LevelIndex);
             if (index < 0)
             {
-                FlowLogger.Log("ChooseEventLevelCommand - too few levels won to play an event level.");
+                FlowLogger.Log("ChooseEventLevelCommand - no playable level for the event.");
                 Retain();
                 Stop();
                 return;
