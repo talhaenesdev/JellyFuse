@@ -127,13 +127,17 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.Editor
             {
                 string path = AssetDatabase.GUIDToAssetPath(guid);
                 if (AssetImporter.GetAtPath(path) is not TextureImporter importer) continue;
-                int size = path.StartsWith(ROOMS) ? 2048 : path.Contains("_Room_") ? 1024 : 512;
-                if (importer.textureType == TextureImporterType.Sprite && importer.maxTextureSize == size) continue;
+                int size = path.StartsWith(ROOMS) ? 2048 : path.Contains("_Room_") || path.EndsWith("_Panel_Shop.png") ? 1024 : 512;
+                bool frame = path.EndsWith("_Panel_Shop.png");
+                if (importer.textureType == TextureImporterType.Sprite && importer.maxTextureSize == size
+                    && (!frame || importer.spriteBorder != Vector4.zero)) continue;
                 importer.textureType = TextureImporterType.Sprite;
                 importer.spriteImportMode = SpriteImportMode.Single;
                 importer.alphaIsTransparency = true;
                 importer.mipmapEnabled = false;
                 importer.maxTextureSize = size;
+                // The shop's frame: the awning and the bottom rim keep their height, only the middle grows taller.
+                if (path.EndsWith("_Panel_Shop.png")) importer.spriteBorder = new Vector4(60, 70, 60, 230);
                 importer.textureCompression = TextureImporterCompression.CompressedHQ;
                 importer.SaveAndReimport();
             }
@@ -294,8 +298,19 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.Editor
                 panelFill.color = new Color(1, 1, 1, 0);
                 var panelFrame = Ui("Img_Frame", panel.transform, typeof(Image)).GetComponent<Image>();
                 Stretch(panelFrame.rectTransform);
+                // The frame is nine-sliced so its corners and awning keep their shape however tall the sheet is;
+                // the paw coin in the middle of the awning is a piece of its own over it, so it never stretches.
                 panelFrame.sprite = Art("Panel_Shop");
+                panelFrame.type = Image.Type.Sliced;
+                panelFrame.fillCenter = true;
                 panelFrame.raycastTarget = false;
+                var coin = Ui("Img_Coin", panel.transform, typeof(Image)).GetComponent<Image>();
+                coin.sprite = Art("Panel_Coin");
+                coin.raycastTarget = false;
+                coin.rectTransform.anchorMin = coin.rectTransform.anchorMax = new Vector2(.5f, 1);
+                coin.rectTransform.pivot = new Vector2(.5f, .5f);
+                coin.rectTransform.anchoredPosition = new Vector2(0, -73);
+                coin.rectTransform.sizeDelta = new Vector2(225, 225);
 
                 var tabsRow = Ui("Row_Tabs", panel.transform, typeof(HorizontalLayoutGroup));
                 Anchor((RectTransform)tabsRow.transform, new Vector2(.05f, .73f), new Vector2(.85f, .85f));
