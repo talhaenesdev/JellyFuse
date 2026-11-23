@@ -198,7 +198,8 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.Editor
                 Stretch(backdrop.rectTransform);
                 backdrop.color = new Color32(0xF6, 0xD9, 0xC4, 0xFF);
                 // The room is bigger than the screen and slides under the finger; the view sizes it to its picture.
-                var roomScroll = Ui("Scroll_Room", root.transform, typeof(Image), typeof(ScrollRect)).GetComponent<ScrollRect>();
+                var roomScroll = Ui("Scroll_Room", root.transform, typeof(Image), typeof(ScrollRect), typeof(PetHomeRoomTapView)).GetComponent<ScrollRect>();
+                Set(roomScroll.GetComponent<PetHomeRoomTapView>(), "_screen", view);
                 Stretch((RectTransform)roomScroll.transform);
                 roomScroll.GetComponent<Image>().color = Color.clear;
                 var room = Ui("Img_Room", roomScroll.transform, typeof(Image)).GetComponent<Image>();

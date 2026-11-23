@@ -223,6 +223,9 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
 
         /// <summary>Where on the floor's rectangle a floor point falls, and how big things are drawn there - smaller at the back.</summary>
         public Vector2 FloorToLocal(Vector2 floor) => new(floor.x * _floor.rect.width, floor.y * _floor.rect.height);
+        public Vector2 LocalToFloor(Vector2 local) => new(
+            _floor.rect.width > 0 ? local.x / _floor.rect.width : 0,
+            _floor.rect.height > 0 ? local.y / _floor.rect.height : 0);
         public float DepthScale(float y) => Mathf.Lerp(1f, .72f, y);
         /// <summary>The height things are sized from: the screen's, so a bigger room is more floor rather than bigger furniture.</summary>
         public float FloorHeight => ((RectTransform)_roomScroll.transform).rect.height * _itemScale;
@@ -315,7 +318,7 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
             foreach (var pair in _items)
             {
                 if (!pair.Value.gameObject.activeSelf || !_catalogue.TryGetValue(pair.Key, out var item)) continue;
-                spots.Add(new PetHomePetView.Spot { Id = pair.Key, Floor = pair.Value.Floor, Category = item.Category, Empty = pair.Value.Empty });
+                spots.Add(new PetHomePetView.Spot { Id = pair.Key, Floor = pair.Value.Floor, Category = item.Category, Empty = pair.Value.Empty, Width = ((RectTransform)pair.Value.transform).sizeDelta.x });
             }
             _pet.SetSpots(spots);
         }
@@ -327,7 +330,7 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
             if (_editing) { Select(item == _selected ? null : item); return; }
             if (!_catalogue.TryGetValue(item.Id, out var cvo)) return;
             if (cvo.Category == PetHomeCategory.Bowl && item.Empty) { RefillClicked?.Invoke(item.Id); return; }
-            _pet.GoTo(new PetHomePetView.Spot { Id = item.Id, Floor = item.Floor, Category = cvo.Category, Empty = item.Empty });
+            _pet.GoTo(new PetHomePetView.Spot { Id = item.Id, Floor = item.Floor, Category = cvo.Category, Empty = item.Empty, Width = ((RectTransform)item.transform).sizeDelta.x });
         }
 
         internal bool CanDrag => _editing;
@@ -408,6 +411,15 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
         }
 
         private void OnPetTapped() => _pet.Pet();
+
+        /// <summary>A tap on the room where nothing stands: the pet walks over, or in edit mode the choice is let go.</summary>
+        internal void RoomTapped(Vector2 screen, Camera camera)
+        {
+            if (_editing) { Select(null); return; }
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(_floor, screen, camera, out var local);
+            var rect = _floor.rect;
+            _pet.WalkTo(new Vector2((local.x - rect.xMin) / rect.width, (local.y - rect.yMin) / rect.height));
+        }
 
         /// <summary>The pet finished a bowl.</summary>
         internal void PetAte(string id) => Ate?.Invoke(id);

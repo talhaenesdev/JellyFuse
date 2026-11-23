@@ -22,6 +22,8 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
             public Vector2 Floor;
             public PetHomeCategory Category;
             public bool Empty;
+            /// <summary>How wide the item is drawn, so the pet stands at its edge rather than in it.</summary>
+            public float Width;
         }
 
         private const int ROW = 16;
@@ -39,6 +41,8 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
         [SerializeField] private float _fps = 12f;
         [Tooltip("Floor heights a second it walks.")]
         [SerializeField] private float _speed = .3f;
+        [Tooltip("Where the mouth is while eating, as a share of the frame from its middle: forward, up. Measured off the eat frames.")]
+        [SerializeField] private Vector2 _mouth = new(.37f, .37f);
 
         public Action Tapped;
         /// <summary>Held still while the room is being edited.</summary>
@@ -73,7 +77,10 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
         }
 
         /// <summary>Called over to a spot - the item the player tapped.</summary>
-        public void GoTo(Spot spot) => Walk(Beside(spot.Floor, spot.Category), spot);
+        public void GoTo(Spot spot) => Walk(Beside(spot), spot);
+
+        /// <summary>Walked over to a point the player tapped on the floor, to sit there a while.</summary>
+        public void WalkTo(Vector2 floor) => Walk(new Vector2(Mathf.Clamp01(floor.x), Mathf.Clamp01(floor.y)), null);
 
         public void Pet() => Play(_animal?.TouchFrames, PETTED, 2, () => Sit(2f));
 
@@ -105,6 +112,8 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
         private void Arrive()
         {
             var goal = _goal;
+            // Whatever it came for, it turns to face it.
+            if (goal.HasValue && goal.Value.Category != PetHomeCategory.Bed) _facingLeft = goal.Value.Floor.x < _floor.x;
             switch (goal?.Category)
             {
                 case PetHomeCategory.Bowl when goal.Value.Empty:
@@ -133,13 +142,27 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
             }
         }
 
-        /// <summary>Where it stands to use an item: in front of a bowl or a toy, on a bed, beside a decoration.</summary>
-        private static Vector2 Beside(Vector2 floor, PetHomeCategory category) => category switch
+        /// <summary>
+        /// Where it stands to use an item, worked out in the room's pixels so it holds in a room of any size: on a bed;
+        /// at a bowl or a toy side on, its mouth over the near half; beside a decoration. It comes at it from the side
+        /// it is already on, and from the other side when that one is off the floor.
+        /// </summary>
+        private Vector2 Beside(Spot spot)
         {
-            PetHomeCategory.Bed => new Vector2(floor.x, Mathf.Max(0, floor.y - .02f)),
-            PetHomeCategory.Decor => new Vector2(Mathf.Clamp01(floor.x + (floor.x > .5f ? -.14f : .14f)), Mathf.Max(0, floor.y - .04f)),
-            _ => new Vector2(Mathf.Clamp01(floor.x + (floor.x > .5f ? -.1f : .1f)), Mathf.Max(0, floor.y - .06f)),
-        };
+            Vector2 at = _screen.FloorToLocal(spot.Floor);
+            if (spot.Category == PetHomeCategory.Bed) return _screen.LocalToFloor(at - new Vector2(0, 2));
+            float h = PetHeight(spot.Floor.y);
+            float reach = spot.Category == PetHomeCategory.Decor
+                ? h * .45f + spot.Width * .45f
+                : h * _mouth.x - spot.Width * .12f;
+            float side = _screen.FloorToLocal(_floor).x <= at.x ? -1 : 1;
+            // Just behind the item, so the bowl's rim is drawn over the mouth dipping into it.
+            var stand = _screen.LocalToFloor(at + new Vector2(side * reach, 2));
+            if (stand.x < 0 || stand.x > 1) stand = _screen.LocalToFloor(at + new Vector2(-side * reach, 2));
+            return new Vector2(Mathf.Clamp01(stand.x), Mathf.Clamp01(stand.y));
+        }
+
+        private float PetHeight(float depth) => _screen.FloorHeight * _height * _screen.DepthScale(depth);
 
         // ---- acts ----
 
@@ -208,7 +231,7 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
             var rect = (RectTransform)transform;
             rect.anchoredPosition = _screen.FloorToLocal(_floor);
             var reference = _animal.Frames[0];
-            float h = _screen.FloorHeight * _height * _screen.DepthScale(_floor.y);
+            float h = PetHeight(_floor.y);
             float scale = reference != null && reference.rect.height > 0 ? h / reference.rect.height : 1;
             rect.sizeDelta = sprite.rect.size * scale;
             rect.localScale = new Vector3(_facingLeft ? -1 : 1, 1, 1);
