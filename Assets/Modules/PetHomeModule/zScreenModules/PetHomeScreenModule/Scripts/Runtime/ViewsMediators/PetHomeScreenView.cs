@@ -339,10 +339,11 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
             RectTransformUtility.ScreenPointToLocalPointInRectangle(_floor, screen, camera, out var local);
             var rect = _floor.rect;
             var floor = new Vector2((local.x - rect.xMin) / rect.width, (local.y - rect.yMin) / rect.height);
-            bool valid = floor.x >= 0 && floor.x <= 1 && floor.y >= 0 && floor.y <= 1;
+            bool onFloor = floor.x >= 0 && floor.x <= 1 && floor.y >= 0 && floor.y <= 1;
             item.Floor = new Vector2(Mathf.Clamp01(floor.x), Mathf.Clamp01(floor.y));
-            item.Valid = valid;
             LayOut(item);
+            bool valid = onFloor && !Overlaps(item);
+            item.Valid = valid;
             _floorMark.gameObject.SetActive(true);
             _floorMark.sprite = valid ? _validMark : _invalidMark;
             var mark = _floorMark.rectTransform;
@@ -351,6 +352,27 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
             mark.anchoredPosition = FloorToLocal(item.Floor);
             float width = FloorHeight * .32f * DepthScale(item.Floor.y);
             mark.sizeDelta = new Vector2(width, width * .42f);
+        }
+
+        /// <summary>
+        /// Whether the patch of floor an item stands on - an oval as wide as most of it, shallow front to back -
+        /// touches another's. A rug and the wall's things take no floor, so anything may stand on or under them.
+        /// </summary>
+        private bool Overlaps(PetHomeItemView item)
+        {
+            if (FLAT.Contains(item.Id)) return false;
+            var a = (RectTransform)item.transform;
+            float aw = a.sizeDelta.x * .4f;
+            foreach (var other in _items.Values)
+            {
+                if (other == item || !other.gameObject.activeSelf || FLAT.Contains(other.Id)) continue;
+                var b = (RectTransform)other.transform;
+                float bw = b.sizeDelta.x * .4f;
+                var d = b.anchoredPosition - a.anchoredPosition;
+                float x = d.x / (aw + bw), y = d.y / ((aw + bw) * .35f);
+                if (x * x + y * y < 1) return true;
+            }
+            return false;
         }
 
         internal void ItemDropped(PetHomeItemView item)

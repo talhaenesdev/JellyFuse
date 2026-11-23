@@ -38,8 +38,44 @@ namespace Modules.PetHomeModule.Models
             var item = Item(id);
             if (item == null || !Owns(id)) return;
             if (item.Category == PetHomeCategory.Room) { Save.Room = id; return; }
-            if (!Save.Placed.Exists(p => p.Id == id)) Save.Placed.Add(new PlacedItemSVO(id, item.Spot.x, item.Spot.y));
+            if (Save.Placed.Exists(p => p.Id == id)) return;
+            var spot = FreeSpot(item.Spot);
+            Save.Placed.Add(new PlacedItemSVO(id, spot.x, spot.y));
         }
+
+        /// <summary>
+        /// The nearest place to where an item would like to stand that nothing else stands on, searched in rings
+        /// around it. A floor too full for any free place gives back the wish.
+        /// </summary>
+        private Vector2 FreeSpot(Vector2 wish)
+        {
+            const float STEP_X = .12f, STEP_Y = .1f;
+            for (int ring = 0; ring <= 6; ring++)
+            for (int dy = -ring; dy <= ring; dy++)
+            for (int dx = -ring; dx <= ring; dx++)
+            {
+                if (Mathf.Max(Mathf.Abs(dx), Mathf.Abs(dy)) != ring) continue;
+                var at = new Vector2(wish.x + dx * STEP_X, wish.y + dy * STEP_Y);
+                if (at.x < .05f || at.x > .95f || at.y < .03f || at.y > .95f) continue;
+                if (IsFree(at)) return at;
+            }
+            return wish;
+        }
+
+        private bool IsFree(Vector2 at)
+        {
+            foreach (var placed in Save.Placed)
+            {
+                var other = Item(placed.Id);
+                if (other == null || LIES_FLAT.Contains(other.Id)) continue;
+                float x = (placed.X - at.x) / .14f, y = (placed.Y - at.y) / .1f;
+                if (x * x + y * y < 1) return false;
+            }
+            return true;
+        }
+
+        /// <summary>A rug lies under things and a wall decoration hangs above them: neither takes up floor.</summary>
+        private static readonly HashSet<string> LIES_FLAT = new() { "Decor_Rug", "Decor_Frame", "Decor_Lights" };
 
         public void Place(PlacedItemSVO placed)
         {
