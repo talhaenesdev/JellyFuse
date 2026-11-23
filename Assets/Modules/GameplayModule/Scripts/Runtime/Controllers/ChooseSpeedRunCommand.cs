@@ -1,4 +1,3 @@
-using UnityEngine;
 using System.Collections.Generic;
 using FlowIoC.BaseModule.Controller;
 using FlowIoC.BaseModule.Injectable.Attributes;
@@ -31,21 +30,17 @@ namespace Modules.GameplayModule.Controllers
             if (progress == null || events == null || levels == null || _duel.Active) { Retain(); Stop(); return; }
             EventsFunction.RefreshDay(progress, events);
             int won = levels.StartIndex(progress);
-            if (EventsFunction.SpeedRunTriesLeft(progress) <= 0)
+            if (EventsFunction.SpeedRunTriesLeft(progress) <= 0 || won <= events.DuelLevelFloor + events.SpeedRunLevels)
             {
-                FlowLogger.Log("ChooseSpeedRunCommand - no try left today.");
+                FlowLogger.Log("ChooseSpeedRunCommand - no try left, or too few levels won for a run.");
                 Retain();
                 Stop();
                 return;
             }
-            // Levels the player has won, above the easy first ones once there are enough of them; a new player's run
-            // reaches up to the levels just ahead, so the run is there from the first day.
-            int pool = Mathf.Max(won, events.SpeedRunLevels);
-            int floor = pool - events.DuelLevelFloor >= events.SpeedRunLevels ? events.DuelLevelFloor : 0;
             var picked = new List<int>();
             for (int guard = 0; picked.Count < events.SpeedRunLevels && guard < 200; guard++)
             {
-                int index = levels.RandomPlayableBelow(pool, floor);
+                int index = levels.RandomPlayableBelow(won, events.DuelLevelFloor);
                 if (index >= 0 && !picked.Contains(index)) picked.Add(index);
             }
             if (picked.Count < events.SpeedRunLevels) { Retain(); Stop(); return; }
