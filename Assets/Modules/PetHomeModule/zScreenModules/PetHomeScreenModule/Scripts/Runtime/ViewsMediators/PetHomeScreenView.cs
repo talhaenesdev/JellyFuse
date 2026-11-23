@@ -5,6 +5,7 @@ using System.Linq;
 using FlowIoC.BaseModule.Injectable.Components;
 using FlowIoC.ScreenModule.ViewsMediators.Screen;
 using Modules.GameplayModule.Shared.Data.UnityObjects;
+using Modules.PetHomeModule.PetHomeScreenModule.Enums;
 using Modules.PetHomeModule.Shared.Data.ValueObjects;
 using Modules.PetHomeModule.Shared.Enums;
 using TMPro;
@@ -63,6 +64,8 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
         public Action<string> Stored;
         public Action<string> Ate;
         public Action<string> RefillClicked;
+        /// <summary>Something the player should hear and feel: a bounce, a pick-up, a meal.</summary>
+        public Action<PetHomeFeel> Felt;
 
         private readonly Dictionary<string, PetHomeItemView> _items = new();
         private readonly List<PetHomeCardView> _cards = new();
@@ -240,7 +243,41 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
         }
 
         /// <summary>Where a thing on the floor touches it, whatever point it turns about.</summary>
-        private static Vector2 Foot(RectTransform rect) => rect.anchoredPosition - new Vector2(0, rect.sizeDelta.y * rect.pivot.y);
+        private Vector2 Foot(RectTransform rect) =>
+            rect.anchoredPosition - new Vector2(0, rect.sizeDelta.y * rect.pivot.y + (_lift.TryGetValue(rect, out float lift) ? lift : 0));
+
+        /// <summary>How high a bouncing ball is off the floor right now.</summary>
+        private readonly Dictionary<Transform, float> _lift = new();
+
+        /// <summary>The jelly squash a thing gives as it lands: wide and low, then back with a little wobble.</summary>
+        private IEnumerator Squash(Transform target, float amount = .16f)
+        {
+            const float TIME = .35f;
+            for (float t = 0; t < TIME; t += Time.deltaTime)
+            {
+                float k = t / TIME;
+                float wobble = Mathf.Sin(k * Mathf.PI * 2.5f) * (1 - k) * amount;
+                target.localScale = new Vector3(target.localScale.x < 0 ? -(1 + wobble) : 1 + wobble, 1 - wobble, 1);
+                yield return null;
+            }
+            target.localScale = new Vector3(target.localScale.x < 0 ? -1 : 1, 1, 1);
+        }
+
+        internal void Wobble(Transform target, float amount = .16f)
+        {
+            if (target != null && target.gameObject.activeInHierarchy) StartCoroutine(Squash(target, amount));
+        }
+
+        /// <summary>A ball held under the finger, ready to be thrown: it stays on the floor under it.</summary>
+        internal void HoldBall(PetHomeItemView item, Vector2 screen, Camera camera)
+        {
+            if (_rolling.TryGetValue(item, out var running) && running != null) { StopCoroutine(running); _rolling.Remove(item); }
+            _lift.Remove(item.transform);
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(_floor, screen, camera, out var local);
+            var floor = LocalToFloor(local - _floor.rect.min);
+            item.Floor = new Vector2(Mathf.Clamp01(floor.x), Mathf.Clamp01(floor.y));
+            LayOut(item);
+        }
 
         // ---- kicked toys ----
 
@@ -283,7 +320,14 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
         }
 
         /// <summary>The pet picked a ball up: from now on it is drawn in the pet's mouth.</summary>
-        internal void PickUp(string id) => _carried = _items.ContainsKey(id) ? id : null;
+        internal void PickUp(string id)
+        {
+            _carried = _items.ContainsKey(id) ? id : null;
+            if (_carried != null) Felt?.Invoke(PetHomeFeel.PickUp);
+        }
+
+        /// <summary>The pet tells the screen of a moment worth hearing.</summary>
+        internal void Feel(PetHomeFeel feel) => Felt?.Invoke(feel);
 
         /// <summary>The pet let go of what it carried: the ball lies where its mouth was, and is saved there.</summary>
         internal void DropCarried()
@@ -291,6 +335,8 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
             if (_carried == null || !_items.TryGetValue(_carried, out var view)) { _carried = null; return; }
             _carried = null;
             LayOut(view);
+            Wobble(view.transform, .1f);
+            Felt?.Invoke(PetHomeFeel.Drop);
             Settle(view);
             if (Overlaps(view)) Kick(view.Id, ((RectTransform)_pet.transform).localScale.x < 0);
         }
@@ -314,9 +360,10 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
             float h = pet.sizeDelta.y;
             float side = pet.localScale.x < 0 ? -1 : 1;
             var foot = Foot(pet);
-            view.Floor = LocalToFloor(foot + new Vector2(side * h * .37f, -2));
+            var mouth = _pet.CarryMouth;
+            view.Floor = LocalToFloor(foot + new Vector2(side * h * mouth.x, -2));
             var rect = (RectTransform)view.transform;
-            rect.anchoredPosition = foot + new Vector2(side * h * .37f, h * .3f);
+            rect.anchoredPosition = foot + new Vector2(side * h * mouth.x, h * mouth.y);
             rect.SetSiblingIndex(Mathf.Min(_floor.childCount - 1, pet.GetSiblingIndex() + 1));
         }
 
@@ -331,6 +378,9 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
         {
             var rect = (RectTransform)view.transform;
             bool bounced = false;
+            // A thrown ball leaves the floor and bounces down to a roll; a swatted one only rolls.
+            float hop = thrown ? Mathf.Min(speed * .1f, rect.sizeDelta.y * 1.6f) : 0;
+            float phase = 0;
             while (speed > FloorHeight * .05f && !_editing && view.gameObject.activeSelf)
             {
                 var before = view.Floor;
@@ -345,17 +395,34 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
                 {
                     view.Floor = before;
                     LayOut(view);
+                    Felt?.Invoke(PetHomeFeel.Bounce);
                     if (bounced) break;
                     dir = -dir;
                     speed *= .5f;
                     bounced = true;
                 }
+                if (hop > 2)
+                {
+                    float before2 = phase;
+                    phase += Time.deltaTime * 7f;
+                    if ((int)(phase / Mathf.PI) != (int)(before2 / Mathf.PI))
+                    {
+                        hop *= .45f;
+                        Felt?.Invoke(PetHomeFeel.Bounce);
+                    }
+                    float lift = hop * Mathf.Abs(Mathf.Sin(phase));
+                    _lift[rect] = lift;
+                    rect.anchoredPosition += new Vector2(0, lift);
+                }
+                else _lift.Remove(rect);
                 float turn = speed * Time.deltaTime / Mathf.Max(1, rect.sizeDelta.y * .5f) * Mathf.Rad2Deg;
                 rect.localRotation *= Quaternion.Euler(0, 0, dir.x > 0 ? -turn : turn);
                 speed *= Mathf.Pow(.2f, Time.deltaTime);
                 yield return null;
             }
             _rolling.Remove(view);
+            _lift.Remove(rect);
+            LayOut(view);
             Settle(view);
             if (thrown && !_editing && view.gameObject.activeSelf)
                 _pet.Fetch(new PetHomePetView.Spot { Id = view.Id, Floor = view.Floor, Category = PetHomeCategory.Toy, Width = rect.sizeDelta.x });
@@ -454,7 +521,13 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
         {
             if (_editing) { Select(item == _selected ? null : item); return; }
             if (!_catalogue.TryGetValue(item.Id, out var cvo)) return;
-            if (cvo.Category == PetHomeCategory.Bowl && item.Empty) { RefillClicked?.Invoke(item.Id); return; }
+            if (cvo.Category == PetHomeCategory.Bowl && item.Empty)
+            {
+                RefillClicked?.Invoke(item.Id);
+                Wobble(item.transform);
+                Felt?.Invoke(PetHomeFeel.Refill);
+                return;
+            }
             _pet.GoTo(new PetHomePetView.Spot { Id = item.Id, Floor = item.Floor, Category = cvo.Category, Empty = item.Empty, Width = ((RectTransform)item.transform).sizeDelta.x });
         }
 
@@ -510,6 +583,8 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
             {
                 Placed?.Invoke(new PlacedItemSVO(item.Id, item.Floor.x, item.Floor.y));
                 item.Committed = item.Floor;
+                Wobble(item.transform);
+                Felt?.Invoke(PetHomeFeel.Place);
             }
             else item.Floor = item.Committed;
             LayOut(item);
@@ -535,7 +610,89 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
             Stored?.Invoke(id);
         }
 
-        private void OnPetTapped() => _pet.Pet();
+        private void OnPetTapped()
+        {
+            _pet.Pet();
+            Hearts(3);
+            Felt?.Invoke(PetHomeFeel.Petted);
+        }
+
+        // ---- hearts ----
+
+        private RectTransform _fx;
+        private Sprite _heartSprite;
+
+        /// <summary>A few hearts float up from the pet's head and fade: it is pleased.</summary>
+        internal void Hearts(int count)
+        {
+            if (!_pet.GetComponent<Image>().enabled) return;
+            if (_fx == null)
+            {
+                // Over the floor, so the room's depth sort never puts a heart behind a bed.
+                var go = new GameObject("Pnl_Fx", typeof(RectTransform));
+                go.layer = gameObject.layer;
+                _fx = (RectTransform)go.transform;
+                _fx.SetParent(_floor.parent, false);
+            }
+            _fx.SetAsLastSibling();
+            _fx.anchorMin = _floor.anchorMin;
+            _fx.anchorMax = _floor.anchorMax;
+            _fx.offsetMin = _fx.offsetMax = Vector2.zero;
+            var pet = (RectTransform)_pet.transform;
+            var head = Foot(pet) + new Vector2(0, pet.sizeDelta.y * .8f);
+            for (int i = 0; i < count; i++) StartCoroutine(Heart(head, i * .15f, pet.sizeDelta.y));
+        }
+
+        private IEnumerator Heart(Vector2 from, float delay, float petHeight)
+        {
+            if (delay > 0) yield return new WaitForSeconds(delay);
+            var go = new GameObject("Img_Heart", typeof(RectTransform), typeof(Image));
+            go.layer = gameObject.layer;
+            var image = go.GetComponent<Image>();
+            image.sprite = HeartSprite();
+            image.raycastTarget = false;
+            var rect = image.rectTransform;
+            rect.SetParent(_fx, false);
+            rect.anchorMin = rect.anchorMax = Vector2.zero;
+            float size = petHeight * UnityEngine.Random.Range(.16f, .24f);
+            rect.sizeDelta = new Vector2(size, size);
+            float drift = UnityEngine.Random.Range(-.35f, .35f) * petHeight;
+            const float TIME = 1.1f;
+            for (float t = 0; t < TIME; t += Time.deltaTime)
+            {
+                float k = t / TIME;
+                rect.anchoredPosition = from + new Vector2(drift * k + Mathf.Sin(k * 9) * size * .15f, petHeight * .6f * k);
+                float pop = k < .15f ? k / .15f * 1.2f : Mathf.Lerp(1.2f, 1f, (k - .15f) * 4);
+                rect.localScale = Vector3.one * pop;
+                image.color = new Color(1, 1, 1, 1 - Mathf.Max(0, k - .6f) / .4f);
+                yield return null;
+            }
+            Destroy(go);
+        }
+
+        /// <summary>A soft pink heart, made once.</summary>
+        private Sprite HeartSprite()
+        {
+            if (_heartSprite != null) return _heartSprite;
+            const int S = 96;
+            var texture = new Texture2D(S, S, TextureFormat.RGBA32, false) { wrapMode = TextureWrapMode.Clamp };
+            var pixels = new Color32[S * S];
+            for (int y = 0; y < S; y++)
+            for (int x = 0; x < S; x++)
+            {
+                // The classic heart curve, a little blurred at its rim, lit from the top left.
+                float px = ((x + .5f) / S - .5f) * 2.6f, py = ((y + .5f) / S - .45f) * 2.6f;
+                float f = Mathf.Pow(px * px + py * py - 1, 3) - px * px * py * py * py;
+                float a = Mathf.Clamp01(-f * 18 + .5f);
+                float light = Mathf.Clamp01(1.15f - Mathf.Sqrt((px + .45f) * (px + .45f) + (py - .55f) * (py - .55f)) * .55f);
+                var c = Color.Lerp(new Color(.93f, .3f, .55f), new Color(1f, .78f, .88f), light * light);
+                pixels[y * S + x] = new Color(c.r, c.g, c.b, a);
+            }
+            texture.SetPixels32(pixels);
+            texture.Apply();
+            _heartSprite = Sprite.Create(texture, new Rect(0, 0, S, S), new Vector2(.5f, .5f));
+            return _heartSprite;
+        }
 
         /// <summary>A tap on the room where nothing stands: the pet walks over, or in edit mode the choice is let go.</summary>
         internal void RoomTapped(Vector2 screen, Camera camera)
@@ -547,7 +704,12 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
         }
 
         /// <summary>The pet finished a bowl.</summary>
-        internal void PetAte(string id) => Ate?.Invoke(id);
+        internal void PetAte(string id)
+        {
+            Ate?.Invoke(id);
+            Felt?.Invoke(PetHomeFeel.Ate);
+            if (_items.TryGetValue(id, out var bowl)) Wobble(bowl.transform, .1f);
+        }
 
         // ---- edit mode ----
 

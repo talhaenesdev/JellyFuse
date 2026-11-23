@@ -3,6 +3,7 @@ using FlowIoC.BaseModule.ViewsMediators.Mediator;
 using FlowIoC.ScreenModule.Enums;
 using FlowIoC.ScreenModule.Extensions;
 using FlowIoC.ScreenModule.ViewsMediators.Screen;
+using Modules.PetHomeModule.PetHomeScreenModule.Enums;
 using Modules.PetHomeModule.PetHomeScreenModule.Signals;
 using Modules.PetHomeModule.Shared.Data.ValueObjects;
 
@@ -34,6 +35,7 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
             _view.Stored += OnStored;
             _view.Ate += OnAte;
             _view.RefillClicked += OnRefill;
+            _view.Felt += OnFelt;
             _signals.Incoming.Apply.AddListener(_view.Apply);
             _signals.Incoming.ApplyCoins.AddListener(_view.ApplyCoins);
             _signals.Incoming.NotBought.AddListener(_view.ShowNotBought);
@@ -48,6 +50,7 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
             _view.Stored -= OnStored;
             _view.Ate -= OnAte;
             _view.RefillClicked -= OnRefill;
+            _view.Felt -= OnFelt;
             _signals.Incoming.Apply.RemoveListener(_view.Apply);
             _signals.Incoming.ApplyCoins.RemoveListener(_view.ApplyCoins);
             _signals.Incoming.NotBought.RemoveListener(_view.ShowNotBought);
@@ -68,5 +71,6 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
         private void OnStored(string id) { if (Ready) _signals.Outgoing.Stored.Dispatch(id); }
         private void OnAte(string id) { if (Ready) _signals.Outgoing.Ate.Dispatch(id); }
         private void OnRefill(string id) { if (Ready) _signals.Outgoing.RefillClicked.Dispatch(id); }
+        private void OnFelt(PetHomeFeel feel) { if (Ready) _internalSignals.Feel.Dispatch(feel); }
     }
 }

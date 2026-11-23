@@ -66,6 +66,7 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
             if (_dragging) Committed = Floor;
             else if (_flicking)
             {
+                _screen.HoldBall(this, eventData.position, eventData.pressEventCamera);
                 _velocity = Vector2.zero;
                 _lastPosition = eventData.position;
                 _lastTime = Time.unscaledTime;
@@ -81,6 +82,7 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
                 // How fast the finger is going as it lets go, smoothed over the last few moves.
                 float dt = Time.unscaledTime - _lastTime;
                 if (dt > 0) _velocity = Vector2.Lerp(_velocity, (eventData.position - _lastPosition) / dt, .6f);
+                _screen.HoldBall(this, eventData.position, eventData.pressEventCamera);
                 _lastPosition = eventData.position;
                 _lastTime = Time.unscaledTime;
             }

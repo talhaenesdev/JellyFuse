@@ -20,11 +20,12 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.RootsContexts
         };
 
         private PetHomeScreenSignals _signals;
+        private PetHomeScreenInternalSignals _internalSignals;
 
         public override void SignalBindings()
         {
             base.SignalBindings();
-            InjectionBinder.Bind<PetHomeScreenInternalSignals>();
+            _internalSignals = InjectionBinder.Bind<PetHomeScreenInternalSignals>();
             _signals = InjectionBinderCrossContext.Bind<PetHomeScreenSignals>();
         }
 
@@ -34,6 +35,7 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.RootsContexts
             CommandBinder.Bind(_signals.Incoming.Open)
                 .ToSequence<OpenPetHomeScreenCommand>()
                 .ToSequence<LoadPetHomeAnimalCommand>();
+            CommandBinder.Bind(_internalSignals.Feel).ToSequence<PlayPetHomeFeelCommand>();
         }
     }
 }

@@ -60,6 +60,32 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
         private Vector2 _target;
         private Spot? _goal;
         private string _carrying;
+
+        /// <summary>
+        /// Where each animal's mouth is, as a share of its frame from the middle of its feet - forward, up - eating
+        /// and walking. Measured off the frames: the front of the head, averaged over the row.
+        /// </summary>
+        private static readonly Dictionary<string, (Vector2 eat, Vector2 walk)> MOUTHS = new()
+        {
+            ["Bunny"] = (new(.34f, .44f), new(.32f, .48f)),
+            ["Drako"] = (new(.35f, .44f), new(.34f, .51f)),
+            ["Foxy"] = (new(.41f, .43f), new(.38f, .51f)),
+            ["Froggy"] = (new(.37f, .54f), new(.36f, .59f)),
+            ["Hammy"] = (new(.38f, .39f), new(.40f, .50f)),
+            ["Hoot"] = (new(.37f, .47f), new(.39f, .45f)),
+            ["Jelly"] = (new(.41f, .26f), new(.44f, .27f)),
+            ["Kitty"] = (new(.39f, .38f), new(.38f, .50f)),
+            ["Panda"] = (new(.38f, .49f), new(.37f, .50f)),
+            ["Pengu"] = (new(.37f, .49f), new(.36f, .50f)),
+            ["Puppy"] = (new(.43f, .45f), new(.39f, .59f)),
+            ["Teddy"] = (new(.35f, .48f), new(.34f, .50f)),
+        };
+
+        private (Vector2 eat, Vector2 walk) Mouths =>
+            _animal != null && MOUTHS.TryGetValue(_animal.name.Replace("CD_BoardAnimal_", ""), out var m) ? m : (_mouth, _mouth);
+
+        /// <summary>Where a ball sits while carried, as a share of the frame: just under the front of the face.</summary>
+        public Vector2 CarryMouth => Mouths.walk - new Vector2(.04f, .1f);
         private bool _facingLeft;
         private Act _act;
         private Sprite[] _clip;
@@ -151,6 +177,7 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
             {
                 // Home with the ball: it drops it at the player's feet and is very pleased with itself.
                 LetGo();
+                _screen.Hearts(2);
                 Play(_animal.TouchFrames, HOP, 1, () => Sit(2f));
                 return;
             }
@@ -211,7 +238,7 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
             float h = PetHeight(spot.Floor.y);
             float reach = spot.Category == PetHomeCategory.Decor
                 ? h * .45f + spot.Width * .45f
-                : h * _mouth.x - spot.Width * .12f;
+                : h * Mouths.eat.x - spot.Width * .12f;
             float side = _screen.FloorToLocal(_floor).x <= at.x ? -1 : 1;
             // Just behind the item, so the bowl's rim is drawn over the mouth dipping into it.
             var stand = _screen.LocalToFloor(at + new Vector2(side * reach, 2));
@@ -265,6 +292,12 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
             Vector2 toward = there - here;
             float step = _speed * height * Time.deltaTime * _screen.DepthScale(_floor.y);
             if (Mathf.Abs(toward.x) > 1f) _facingLeft = toward.x < 0;
+            // The last few steps it already turns to what it came for, rather than spinning round on arrival.
+            if (_goal is { Back: false } goal && goal.Category != PetHomeCategory.Bed && toward.magnitude < height * .5f)
+            {
+                float at = _screen.FloorToLocal(goal.Floor).x;
+                if (Mathf.Abs(at - here.x) > 1f) _facingLeft = at < here.x;
+            }
             if (toward.magnitude <= step)
             {
                 _floor = _target;
