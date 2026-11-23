@@ -292,7 +292,7 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.Editor
                 var panel = Ui("Pnl_Shop", root.transform);
                 Anchor((RectTransform)panel.transform, new Vector2(.02f, 0), new Vector2(.98f, .47f));
                 var panelFill = Ui("Img_Fill", panel.transform, typeof(Image)).GetComponent<Image>();
-                Anchor(panelFill.rectTransform, new Vector2(.04f, .03f), new Vector2(.96f, .8f));
+                Anchor(panelFill.rectTransform, new Vector2(.04f, .03f), new Vector2(.96f, .78f));
                 panelFill.sprite = AssetDatabase.LoadAssetAtPath<Sprite>(ROUNDED);
                 panelFill.type = Image.Type.Sliced;
                 panelFill.color = new Color(1, 1, 1, 0);
@@ -315,7 +315,8 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.Editor
                 coin.rectTransform.sizeDelta = new Vector2(225, 225);
 
                 var tabsRow = Ui("Row_Tabs", panel.transform, typeof(HorizontalLayoutGroup));
-                Anchor((RectTransform)tabsRow.transform, new Vector2(.05f, .73f), new Vector2(.85f, .85f));
+                // Under the awning (its 230 px are the panel's top fifth), so the stripes never run behind the tabs.
+                Anchor((RectTransform)tabsRow.transform, new Vector2(.05f, .655f), new Vector2(.95f, .765f));
                 var tabsLayout = tabsRow.GetComponent<HorizontalLayoutGroup>();
                 tabsLayout.spacing = 10;
                 tabsLayout.childAlignment = TextAnchor.MiddleCenter;
@@ -330,10 +331,10 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.Editor
                     image.preserveAspect = true;
                     tabs.Add(t.GetComponent<Button>());
                 }
-                var shopClose = RoundButton("Btn_ShopClose", panel.transform, AssetDatabase.LoadAssetAtPath<Sprite>(CLOSE_SMALL), new Vector2(1, 1), new Vector2(-70, -150), 100);
+                var shopClose = RoundButton("Btn_ShopClose", panel.transform, AssetDatabase.LoadAssetAtPath<Sprite>(CLOSE_SMALL), new Vector2(1, 1), new Vector2(-45, -15), 100);
 
                 var scroll = Ui("Scroll_Cards", panel.transform, typeof(Image), typeof(ScrollRect), typeof(RectMask2D));
-                Anchor((RectTransform)scroll.transform, new Vector2(.05f, .05f), new Vector2(.95f, .71f));
+                Anchor((RectTransform)scroll.transform, new Vector2(.05f, .05f), new Vector2(.95f, .64f));
                 scroll.GetComponent<Image>().color = new Color(1, 1, 1, 0);
                 var content = Ui("Content", scroll.transform, typeof(GridLayoutGroup), typeof(ContentSizeFitter));
                 var contentRect = (RectTransform)content.transform;
