@@ -25,6 +25,8 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.Editor
         private const string FONT = "Assets/Modules/UiWidgetsModule/Fonts/Baloo2-ExtraBold SDF.asset";
         private const string TITLE_FONT = "Assets/Modules/UiWidgetsModule/Fonts/LuckiestGuy SDF.asset";
         private const string CLOSE = "Assets/Art/Generated/UI/Buttons/Kit/SPR_UI_Round_Close.png";
+        private const string ROUNDED = "Assets/Modules/GameplayModule/zScreenModules/GameplayScreenModule/Sprites/UI/SPR_UI_Rounded.png";
+        private static readonly Color32 CREAM = new(0xFF, 0xF4, 0xE6, 0xFF);
         private const string CLOSE_SMALL = "Assets/Art/Generated/UI/Buttons/Kit/SPR_UI_Round_Close_Small.png";
 
         // id, category, price, height (share of the floor's height), spot on the floor
@@ -234,10 +236,18 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.Editor
                 store.gameObject.SetActive(false);
 
                 // Shop sheet.
-                var panel = Ui("Pnl_Shop", root.transform, typeof(Image));
+                // The kit's panel and card are frames with nothing inside: a cream fill goes under each.
+                var panel = Ui("Pnl_Shop", root.transform);
                 Anchor((RectTransform)panel.transform, new Vector2(.02f, 0), new Vector2(.98f, .47f));
-                var panelImage = panel.GetComponent<Image>();
-                panelImage.sprite = Art("Panel_Shop");
+                var panelFill = Ui("Img_Fill", panel.transform, typeof(Image)).GetComponent<Image>();
+                Anchor(panelFill.rectTransform, new Vector2(.04f, .03f), new Vector2(.96f, .8f));
+                panelFill.sprite = AssetDatabase.LoadAssetAtPath<Sprite>(ROUNDED);
+                panelFill.type = Image.Type.Sliced;
+                panelFill.color = CREAM;
+                var panelFrame = Ui("Img_Frame", panel.transform, typeof(Image)).GetComponent<Image>();
+                Stretch(panelFrame.rectTransform);
+                panelFrame.sprite = Art("Panel_Shop");
+                panelFrame.raycastTarget = false;
 
                 var tabsRow = Ui("Row_Tabs", panel.transform, typeof(HorizontalLayoutGroup));
                 Anchor((RectTransform)tabsRow.transform, new Vector2(.05f, .73f), new Vector2(.85f, .85f));
@@ -278,7 +288,14 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.Editor
                 scrollRect.movementType = ScrollRect.MovementType.Clamped;
 
                 var card = Ui("Card_Template", content.transform, typeof(Image), typeof(Button), typeof(PetHomeCardView));
-                card.GetComponent<Image>().sprite = Art("Card_Item");
+                var cardFill = card.GetComponent<Image>();
+                cardFill.sprite = AssetDatabase.LoadAssetAtPath<Sprite>(ROUNDED);
+                cardFill.type = Image.Type.Sliced;
+                cardFill.color = Color.white;
+                var cardFrame = Ui("Img_Frame", card.transform, typeof(Image)).GetComponent<Image>();
+                Stretch(cardFrame.rectTransform);
+                cardFrame.sprite = Art("Card_Item");
+                cardFrame.raycastTarget = false;
                 var icon = Ui("Img_Icon", card.transform, typeof(Image)).GetComponent<Image>();
                 Anchor(icon.rectTransform, new Vector2(.12f, .3f), new Vector2(.88f, .9f));
                 icon.preserveAspect = true;
@@ -384,7 +401,7 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.Editor
             text.color = color;
             text.alignment = align;
             text.raycastTarget = false;
-            text.enableWordWrapping = true;
+            text.textWrappingMode = TextWrappingModes.Normal;
             return text;
         }
 
