@@ -333,9 +333,18 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.Editor
                 }
                 var shopClose = RoundButton("Btn_ShopClose", panel.transform, AssetDatabase.LoadAssetAtPath<Sprite>(CLOSE_SMALL), new Vector2(1, 1), new Vector2(-45, -15), 100);
 
+                // The cards live in a soft well inside the panel's rim: they scroll only within it, fading at its
+                // top and bottom, and the grid leaves room for the badges that stand out over each card's corner.
+                var well = Ui("Img_Well", panel.transform, typeof(Image)).GetComponent<Image>();
+                Anchor(well.rectTransform, new Vector2(.055f, .055f), new Vector2(.945f, .635f));
+                well.sprite = AssetDatabase.LoadAssetAtPath<Sprite>(ROUNDED);
+                well.type = Image.Type.Sliced;
+                well.color = new Color32(0x9B, 0x6F, 0xD0, 0x30);
+                well.raycastTarget = false;
                 var scroll = Ui("Scroll_Cards", panel.transform, typeof(Image), typeof(ScrollRect), typeof(RectMask2D));
-                Anchor((RectTransform)scroll.transform, new Vector2(.05f, .05f), new Vector2(.95f, .64f));
+                Anchor((RectTransform)scroll.transform, new Vector2(.06f, .06f), new Vector2(.94f, .63f));
                 scroll.GetComponent<Image>().color = new Color(1, 1, 1, 0);
+                scroll.GetComponent<RectMask2D>().softness = new Vector2Int(0, 24);
                 var content = Ui("Content", scroll.transform, typeof(GridLayoutGroup), typeof(ContentSizeFitter));
                 var contentRect = (RectTransform)content.transform;
                 contentRect.anchorMin = new Vector2(0, 1);
@@ -345,7 +354,7 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.Editor
                 var grid = content.GetComponent<GridLayoutGroup>();
                 grid.cellSize = new Vector2(210, 240);
                 grid.spacing = new Vector2(18, 18);
-                grid.padding = new RectOffset(10, 10, 10, 10);
+                grid.padding = new RectOffset(20, 40, 44, 24);
                 grid.childAlignment = TextAnchor.UpperCenter;
                 content.GetComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.PreferredSize;
                 var scrollRect = scroll.GetComponent<ScrollRect>();
