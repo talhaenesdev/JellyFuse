@@ -52,12 +52,23 @@ namespace Modules.PetHomeModule.Models
 
         public void Store(string id) => Save?.Placed.RemoveAll(p => p.Id == id);
 
+        public void Empty(string id)
+        {
+            var item = Item(id);
+            if (Save == null || item == null || item.Category != PetHomeCategory.Bowl) return;
+            if (!Save.Placed.Exists(p => p.Id == id) || Save.EmptyBowls.Contains(id)) return;
+            Save.EmptyBowls.Add(id);
+        }
+
+        public void Refill(string id) => Save?.EmptyBowls.Remove(id);
+
         public PetHomeRVO Snapshot() => new()
         {
             Items = Config != null ? Config.Items : new List<PetHomeItemCVO>(),
             Owned = Save != null ? new HashSet<string>(Save.Owned) : new HashSet<string>(),
             Placed = Save != null ? Save.Placed.ConvertAll(p => new PlacedItemSVO(p.Id, p.X, p.Y)) : new List<PlacedItemSVO>(),
             Room = Save != null ? Save.Room : null,
+            Empty = Save != null ? new HashSet<string>(Save.EmptyBowls) : new HashSet<string>(),
         };
     }
 }

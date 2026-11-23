@@ -9,5 +9,7 @@ namespace Modules.PetHomeModule.Shared.Data.ValueObjects
         public IReadOnlyCollection<string> Owned;
         public IReadOnlyList<PlacedItemSVO> Placed;
         public string Room;
+        /// <summary>Bowls the pet has eaten empty, by id.</summary>
+        public IReadOnlyCollection<string> Empty;
     }
 }

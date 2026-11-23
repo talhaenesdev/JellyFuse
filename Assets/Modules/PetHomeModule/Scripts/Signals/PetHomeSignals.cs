@@ -19,6 +19,10 @@ namespace Modules.PetHomeModule.Signals
         public Signal<PlacedItemSVO> Place = new();
         /// <summary>An item was taken out of the room, by id; it stays the player's.</summary>
         public Signal<string> Store = new();
+        /// <summary>The pet ate a bowl empty, by id.</summary>
+        public Signal<string> Eat = new();
+        /// <summary>An empty bowl was filled again, by id.</summary>
+        public Signal<string> Refill = new();
         /// <summary>The purse answered a CoinsRequested: the key it was asked with, and whether the coins were taken.</summary>
         public Signal<string, bool> CoinsAnswered = new();
     }

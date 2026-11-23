@@ -44,6 +44,14 @@ namespace Modules.PetHomeModule.RootsContexts
             CommandBinder.Bind(_signals.Incoming.Place)
                 .ToSequence<PlacePetHomeItemCommand>()
                 .ToSequence<ILocalSaveService.Commands.Save>(SAVE);
+            CommandBinder.Bind(_signals.Incoming.Eat)
+                .ToSequence<EmptyPetHomeBowlCommand>()
+                .ToSequence<ILocalSaveService.Commands.Save>(SAVE)
+                .ToSequence<AnnouncePetHomeCommand>();
+            CommandBinder.Bind(_signals.Incoming.Refill)
+                .ToSequence<RefillPetHomeBowlCommand>()
+                .ToSequence<ILocalSaveService.Commands.Save>(SAVE)
+                .ToSequence<AnnouncePetHomeCommand>();
             CommandBinder.Bind(_signals.Incoming.Store)
                 .ToSequence<StorePetHomeItemCommand>()
                 .ToSequence<ILocalSaveService.Commands.Save>(SAVE)

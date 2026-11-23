@@ -54,6 +54,8 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
         public Action<string> PickClicked;
         public Action<PlacedItemSVO> Placed;
         public Action<string> Stored;
+        public Action<string> Ate;
+        public Action<string> RefillClicked;
 
         private readonly Dictionary<string, PetHomeItemView> _items = new();
         private readonly List<PetHomeCardView> _cards = new();
@@ -124,7 +126,7 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
             _catalogue.Clear();
             foreach (var item in home.Items) if (item != null && !string.IsNullOrEmpty(item.Id)) _catalogue[item.Id] = item;
 
-            if (home.Room != null && _catalogue.TryGetValue(home.Room, out var room) && room.Sprite != null) _room.sprite = room.Sprite;
+            if (home.Room != null && _catalogue.TryGetValue(home.Room, out var room) && room.Sprite != null) ShowRoom(room);
             PlaceItems(home.Placed);
             RefreshCards();
         }
@@ -136,6 +138,20 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
         public void ApplyAnimal(CD_BoardAnimal animal) => _pet.SetAnimal(animal);
 
         // ---- the room ----
+
+        /// <summary>The room's picture, keeping its shape, and its floor where the room says its painted floor is.</summary>
+        private void ShowRoom(PetHomeItemCVO room)
+        {
+            _room.sprite = room.Sprite;
+            var fitter = _room.GetComponent<AspectRatioFitter>();
+            if (fitter != null && room.Sprite.rect.height > 0) fitter.aspectRatio = room.Sprite.rect.width / room.Sprite.rect.height;
+            var floor = room.Floor;
+            _floor.anchorMin = new Vector2(floor.xMin, floor.yMin);
+            _floor.anchorMax = new Vector2(floor.xMax, floor.yMax);
+            _floor.offsetMin = _floor.offsetMax = Vector2.zero;
+            Canvas.ForceUpdateCanvases();
+            foreach (var view in _items.Values) if (view.gameObject.activeSelf) LayOut(view);
+        }
 
         private void PlaceItems(IReadOnlyList<PlacedItemSVO> placed)
         {
@@ -152,7 +168,9 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
                     _items[spot.Id] = view;
                 }
                 view.gameObject.SetActive(true);
-                view.Show(item.Sprite, item.Height);
+                bool empty = _home.Empty != null && _home.Empty.Contains(spot.Id);
+                view.Show(empty && item.EmptySprite != null ? item.EmptySprite : item.Sprite, item.Height);
+                view.Empty = empty;
                 view.Floor = new Vector2(spot.X, spot.Y);
                 LayOut(view);
             }
@@ -191,7 +209,7 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
             foreach (var pair in _items)
             {
                 if (!pair.Value.gameObject.activeSelf || !_catalogue.TryGetValue(pair.Key, out var item)) continue;
-                spots.Add(new PetHomePetView.Spot { Floor = pair.Value.Floor, Category = item.Category });
+                spots.Add(new PetHomePetView.Spot { Id = pair.Key, Floor = pair.Value.Floor, Category = item.Category, Empty = pair.Value.Empty });
             }
             _pet.SetSpots(spots);
         }
@@ -201,7 +219,9 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
         internal void ItemTapped(PetHomeItemView item)
         {
             if (_editing) { Select(item == _selected ? null : item); return; }
-            if (_catalogue.TryGetValue(item.Id, out var cvo)) _pet.GoTo(item.Floor, cvo.Category);
+            if (!_catalogue.TryGetValue(item.Id, out var cvo)) return;
+            if (cvo.Category == PetHomeCategory.Bowl && item.Empty) { RefillClicked?.Invoke(item.Id); return; }
+            _pet.GoTo(new PetHomePetView.Spot { Id = item.Id, Floor = item.Floor, Category = cvo.Category, Empty = item.Empty });
         }
 
         internal bool CanDrag => _editing;
@@ -259,6 +279,9 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
         }
 
         private void OnPetTapped() => _pet.Pet();
+
+        /// <summary>The pet finished a bowl.</summary>
+        internal void PetAte(string id) => Ate?.Invoke(id);
 
         // ---- edit mode ----
 

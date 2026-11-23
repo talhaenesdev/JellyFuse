@@ -29,6 +29,10 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.Signals
         public Signal<PlacedItemSVO> Placed = new();
         /// <summary>An item was taken out of the room, by id.</summary>
         public Signal<string> Stored = new();
+        /// <summary>The pet ate a bowl empty, by id.</summary>
+        public Signal<string> Ate = new();
+        /// <summary>An empty bowl was tapped to fill it, by id.</summary>
+        public Signal<string> RefillClicked = new();
         /// <summary>The screen was closed.</summary>
         public Signal Closed = new();
     }

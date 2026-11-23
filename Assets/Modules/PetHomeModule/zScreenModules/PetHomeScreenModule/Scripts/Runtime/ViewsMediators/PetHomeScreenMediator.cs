@@ -32,6 +32,8 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
             _view.PickClicked += OnPick;
             _view.Placed += OnPlaced;
             _view.Stored += OnStored;
+            _view.Ate += OnAte;
+            _view.RefillClicked += OnRefill;
             _signals.Incoming.Apply.AddListener(_view.Apply);
             _signals.Incoming.ApplyCoins.AddListener(_view.ApplyCoins);
             _signals.Incoming.NotBought.AddListener(_view.ShowNotBought);
@@ -44,6 +46,8 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
             _view.PickClicked -= OnPick;
             _view.Placed -= OnPlaced;
             _view.Stored -= OnStored;
+            _view.Ate -= OnAte;
+            _view.RefillClicked -= OnRefill;
             _signals.Incoming.Apply.RemoveListener(_view.Apply);
             _signals.Incoming.ApplyCoins.RemoveListener(_view.ApplyCoins);
             _signals.Incoming.NotBought.RemoveListener(_view.ShowNotBought);
@@ -62,5 +66,7 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
         private void OnPick(string id) { if (Ready) _signals.Outgoing.PickClicked.Dispatch(id); }
         private void OnPlaced(PlacedItemSVO placed) { if (Ready) _signals.Outgoing.Placed.Dispatch(placed); }
         private void OnStored(string id) { if (Ready) _signals.Outgoing.Stored.Dispatch(id); }
+        private void OnAte(string id) { if (Ready) _signals.Outgoing.Ate.Dispatch(id); }
+        private void OnRefill(string id) { if (Ready) _signals.Outgoing.RefillClicked.Dispatch(id); }
     }
 }

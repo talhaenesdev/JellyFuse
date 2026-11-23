@@ -14,6 +14,9 @@ namespace Modules.PetHomeModule.Models
         void Use(string id);
         void Place(PlacedItemSVO placed);
         void Store(string id);
+        /// <summary>A bowl standing in the room, eaten empty.</summary>
+        void Empty(string id);
+        void Refill(string id);
         PetHomeRVO Snapshot();
     }
 }

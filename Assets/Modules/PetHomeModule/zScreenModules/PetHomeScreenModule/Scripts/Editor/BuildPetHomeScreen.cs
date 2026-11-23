@@ -125,8 +125,15 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.Editor
                 config = ScriptableObject.CreateInstance<CD_PetHome>();
                 AssetDatabase.CreateAsset(config, CONFIG);
             }
+            // What was tuned in the asset is kept: prices, and where each room's floor is.
             var prices = new Dictionary<string, int>();
-            foreach (var item in config.Items) if (item != null && item.Id != null) prices[item.Id] = item.Price;
+            var floors = new Dictionary<string, Rect>();
+            foreach (var item in config.Items)
+            {
+                if (item == null || item.Id == null) continue;
+                prices[item.Id] = item.Price;
+                floors[item.Id] = item.Floor;
+            }
             config.Items.Clear();
             foreach (var (id, cat, price, height, spot) in ITEMS)
             {
@@ -134,6 +141,8 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.Editor
                 {
                     Id = id, Category = cat, Sprite = Art(id), Height = height, Spot = spot,
                     Price = prices.TryGetValue(id, out int kept) ? kept : price,
+                    EmptySprite = cat == PetHomeCategory.Bowl ? Art(id + "_Empty") : null,
+                    Floor = floors.TryGetValue(id, out var floor) ? floor : new Rect(.3f, .08f, .4f, .42f),
                 });
             }
             config.StarterItems = new List<string> { "Bowl_Ceramic", "Bed_Cushion" };
@@ -171,8 +180,10 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.Editor
                 fitter.aspectMode = AspectRatioFitter.AspectMode.EnvelopeParent;
                 fitter.aspectRatio = room.sprite != null ? room.sprite.rect.width / room.sprite.rect.height : .72f;
 
-                var floor = (RectTransform)Ui("Pnl_Floor", root.transform).transform;
-                Anchor(floor, new Vector2(.06f, .12f), new Vector2(.94f, .5f));
+                // The floor lives on the room picture, so it stays on the painted floor whatever the screen's shape;
+                // each room says where its floor is (CD_PetHome, Floor).
+                var floor = (RectTransform)Ui("Pnl_Floor", room.transform).transform;
+                Anchor(floor, new Vector2(.3f, .08f), new Vector2(.7f, .5f));
 
                 var mark = Ui("Img_FloorMark", floor, typeof(Image)).GetComponent<Image>();
                 mark.raycastTarget = false;

@@ -18,8 +18,10 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
     {
         public struct Spot
         {
+            public string Id;
             public Vector2 Floor;
             public PetHomeCategory Category;
+            public bool Empty;
         }
 
         private const int ROW = 16;
@@ -48,7 +50,7 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
         private readonly List<Spot> _spots = new();
         private Vector2 _floor = new(.5f, .3f);
         private Vector2 _target;
-        private PetHomeCategory? _goal;
+        private Spot? _goal;
         private bool _facingLeft;
         private Act _act;
         private Sprite[] _clip;
@@ -71,7 +73,7 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
         }
 
         /// <summary>Called over to a spot - the item the player tapped.</summary>
-        public void GoTo(Vector2 floor, PetHomeCategory category) => Walk(Beside(floor, category), category);
+        public void GoTo(Spot spot) => Walk(Beside(spot.Floor, spot.Category), spot);
 
         public void Pet() => Play(_animal?.TouchFrames, PETTED, 2, () => Sit(2f));
 
@@ -91,11 +93,10 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
         private void Decide()
         {
             float roll = UnityEngine.Random.value;
-            if (_spots.Count > 0 && roll < .45f)
-            {
-                var spot = _spots[UnityEngine.Random.Range(0, _spots.Count)];
-                Walk(Beside(spot.Floor, spot.Category), spot.Category);
-            }
+            // A full bowl draws it more than anything else in the room.
+            int full = _spots.FindIndex(s => s.Category == PetHomeCategory.Bowl && !s.Empty);
+            if (full >= 0 && roll < .35f) GoTo(_spots[full]);
+            else if (_spots.Count > 0 && roll < .6f) GoTo(_spots[UnityEngine.Random.Range(0, _spots.Count)]);
             else if (roll < .8f) Walk(new Vector2(UnityEngine.Random.Range(.1f, .9f), UnityEngine.Random.Range(.05f, .8f)), null);
             else if (roll < .9f) Play(_animal.Frames, GROOM, 1, () => Sit(2f));
             else Play(_animal.Frames, STRETCH, 1, () => Sit(2f));
@@ -103,10 +104,19 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
 
         private void Arrive()
         {
-            switch (_goal)
+            var goal = _goal;
+            switch (goal?.Category)
             {
+                case PetHomeCategory.Bowl when goal.Value.Empty:
+                    Play(_animal.TouchFrames, CURIOUS, 1, () => Sit(2f));
+                    break;
                 case PetHomeCategory.Bowl:
-                    Loop(_animal.EatFrames, EAT, 4f, () => Play(_animal.EatFrames, FULL, 1, () => Sit(2f)));
+                    string bowl = goal.Value.Id;
+                    Loop(_animal.EatFrames, EAT, 4f, () =>
+                    {
+                        _screen.PetAte(bowl);
+                        Play(_animal.EatFrames, FULL, 1, () => Sit(2f));
+                    });
                     break;
                 case PetHomeCategory.Bed:
                     Play(_animal.Frames, SIT_DOWN, 1, () => Loop(_animal.Frames, SLEEP, 7f, () => Play(_animal.Frames, STRETCH, 1, () => Sit(1.5f))));
@@ -135,7 +145,7 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
 
         private void Sit(float seconds) => Begin(Act.Sit, _animal?.Frames, SIT, seconds, null);
 
-        private void Walk(Vector2 target, PetHomeCategory? goal)
+        private void Walk(Vector2 target, Spot? goal)
         {
             if (_animal == null) return;
             _target = target;

@@ -13,5 +13,7 @@ namespace Modules.PetHomeModule.Shared.Data.UnityObjects
         public List<string> Owned = new();
         public List<PlacedItemSVO> Placed = new();
         public string Room;
+        [Tooltip("Bowls the pet has eaten empty, waiting to be filled.")]
+        public List<string> EmptyBowls = new();
     }
 }

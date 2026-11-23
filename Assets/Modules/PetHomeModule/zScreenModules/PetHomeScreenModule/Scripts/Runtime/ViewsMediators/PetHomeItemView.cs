@@ -20,6 +20,8 @@ namespace Modules.PetHomeModule.PetHomeScreenModule.ViewsMediators
         /// <summary>Where it last stood for good - a drop off the floor goes back there.</summary>
         public Vector2 Committed { get; set; }
         public bool Valid { get; set; } = true;
+        /// <summary>A bowl the pet has eaten empty.</summary>
+        public bool Empty { get; set; }
 
         public void Begin(PetHomeScreenView screen, string id)
         {

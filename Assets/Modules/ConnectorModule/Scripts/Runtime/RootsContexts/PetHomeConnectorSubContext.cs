@@ -36,6 +36,8 @@ namespace Modules.ConnectorModule.RootsContexts
             _screenSignals.Outgoing.PickClicked.Connect(_petHomeSignals.Incoming.Pick, GROUP);
             _screenSignals.Outgoing.Placed.Connect(_petHomeSignals.Incoming.Place, GROUP);
             _screenSignals.Outgoing.Stored.Connect(_petHomeSignals.Incoming.Store, GROUP);
+            _screenSignals.Outgoing.Ate.Connect(_petHomeSignals.Incoming.Eat, GROUP);
+            _screenSignals.Outgoing.RefillClicked.Connect(_petHomeSignals.Incoming.Refill, GROUP);
             _gameplaySignals.Outgoing.CoinsSpent.Connect(_petHomeSignals.Incoming.CoinsAnswered, GROUP);
         }
 
