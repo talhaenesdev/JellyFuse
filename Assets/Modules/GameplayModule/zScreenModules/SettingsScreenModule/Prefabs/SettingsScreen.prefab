@@ -580,7 +580,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: -14, y: -80}
-  m_SizeDelta: {x: 70, y: 70}
+  m_SizeDelta: {x: 92, y: 92}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4934161516848939642
 CanvasRenderer:
@@ -1453,6 +1453,8 @@ GameObject:
   - component: {fileID: 8934268792141030755}
   - component: {fileID: 8595828975831778963}
   - component: {fileID: 3650062572552870936}
+  - component: {fileID: 8695313758560964539}
+  - component: {fileID: 8991498398955080690}
   m_Layer: 0
   m_Name: Txt_Redeem
   m_TagString: Untagged
@@ -1594,6 +1596,40 @@ MonoBehaviour:
   m_EffectColor: {r: 0.10980392, g: 0.047058824, b: 0.2627451, a: 0.74509805}
   m_EffectDistance: {x: 2, y: -3}
   m_UseGraphicAlpha: 1
+--- !u!114 &8695313758560964539
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2141839310771162233}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03cab3481c6e0644b9556052741d16c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FlowIoC::FlowIoC.BaseModule.Injectable.Components.ViewInjector
+  viewDataList:
+  - View: {fileID: 8991498398955080690}
+    AutoRegister: 1
+    InjectableView: 0
+    ContextSource: 2
+    SelectedRoot: {fileID: 0}
+    RootName: LocalizationServiceRoot
+    IsRegistered: 0
+--- !u!114 &8991498398955080690
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2141839310771162233}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26ac5570858801e458c6115490e71f02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.Localization::Modules.LocalizationModule.ViewsMediators.LocalizedTextView
+  _key: promo.redeem
+  _text: {fileID: 8595828975831778963}
 --- !u!1 &2449621396016957810
 GameObject:
   m_ObjectHideFlags: 0
@@ -1756,6 +1792,8 @@ GameObject:
   - component: {fileID: 269486523469593741}
   - component: {fileID: 7189439184727114342}
   - component: {fileID: 864145100601710085}
+  - component: {fileID: 8532740784855225401}
+  - component: {fileID: 3957798013198449350}
   m_Layer: 0
   m_Name: Txt_PromoTitle
   m_TagString: Untagged
@@ -1897,81 +1935,40 @@ MonoBehaviour:
   m_EffectColor: {r: 0.10980392, g: 0.047058824, b: 0.2627451, a: 0.74509805}
   m_EffectDistance: {x: 2, y: -3}
   m_UseGraphicAlpha: 1
---- !u!1 &2839193006113921964
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4601751806246013054}
-  - component: {fileID: 7642231256725103296}
-  - component: {fileID: 3340952983878320900}
-  m_Layer: 5
-  m_Name: Img_SettingsPanelTheme
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &4601751806246013054
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2839193006113921964}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 5060918100295177338}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 78.5}
-  m_SizeDelta: {x: 112, y: 417}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &7642231256725103296
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2839193006113921964}
-  m_CullTransparentMesh: 1
---- !u!114 &3340952983878320900
+--- !u!114 &8532740784855225401
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2839193006113921964}
+  m_GameObject: {fileID: 2744427008310070751}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Script: {fileID: 11500000, guid: 03cab3481c6e0644b9556052741d16c8, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 0
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: c20af739d3f64543a3f191a93a7c20e6, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
+  m_EditorClassIdentifier: FlowIoC::FlowIoC.BaseModule.Injectable.Components.ViewInjector
+  viewDataList:
+  - View: {fileID: 3957798013198449350}
+    AutoRegister: 1
+    InjectableView: 0
+    ContextSource: 2
+    SelectedRoot: {fileID: 0}
+    RootName: LocalizationServiceRoot
+    IsRegistered: 0
+--- !u!114 &3957798013198449350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2744427008310070751}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26ac5570858801e458c6115490e71f02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.Localization::Modules.LocalizationModule.ViewsMediators.LocalizedTextView
+  _key: promo.title
+  _text: {fileID: 7189439184727114342}
 --- !u!1 &2914230698121803323
 GameObject:
   m_ObjectHideFlags: 0
@@ -2312,6 +2309,8 @@ GameObject:
   - component: {fileID: 4467526503989594058}
   - component: {fileID: 9197894681558438434}
   - component: {fileID: 8645518102828605564}
+  - component: {fileID: 8640384032339437502}
+  - component: {fileID: 2116184865194338629}
   m_Layer: 0
   m_Name: Txt_Title
   m_TagString: Untagged
@@ -2453,6 +2452,40 @@ MonoBehaviour:
   m_EffectColor: {r: 0.10980392, g: 0.047058824, b: 0.2627451, a: 0.74509805}
   m_EffectDistance: {x: 2, y: -3}
   m_UseGraphicAlpha: 1
+--- !u!114 &8640384032339437502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3798778113569161880}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03cab3481c6e0644b9556052741d16c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FlowIoC::FlowIoC.BaseModule.Injectable.Components.ViewInjector
+  viewDataList:
+  - View: {fileID: 2116184865194338629}
+    AutoRegister: 1
+    InjectableView: 0
+    ContextSource: 2
+    SelectedRoot: {fileID: 0}
+    RootName: LocalizationServiceRoot
+    IsRegistered: 0
+--- !u!114 &2116184865194338629
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3798778113569161880}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26ac5570858801e458c6115490e71f02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.Localization::Modules.LocalizationModule.ViewsMediators.LocalizedTextView
+  _key: settings.title
+  _text: {fileID: 9197894681558438434}
 --- !u!1 &3905709181097232530
 GameObject:
   m_ObjectHideFlags: 0
@@ -2886,6 +2919,8 @@ GameObject:
   - component: {fileID: 1606947095160859099}
   - component: {fileID: 2891283910998482290}
   - component: {fileID: 414423673866851120}
+  - component: {fileID: 8166650187891813840}
+  - component: {fileID: 5948869914315474942}
   m_Layer: 0
   m_Name: Txt_LanguageValue
   m_TagString: Untagged
@@ -3012,6 +3047,40 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &8166650187891813840
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4399406773767831098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03cab3481c6e0644b9556052741d16c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FlowIoC::FlowIoC.BaseModule.Injectable.Components.ViewInjector
+  viewDataList:
+  - View: {fileID: 5948869914315474942}
+    AutoRegister: 1
+    InjectableView: 0
+    ContextSource: 2
+    SelectedRoot: {fileID: 0}
+    RootName: LocalizationServiceRoot
+    IsRegistered: 0
+--- !u!114 &5948869914315474942
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4399406773767831098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26ac5570858801e458c6115490e71f02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.Localization::Modules.LocalizationModule.ViewsMediators.LocalizedTextView
+  _key: settings.promo_enter
+  _text: {fileID: 414423673866851120}
 --- !u!1 &4673181837475441005
 GameObject:
   m_ObjectHideFlags: 0
@@ -3297,6 +3366,8 @@ GameObject:
   - component: {fileID: 974132999209652843}
   - component: {fileID: 3808232079111982192}
   - component: {fileID: 152615734522714833}
+  - component: {fileID: 9124095860329072611}
+  - component: {fileID: 4994022935306292286}
   m_Layer: 0
   m_Name: Txt_LanguageValue
   m_TagString: Untagged
@@ -3423,6 +3494,115 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &9124095860329072611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4965423181424273274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03cab3481c6e0644b9556052741d16c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FlowIoC::FlowIoC.BaseModule.Injectable.Components.ViewInjector
+  viewDataList:
+  - View: {fileID: 4994022935306292286}
+    AutoRegister: 1
+    InjectableView: 0
+    ContextSource: 2
+    SelectedRoot: {fileID: 0}
+    RootName: LocalizationServiceRoot
+    IsRegistered: 0
+--- !u!114 &4994022935306292286
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4965423181424273274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26ac5570858801e458c6115490e71f02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.Localization::Modules.LocalizationModule.ViewsMediators.LocalizedTextView
+  _key: settings.privacy_change
+  _text: {fileID: 152615734522714833}
+--- !u!1 &5369113378919147109
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8890665302465564199}
+  - component: {fileID: 4568767629168425652}
+  - component: {fileID: 4148301138230599691}
+  m_Layer: 5
+  m_Name: Img_SettingsPanelTheme
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &8890665302465564199
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5369113378919147109}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5060918100295177338}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 78.5}
+  m_SizeDelta: {x: 112, y: 417}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &4568767629168425652
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5369113378919147109}
+  m_CullTransparentMesh: 1
+--- !u!114 &4148301138230599691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5369113378919147109}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: c20af739d3f64543a3f191a93a7c20e6, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &5457933808839416319
 GameObject:
   m_ObjectHideFlags: 0
@@ -3822,7 +4002,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 4601751806246013054}
+  - {fileID: 8890665302465564199}
   - {fileID: 6620457742228233736}
   - {fileID: 5494241282853497725}
   - {fileID: 2428957000073883632}

@@ -100,16 +100,10 @@ namespace Modules.GameplayModule.PauseScreenModule.ViewsMediators
 
         private void RefreshTexts()
         {
-            _title.text = L("pause.title", "Pause");
+            // Fixed words are LocalizedTextViews in the prefab, edited in the inspector: pause.title, pause.resume, pause.quit, pause.quitconfirm.title, pause.quitconfirm.body, pause.quitconfirm.stay.
             _soundsLabel.text = L("settings.sounds", "Sounds") + ":";
             _musicLabel.text = L("settings.music", "Music") + ":";
             _hapticsLabel.text = L("settings.haptics", "Haptics") + ":";
-            _resumeLabel.text = L("pause.resume", "Resume");
-            _quitLabel.text = L("pause.quit", "Quit");
-            _quitTitle.text = L("pause.quitconfirm.title", "Leave Level?");
-            _quitBody.text = L("pause.quitconfirm.body", "If you leave now, you will lose a life.");
-            _quitStayLabel.text = L("pause.quitconfirm.stay", "Keep Playing");
-            _quitConfirmLabel.text = L("pause.quit", "Quit");
         }
 
         /// <summary>The pooled screen opens on the pause card, whatever the last opening left showing.</summary>

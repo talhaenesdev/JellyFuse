@@ -191,7 +191,7 @@ namespace Modules.GameplayModule.SettingsScreenModule.ViewsMediators
 
         private void RefreshTexts()
         {
-            _title.text = L("settings.title", "Settings");
+            // Fixed words are LocalizedTextViews in the prefab, edited in the inspector: settings.title, settings.privacy_change, settings.promo_enter, promo.title, promo.redeem.
             _notificationsLabel.text = L("settings.notifications", "Notifications") + ":";
             _soundsLabel.text = L("settings.sounds", "Sounds") + ":";
             _musicLabel.text = L("settings.music", "Music") + ":";
@@ -199,11 +199,7 @@ namespace Modules.GameplayModule.SettingsScreenModule.ViewsMediators
             if (_languageLabel != null) _languageLabel.text = L("settings.language", "Language") + ":";
             if (_languageValue != null) _languageValue.text = LanguageAt(IndexOf(_language))?.Name ?? _language;
             if (_privacyLabel != null) _privacyLabel.text = L("settings.privacy", "Privacy") + ":";
-            if (_privacyValue != null) _privacyValue.text = L("settings.privacy_change", "Change");
             if (_promoLabel != null) _promoLabel.text = L("settings.promo", "Promo code") + ":";
-            if (_promoValue != null) _promoValue.text = L("settings.promo_enter", "Enter");
-            if (_promoTitle != null) _promoTitle.text = L("promo.title", "Promo Code");
-            if (_promoSubmitLabel != null) _promoSubmitLabel.text = L("promo.redeem", "REDEEM");
             if (_promoInput != null && _promoInput.placeholder is TMP_Text hint) hint.text = L("promo.hint", "Type your code");
         }
 

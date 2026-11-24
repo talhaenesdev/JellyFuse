@@ -80,9 +80,7 @@ namespace Modules.ProfileModule.ProfileSelectionScreenModule.ViewsMediators
         /// <summary>Every fixed word on the screen, in the language in use.</summary>
         private void ApplyTexts()
         {
-            if (_titleLabel != null) _titleLabel.text = L("profile.title", "PROFILE");
-            if (_avatarTabLabel != null) _avatarTabLabel.text = L("profile.tab_avatar", "Avatar");
-            if (_frameTabLabel != null) _frameTabLabel.text = L("profile.tab_frame", "Frame");
+            // Fixed words are LocalizedTextViews in the prefab, edited in the inspector: profile.title, profile.tab_avatar, profile.tab_frame.
             if (_nameInput != null && _nameInput.placeholder is TMP_Text placeholder)
                 placeholder.text = L("profile.name_placeholder", "Enter your name");
             _saveText = L("profile.save", "SAVE");
