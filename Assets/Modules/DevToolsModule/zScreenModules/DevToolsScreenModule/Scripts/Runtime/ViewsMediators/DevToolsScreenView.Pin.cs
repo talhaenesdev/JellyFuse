@@ -35,7 +35,7 @@ namespace Modules.DevToolsModule.DevToolsScreenModule.ViewsMediators
             if (_pinPage != null) _pinPage.SetActive(show);
             // The pad covers the panel; Close stays on top of it so a wrong guess can still leave.
             if (show && _closeButton != null) _closeButton.transform.SetAsLastSibling();
-            if (_pinTitle != null) _pinTitle.text = L("devtools.pin_title", "Enter PIN");
+            // Fixed words are LocalizedTextViews in the prefab, edited in the inspector: devtools.pin_title.
             if (_pinMessage != null) _pinMessage.text = string.Empty;
             RefreshDots();
         }

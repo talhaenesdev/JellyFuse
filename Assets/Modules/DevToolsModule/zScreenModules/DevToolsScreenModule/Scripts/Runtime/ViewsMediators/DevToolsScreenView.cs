@@ -75,17 +75,7 @@ namespace Modules.DevToolsModule.DevToolsScreenModule.ViewsMediators
 
         private void RefreshTexts()
         {
-            if (_title != null) _title.text = L("devtools.title", "Dev Tools");
-            if (_previousLabel != null) _previousLabel.text = L("devtools.previous", "Previous");
-            if (_nextLabel != null) _nextLabel.text = L("devtools.next", "Next");
-            if (_resetBoostersLabel != null) _resetBoostersLabel.text = L("devtools.reset_boosters", "Reset Boosters");
-            if (_refillLivesLabel != null) _refillLivesLabel.text = L("devtools.refill_lives", "Refill Lives");
-            if (_resetWheelLabel != null) _resetWheelLabel.text = L("devtools.reset_wheel", "Reset Daily Games");
-            if (_resetPlayerLabel != null) _resetPlayerLabel.text = L("devtools.reset_player", "Reset Player");
-            if (_gameTogglesLabel != null) _gameTogglesLabel.text = L("devtools.game_toggles", "Gameplay Settings");
-            if (_displayTogglesLabel != null) _displayTogglesLabel.text = L("devtools.display_toggles", "Display Settings");
-            if (_togglesBackLabel != null) _togglesBackLabel.text = L("devtools.back", "Back");
-            if (_slidersLabel != null) _slidersLabel.text = L("devtools.sliders", "Animation Settings");
+            // Fixed words are LocalizedTextViews in the prefab, edited in the inspector: devtools.title, devtools.previous, devtools.next, devtools.reset_boosters, devtools.refill_lives, devtools.reset_wheel, devtools.reset_player, devtools.game_toggles, devtools.display_toggles, devtools.back, devtools.sliders.
             foreach (var (label, toggle) in _labels)
                 label.text = L("devtools." + toggle.Key, string.IsNullOrEmpty(toggle.Label) ? toggle.Key : toggle.Label);
         }

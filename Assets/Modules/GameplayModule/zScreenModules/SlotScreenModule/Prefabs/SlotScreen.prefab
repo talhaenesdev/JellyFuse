@@ -271,6 +271,8 @@ GameObject:
   - component: {fileID: 1954166456568552254}
   - component: {fileID: 2366573550415742848}
   - component: {fileID: 1183486497493542634}
+  - component: {fileID: 8722050393767737746}
+  - component: {fileID: 3909008965297498887}
   m_Layer: 5
   m_Name: Txt_Title
   m_TagString: Untagged
@@ -397,6 +399,40 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &8722050393767737746
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1448744890408219796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03cab3481c6e0644b9556052741d16c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FlowIoC::FlowIoC.BaseModule.Injectable.Components.ViewInjector
+  viewDataList:
+  - View: {fileID: 3909008965297498887}
+    AutoRegister: 1
+    InjectableView: 0
+    ContextSource: 2
+    SelectedRoot: {fileID: 0}
+    RootName: LocalizationServiceRoot
+    IsRegistered: 0
+--- !u!114 &3909008965297498887
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1448744890408219796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26ac5570858801e458c6115490e71f02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.Localization::Modules.LocalizationModule.ViewsMediators.LocalizedTextView
+  _key: slot.title
+  _text: {fileID: 1183486497493542634}
 --- !u!1 &1854278967500399890
 GameObject:
   m_ObjectHideFlags: 0
@@ -765,6 +801,8 @@ GameObject:
   - component: {fileID: 8070477949444134997}
   - component: {fileID: 3951307579020546105}
   - component: {fileID: 1577292364305688277}
+  - component: {fileID: 6804782465278368687}
+  - component: {fileID: 1944366840976441564}
   m_Layer: 5
   m_Name: Txt_Label
   m_TagString: Untagged
@@ -891,6 +929,40 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &6804782465278368687
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3693709831570172196}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03cab3481c6e0644b9556052741d16c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FlowIoC::FlowIoC.BaseModule.Injectable.Components.ViewInjector
+  viewDataList:
+  - View: {fileID: 1944366840976441564}
+    AutoRegister: 1
+    InjectableView: 0
+    ContextSource: 2
+    SelectedRoot: {fileID: 0}
+    RootName: LocalizationServiceRoot
+    IsRegistered: 0
+--- !u!114 &1944366840976441564
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3693709831570172196}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26ac5570858801e458c6115490e71f02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Modules.Localization::Modules.LocalizationModule.ViewsMediators.LocalizedTextView
+  _key: slot.ad_spin
+  _text: {fileID: 1577292364305688277}
 --- !u!1 &3997483755989882223
 GameObject:
   m_ObjectHideFlags: 0

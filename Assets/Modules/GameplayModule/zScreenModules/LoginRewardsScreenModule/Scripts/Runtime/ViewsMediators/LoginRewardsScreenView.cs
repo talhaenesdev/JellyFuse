@@ -63,7 +63,7 @@ namespace Modules.GameplayModule.LoginRewardsScreenModule.ViewsMediators
 
         public void ShowEvents(EventsRVO events)
         {
-            _title.text = L("login.title", "Daily Rewards");
+            // Fixed words are LocalizedTextViews in the prefab, edited in the inspector: login.title.
             _raysTarget = null;
             for (int i = 0; i < _days.Length; i++)
             {

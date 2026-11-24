@@ -70,7 +70,7 @@ namespace Modules.GameplayModule.DailyQuestsScreenModule.ViewsMediators
         public void ShowEvents(EventsRVO events)
         {
             if (_rows.Count == 0) _rows.Add(_rowTemplate);
-            _title.text = L("quests.title", "Daily Quests");
+            // Fixed words are LocalizedTextViews in the prefab, edited in the inspector: quests.title.
             var quests = events.Quests;
             while (_rows.Count < quests.Count)
             {

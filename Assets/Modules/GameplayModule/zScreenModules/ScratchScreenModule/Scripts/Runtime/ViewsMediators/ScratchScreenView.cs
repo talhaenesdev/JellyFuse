@@ -129,7 +129,7 @@ namespace Modules.GameplayModule.ScratchScreenModule.ViewsMediators
         public void ShowEvents(EventsRVO events)
         {
             _events = events ?? new EventsRVO();
-            _title.text = L("scratch.title", "Scratch & Win");
+            // Fixed words are LocalizedTextViews in the prefab, edited in the inspector: scratch.title, scratch.ad_card, scratch.open_all.
             DrawButtons();
         }
 
@@ -236,9 +236,7 @@ namespace Modules.GameplayModule.ScratchScreenModule.ViewsMediators
             if (_cardLabel != null)
                 _cardLabel.text = _events.ScratchCards > 0 ? string.Format(L("scratch.card_many", "New Card ({0})"), _events.ScratchCards) : L("scratch.card", "New Card");
             _adCardButton.gameObject.SetActive(!scratching && !held);
-            if (_adCardLabel != null) _adCardLabel.text = L("scratch.ad_card", "+1 Card");
             _openAllButton.gameObject.SetActive(scratching);
-            if (_openAllLabel != null) _openAllLabel.text = L("scratch.open_all", "Reveal All");
         }
 
         private Sprite RewardIcon(RewardCVO reward)

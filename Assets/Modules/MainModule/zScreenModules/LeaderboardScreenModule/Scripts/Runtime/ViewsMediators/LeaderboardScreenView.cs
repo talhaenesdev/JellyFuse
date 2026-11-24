@@ -111,10 +111,7 @@ namespace Modules.MainModule.LeaderboardScreenModule.ViewsMediators
         public void SetLocalizer(Func<string, string> localize)
         {
             _localize = localize;
-            if (_title != null) _title.text = L("leaderboard.title", "LEADERBOARD");
-            if (_allTimeLabel != null) _allTimeLabel.text = L("leaderboard.all_time", "All Time");
-            if (_weeklyLabel != null) _weeklyLabel.text = L("leaderboard.weekly", "Weekly");
-            if (_editProfileLabel != null) _editProfileLabel.text = L("leaderboard.edit", "Edit");
+            // Fixed words are LocalizedTextViews in the prefab, edited in the inspector: leaderboard.title, leaderboard.all_time, leaderboard.weekly, leaderboard.edit.
         }
 
         /// <summary>The board the screen is on: its tab lit; a board that comes back for the other tab is not drawn.</summary>

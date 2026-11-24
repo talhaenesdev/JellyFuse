@@ -120,7 +120,7 @@ namespace Modules.GameplayModule.SlotScreenModule.ViewsMediators
         public void ShowEvents(EventsRVO events)
         {
             _events = events ?? new EventsRVO();
-            _title.text = L("slot.title", "Lucky Slots");
+            // Fixed words are LocalizedTextViews in the prefab, edited in the inspector: slot.title, slot.ad_spin.
             // While the reels roll the buttons wait; the spin's end draws them from the events last given.
             if (!Spinning) DrawButtons();
         }
@@ -257,7 +257,6 @@ namespace Modules.GameplayModule.SlotScreenModule.ViewsMediators
                 _spinLabel.text = _events.SlotSpins > 0 ? string.Format(L("slot.spin_many", "Spin ({0})"), _events.SlotSpins) : L("slot.spin", "Spin");
             _adSpinButton.gameObject.SetActive(!held);
             _adSpinButton.interactable = !held && !Spinning;
-            if (_adSpinLabel != null) _adSpinLabel.text = L("slot.ad_spin", "+1 Spin");
             if (_leverButton != null) _leverButton.interactable = held && !Spinning;
             _closeButton.interactable = !Spinning;
         }

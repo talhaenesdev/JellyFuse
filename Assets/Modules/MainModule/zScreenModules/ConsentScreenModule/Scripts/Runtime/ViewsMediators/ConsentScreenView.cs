@@ -44,12 +44,10 @@ namespace Modules.MainModule.ConsentScreenModule.ViewsMediators
         public void SetLocalizer(Func<string, string> localize)
         {
             _localize = localize;
-            _title.text = L("consent.title", "Your Privacy");
+            // Fixed words are LocalizedTextViews in the prefab, edited in the inspector: consent.title, consent.accept, consent.decline.
             _body.text = L("consent.body",
                 "We use your device's advertising ID and gameplay data to show ads that suit you and to make the game better. " +
                 "You can refuse: you will still see ads, just not personalised ones.");
-            _acceptLabel.text = L("consent.accept", "Accept");
-            _declineLabel.text = L("consent.decline", "Refuse");
         }
 
         private string L(string key, string fallback)

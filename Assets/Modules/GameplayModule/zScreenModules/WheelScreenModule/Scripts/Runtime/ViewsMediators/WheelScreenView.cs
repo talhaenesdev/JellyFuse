@@ -106,7 +106,7 @@ namespace Modules.GameplayModule.WheelScreenModule.ViewsMediators
         public void ShowEvents(EventsRVO events)
         {
             _events = events ?? new EventsRVO();
-            _title.text = L("wheel.title", "Lucky Wheel");
+            // Fixed words are LocalizedTextViews in the prefab, edited in the inspector: wheel.title, wheel.ad_spin.
             LaySlices();
             // While the wheel turns the buttons wait; the spin's end draws them from the events last given.
             if (!Spinning) DrawButtons();
@@ -180,7 +180,6 @@ namespace Modules.GameplayModule.WheelScreenModule.ViewsMediators
                 _spinLabel.text = _events.WheelSpins > 0 ? string.Format(L("wheel.spin_many", "Spin ({0})"), _events.WheelSpins) : L("wheel.spin", "Spin");
             _adSpinButton.gameObject.SetActive(!held);
             _adSpinButton.interactable = !held && !Spinning;
-            if (_adSpinLabel != null) _adSpinLabel.text = L("wheel.ad_spin", "+1 Spin");
             _closeButton.interactable = !Spinning;
         }
 

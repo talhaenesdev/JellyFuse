@@ -72,7 +72,7 @@ namespace Modules.GameplayModule.StatsScreenModule.ViewsMediators
         public void ShowStats(JellyStatsSVO stats)
         {
             stats ??= new JellyStatsSVO();
-            if (_title != null) _title.text = L("stats.title", "Statistics");
+            // Fixed words are LocalizedTextViews in the prefab, edited in the inspector: stats.title.
             Set(Row.Taps, "stats.taps", "Jellies tapped", stats.Taps);
             Set(Row.Merges, "stats.merges", "Jellies merged", stats.Merges);
             Set(Row.Delivered, "stats.delivered", "Jellies through doors", stats.Delivered);
