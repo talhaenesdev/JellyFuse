@@ -4,7 +4,7 @@
 Shows a game's text, and its editor's, in the language picked: the player's in the game, each developer's in the editor. Texts are keyed tables in assets, exported to and imported from CSV for translators. Game-agnostic: copy the module into another FlowIoC game.
 
 ## Concepts
-localization, localisation, language, translation, Turkish, CSV, ILocalizationService, CD_Localization, CD_LocalizationTable, editor language
+localization, localisation, language, translation, Turkish, CSV, ILocalizationService, CD_Localization, CD_LocalizationTable, editor language, LocalizedTextView, texts panel, inspector
 
 ## How a game uses it
 1. Put `Prefabs/LocalizationServiceRoot` in the game scene, among the Services (Initialize Order -40),
@@ -22,6 +22,13 @@ localization, localisation, language, translation, Turkish, CSV, ILocalizationSe
 5. Translators: Tools/FlowIoC-Modules/Localization/Panel (also Floria/Localization) exports a table
    to CSV (Key, then one column per language) and imports it back. UTF-8 with a BOM, quoted the way
    Google Sheets and Excel write it.
+6. Fixed words on a screen - a title, a button's label - need no code: right-click the TextMeshPro
+   text and pick *Localize this text*, or add `LocalizedTextView`. Its inspector picks or makes the
+   key and edits every language's words in place, straight into the table; *Show in editor* sets the
+   language the prefab reads in. *Tools/FlowIoC-Modules/Localization/Texts* (also Floria/Texts) lists
+   every text of the open prefab or selected object - localized, fixed words, filled by the game -
+   localizes one or all of them, and finds a key with the code that asks for it. Text the game fills
+   in itself (a score, a name, a countdown) stays with the screen's code.
 
 ## The editor's own language
 Editor tables (`Usage = Editor`) are keyed by the English the editor code writes. An editor holds an
@@ -39,6 +46,12 @@ one, untranslated.
   LanguageChanged is for changes made while playing.
 - `EditorTexts` sits in Shared (#if UNITY_EDITOR) because other modules' editors call it, and a
   module may read only another module's Shared assembly.
+- **A LocalizedTextView registers with LocalizationServiceRoot by name**, not with the screen it sits
+  in: a screen needs no binding of its own for it, and a pooled screen keeps its one registration.
+  Its Mediator may inject only its View, so it dispatches the internal FillText and a Command reads
+  the service - when the text registers and again on every LanguageChanged.
+- New keys made from the inspector or the panel go to the game table holding the most texts, named
+  after the prefab and the object (`settingsscreen.txt_title`); words a key already holds reuse it.
 - Game data never lives in this module: Jelly Fuse's CD_Localization and tables are in
   GameplayModule/Scriptables/Localization, so the module copies into another game clean.
 

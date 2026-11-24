@@ -1,4 +1,5 @@
 using FlowIoC.BaseModule.Signals;
+using Modules.LocalizationModule.ViewsMediators;
 
 namespace Modules.LocalizationModule.Signals
 {
@@ -10,5 +11,7 @@ namespace Modules.LocalizationModule.Signals
     {
         public Signal Initialize = new();
         public Signal<string> SetLanguage = new();
+        /// <summary>A localized text registered, or the language changed under it: fill it with its key's words. One per text, so kept out of the log.</summary>
+        public Signal<LocalizedTextView> FillText = new(hideCommandLog: true);
     }
 }

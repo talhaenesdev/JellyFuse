@@ -3,6 +3,7 @@ using Modules.LocalizationModule.Controllers;
 using Modules.LocalizationModule.Models;
 using Modules.LocalizationModule.Services;
 using Modules.LocalizationModule.Signals;
+using Modules.LocalizationModule.ViewsMediators;
 
 namespace Modules.LocalizationModule.RootsContexts
 {
@@ -26,10 +27,18 @@ namespace Modules.LocalizationModule.RootsContexts
             InjectionBinderCrossContext.Bind<ILocalizationService, LocalizationService>();
         }
 
+        public override void MediationBindings()
+        {
+            base.MediationBindings();
+            // Every LocalizedTextView in the game, in whatever screen, registers here by the Root's name.
+            MediationBinder.Bind<LocalizedTextView>().To<LocalizedTextMediator>();
+        }
+
         public override void CommandBindings()
         {
             base.CommandBindings();
             CommandBinder.Bind(_internalSignals.Initialize).ToSequence<InitializeLocalizationCommand>();
+            CommandBinder.Bind(_internalSignals.FillText).ToSequence<FillLocalizedTextCommand>();
             // A change asked for by the game's code (the service) or by another module (Incoming) is the same step.
             CommandBinder.Bind(_internalSignals.SetLanguage).ToSequence<ChangeLanguageCommand>();
             CommandBinder.Bind(_signals.Incoming.SetLanguage).ToSequence<ChangeLanguageCommand>();
