@@ -120,6 +120,51 @@ namespace Modules.LocalizationModule.Editor
             EditorUtility.SetDirty(table);
         }
 
+        /// <summary>
+        /// Whether a screen's code fills the text: some other component of the prefab or scene holds a reference to it
+        /// (a View's serialized field). A localized text there would fight the code for the same words.
+        /// </summary>
+        public bool FilledByCode(TMP_Text text)
+        {
+            var root = text.transform.root;
+            foreach (var component in root.GetComponentsInChildren<MonoBehaviour>(true))
+            {
+                if (component == null || component == text || component is LocalizedTextView || component is TMP_Text) continue;
+                var serialized = new SerializedObject(component);
+                var property = serialized.GetIterator();
+                while (property.NextVisible(true))
+                {
+                    if (property.propertyType != SerializedPropertyType.ObjectReference) continue;
+                    var value = property.objectReferenceValue;
+                    if (value == text || value == text.gameObject || value == text.rectTransform) return true;
+                    // Code often fills a button's label by looking inside the button it holds.
+                    if (LabelOf(value) == text) return true;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>The one text inside a referenced object, two levels down at most - the label code reaches through it.</summary>
+        private static TMP_Text LabelOf(Object value)
+        {
+            Transform holder = value switch
+            {
+                GameObject go => go.transform,
+                Component component => component.transform,
+                _ => null,
+            };
+            if (holder == null) return null;
+            var texts = holder.GetComponentsInChildren<TMP_Text>(true);
+            if (texts.Length != 1) return null;
+            int depth = 0;
+            for (var t = texts[0].transform; t != null && t != holder; t = t.parent) depth++;
+            return depth <= 2 ? texts[0] : null;
+        }
+
+        /// <summary>A text the tools may localize: it holds words, and no screen code fills it.</summary>
+        public bool IsFixed(TMP_Text text) =>
+            text.GetComponent<LocalizedTextView>() == null && HasWords(text.text) && !FilledByCode(text);
+
         /// <summary>Whether a text is worth translating: words, not a number, a placeholder or empty.</summary>
         public bool HasWords(string text)
         {

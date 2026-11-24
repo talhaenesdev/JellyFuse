@@ -46,7 +46,7 @@ namespace Modules.LocalizationModule.Editor
             }
 
             var texts = root.GetComponentsInChildren<TMP_Text>(true);
-            var fixedTexts = texts.Where(t => t.GetComponent<LocalizedTextView>() == null && _tools.HasWords(t.text)).ToList();
+            var fixedTexts = texts.Where(_tools.IsFixed).ToList();
             int localized = texts.Count(t => t.GetComponent<LocalizedTextView>() != null);
             painter.Field("Localized", localized + " of " + texts.Length);
             painter.Field("Fixed words", fixedTexts.Count.ToString(),
@@ -70,7 +70,7 @@ namespace Modules.LocalizationModule.Editor
                     painter.Field(text.name, state, words);
                     painter.Actions(new ModulePanelAction("Select", () => Selection.activeObject = view));
                 }
-                else if (_tools.HasWords(text.text))
+                else if (fixedTexts.Contains(text))
                 {
                     painter.Field(text.name, "fixed: \"" + words + "\"");
                     painter.Actions(

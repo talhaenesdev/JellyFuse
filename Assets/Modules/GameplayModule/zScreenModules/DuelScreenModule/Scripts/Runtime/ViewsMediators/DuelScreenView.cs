@@ -150,20 +150,14 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
             _challengeId = invite.Id;
             SetIcon(_challengeFromIcon, invite.FromIcon);
             SetIcon(_challengeMeIcon, _playerIcon);
-            if (_challengeTitle != null) _challengeTitle.text = L("duel.challenge_title", "Challenge!");
+            // The title and the two buttons are LocalizedTextViews in the prefab (duel.challenge_title, duel.accept,
+            // duel.decline): their words are edited in the inspector, not here.
             if (_challengeBody != null) _challengeBody.text = string.Format(L("duel.challenge_body", "{0} challenged you on level {1}"), Short(invite.FromName, NAME_IN_TEXT), invite.Level);
-            Label(_challengeAccept, L("duel.accept", "Play"));
-            Label(_challengeDecline, L("duel.decline", "Later"));
             // Over everything else on the screen - a rematch invite arrives while the last race's result is on show.
             if (_challenge != null) { _challenge.SetActive(true); _challenge.transform.SetAsLastSibling(); }
             if (_blocker != null) _blocker.SetActive(true);
         }
 
-        private static void Label(Button button, string text)
-        {
-            var label = button != null ? button.GetComponentInChildren<TMP_Text>(true) : null;
-            if (label != null) label.text = text;
-        }
 
         /// <summary>How a challenge this player sent went, in a banner along the top for a few seconds.</summary>
         public void ShowOutcome(ChallengeOutcomeRVO outcome)
@@ -240,7 +234,6 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
             Show(search: true, countdown: false, race: false, result: false);
             if (_searchStatus != null) _searchStatus.text = L("duel.unavailable", "No opponent found. Win more levels or check your connection.");
             if (_searchClose != null) _searchClose.gameObject.SetActive(true);
-            Label(_searchClose, L("duel.ok", "OK"));
         }
 
         /// <summary>
@@ -322,12 +315,8 @@ namespace Modules.GameplayModule.DuelScreenModule.ViewsMediators
             if (_resultTimes != null) _resultTimes.gameObject.SetActive(result.Coins <= 0);
             if (_reward != null) _reward.SetActive(result.Coins > 0);
             if (_rewardCoins != null) _rewardCoins.text = "+" + result.Coins;
-            Label(_resultClose, L("duel.continue", "Main Menu"));
-            if (_resultRematch != null)
-            {
-                _resultRematch.gameObject.SetActive(result.CanRematch);
-                Label(_resultRematch, L("duel.rematch", "Keep Dueling"));
-            }
+            // The two buttons' words are LocalizedTextViews in the prefab (duel.continue, duel.rematch).
+            if (_resultRematch != null) _resultRematch.gameObject.SetActive(result.CanRematch);
             if (_result != null) _result.SetActive(true);
             // The board behind is finished with: dimmed, and taps on it stop at the result.
             if (_blocker != null) _blocker.SetActive(true);
