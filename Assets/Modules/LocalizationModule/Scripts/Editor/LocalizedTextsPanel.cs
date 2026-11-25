@@ -21,6 +21,7 @@ namespace Modules.LocalizationModule.Editor
         private const string MENU_PATH = "Tools/FlowIoC-Modules/Localization/Texts";
 
         private readonly LocalizedTextTools _tools = new();
+        private readonly LocalizedTextIndex _index = new();
         private string _search = "";
         private string _result;
 
@@ -36,12 +37,15 @@ namespace Modules.LocalizationModule.Editor
 
         public override void Draw(ModulePanelPainter painter)
         {
+            // Finding a text comes first: it is what the panel is opened for most.
+            DrawSearch(painter);
+            painter.Space();
+
             var root = Root(out string where);
             painter.Heading("Texts in " + where);
             if (root == null)
             {
                 painter.Note("Open a screen's prefab, or select an object in the scene: its texts are listed here.");
-                DrawSearch(painter);
                 return;
             }
 
@@ -82,19 +86,40 @@ namespace Modules.LocalizationModule.Editor
                     painter.Field(text.name, string.IsNullOrEmpty(words) ? "filled by the game" : "filled by the game (\"" + words + "\")");
                 }
             }
-
-            painter.Space();
-            DrawSearch(painter);
         }
 
         private void DrawSearch(ModulePanelPainter painter)
         {
-            painter.Heading("Find a text");
-            _search = painter.TextField("Search", _search, help: "Part of a key or of its words.");
-            foreach (var (key, words) in _tools.Search(_search, 12))
+            painter.Heading("Find a text in the whole game",
+                new ModulePanelAction("Rescan", () => _index.Build()));
+            _search = painter.TextField("Search", _search, help: "Part of the words as they read in the game, in any language, or of a key.");
+            if (string.IsNullOrWhiteSpace(_search))
             {
-                var code = _tools.CodeUsing(key);
-                painter.Field(key, Short(words), code.Count > 0 ? "Asked for in: " + string.Join(", ", code) : "Not asked for in code.");
+                painter.Note("Type a few words you see in the game. Each match shows the screens that show it, with Open to go straight to the text, and the code lines that fill it.");
+                return;
+            }
+            if (!_index.Built) _index.Build();
+
+            var found = _tools.Search(_search, 15);
+            if (found.Count == 0) painter.Note("No text holds \"" + _search + "\".");
+            foreach (var (key, words) in found)
+            {
+                painter.Space();
+                painter.Field(key, Short(words));
+                foreach (var place in _index.PlacesOf(key))
+                {
+                    var target = place;
+                    painter.Field("   in " + System.IO.Path.GetFileNameWithoutExtension(place.Prefab), place.Path);
+                    painter.Actions(new ModulePanelAction("Open", () => _index.Open(target)));
+                }
+                foreach (var line in _index.CodeOf(key).Take(4))
+                {
+                    var target = line;
+                    painter.Field("   code " + System.IO.Path.GetFileNameWithoutExtension(line.File) + ":" + line.Line, Short(line.Text));
+                    painter.Actions(new ModulePanelAction("Open", () => _index.Open(target)));
+                }
+                if (_index.PlacesOf(key).Count == 0 && _index.CodeOf(key).Count == 0)
+                    painter.Note("   Not shown anywhere yet.");
             }
         }
 
